@@ -6,32 +6,29 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity  implements View.OnClickListener {
-
-
-    //setting listers
-
+public class JoinRoom extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_join_room);
+
 
         //button reference to widgets
-        Button guest_login_button = (Button) findViewById(R.id.guest_login_btn);
+        Button room = (Button) findViewById(R.id.TEMP_go_to_room);
 
         //setting listeners
-        guest_login_button.setOnClickListener(this);
+        room.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
 
-            case R.id.guest_login_btn:
+            case R.id.TEMP_go_to_room:
                 //go to activity
-                Intent guestLogin = new Intent(MainActivity.this, JoinRoom.class);
-                startActivity(guestLogin);
+                Intent goToRoom = new Intent(JoinRoom.this, Room.class);
+                startActivity(goToRoom);
 
                 break;
         }

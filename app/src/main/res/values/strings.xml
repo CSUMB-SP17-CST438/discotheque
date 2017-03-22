@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">Discotheque</string>
+
+    <string name="login">Log in</string>
+    <string name="facebook">Register with Facebook</string>
+    <string name="google">Register with Google</string>
+    <string name="guest">Enter as a Guest</string>
+
+    <string name="room">Listening Rooms</string>
+
+
+    <string name="RoomTitle">Room Title</string>
+    <string name="curSong">Song title</string>
+    <string name="curArt">Art</string>
+
+
+
+    <string name="background"> #a4c639 </string>
+    <string name="gray"> #B33f4246 </string>
+
+
+
 </resources>
