@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".JoinRoom" />
-        <activity android:name=".Room"></activity>
+        <activity android:name=".Room_activity"></activity>
     </application>
 
 </manifest>

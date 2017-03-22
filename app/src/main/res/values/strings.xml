@@ -13,11 +13,9 @@
     <string name="curSong">Song title</string>
     <string name="curArt">Art</string>
 
-
-
-    <string name="background"> #a4c639 </string>
-    <string name="gray"> #B33f4246 </string>
-
+    <string name="CurRoomTitle">Current Room Title</string>
+    <string name="currentTrack">Current Song</string>
+    <string name="currentArtist">Artist</string>
 
 
 </resources>

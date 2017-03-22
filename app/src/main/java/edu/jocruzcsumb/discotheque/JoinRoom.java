@@ -27,7 +27,7 @@ public class JoinRoom extends AppCompatActivity implements View.OnClickListener 
 
             case R.id.TEMP_go_to_room:
                 //go to activity
-                Intent goToRoom = new Intent(JoinRoom.this, Room.class);
+                Intent goToRoom = new Intent(JoinRoom.this, Room_activity.class);
                 startActivity(goToRoom);
 
                 break;
