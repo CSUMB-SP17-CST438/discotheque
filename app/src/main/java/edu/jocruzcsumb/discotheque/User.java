@@ -11,6 +11,7 @@ public class User {
     private String email;
     private String photo;
     private String genre;
+    UserList userList;
 
 
     public User(){
@@ -19,6 +20,7 @@ public class User {
         email = "";
         photo = "";
         genre = "";
+        userList = new UserList();
     }
 
     public User(String userName, String name, String email, String photo, String genre){
@@ -27,7 +29,7 @@ public class User {
         this.email = email;
         this.photo = photo;
         this.genre = genre;
-
+        userList = new UserList();
     }
 
     public String getUserName(){
@@ -63,6 +65,29 @@ public class User {
     public void setGenre(String genre){
         this.genre = genre;
     }
+
+    public void addFriend(User user){
+        userList.addUser(user);
+    }
+
+    public boolean deleteFriend(User user){
+        return userList.deleteUser(user);
+    }
+
+    public int numOfFriends(){
+        return userList.numUser();
+    }
+
+    public UserList userList(){
+
+        return userList;
+    }
+
+
+
+
+
+
 
 
 }
