@@ -17,8 +17,8 @@
     <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_weight="0.50"
+        android:orientation="vertical"
 
         />
 
@@ -39,11 +39,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#8b92a7"
-        android:textSize="12pt"
         android:text="@string/guest"
-        android:textColor="#ffffff"
         android:textAllCaps="false"
-        />
+        android:textColor="#ffffff"
+        android:textSize="12pt" />
 
 
 </LinearLayout>
