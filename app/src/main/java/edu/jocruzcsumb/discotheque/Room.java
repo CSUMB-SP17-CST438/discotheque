@@ -62,8 +62,9 @@ public class Room {
 
     public boolean removeUserFromList(User user){
         if(userList.deleteUser(user)){
+            numOfUsers--;
             return true;
-        }
+    }
 
         return false;
     }
