@@ -1,6 +1,33 @@
- import soundcloud
+import flask
+import flask_socketio
+from flask_socketio import join_room, leave_room
+import discoSounds as ds 
 
- self.client = soundcloud.Client(client_id="8c1cf28d0d2834808a2eda6645da717b", client_secret='67422b6c159a389c9cfed1a9607227ef')
+serv = flask.Flask(__name__)
+socket = flask_socketio.SocketIO(serv)
+##default route
+@serv.route('/')
+
+
+@socket.on('connect')
+def on_connect():
+	print('client-connected')
+
+
+@socket.on('join room')
+def on_join_room(data):
+	sessionid = request.sid
+
+
+@socket.on('get songs')
+def on_get_songs(data):
+	genre = data['genre']
+	songs = ds.getSongList(genre)
+	socket.emit('song list', songs)
+
+
+
+
 
 
 
