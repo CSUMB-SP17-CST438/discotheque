@@ -7,28 +7,44 @@ package edu.jocruzcsumb.discotheque;
 public class User {
 
     private String userName;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
     private String photo;
+    private String description;
     private String genre;
-    UserList userList;
+    private UserList userList;
+
 
 
     public User(){
         userName = "";
-        name = "";
+        firstName = "";
+        lastName = "";
         email = "";
         photo = "";
+        description = "";
         genre = "";
         userList = new UserList();
     }
-
-    public User(String userName, String name, String email, String photo, String genre){
+    public User(String userName, String firstName, String lastName, String email, String photo, String description){
         this.userName = userName;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.photo = photo;
+        this.description = description;
+        userList = new UserList();
+    }
+
+    public User(String userName, String firstName, String lastName, String email, String photo, String genre, String description){
+        this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.photo = photo;
         this.genre = genre;
+        this.description = description;
         userList = new UserList();
     }
 
@@ -36,9 +52,11 @@ public class User {
         return userName;
     }
 
-    public String getName(){
-        return name;
+    public String getFirstName(){
+        return firstName;
     }
+
+    public String getLastName(){return lastName;}
 
     public String getEmail(){
         return email;
@@ -52,6 +70,14 @@ public class User {
         return photo;
     }
 
+    public String getDescription(){return description;}
+
+    public void setFirstName(String firstName){this.firstName = firstName;}
+
+    public void setLastName(String lastName){this.lastName = lastName;}
+
+    public void setDescription(String description){this.description = description;}
+
     public void setUserName(String userName){
         this.userName = userName;
     }
@@ -59,9 +85,11 @@ public class User {
     public void setEmail(String email){
         this.email = email;
     }
+
     public void setPhoto(String photo){
         this.photo = photo;
     }
+
     public void setGenre(String genre){
         this.genre = genre;
     }
@@ -74,14 +102,9 @@ public class User {
         return userList.deleteUser(user);
     }
 
-    public int numOfFriends(){
-        return userList.numUser();
-    }
+    public int numOfFriends(){return userList.numUser();}
 
-    public UserList userList(){
-
-        return userList;
-    }
+    public UserList userList(){return userList;}
 
 
 
