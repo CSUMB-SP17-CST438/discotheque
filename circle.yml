@@ -1,6 +1,6 @@
 test:
-    -python -m tests/unit_tests
-
+  override:
+    - python -m tests/unit_tests
 
 deployment:
   staging:
