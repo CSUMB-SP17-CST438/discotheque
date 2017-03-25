@@ -1,0 +1,5 @@
+deployment:
+  staging:
+    branch:server
+    heroku:
+      appname: disco-theque
