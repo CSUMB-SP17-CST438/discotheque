@@ -1,5 +1,4 @@
 test:
-  override:
     -python -m tests/unit_tests
 
 
