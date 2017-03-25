@@ -1,3 +1,8 @@
+test:
+  override:
+    -python -m tests/unit_tests
+
+
 deployment:
   staging:
     branch: server
