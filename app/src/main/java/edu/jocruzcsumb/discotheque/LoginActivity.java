@@ -3,6 +3,7 @@ package edu.jocruzcsumb.discotheque;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -50,7 +51,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 	 * TODO: remove after connecting to a real authentication system.
 	 */
 	private static final String[] DUMMY_CREDENTIALS = new String[]{
-			"foo@example.com:hello", "bar@example.com:world"
+			"dummy:test"
 	};
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
@@ -221,14 +222,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 	private boolean isEmailValid(String email)
 	{
-		//TODO: Replace this with your own logic
-		return email.contains("@");
+		return email.length() > 3;
 	}
 
 	private boolean isPasswordValid(String password)
 	{
 		//TODO: Replace this with your own logic
-		return password.length() > 4;
+		return password.length() > 3;
 	}
 
 	/**
@@ -375,9 +375,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 					return pieces[1].equals(mPassword);
 				}
 			}
-
-			// TODO: register the new account here.
-			return true;
+			return false;
 		}
 
 		@Override
@@ -388,7 +386,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 			if(success)
 			{
-				finish();
+				//go to activity
+				Intent guestLogin = new Intent(LoginActivity.this, JoinRoom.class);
+				startActivity(guestLogin);
 			}
 			else
 			{
