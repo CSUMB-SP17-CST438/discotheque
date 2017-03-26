@@ -25,11 +25,12 @@
         android:text="@string/room"
 
         android:textSize="10pt" />
+
     <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_weight="0.24"
+        android:orientation="vertical"
 
         />
 
