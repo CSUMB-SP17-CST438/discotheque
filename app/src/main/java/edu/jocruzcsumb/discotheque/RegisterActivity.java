@@ -59,6 +59,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
 	// UI references.
 	private AutoCompleteTextView mEmailView;
+	private EditText mUsernameView;
 	private EditText mPasswordView;
 	private View mProgressView;
 	private View mLoginFormView;
@@ -72,6 +73,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 		mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 		populateAutoComplete();
 
+		mUsernameView = (EditText) findViewById(R.id.username);
 		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener()
 		{
@@ -176,6 +178,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
 		// Store values at the time of the login attempt.
 		String email = mEmailView.getText().toString();
+		String username = mUsernameView.getText().toString();
 		String password = mPasswordView.getText().toString();
 
 		boolean cancel = false;
@@ -203,6 +206,20 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 			cancel = true;
 		}
 
+		// Check for a valid uname.
+		if(TextUtils.isEmpty(username))
+		{
+			mUsernameView.setError(getString(R.string.register_activity_error_field_required));
+			focusView = mUsernameView;
+			cancel = true;
+		}
+		else if(!isUsernameValid(username))
+		{
+			mUsernameView.setError(getString(R.string.register_activity_error_invalid_username));
+			focusView = mUsernameView;
+			cancel = true;
+		}
+
 		if(cancel)
 		{
 			// There was an error; don't attempt login and focus the first
@@ -223,6 +240,12 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 	{
 		//TODO: Replace this with your own logic
 		return email.contains("@");
+	}
+
+	private boolean isUsernameValid(String username)
+	{
+		//TODO: Replace this with your own logic
+		return (!username.contains(" ") && username.length() > 4);
 	}
 
 	private boolean isPasswordValid(String password)

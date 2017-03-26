@@ -54,5 +54,15 @@
         android:textColor="#ffffff"
         android:textSize="12pt" />
 
+    <Button
+        android:id="@+id/register_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#8b92a7"
+        android:text="@string/register"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textSize="12pt" />
+
 
 </LinearLayout>
