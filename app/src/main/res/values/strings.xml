@@ -16,6 +16,23 @@
     <string name="CurRoomTitle">Current Room Title</string>
     <string name="currentTrack">Current Song</string>
     <string name="currentArtist">Artist</string>
+    <string name="title_activity_view_profile">ViewProfileActivity</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Sign in to Discotheque</string>
+
+    <!-- Strings related to DISCOTHEQUE LOGIN ACTIVITY-->
+    <string name="login_activity_prompt_email">Email or username</string>
+    <string name="login_activity_prompt_password">Password</string>
+    <string name="login_activity_action_sign_in">Sign in to Discotheque</string>
+    <string name="login_activity_action_sign_in_short">Sign in</string>
+    <string name="login_activity_error_invalid_email">This email address is invalid</string>
+    <string name="login_activity_error_invalid_password">This password is too short</string>
+    <string name="login_activity_error_incorrect_password">This password is incorrect</string>
+    <string name="login_activity_error_field_required">This field is required</string>
+    <string name="login_activity_permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
 
 
 </resources>
