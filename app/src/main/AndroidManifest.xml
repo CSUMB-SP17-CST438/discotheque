@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".JoinRoom"/>
+        <activity android:name=".JoinRoomActivity"/>
         <activity android:name=".ChatRoomActivity"/>
         <activity
             android:name=".ViewProfileActivity"

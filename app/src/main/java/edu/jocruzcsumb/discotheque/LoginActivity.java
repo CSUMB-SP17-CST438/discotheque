@@ -387,7 +387,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 			if(success)
 			{
 				//go to activity
-				Intent guestLogin = new Intent(LoginActivity.this, JoinRoom.class);
+				Intent guestLogin = new Intent(LoginActivity.this, JoinRoomActivity.class);
 				startActivity(guestLogin);
 			}
 			else

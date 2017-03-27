@@ -32,5 +32,13 @@ public class SongList {
         return arrayList;
     }
 
+    public int size(){
+        return arrayList.size();
+    }
+
+    public Song getSong(int index){
+        return arrayList.get(index);
+    }
+
 
 }
