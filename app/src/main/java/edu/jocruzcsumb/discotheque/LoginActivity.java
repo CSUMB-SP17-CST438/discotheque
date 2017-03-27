@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,8 +31,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -46,13 +57,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 	 */
 	private static final int REQUEST_READ_CONTACTS = 0;
 
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[]{
-			"dummy:test"
-	};
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
@@ -182,8 +186,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 		boolean cancel = false;
 		View focusView = null;
 
+
+		// Check for a valid password.
+		if(TextUtils.isEmpty(password))
+		{
+			mPasswordView.setError(getString(R.string.login_activity_error_field_required));
+			focusView = mPasswordView;
+			cancel = true;
+		}
 		// Check for a valid password, if the user entered one.
-		if(!TextUtils.isEmpty(password) && !isPasswordValid(password))
+		else if(!User.isValidPassword(password))
 		{
 			mPasswordView.setError(getString(R.string.login_activity_error_invalid_password));
 			focusView = mPasswordView;
@@ -197,7 +209,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 			focusView = mEmailView;
 			cancel = true;
 		}
-		else if(!isEmailValid(email))
+		else if(!(User.isValidEmail(email) || User.isValidUsername(email)))
 		{
 			mEmailView.setError(getString(R.string.login_activity_error_invalid_email));
 			focusView = mEmailView;
@@ -218,17 +230,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 			mAuthTask = new UserLoginTask(email, password);
 			mAuthTask.execute((Void) null);
 		}
-	}
-
-	private boolean isEmailValid(String email)
-	{
-		return email.length() > 3;
-	}
-
-	private boolean isPasswordValid(String password)
-	{
-		//TODO: Replace this with your own logic
-		return password.length() > 3;
 	}
 
 	/**
@@ -339,9 +340,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean>
+	public class UserLoginTask extends AsyncTask<Void, Void, Boolean>implements Emitter.Listener
 	{
 
+		private boolean success;
+		private CountDownLatch loginLatch;
 		private final String mEmail;
 		private final String mPassword;
 
@@ -349,7 +352,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 		{
 			mEmail = email;
 			mPassword = password;
+			success = false;
+			loginLatch = new CountDownLatch(1);
 		}
+
+		@Override
+		public void call(Object... args) {
+			JSONObject obj = (JSONObject) args[0];
+			Log.d("Disco Login","event happened");
+			success = true;
+			loginLatch.countDown();
+		}
+
 
 		@Override
 		protected Boolean doInBackground(Void... params)
@@ -358,24 +372,29 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 			try
 			{
-				// Simulate network access.
-				Thread.sleep(2000);
+				Log.d("Disco Register","Attempting to contact main server");
+				Socket socket = IO.socket("https://disco-theque.herokuapp.com");
+				socket.once("registered successfully", this);
+				socket.connect();
+				JSONObject obj = new JSONObject();
+				obj.put(User.isValidEmail(mEmail)?"email":"username", mEmail);
+				obj.put("password", mPassword);
+				socket.emit("login", obj);
+				loginLatch.await(8L, TimeUnit.SECONDS);
+				return success;
+			}
+			catch (JSONException e)
+			{
+				return false;
+			}
+			catch (URISyntaxException e)
+			{
+				return false;
 			}
 			catch (InterruptedException e)
 			{
 				return false;
 			}
-
-			for(String credential : DUMMY_CREDENTIALS)
-			{
-				String[] pieces = credential.split(":");
-				if(pieces[0].equals(mEmail))
-				{
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
-				}
-			}
-			return false;
 		}
 
 		@Override

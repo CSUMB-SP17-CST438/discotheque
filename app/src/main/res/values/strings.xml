@@ -27,8 +27,8 @@
     <string name="login_activity_prompt_password">Password</string>
     <string name="login_activity_action_sign_in">Sign in to Discotheque</string>
     <string name="login_activity_action_sign_in_short">Sign in</string>
-    <string name="login_activity_error_invalid_email">This email address is invalid</string>
-    <string name="login_activity_error_invalid_password">This password is too short</string>
+    <string name="login_activity_error_invalid_email">This email address or username is invalid</string>
+    <string name="login_activity_error_invalid_password">This password is invalid</string>
     <string name="login_activity_error_incorrect_password">This password is incorrect</string>
     <string name="login_activity_error_field_required">This field is required</string>
     <string name="login_activity_permission_rationale">"Contacts permissions are needed for providing email
@@ -45,7 +45,7 @@
     <string name="register_activity_error_invalid_email">This email address is invalid</string>
     <string name="register_activity_error_invalid_username">This username is invalid</string>
     <string name="register_activity_error_invalid_password">This password is too short</string>
-    <string name="register_activity_error_incorrect_password">This password is incorrect</string>
+    <string name="register_activity_error_fail">This user could not be registered at this time</string>
     <string name="register_activity_error_field_required">This field is required</string>
     <string name="register_activity_permission_rationale">"Contacts permissions are needed for providing email
         completions."

@@ -3,6 +3,7 @@ package edu.jocruzcsumb.discotheque;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,8 +31,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -45,13 +57,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 	 */
 	private static final int REQUEST_READ_CONTACTS = 0;
 
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[]{
-			"foo@example.com:hello", "bar@example.com:world"
-	};
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
@@ -185,7 +190,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 		View focusView = null;
 
 		// Check for a valid password, if the user entered one.
-		if(!TextUtils.isEmpty(password) && !isPasswordValid(password))
+		if(!TextUtils.isEmpty(password) && !User.isValidPassword(password))
 		{
 			mPasswordView.setError(getString(R.string.register_activity_error_invalid_password));
 			focusView = mPasswordView;
@@ -199,7 +204,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 			focusView = mEmailView;
 			cancel = true;
 		}
-		else if(!isEmailValid(email))
+		else if(!User.isValidEmail(email))
 		{
 			mEmailView.setError(getString(R.string.register_activity_error_invalid_email));
 			focusView = mEmailView;
@@ -213,7 +218,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 			focusView = mUsernameView;
 			cancel = true;
 		}
-		else if(!isUsernameValid(username))
+		else if(!User.isValidUsername(username))
 		{
 			mUsernameView.setError(getString(R.string.register_activity_error_invalid_username));
 			focusView = mUsernameView;
@@ -231,27 +236,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
 			showProgress(true);
-			mAuthTask = new UserLoginTask(email, password);
+			mAuthTask = new UserLoginTask(email, username, password);
 			mAuthTask.execute((Void) null);
 		}
-	}
-
-	private boolean isEmailValid(String email)
-	{
-		//TODO: Replace this with your own logic
-		return email.contains("@");
-	}
-
-	private boolean isUsernameValid(String username)
-	{
-		//TODO: Replace this with your own logic
-		return (!username.contains(" ") && username.length() > 4);
-	}
-
-	private boolean isPasswordValid(String password)
-	{
-		//TODO: Replace this with your own logic
-		return password.length() > 4;
 	}
 
 	/**
@@ -362,16 +349,30 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean>
+	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> implements Emitter.Listener
 	{
 
+		private boolean success;
+		private CountDownLatch loginLatch;
 		private final String mEmail;
+		private final String mUsername;
 		private final String mPassword;
 
-		UserLoginTask(String email, String password)
+		UserLoginTask(String email, String username, String password)
 		{
 			mEmail = email;
+			mUsername = username;
 			mPassword = password;
+			success = false;
+			loginLatch = new CountDownLatch(1);
+
+		}
+
+		@Override
+		public void call(Object... args) {
+			Log.d("Disco Register","success event happened");
+			success = true;
+			loginLatch.countDown();
 		}
 
 		@Override
@@ -381,26 +382,34 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
 			try
 			{
-				// Simulate network access.
+				Log.d("Disco Register","Attempting to contact main server");
+				//Socket socket = IO.socket("http://10.11.154.239");
+				Socket socket = IO.socket("https://disco-theque.herokuapp.com");
+				socket.once("registered successfully", this);
+				socket.connect();
 				Thread.sleep(2000);
+				JSONObject obj = new JSONObject();
+				obj.put("email", mEmail);
+				obj.put("username", mUsername);
+				obj.put("password", mPassword);
+				socket.emit("register", obj);
+				loginLatch.await(8L, TimeUnit.SECONDS);
+
+				Log.d("Disco Register","Success = " + (success?"true":"false"));
+				return success;
+			}
+			catch (JSONException e)
+			{
+				return false;
+			}
+			catch (URISyntaxException e)
+			{
+				return false;
 			}
 			catch (InterruptedException e)
 			{
 				return false;
 			}
-
-			for(String credential : DUMMY_CREDENTIALS)
-			{
-				String[] pieces = credential.split(":");
-				if(pieces[0].equals(mEmail))
-				{
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
-				}
-			}
-
-			// TODO: register the new account here.
-			return true;
 		}
 
 		@Override
@@ -411,12 +420,14 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
 			if(success)
 			{
-				finish();
+				//go to activity
+				Intent guestLogin = new Intent(RegisterActivity.this, JoinRoom.class);
+				startActivity(guestLogin);
 			}
 			else
 			{
-				mPasswordView.setError(getString(R.string.register_activity_error_incorrect_password));
-				mPasswordView.requestFocus();
+				mEmailView.setError(getString(R.string.register_activity_error_fail));
+				mEmailView.requestFocus();
 			}
 		}
 
