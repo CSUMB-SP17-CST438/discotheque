@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,6 +38,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -195,7 +197,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 		View focusView = null;
 
 		// Check for a valid password, if the user entered one.
-		if(!TextUtils.isEmpty(password) && !isPasswordValid(password))
+		if(!TextUtils.isEmpty(password) && !User.isValidPassword(password))
 		{
 			mPasswordView.setError(getString(R.string.register_activity_error_invalid_password));
 			focusView = mPasswordView;
@@ -209,7 +211,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 			focusView = mEmailView;
 			cancel = true;
 		}
-		else if(!isEmailValid(email))
+		else if(!User.isValidEmail(email))
 		{
 			mEmailView.setError(getString(R.string.register_activity_error_invalid_email));
 			focusView = mEmailView;
@@ -223,7 +225,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 			focusView = mUsernameView;
 			cancel = true;
 		}
-		else if(!isUsernameValid(username))
+		else if(!User.isValidUsername(username))
 		{
 			mUsernameView.setError(getString(R.string.register_activity_error_invalid_username));
 			focusView = mUsernameView;
@@ -244,24 +246,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 			mAuthTask = new UserLoginTask(email, username, password);
 			mAuthTask.execute((Void) null);
 		}
-	}
-
-	private boolean isEmailValid(String email)
-	{
-		//TODO: Replace this with your own logic
-		return email.contains("@");
-	}
-
-	private boolean isUsernameValid(String username)
-	{
-		//TODO: Replace this with your own logic
-		return (!username.contains(" ") && username.length() > 4);
-	}
-
-	private boolean isPasswordValid(String password)
-	{
-		//TODO: Replace this with your own logic
-		return password.length() > 4;
 	}
 
 	/**
@@ -375,28 +359,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> implements Emitter.Listener
 	{
 
-		boolean success;
-
-		@Override
-		public void call(Object... args) {
-			JSONObject obj = (JSONObject) args[0];
-			try
-			{
-				if(obj.getInt("authorized") == 1)
-				{
-					success = true;
-				}
-			}
-			catch (JSONException e)
-			{
-				e.printStackTrace();
-			}
-			System.out.println(obj);
-			loginLatch.countDown();
-		}
-
-		CountDownLatch loginLatch;
-
+		private boolean success;
+		private CountDownLatch loginLatch;
 		private final String mEmail;
 		private final String mUsername;
 		private final String mPassword;
@@ -412,13 +376,20 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 		}
 
 		@Override
+		public void call(Object... args) {
+			Log.d("Disco Register","success event happened");
+			success = true;
+			loginLatch.countDown();
+		}
+
+		@Override
 		protected Boolean doInBackground(Void... params)
 		{
 			// TODO: attempt authentication against a network service.
 
 			try
 			{
-
+				Log.d("Disco Register","Attempting to contact main server");
 				Socket socket = IO.socket("https://disco-theque.herokuapp.com");
 				socket.once("registered successfully", this);
 				socket.connect();
@@ -427,7 +398,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 				obj.put("username", mUsername);
 				obj.put("password", mPassword);
 				socket.emit("register", obj);
-				loginLatch.await();
+				loginLatch.await(8L, TimeUnit.SECONDS);
+
+				Log.d("Disco Register","Success = " + (success?"true":"false"));
 				return success;
 			}
 			catch (JSONException e)
@@ -458,8 +431,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 			}
 			else
 			{
-				mPasswordView.setError(getString(R.string.register_activity_error_incorrect_password));
-				mPasswordView.requestFocus();
+				mEmailView.setError(getString(R.string.register_activity_error_fail));
+				mEmailView.requestFocus();
 			}
 		}
 
