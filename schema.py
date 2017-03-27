@@ -129,12 +129,12 @@ class floor_Schema(ma.ModelSchema):
 ****************************************************************************************************************************************
 ****************************************************************************************************************************************"""
 def memberExists_by_email(email):
-	member = member.query.filter_by(member_email=email).first()
-	return member
+	found_member = member.query.filter_by(member_email=email).first()
+	return found_member
 
 def memberExists_by_username(username):
-	member = member.query.filter_by(username=username).first()
-	return member
+	found_member = member.query.filter_by(username=username).first()
+	return found_member
 
 def registerMember(username,password,fname,lname,email):
 	if not memberExists:
@@ -151,15 +151,15 @@ def add_message(self, floor_id, member_id, text):
 	db.session.commit()
 
 def login_attempt(username,password):
-	member = memberExists_by_username(username)
-	if member is not None and member.member_password == password:
+	this_member = memberExists_by_username(username)
+	if this_member is not None and this_member.member_password == password:
 		return True
 	else:
 		return False;
 
 def login_attemp_email(email,password):
-	member = memberExists_by_email(email)
-	if member is not None and member.member_password == password:
+	this_member = memberExists_by_email(email)
+	if this_member is not None and this_member.member_password == password:
 		return True
 	else:
 		return False;
