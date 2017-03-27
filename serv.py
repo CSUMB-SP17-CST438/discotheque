@@ -19,12 +19,13 @@ def start():
 
 @socket.on('connect')
 def on_connect():
-	print('client-connected')
+	print('**************************************************client-connected**************************************************************')
 
 #adds a client to the public room
 @socket.on('join room')
 def on_join_room(data):
 	sessionid = request.sid
+	print("********************************************************joined room*************************************************************")
 	join_room(public_room)
 
 #should be called when connected to get a list of songs for the room
@@ -33,7 +34,7 @@ def on_join_room(data):
 def on_get_songs(data):
 	genre = data['genre']
 	songs = ds.getSongList(genre)
-	# print(songs)
+	print(("********************************************"+songs+"******************************************************************"))
 	socket.emit('song list', songs,room=public_room)
 
 @socket.on('now playing')
@@ -44,6 +45,7 @@ def on_now_playing(data):
 
 @socket.on('register')
 def on_register(data):
+	print("**************************************triggered register*****************************************************************")
 	new_username = data['username']
 	new_password = data['password']
 	new_email = data['email']
@@ -58,6 +60,7 @@ def on_register(data):
 
 @socket.on('login')
 def on_login(data):
+	print("**************************************triggered login*****************************************************************")
 	loadedData = json.loads(data)
 	if 'username' not in loadedData:
 		if db.login_attempt_email(loadedData['email'],loadedData['password']):
