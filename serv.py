@@ -1,6 +1,7 @@
 import flask
 import flask_socketio
 from flask_socketio import join_room, leave_room
+from flask import request
 import discoSounds as ds 
 import os
 import json
@@ -32,7 +33,7 @@ def on_join_room(data):
 def on_get_songs(data):
 	genre = data['genre']
 	songs = ds.getSongList(genre)
-	print(songs)
+	# print(songs)
 	socket.emit('song list', songs,room=public_room)
 
 @socket.on('now playing')
@@ -59,12 +60,12 @@ def on_register(data):
 def on_login(data):
 	loadedData = json.loads(data)
 	if 'username' not in loadedData:
-		if db.login_attempt_email(loadedData['email']):
+		if db.login_attempt_email(loadedData['email'],loadedData['password']):
 			socket.emit("login status", {'authorized': 1}, room=request.sid)
 		else:
 			socket.emit("login status", {'authorized': 0}, room=request.sid)
 	if 'email' not in loadedData:
-		if db.login_attempt(loadedData['username']):
+		if db.login_attempt(loadedData['username'],loadedData['password']):
 			socket.emit("login status", {'authorized': 1}, room=request.sid)
 		else:
 			socket.emit("login status", {'authorized': 0}, room=request.sid)
@@ -80,7 +81,12 @@ if __name__ == '__main__':
 		host=os.getenv('IP','0.0.0.0'),
 		debug=True)
 
-
+# if __name__ == '__main__':
+# 	socket.run(
+# 		serv,
+# 		port='8080',
+# 		host=os.getenv('IP','0.0.0.0'),
+# 		debug=True)
 
 
  ##waht did you do yesterday?
