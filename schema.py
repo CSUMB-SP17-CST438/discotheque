@@ -15,8 +15,8 @@ from sqlalchemy import desc
 
 
 
-serv.serv.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-# serv.serv.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jcrzr:anchor99@localhost/postgres'
+#serv.serv.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+serv.serv.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jcrzr:anchor99@localhost/postgres'
 db = flask_sqlalchemy.SQLAlchemy(serv.serv)
 ma = Marshmallow(serv.serv)
 
@@ -137,8 +137,9 @@ def memberExists_by_username(username):
 	return found_member
 
 def registerMember(username,password,fname,lname,email):
-	if not memberExists:
-		new_member = member(username, password,fname,lname,email)
+	if not memberExists_by_email(email) and not memberExists_by_username(username):
+		#fname,lname,email,imgLink,desc, genres
+		new_member = member(username, password,fname,lname,email,None,None,None)
 		db.session.add(new_member)
 		db.session.commit()
 		return new_member

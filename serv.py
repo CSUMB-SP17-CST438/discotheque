@@ -53,11 +53,12 @@ def on_register(data):
 	# new_fn = data['fname']
 	# new_ln = data['lname']
 	if db.memberExists_by_username(new_username) is None and db.memberExists_by_email(new_email) is None:
-		db.registerMember(new_username,new_password,None,None,new_email,None,None,None)
+		db.registerMember(new_username,new_password,None,None,new_email)
 		print((new_username + "just registered!"))
-		socket.emit("registered successfully", {'message': "successfully registered!"})
+		socket.emit("register response", {'message': "successfully registered!", 'registered':1},room=request.sid)
 	else:
 		print("registration failure, user must already exist")
+		socket.emit("register response", {'message': "registeration failed!",'registered':0},room=request.sid)
 
 @socket.on('login')
 def on_login(data):
