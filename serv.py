@@ -1,6 +1,7 @@
 import flask
 import flask_socketio
 from flask_socketio import join_room, leave_room
+from flask import request
 import discoSounds as ds 
 import os
 import json
@@ -32,7 +33,7 @@ def on_join_room(data):
 def on_get_songs(data):
 	genre = data['genre']
 	songs = ds.getSongList(genre)
-	print(songs)
+	# print(songs)
 	socket.emit('song list', songs,room=public_room)
 
 @socket.on('now playing')
