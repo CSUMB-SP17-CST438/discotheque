@@ -15,8 +15,8 @@ from sqlalchemy import desc
 
 
 
-# serv.serv.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-serv.serv.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jcrzr:anchor99@localhost/postgres'
+serv.serv.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+# serv.serv.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jcrzr:anchor99@localhost/postgres'
 db = flask_sqlalchemy.SQLAlchemy(serv.serv)
 ma = Marshmallow(serv.serv)
 
@@ -152,7 +152,14 @@ def add_message(self, floor_id, member_id, text):
 
 def login_attempt(username,password):
 	member = memberExists_by_username(username)
-	if member.member_password == password:
+	if member is not None and member.member_password == password:
+		return True
+	else:
+		return False;
+
+def login_attemp_email(email,password):
+	member = memberExists_by_email(email)
+	if member is not None and member.member_password == password:
 		return True
 	else:
 		return False;

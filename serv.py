@@ -3,6 +3,7 @@ import flask_socketio
 from flask_socketio import join_room, leave_room
 import discoSounds as ds 
 import os
+import json
 
 
 public_room = 912837
@@ -45,14 +46,31 @@ def on_register(data):
 	new_username = data['username']
 	new_password = data['password']
 	new_email = data['email']
-	new_fn = data['fname']
-	new_ln = data['lname']
+	# new_fn = data['fname']
+	# new_ln = data['lname']
 	if db.memberExists_by_username(new_username) and db.memberExists_by_email(new_email) is None:
-		db.registerMember(new_username,new_password,new_fn,new_ln,new_email)
+		db.registerMember(new_username,new_password,None,None,new_email,None,None,None)
 		print((new_username + "just registered!"))
 		socket.emit("registered successfully", {'message': "successfully registered!"})
 	else:
 		print("registration failure, user must already exist")
+
+@socket.on('login')
+def on_login(data):
+	loadedData = json.loads(data)
+	if 'username' not in loadedData:
+		if db.login_attempt_email(loadedData['email']):
+			socket.emit("login status", {'authorized': 1}, room=request.sid)
+		else:
+			socket.emit("login status", {'authorized': 0}, room=request.sid)
+	if 'email' not in loadedData:
+		if db.login_attempt(loadedData['username']):
+			socket.emit("login status", {'authorized': 1}, room=request.sid)
+		else:
+			socket.emit("login status", {'authorized': 0}, room=request.sid)
+
+
+
 
 
 if __name__ == '__main__':
