@@ -193,8 +193,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 		boolean cancel = false;
 		View focusView = null;
 
+
+		// Check for a valid password.
+		if(TextUtils.isEmpty(password))
+		{
+			mPasswordView.setError(getString(R.string.login_activity_error_field_required));
+			focusView = mPasswordView;
+			cancel = true;
+		}
 		// Check for a valid password, if the user entered one.
-		if(!TextUtils.isEmpty(password) && !User.isValidPassword(password))
+		else if(!User.isValidPassword(password))
 		{
 			mPasswordView.setError(getString(R.string.login_activity_error_invalid_password));
 			focusView = mPasswordView;
@@ -208,7 +216,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 			focusView = mEmailView;
 			cancel = true;
 		}
-		else if(!User.isValidEmail(email) || User.isValidUsername(email))
+		else if(!(User.isValidEmail(email) || User.isValidUsername(email)))
 		{
 			mEmailView.setError(getString(R.string.login_activity_error_invalid_email));
 			focusView = mEmailView;
