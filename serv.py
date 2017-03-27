@@ -31,7 +31,7 @@ def on_join_room(data):
 def on_get_songs(data):
 	genre = data['genre']
 	songs = ds.getSongList(genre)
-	ds.print(songs)
+	print(songs)
 	socket.emit('song list', songs,room=public_room)
 
 @socket.on('now playing')
