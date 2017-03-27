@@ -386,8 +386,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 				//Socket socket = IO.socket("http://10.11.154.239");
 				Socket socket = IO.socket("https://disco-theque.herokuapp.com");
 				socket.once("registered successfully", this);
-				socket.connect();
-				Thread.sleep(2000);
 				JSONObject obj = new JSONObject();
 				obj.put("email", mEmail);
 				obj.put("username", mUsername);
@@ -421,7 +419,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 			if(success)
 			{
 				//go to activity
-				Intent guestLogin = new Intent(RegisterActivity.this, JoinRoom.class);
+				Intent guestLogin = new Intent(RegisterActivity.this, JoinRoomActivity.class);
 				startActivity(guestLogin);
 			}
 			else
