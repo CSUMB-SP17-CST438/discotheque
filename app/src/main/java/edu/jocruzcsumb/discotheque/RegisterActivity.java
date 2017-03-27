@@ -3,6 +3,7 @@ package edu.jocruzcsumb.discotheque;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -29,8 +30,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -231,7 +241,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
 			showProgress(true);
-			mAuthTask = new UserLoginTask(email, password);
+			mAuthTask = new UserLoginTask(email, username, password);
 			mAuthTask.execute((Void) null);
 		}
 	}
@@ -362,16 +372,43 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean>
+	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> implements Emitter.Listener
 	{
 
+		boolean success;
+
+		@Override
+		public void call(Object... args) {
+			JSONObject obj = (JSONObject) args[0];
+			try
+			{
+				if(obj.getInt("authorized") == 1)
+				{
+					success = true;
+				}
+			}
+			catch (JSONException e)
+			{
+				e.printStackTrace();
+			}
+			System.out.println(obj);
+			loginLatch.countDown();
+		}
+
+		CountDownLatch loginLatch;
+
 		private final String mEmail;
+		private final String mUsername;
 		private final String mPassword;
 
-		UserLoginTask(String email, String password)
+		UserLoginTask(String email, String username, String password)
 		{
 			mEmail = email;
+			mUsername = username;
 			mPassword = password;
+			success = false;
+			loginLatch = new CountDownLatch(1);
+
 		}
 
 		@Override
@@ -381,26 +418,30 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
 			try
 			{
-				// Simulate network access.
-				Thread.sleep(2000);
+
+				Socket socket = IO.socket("https://disco-theque.herokuapp.com");
+				socket.once("registered successfully", this);
+				socket.connect();
+				JSONObject obj = new JSONObject();
+				obj.put("email", mEmail);
+				obj.put("username", mUsername);
+				obj.put("password", mPassword);
+				socket.emit("register", obj);
+				loginLatch.await();
+				return success;
+			}
+			catch (JSONException e)
+			{
+				return false;
+			}
+			catch (URISyntaxException e)
+			{
+				return false;
 			}
 			catch (InterruptedException e)
 			{
 				return false;
 			}
-
-			for(String credential : DUMMY_CREDENTIALS)
-			{
-				String[] pieces = credential.split(":");
-				if(pieces[0].equals(mEmail))
-				{
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
-				}
-			}
-
-			// TODO: register the new account here.
-			return true;
 		}
 
 		@Override
@@ -411,7 +452,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
 			if(success)
 			{
-				finish();
+				//go to activity
+				Intent guestLogin = new Intent(RegisterActivity.this, JoinRoom.class);
+				startActivity(guestLogin);
 			}
 			else
 			{
