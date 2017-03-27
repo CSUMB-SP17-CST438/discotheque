@@ -106,6 +106,26 @@ public class User {
 
     public UserList userList(){return userList;}
 
+    public static boolean isValidUsername(String username)
+    {
+        if(username.length() > 120) return false;
+        else if(username.length() < 6) return false;
+        return true;
+    }
+
+    public static boolean isValidPassword(String password)
+    {
+        if(password.length() > 140) return false;
+        else if(password.length() < 3) return false;
+        return true;
+    }
+    public static boolean isValidEmail(String email)
+    {
+        if(email.length() > 120) return false;
+        else if(email.length() < 6) return false;
+        return email.contains("@");
+    }
+
 
 
 
