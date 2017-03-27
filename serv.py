@@ -52,7 +52,7 @@ def on_register(data):
 	new_email = data['email']
 	# new_fn = data['fname']
 	# new_ln = data['lname']
-	if db.memberExists_by_username(new_username) and db.memberExists_by_email(new_email) is None:
+	if db.memberExists_by_username(new_username) is None and db.memberExists_by_email(new_email) is None:
 		db.registerMember(new_username,new_password,None,None,new_email,None,None,None)
 		print((new_username + "just registered!"))
 		socket.emit("registered successfully", {'message': "successfully registered!"})
