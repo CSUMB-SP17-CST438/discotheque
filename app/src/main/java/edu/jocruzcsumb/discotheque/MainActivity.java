@@ -3,9 +3,10 @@ package edu.jocruzcsumb.discotheque;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
     //setting listers
 
     ArrayList<Button> buttons = new ArrayList<>();
+    JSONArray jsonArray;
 
 
     @Override
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
 
             case R.id.guest_login_btn:
                 //go to activity
-                Intent guestLogin = new Intent(MainActivity.this, JoinRoom.class);
+                Intent guestLogin = new Intent(MainActivity.this, JoinRoomActivity.class);
                 startActivity(guestLogin);
 
                 break;
