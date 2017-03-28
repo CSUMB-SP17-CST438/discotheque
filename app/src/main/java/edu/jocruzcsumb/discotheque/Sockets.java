@@ -23,78 +23,88 @@ import java.util.concurrent.TimeUnit;
  * Created by Admin on 3/25/2017.
  */
 
-public class Sockets {
+public class Sockets
+{
+	private static Socket socket = null;
+
+    private static final boolean DEV_SERVER = true;
+
+    public static String getServer()
+	{
+		return DEV_SERVER?"http://carsen.ml":"https://disco-theque.herokuapp.com";
+	}
 
 
-    private Socket socket;
-    private JSONArray jsonArray;
-    private SongList songList = new SongList();
+    public static Socket getSocket()
+	{
+		if(socket != null ) return socket;
+		try
+		{
+			socket = IO.socket(getServer());
+		}
+		catch(URISyntaxException e)
+		{
+			e.printStackTrace();
+		}
+		socket.connect();
+		return socket;
+	}
 
-    public Sockets(){
-
-            try {
-                //"https://disco-theque.herokuapp.com"
-                socket = IO.socket("http://10.11.154.239");
-                socket.connect();
-
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-
-            }
-
-    }
-
-
-    public SongList getSongList(String genre) {
-        try {
-            JSONObject obj = new JSONObject();
-            obj.put("genre", "punk");
-            socket.emit("join room", "pls");
-            socket.emit("get songs", obj);
-            Thread.sleep(1000);
-            final CountDownLatch socketLatch = new CountDownLatch(1);
-
-
-            socket.on("song list", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    jsonArray = (JSONArray) args[0];
-                    //JSONObject obj = (JSONObject)args[0];
-
-
-                    Log.d("returned data*****:", jsonArray.toString());
-                    socketLatch.countDown();
-                }
-            });
-            socketLatch.await(8L, TimeUnit.SECONDS);
-            //Log.d("json array.....after", jsonArray.toString());
-            if (jsonArray != null) {
-                Log.d("json array.....after", jsonArray.toString());
-                int arrayLength = jsonArray.length();
-                for (int i = 0; i < arrayLength; i++) {
-                    JSONObject object = jsonArray.getJSONObject(i);
-                    Song song = new Song();
-                    song.setSongName(object.getString("title"));
-                    song.setArtist(object.getString("creator_user"));
-                    song.setSong_uri(object.getString("stream_url"));
-                    songList.addSong(song);
-                }
-            }
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    public static class SocketWaiter implements Emitter.Listener
+	{
+		private static final long TIMEOUT = 8L;
+        private boolean success;
+        private CountDownLatch socketLatch;
+        private String signal, event;
+		private JSONObject json;
+        //Signal is what to send the server, event the event we wait for.
+        public SocketWaiter(String signal, String event)
+        {
+            success = false;
+            this.signal=signal;
+            this.event=event;
         }
 
-        return songList;
+        public JSONObject get(JSONObject params)
+        {
+			json = null;
+			socketLatch = new CountDownLatch(1);
+			success = false;
+
+			Log.d("Discotheque", "Sending socket event: "+signal);
+
+			if(params == null) getSocket().emit(signal);
+			else getSocket().emit(signal, params);
+
+			getSocket().once(event, this);
+			try
+			{
+				socketLatch.await(TIMEOUT, TimeUnit.SECONDS);
+				if(!success)
+					return null;
+
+				return json;
+			}
+			catch(InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+        public JSONObject get()
+        {
+			return get(null);
+        }
+
+		@Override
+		public void call(Object... args) {
+			Log.d("Discotheque", "Received socket event: "+event);
+			json = (JSONObject) args[0];
+			success = true;
+			socketLatch.countDown();
+		}
 
 
     }
-
-
-
-
 }

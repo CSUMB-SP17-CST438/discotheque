@@ -340,11 +340,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean>implements Emitter.Listener
+	public class UserLoginTask extends AsyncTask<Void, Void, Boolean>
 	{
-
-		private boolean success;
-		private CountDownLatch loginLatch;
 		private final String mEmail;
 		private final String mPassword;
 
@@ -352,46 +349,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 		{
 			mEmail = email;
 			mPassword = password;
-			success = false;
-			loginLatch = new CountDownLatch(1);
 		}
 
 		@Override
-		public void call(Object... args) {
-			JSONObject obj = (JSONObject) args[0];
-			Log.d("Disco Login","event happened");
-			success = true;
-			loginLatch.countDown();
-		}
-
-
-		@Override
-		protected Boolean doInBackground(Void... params)
+		protected Boolean doInBackground(Void... nothing)
 		{
-			// TODO: attempt authentication against a network service.
-
 			try
 			{
 				Log.d("Disco Register","Attempting to contact main server");
-				Socket socket = IO.socket("https://disco-theque.herokuapp.com");
-				socket.once("registered successfully", this);
-				socket.connect();
-				JSONObject obj = new JSONObject();
-				obj.put(User.isValidEmail(mEmail)?"email":"username", mEmail);
-				obj.put("password", mPassword);
-				socket.emit("login", obj);
-				loginLatch.await(8L, TimeUnit.SECONDS);
-				return success;
+				Sockets.SocketWaiter socketWaiter = new Sockets.SocketWaiter("login", "login status");
+
+				JSONObject params = new JSONObject();
+				params.put(User.isValidEmail(mEmail)?"email":"username", mEmail);
+				params.put("password", mPassword);
+
+				//This is the part that actually waits
+				JSONObject results = socketWaiter.get(params);
+				if(results == null) return false;
+				return results.getInt("authorized") == 1;
 			}
 			catch (JSONException e)
-			{
-				return false;
-			}
-			catch (URISyntaxException e)
-			{
-				return false;
-			}
-			catch (InterruptedException e)
 			{
 				return false;
 			}
