@@ -116,7 +116,8 @@ public class Sockets
 			getSocket().once(event, this);
 			try
 			{
-				socketLatch.await(TIMEOUT, TimeUnit.SECONDS);
+				//socketLatch.await(TIMEOUT, TimeUnit.SECONDS);
+				socketLatch.await();
 				if(!success)
 					return null;
 
