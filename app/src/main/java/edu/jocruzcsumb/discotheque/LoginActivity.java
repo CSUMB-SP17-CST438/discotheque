@@ -34,15 +34,8 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -364,7 +357,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 				params.put("password", mPassword);
 
 				//This is the part that actually waits
-				JSONObject results = socketWaiter.get(params);
+				JSONObject results = socketWaiter.getObj(params);
 				if(results == null) return false;
 				return results.getInt("authorized") == 1;
 			}

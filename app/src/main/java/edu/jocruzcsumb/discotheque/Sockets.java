@@ -5,11 +5,10 @@ package edu.jocruzcsumb.discotheque;
  */
 
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONException;
+
 import io.socket.client.Socket;
 //import edu.jocruzcsumb.discotheque.Socket;
 import io.socket.emitter.Emitter;
@@ -57,6 +56,8 @@ public class Sockets
         private CountDownLatch socketLatch;
         private String signal, event;
 		private JSONObject json;
+		private JSONArray jsonArray;
+		private boolean arrayMode;
         //Signal is what to send the server, event the event we wait for.
         public SocketWaiter(String signal, String event)
         {
@@ -65,8 +66,9 @@ public class Sockets
             this.event=event;
         }
 
-        public JSONObject get(JSONObject params)
+        public JSONObject getObj(JSONObject params)
         {
+			arrayMode = false;
 			json = null;
 			socketLatch = new CountDownLatch(1);
 			success = false;
@@ -92,15 +94,52 @@ public class Sockets
 			return null;
 		}
 
-        public JSONObject get()
+        public JSONObject getObj()
         {
-			return get(null);
+			return getObj(null);
         }
 
+
+
+		public JSONArray getArray(JSONObject params)
+		{
+			arrayMode = true;
+			jsonArray = null;
+			socketLatch = new CountDownLatch(1);
+			success = false;
+
+			Log.d("Discotheque", "Sending socket event: "+signal);
+
+			if(params == null) getSocket().emit(signal);
+			else getSocket().emit(signal, params);
+
+			getSocket().once(event, this);
+			try
+			{
+				socketLatch.await(TIMEOUT, TimeUnit.SECONDS);
+				if(!success)
+					return null;
+
+				return jsonArray;
+			}
+			catch(InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		public JSONArray getArray()
+		{
+			return getArray(null);
+		}
 		@Override
 		public void call(Object... args) {
 			Log.d("Discotheque", "Received socket event: "+event);
-			json = (JSONObject) args[0];
+
+			if(arrayMode) jsonArray = (JSONArray) args[0];
+			else json = (JSONObject) args[0];
+
 			success = true;
 			socketLatch.countDown();
 		}
