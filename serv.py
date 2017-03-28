@@ -82,7 +82,7 @@ def on_login(data):
 if __name__ == '__main__':
 	socket.run(
 		serv,
-		port=int(os.getenv('PORT')),
+		port=int(os.getenv('PORT','80')),
 		host=os.getenv('IP','0.0.0.0'),
 		debug=True)
 
