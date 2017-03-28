@@ -38,11 +38,10 @@ def on_get_songs(data):
 	print(songs)
 	socket.emit('song list', songs,room=public_room)
 
-@socket.on('now playing')
-def on_now_playing(data):
-	current_song = data['current_song']
+@socket.on('song picked')
+def on_song_picked(data):
+	current_song = data['song']
 	socket.emit('song to play', current_song, room=public_room)
-
 
 @socket.on('register')
 def on_register(data):
@@ -74,6 +73,15 @@ def on_login(data):
 			socket.emit("login status", {'authorized': 1}, room=request.sid)
 		else:
 			socket.emit("login status", {'authorized': 0}, room=request.sid)
+
+
+
+	@socket.on('new message')
+	def on_new_message(data):
+		message = data['message']
+		member = data['from']
+
+
 
 
 
