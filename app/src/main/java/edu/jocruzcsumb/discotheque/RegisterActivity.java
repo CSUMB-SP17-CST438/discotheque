@@ -383,8 +383,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 			try
 			{
 				Log.d("Disco Register","Attempting to contact main server");
-				//Socket socket = IO.socket("http://10.11.154.239");
-				Socket socket = IO.socket("https://disco-theque.herokuapp.com");
+				Socket socket = IO.socket("http://10.11.154.239");
+				//Socket socket = IO.socket("https://disco-theque.herokuapp.com");
 				socket.once("registered successfully", this);
 				JSONObject obj = new JSONObject();
 				obj.put("email", mEmail);

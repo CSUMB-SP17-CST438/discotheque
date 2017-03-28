@@ -67,10 +67,8 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
 
         } catch (JSONException e) {
             e.printStackTrace();
-
         }  catch (URISyntaxException e) {
             throw new RuntimeException(e);
-
         }
         catch (InterruptedException e) {
             e.printStackTrace();
