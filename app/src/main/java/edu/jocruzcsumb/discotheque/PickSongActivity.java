@@ -21,6 +21,7 @@ import java.io.IOException;
 public class PickSongActivity extends AppCompatActivity {
 
 	private SongList songList = new SongList();
+	private JSONArray jsonArray = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class PickSongActivity extends AppCompatActivity {
 					e.printStackTrace();
 				}
 				//This waits for the jsonArray to get back
-                JSONArray jsonArray = waiter.getArray(obj);
+                jsonArray = waiter.getArray(obj);
 
 				if (jsonArray != null)
 				{
@@ -109,29 +110,17 @@ public class PickSongActivity extends AppCompatActivity {
 						public void onItemClick(AdapterView<?> parent, View view, int pos, long id)
 						{
 							Toast.makeText(PickSongActivity.this, pos + " " + id, Toast.LENGTH_SHORT).show();
-							Song song = songList.getSong(pos);
-							String url = song.getSong_uri();
-							Log.d("Discotheque", "Streaming song - url: " + url);
-							MediaPlayer mediaPlayer = new MediaPlayer();
-							mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+							JSONObject obj = new JSONObject();
 							try
 							{
-								Log.d("Discotheque","song url chosen: "+url);
-								mediaPlayer.setDataSource(url);
+								obj.put("song", jsonArray.get(pos));
 							}
-							catch(IOException e)
+							catch(JSONException e)
 							{
 								e.printStackTrace();
 							}
-							try
-							{
-								mediaPlayer.prepare(); // might take long! (for buffering, etc)
-							}
-							catch(IOException e)
-							{
-								e.printStackTrace();
-							}
-							mediaPlayer.start();
+							Sockets.getSocket().emit("song picked",obj);
+							finish();
 						}
 
 					});
