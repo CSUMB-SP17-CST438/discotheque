@@ -382,29 +382,16 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
 			try
 			{
-				Log.d("Disco Register","Attempting to contact main server");
-				Socket socket = IO.socket("http://10.11.154.239");
-				//Socket socket = IO.socket("https://disco-theque.herokuapp.com");
-				socket.once("registered successfully", this);
+				Sockets.SocketWaiter socketWaiter = new Sockets.SocketWaiter("register","registered successfully");
 				JSONObject obj = new JSONObject();
 				obj.put("email", mEmail);
 				obj.put("username", mUsername);
 				obj.put("password", mPassword);
-				socket.emit("register", obj);
-				loginLatch.await(8L, TimeUnit.SECONDS);
-
-				Log.d("Disco Register","Success = " + (success?"true":"false"));
-				return success;
+				JSONObject results = socketWaiter.getObj(obj);
+				if(results == null)return false;
+				else return results.getInt("authorized") == 1;
 			}
 			catch (JSONException e)
-			{
-				return false;
-			}
-			catch (URISyntaxException e)
-			{
-				return false;
-			}
-			catch (InterruptedException e)
 			{
 				return false;
 			}
