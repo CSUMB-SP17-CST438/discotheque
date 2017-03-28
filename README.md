@@ -9,15 +9,15 @@ The app streams musics.
 
 
 
-### Work Distribution ###
+### Work Distrubution ###
 _Who worked on what_
 
 
-* Joshua 'Ryan' Cruz: Backend Heroku Deployment, servers socket intergran, initial soundcloud integration, and database creation
-* Tommy Ha: Socket integration, multiple classes, UI for displaying songs
-* Peter King: UI skeleton, READMEs, rewrote user stories. 
+* Joshua 'Ryan' Cruz: Backend Heroku Deployment, servers socket intergran, intitial soundcloud intergration, and database creation
+* Tommy Ha: Socket integration, multible classes, UI for displaying songs
+* Peter King: UI skeleton, READMEs, rewrote user storys. 
 * Kara Spencer: Media player
-* Carsen Yates: android Interface, login functionality, android sockets. 
+* Carsen Yates: android Interace, login functionality, android sockets. 
 
 
 
@@ -36,10 +36,10 @@ The databases and backend framework are deployed on a heroku app that all the us
 
 
 ### Known Problems ###
-Not for MVP goal. Songs will play indefinitely. Login and account creation does not work completely. 
+Not for MVP goal. 
 
 
-### Future Improvements ###
-For future improvements will continue create functionality based off of our users stories. Users be able to create, join, and 
+### Future Improvments ###
+For future improvements will continue create functionarlity based off of our users storys. Users be able to create, join, and 
 leave different rooms. Users will only be able to choose songs only when it is their turn. Each room will have chat functionality and users 
 will have profiles.
