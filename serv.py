@@ -41,6 +41,8 @@ def on_get_songs(data):
 @socket.on('song picked')
 def on_song_picked(data):
 	current_song = data['song']
+	stream_url_loc = ds.getSongURLLocation(current_song['id'])
+	current_song['stream_url'] = stream_url_loc
 	socket.emit('song to play', current_song, room=public_room)
 
 @socket.on('register')
