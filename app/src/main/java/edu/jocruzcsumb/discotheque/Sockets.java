@@ -26,7 +26,7 @@ public class Sockets
 {
 	private static Socket socket = null;
 
-    private static final boolean DEV_SERVER = true;
+    private static final boolean DEV_SERVER = false;
 
     public static String getServer()
 	{
