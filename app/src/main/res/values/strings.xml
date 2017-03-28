@@ -50,6 +50,7 @@
     <string name="register_activity_permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="chat_room_activity_choose_song">Choose Song</string>
 
 
 </resources>

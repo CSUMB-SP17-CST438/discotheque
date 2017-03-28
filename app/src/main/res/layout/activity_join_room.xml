@@ -51,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.10"
-        android:text="temp_gotoRoom" />
+        android:text="Enter Chat Room 1" />
 
 
 </LinearLayout>
