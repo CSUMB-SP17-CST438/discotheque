@@ -33,6 +33,7 @@ public class PickSongActivity extends AppCompatActivity {
         TextView CurrentSong = (TextView) findViewById(R.id.curr_song_name_textview);
         TextView currentArtist = (TextView) findViewById(R.id.curr_artist_textiew);
         final ListView songListView = (ListView) findViewById(R.id.song_listview);
+
         new Thread(new Runnable()
         {
             @Override
@@ -76,10 +77,6 @@ public class PickSongActivity extends AppCompatActivity {
 					}
 					final ListView listView = songListView;
 					//songList = socket.getSongList("punk");
-					if(songList.size() == 0)
-					{
-						Toast.makeText(PickSongActivity.this, "list is zero", Toast.LENGTH_SHORT).show();
-					}
 
 
 					//button reference to widgets

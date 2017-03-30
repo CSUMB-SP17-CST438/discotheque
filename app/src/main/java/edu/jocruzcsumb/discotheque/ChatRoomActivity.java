@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,15 +23,19 @@ import io.socket.emitter.Emitter;
 public class ChatRoomActivity extends AppCompatActivity implements View.OnClickListener, Emitter.Listener
 {
 	MediaPlayer mediaPlayer;
+	private EditText chatField;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat_room);
 		Button pickSongButton = (Button) findViewById(R.id.pick_song_button);
+		Button send_chat_button = (Button) findViewById(R.id.send_button);
+		chatField = (EditText) findViewById(R.id.chat_edit_text);
 		pickSongButton.setOnClickListener(this);
-
+		send_chat_button.setOnClickListener(this);
 		Sockets.getSocket().on("song to play", this);
+
 	}
 
 	@Override
@@ -50,7 +57,20 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
 				startActivity(goToRoom);
 
 				break;
+
+			case R.id.send_button:
+				chat();
+
+				break;
 		}
+	}
+
+	public void chat(){
+		String chatMessage = chatField.getText().toString();
+		chatField.setText("");
+		Log.d("chatMessage", chatMessage);
+		Sockets.getSocket().emit("chat" , chatMessage);
+
 	}
 
 	@Override
