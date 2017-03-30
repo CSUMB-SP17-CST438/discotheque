@@ -1,11 +1,14 @@
 package edu.jocruzcsumb.discotheque;
 
+import java.io.Serializable;
+
 /**
  * Created by Tommy on 3/22/2017.
  */
 
-public class User {
+public class User implements Serializable {
 
+    private String member_id;
     private String userName;
     private String firstName;
     private String lastName;
@@ -18,6 +21,7 @@ public class User {
 
 
     public User(){
+        member_id = "";
         userName = "";
         firstName = "";
         lastName = "";
@@ -37,7 +41,8 @@ public class User {
         userList = new UserList();
     }
 
-    public User(String userName, String firstName, String lastName, String email, String photo, String genre, String description){
+    public User(String member_id, String userName, String firstName, String lastName, String email, String photo, String genre, String description){
+        this.member_id = member_id;
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -47,6 +52,8 @@ public class User {
         this.description = description;
         userList = new UserList();
     }
+
+    public String getMember_id(){return member_id;}
 
     public String getUserName(){
         return userName;
@@ -71,6 +78,8 @@ public class User {
     }
 
     public String getDescription(){return description;}
+
+    public void setMember_id(String member_id){this.member_id = member_id;}
 
     public void setFirstName(String firstName){this.firstName = firstName;}
 
