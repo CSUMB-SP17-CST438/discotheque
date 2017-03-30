@@ -24,7 +24,8 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        int[] ids = new int[]{R.id.guest_login_btn, R.id.login_btn, R.id.register_btn};
+        // Insert a button ID into this array to give it a click listener and add it to the buttons ArrayList
+        int[] ids = new int[]{R.id.guest_login_btn};
         for(int id:ids){
             Button b = (Button) findViewById(id);
             buttons.add(b);
