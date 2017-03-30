@@ -42,20 +42,6 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
                 startActivity(guestLogin);
 
                 break;
-
-            case R.id.login_btn:
-                //go to activity
-                Intent login = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(login);
-
-                break;
-
-            case R.id.register_btn:
-                //go to activity
-                Intent register = new Intent(MainActivity.this, RegisterActivity.class);
-                startActivity(register);
-
-                break;
         }
     }
 }

@@ -7,3 +7,6 @@
 /build
 /captures
 .externalNativeBuild
+.idea/codeStyleSettings.xml
+.idea/misc.xml
+.idea/modules.xml
