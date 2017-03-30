@@ -17,11 +17,6 @@ import java.net.URISyntaxException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-
-/**
- * Created by Admin on 3/25/2017.
- */
-
 public class Sockets
 {
 	private static Socket socket = null;
@@ -33,6 +28,19 @@ public class Sockets
 		return DEV_SERVER?"http://carsen.ml":"https://disco-theque.herokuapp.com";
 	}
 
+	//Checks to see if the current user is authed
+	public static boolean isUserAuthenticated()
+	{
+		//TODO: AUTH
+		return true;
+	}
+
+	//Returns the authed user
+	public static User getUser()
+	{
+		//TODO: AUTH
+		return null;
+	}
 
     public static Socket getSocket()
 	{
@@ -58,9 +66,14 @@ public class Sockets
 		private JSONObject json;
 		private JSONArray jsonArray;
 		private boolean arrayMode;
-        //Signal is what to send the server, event the event we wait for.
+		//event = the event we wait for.
+		public SocketWaiter(String event)
+		{
+			this(null, event);
+		}
+		//Signal = what to send the server, event = event we wait for.
         public SocketWaiter(String signal, String event)
-        {
+			{
             success = false;
             this.signal=signal;
             this.event=event;
@@ -75,8 +88,11 @@ public class Sockets
 
 			Log.d("Discotheque", "Sending socket event: "+signal);
 
-			if(params == null) getSocket().emit(signal);
-			else getSocket().emit(signal, params);
+			if(signal != null)
+			{
+				if(params == null) getSocket().emit(signal);
+				else getSocket().emit(signal, params);
+			}
 
 			getSocket().once(event, this);
 			try
@@ -110,8 +126,11 @@ public class Sockets
 
 			Log.d("Discotheque", "Sending socket event: "+signal);
 
-			if(params == null) getSocket().emit(signal);
-			else getSocket().emit(signal, params);
+			if(signal != null)
+			{
+				if(params == null) getSocket().emit(signal);
+				else getSocket().emit(signal, params);
+			}
 
 			getSocket().once(event, this);
 			try
