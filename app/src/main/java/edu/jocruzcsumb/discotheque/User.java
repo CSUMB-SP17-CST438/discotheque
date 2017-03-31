@@ -1,12 +1,10 @@
 package edu.jocruzcsumb.discotheque;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-/**
- * Created by Tommy on 3/22/2017.
- */
 
-public class User implements Serializable {
+public class User implements Parcelable {
 
     private String member_id;
     private String userName;
@@ -134,6 +132,48 @@ public class User implements Serializable {
         else if(email.length() < 6) return false;
         return email.contains("@");
     }
+
+    public User(Parcel in){
+
+        this.member_id = in.readString();
+        this.userName = in.readString();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
+        this.email = in.readString();
+        this.photo = in.readString();
+        this.genre = in.readString();
+        this.description = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(member_id);
+        dest.writeString(userName);
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(email);
+        dest.writeString(photo);
+        dest.writeString(genre);
+        dest.writeString(description);
+
+    }
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+
 
 
 
