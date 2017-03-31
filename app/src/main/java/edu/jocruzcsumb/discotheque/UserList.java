@@ -1,12 +1,14 @@
 package edu.jocruzcsumb.discotheque;
 
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 /**
  * Created by Tommy on 3/23/2017.
  */
 
-public class UserList {
+public class UserList{
 
     private ArrayList<User> arrayList;
 

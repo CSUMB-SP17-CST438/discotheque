@@ -34,7 +34,7 @@ public class PickSongActivity extends AppCompatActivity {
         TextView currentArtist = (TextView) findViewById(R.id.curr_artist_textiew);
         final ListView songListView = (ListView) findViewById(R.id.song_listview);
 
-        new Thread(new Runnable()
+		new Thread(new Runnable()
         {
             @Override
             public void run()
