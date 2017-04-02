@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Discotheque</string>
+    <string name = "facebook_app_id"> 959522337518625</string>
+
 
     <string name="facebook">Log in with Facebook</string>
     <string name="google">Log in with Google</string>
