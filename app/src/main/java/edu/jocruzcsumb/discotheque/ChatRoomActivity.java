@@ -60,9 +60,11 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
 		Log.d("Discotheque","new song to play: "+jsonSong.toString());
 
 		String url = null;
+		String startTime = null;
 		try
 		{
 			url = jsonSong.get("stream_url").toString();
+			startTime = jsonSong.get("start_time").toString();
 		}
 		catch(JSONException e)
 		{
