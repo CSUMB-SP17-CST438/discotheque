@@ -18,6 +18,14 @@ class sc_test(unittest.TestCase):
 		new_member = db.registerMember(usnm,password,None,None,email)
 		self.assertIsNotNone(new_member)
 
+	def test_add_message(self):
+		nm = db.add_message(1,1,"this is a test...")
+		self.assertEqual(nm,True)
 
+	def test_get_messages(self):
+		messages = db.getFloorMessages(1)
+		print(messages)
+		print(messages[1])
+		self.assertIsNotNone(messages)
 if __name__ == '__main__':
     unittest.main()

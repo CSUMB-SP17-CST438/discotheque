@@ -5,6 +5,7 @@ from flask import request
 import discoSounds as ds 
 import os
 import json
+import datetime
 
 
 public_room = 912837
@@ -34,12 +35,12 @@ def on_join_room(data):
 def on_get_songs(data):
 	genre = data['genre']
 	songs = ds.getSongList(genre)
-	print("********************************************SONGLIST******************************************************************")
-	print(songs)
+	print("********************************************SONGLIST triggered******************************************************************")
 	socket.emit('song list', songs,room=public_room)
 
 @socket.on('song picked')
 def on_song_picked(data):
+	start_at = datetime.now().microseconds
 	current_song = data['song']
 	stream_url_loc = ds.getSongURLLocation(current_song['id'])
 	current_song['stream_url'] = stream_url_loc
@@ -78,14 +79,14 @@ def on_login(data):
 
 
 
-	@socket.on('new message')
-	def on_new_message(data):
-		message = data['message']
-		member = data['from']
-
-
-
-
+@socket.on('new message')
+def on_new_message(data):
+	print('***********************************triggered new message********************************')
+	floor_id = data['floor']
+	member_id = data['from']
+	text = data['message']
+	db.add_message(floor_id,member_id,text)
+	socket.emit("message added", {'floor_messages':db.getFloorMessages(floor_id)},room=request.sid)
 
 
 
@@ -95,14 +96,6 @@ if __name__ == '__main__':
 		port=int(os.getenv('PORT','80')),
 		host=os.getenv('IP','0.0.0.0'),
 		debug=True)
-
-# if __name__ == '__main__':
-# 	socket.run(
-# 		serv,
-# 		port='8080',
-# 		host=os.getenv('IP','0.0.0.0'),
-# 		debug=True)
-
 
  ##waht did you do yesterday?
  #what did you do toda?
