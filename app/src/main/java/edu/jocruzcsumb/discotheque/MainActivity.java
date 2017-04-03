@@ -28,6 +28,8 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -145,6 +147,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String email = account.getEmail();
             String img_url = account.getPhotoUrl().toString();
             Toast.makeText(MainActivity.this, "Google Login Result: " + name, Toast.LENGTH_SHORT).show();
+            Sockets.SocketWaiter waiter = new Sockets.SocketWaiter("login", "login status");
+
+            JSONObject obj = new JSONObject();
+            String t = result.getSignInAccount().getIdToken();
+
+
+			try
+			{
+				obj.put("google_t", t);
+			}
+			catch(JSONException e)
+			{
+				e.printStackTrace();
+				return;
+			}
+
+			obj = waiter.getObj(obj);
+
+			if(obj == null)
+			{
+				return;
+			}
+
 
 
         }
