@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Discotheque</string>
+    <string name = "facebook_app_id"> 959522337518625</string>
 
-    <string name="login">Log in</string>
-    <string name="register">Register</string>
+
     <string name="facebook">Log in with Facebook</string>
     <string name="google">Log in with Google</string>
     <string name="guest">Enter as a Guest</string>
@@ -51,6 +51,8 @@
         completions."
     </string>
     <string name="chat_room_activity_choose_song">Choose Song</string>
+    <string name="chat_room_activity_send">Send</string>
+    <string name="chat_room_activity_chat">Chat</string>
 
 
 </resources>
