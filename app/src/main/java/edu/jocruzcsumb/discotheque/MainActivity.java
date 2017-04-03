@@ -19,6 +19,8 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -44,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Google sign in set up
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN.DEFAULT_SIGN_IN).requestEmail().build();
         googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this).addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions).build();
-
 
 
         // Insert a button ID into this array to give it a click listener and add it to the buttons ArrayList
@@ -104,6 +105,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String email = account.getEmail();
             String img_url = account.getPhotoUrl().toString();
             Toast.makeText(MainActivity.this, "Google Login Result: " + name, Toast.LENGTH_SHORT).show();
+            Sockets.SocketWaiter waiter = new Sockets.SocketWaiter("login", "login status");
+
+            JSONObject obj = new JSONObject();
+            String t = result.getSignInAccount().getIdToken();
+
+
+			try
+			{
+				obj.put("google_t", t);
+			}
+			catch(JSONException e)
+			{
+				e.printStackTrace();
+				return;
+			}
+
+			obj = waiter.getObj(obj);
+
+			if(obj == null)
+			{
+				return;
+			}
+
 
 
         }
