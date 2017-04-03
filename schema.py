@@ -15,8 +15,8 @@ from sqlalchemy import desc
 
 
 
-serv.serv.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-# serv.serv.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jcrzr:anchor99@localhost/postgres'
+# serv.serv.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+serv.serv.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jcrzr:anchor99@localhost/postgres'
 db = flask_sqlalchemy.SQLAlchemy(serv.serv)
 ma = Marshmallow(serv.serv)
 
@@ -136,6 +136,14 @@ def memberExists_by_username(username):
 	found_member = member.query.filter_by(username=username).first()
 	return found_member
 
+def memberExists(mem_id):
+	if db.member.query.get(mem_id):
+		return True
+	return False
+
+# ******************************************************************************************************
+# ************************************START INSERT MESSAGES*********************************************
+# ******************************************************************************************************
 def registerMember(username,password,fname,lname,email):
 	if not memberExists_by_email(email) and not memberExists_by_username(username):
 		#fname,lname,email,imgLink,desc, genres
@@ -146,10 +154,17 @@ def registerMember(username,password,fname,lname,email):
 	else:
 		return None
 
-def add_message(self, floor_id, member_id, text):
-	new_message = message(floor_id,mem_id,text)
+def add_message(floor_id, member_id, text):
+	new_message = message(floor_id,member_id,text)
 	db.session.add(new_message)
 	db.session.commit()
+	return True
+
+# ******************************************************************************************************
+# **************************************END INSERT MESSAGES*********************************************
+# ******************************************************************************************************
+
+
 
 def login_attempt(username,password):
 	this_member = memberExists_by_username(username)
@@ -171,5 +186,35 @@ def login_attemp_email(email,password):
 """*************************************************************************************************************************************
 ****************************************************************************************************************************************
 ***********************************************END INSERT/UPDATE FUNCTIONS**************************************************************
+****************************************************************************************************************************************
+****************************************************************************************************************************************"""
+
+"""*************************************************************************************************************************************
+****************************************************************************************************************************************
+**************************************************START GET FUNCTIONS*******************************************************************
+****************************************************************************************************************************************
+****************************************************************************************************************************************"""
+def getFloorMessages(floor_id):
+	all_messages = floor.query.get(floor_id).floor_messages.order_by(message.pubTime)
+	me_schem = message_Schema()
+	floor_Messages = []
+	for i in all_messages:
+		floor_Messages.append(me_schem.dump(i).data)
+	return floor_Messages
+
+
+def getFloorMembers(floor_id):
+	membs = floor.query.get(floor_id).floor_members.order_by(member.username)
+	memb_schem = member_Schema()
+	floor_members = []
+	for m in membs:
+		members.append(memb_schem.dump(m).data)
+	return floor_members
+
+
+
+"""*************************************************************************************************************************************
+****************************************************************************************************************************************
+*****************************************************END GET FUNCTIONS******************************************************************
 ****************************************************************************************************************************************
 ****************************************************************************************************************************************"""

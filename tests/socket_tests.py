@@ -13,17 +13,25 @@ class SocketioTestCases(unittest.TestCase):
         # print (from_server)
         self.assertIsNot(from_server,None)
 
-    def test_register(self):
+    # def test_register(self):
+    #     client = serv.socket.test_client(serv.serv)
+    #     i = random.randint(1,100000)
+    #     usnm = "username" + str(i)
+    #     password = "pass"+str(i)
+    #     email = "thisiaanemail@"+str(i)
+    #     client.emit("register",{'username':usnm,'password':password,'email':email})
+    #     r = client.get_received()
+    #     response_message = r[0]['name']
+    #     print(response_message)
+    #     self.assertEquals(response_message,"register response")
+
+    def test_add_message(self):
         client = serv.socket.test_client(serv.serv)
-        i = random.randint(1,100000)
-        usnm = "username" + str(i)
-        password = "pass"+str(i)
-        email = "thisiaanemail@"+str(i)
-        client.emit("register",{'username':usnm,'password':password,'email':email})
+        client.emit('new message', {'floor':1,'from':2,'message':'this is a test message from socket_tests.'})
         r = client.get_received()
-        response_message = r[0]['name']
-        print(response_message)
-        self.assertEquals(response_message,"register response")
+        # response_message = r
+        print(r)
+        self.assertIsNotNone(r)
     
 if __name__ == '__main__':
     unittest.main()
