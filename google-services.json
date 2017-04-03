@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "598475373789",
+    "project_id": "discotheque-163417"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:598475373789:android:f21c5e889f20552a",
+        "android_client_info": {
+          "package_name": "edu.jocruzcsumb.discotheque"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "598475373789-eqs53hf9ifinmv7m06sm2km72uksc8tj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.jocruzcsumb.discotheque",
+            "certificate_hash": "9ba12cc3c5a09425eed0f29bb475f8be73d7668c"
+          }
+        },
+        {
+          "client_id": "598475373789-4i51i1tl2uc3oca8ruhj2jq2p7ai718n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2fdBvk8SlhtqB1ddvEszemn23KZVzODE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
