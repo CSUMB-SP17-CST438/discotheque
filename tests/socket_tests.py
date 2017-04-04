@@ -17,7 +17,7 @@ class SocketioTestCases(unittest.TestCase):
     #     client = serv.socket.test_client(serv.serv)
     #     i = random.randint(1,100000)
     #     usnm = "username" + str(i)
-    #     password = "pass"+str(i)
+    #     password = "pass"+st r(i)
     #     email = "thisiaanemail@"+str(i)
     #     client.emit("register",{'username':usnm,'password':password,'email':email})
     #     r = client.get_received()
@@ -32,6 +32,14 @@ class SocketioTestCases(unittest.TestCase):
         # response_message = r
         print(r)
         self.assertIsNotNone(r)
+
+
+    # def test_login_fb(self):
+    # 	client = serv.socket.test_client(serv.serv)
+    # 	client.emit('login',{'fb_t': 'EAAF55XYSy2sBABpHK2UqcyZAz11UBBrTiMzyDSP9rvm7rvnEiG1oG95UUCWfr2oXmMZArjaGHif5nV3mJIIT8JXg6TnSIIhVXe6NGSBZAHBZC1vIRlN5AxJQFPZAMSei1asovC8oeN3FiMSaCP2cVaoxEBXvAV1VTjgoLEz9g2zBYBpLTIze0wJHIGZB2xZBTwXInD0smTjlFJcgg0oWq8DIlFFgZCTjdFQZD'})
+    # 	r = client.get_received()
+    # 	print(r)
+    # 	self.assertIsNotNone(r)
     
 if __name__ == '__main__':
     unittest.main()
