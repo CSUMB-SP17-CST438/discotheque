@@ -15,8 +15,8 @@ from sqlalchemy import desc
 
 
 
-# serv.serv.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-serv.serv.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jcrzr:anchor99@localhost/postgres'
+serv.serv.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+# serv.serv.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jcrzr:anchor99@localhost/postgres'
 serv.serv.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
 db = flask_sqlalchemy.SQLAlchemy(serv.serv)
 ma = Marshmallow(serv.serv)
