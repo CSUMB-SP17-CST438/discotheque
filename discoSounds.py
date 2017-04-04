@@ -10,7 +10,7 @@ def getSongList(g):
 	for t in scTracks:
 		#parse track information to what is relevant to us
 		username = t.user['username']
-		new_track = {'id':t.id,'title':t.title, 'creator_user':username,'track_permalink':t.permalink_url,'stream_url':"nothing yet",'artwork':t.artwork_url}
+		new_track = {'id':t.id,'title':t.title, 'creator_user':username,'track_permalink':t.permalink_url,'stream_url':"nothing yet",'artwork':t.artwork_url, 'start_time':'0'}
 		trackList.append(new_track)
 	return trackList
 

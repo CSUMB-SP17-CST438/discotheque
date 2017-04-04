@@ -8,3 +8,4 @@ psycopg2
 eventlet
 flask-testing
 soundcloud
+facebook-sdk
