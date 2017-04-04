@@ -1,5 +1,6 @@
 general:
   branches:
     ignore:
-      - master
       - android
+      - master
+
