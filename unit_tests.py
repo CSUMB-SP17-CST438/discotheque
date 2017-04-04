@@ -12,10 +12,13 @@ class sc_test(unittest.TestCase):
 
 	def test_add_user(self):
 		i = random.randint(1,100000)
-		usnm = "username" + str(i)
-		password = "pass"+str(i)
+		j = random.randint(1,2222)
+		usnm = "username" + str(i)+str(j)
+		fname = "first_n"+str(i)
+		lname = "last_n"+str(i)
 		email = "thisiaanemail@"+str(i)
-		new_member = db.registerMember(usnm,password,None,None,email)
+		img = 'link' + str(i)
+		new_member = db.registerMember(usnm,fname,lname,email,img)
 		self.assertIsNotNone(new_member)
 
 	def test_add_message(self):

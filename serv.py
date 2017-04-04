@@ -109,10 +109,11 @@ def on_new_message(data):
                 'floor_messages': db.getFloorMessages(floor_id)}, room=request.sid)
 
 
-@serv.route('/rooms')
+@serv.route('/floors')
 @socket.on('create')
 def on_create(data):
-    new_floor = db.floor('')
+    new_floor = db.floor(data['floor_name'],data['m_id'],data['isPublic'])
+    
 
 
 # def get_dt_ms():
