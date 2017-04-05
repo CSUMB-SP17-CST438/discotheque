@@ -11,7 +11,7 @@ import facebook
 
 public_room = 912837
 
-serv = flask.Flask(__name__)
+serv = flask.Flask("app")
 import schema as db
 serv.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
 socket = flask_socketio.SocketIO(serv)
