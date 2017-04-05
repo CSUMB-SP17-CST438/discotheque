@@ -25,7 +25,7 @@ public class Sockets
 
     public static String getServer()
 	{
-		return DEV_SERVER?"http://10.11.154.239":"https://disco-theque.herokuapp.com";
+		return DEV_SERVER?"http://carsen.ml":"https://disco-theque.herokuapp.com";
 	}
 
 	//Checks to see if the current user is authed
