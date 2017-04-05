@@ -66,7 +66,8 @@ def on_login(data):
         response = requests.get(
             'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + data['google_t'])
         json = response.json()
-        fname = json['given_name']
+        print(json)
+        fname = json['given_name'] 
         lname = json['family_name']
         link = json['picture']
         email = json['email']
@@ -113,7 +114,8 @@ def on_new_message(data):
 @socket.on('create')
 def on_create(data):
     new_floor = db.floor(data['floor_name'],data['m_id'],data['isPublic'])
-    
+    socket.emit('floor created', {'floor_id':new_floor.floor_id})
+
 
 
 # def get_dt_ms():
