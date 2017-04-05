@@ -68,8 +68,10 @@ def on_login(data):
         response = requests.get(
             'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + data['google_t'])
         json = response.json()
-        name = json['name']
-        link = json['picture']['data']['url']
+        fname = json['given_name']
+        lname = json['family_name']
+        link = json['picture']
+        email = json['email']
         mem_found = db.memberExists_by_email(email)
         if mem_found is not None:
             mem = db.getMember(email)
