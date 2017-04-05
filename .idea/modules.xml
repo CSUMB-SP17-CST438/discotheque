@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Discotheque.iml" filepath="$PROJECT_DIR$/Discotheque.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/discotheque.iml" filepath="$PROJECT_DIR$/discotheque.iml" />
       <module fileurl="file://$PROJECT_DIR$/project3-cyates.iml" filepath="$PROJECT_DIR$/project3-cyates.iml" />

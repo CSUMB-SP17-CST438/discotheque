@@ -22,15 +22,13 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
-<<<<<<< HEAD
-=======
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
->>>>>>> upstream/android
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,19 +70,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN.DEFAULT_SIGN_IN).requestEmail().build();
         googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this).addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions).build();
 
-<<<<<<< HEAD
-=======
 
 		//google sign in button
 		SignIn = (SignInButton)findViewById( R.id.google_login_btn);
 		SignIn.setOnClickListener(this);
 
-        //facebook sign in
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
-        info = (TextView)findViewById(R.id.info);
-        loginButton = (LoginButton)findViewById(R.id.login_button);
->>>>>>> upstream/android
 
         // Insert a button ID into this array to give it a click listener and add it to the buttons ArrayList
         int[] ids = new int[]{R.id.guest_login_btn};
