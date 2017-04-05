@@ -44,7 +44,6 @@
         android:textColor="#ffffff"
         android:textSize="12pt" />
 
-
     <!-- google signin -->
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_login_btn"
