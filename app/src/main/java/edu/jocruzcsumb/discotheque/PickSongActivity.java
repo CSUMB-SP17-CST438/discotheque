@@ -42,7 +42,6 @@ public class PickSongActivity extends AppCompatActivity {
 		mRecyleView.setHasFixedSize(true);
 		LinearLayoutManager llm = new LinearLayoutManager(this);
 		mRecyleView.setLayoutManager(llm);
-
 		new Thread(new Runnable()
         {
             @Override
@@ -54,7 +53,7 @@ public class PickSongActivity extends AppCompatActivity {
 				JSONObject obj = new JSONObject();
 				try
 				{
-					obj.put("genre", "punk");
+					obj.put("genre", "reggae");
 				}
 				catch(JSONException e)
 				{

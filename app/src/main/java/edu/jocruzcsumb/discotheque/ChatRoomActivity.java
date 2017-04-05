@@ -43,6 +43,7 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
 	{
 		super.onDestroy();
 		if(mediaPlayer != null) mediaPlayer.stop();
+        Toast.makeText(this, "mediaplayer was destroyed.", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
@@ -69,7 +70,17 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
 		String chatMessage = chatField.getText().toString();
 		chatField.setText("");
 		Log.d("chatMessage", chatMessage);
-		Sockets.getSocket().emit("chat" , chatMessage);
+		JSONObject jsonObject = new JSONObject();
+		try{
+			jsonObject.put("floor", 1);
+			jsonObject.put("from", 1);
+			jsonObject.put("message", chatMessage);
+
+		}
+		catch(JSONException e){
+			e.printStackTrace();
+		}
+		Sockets.getSocket().emit("new message" , jsonObject);
 
 	}
 
@@ -78,7 +89,6 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
 	{
 		JSONObject jsonSong = (JSONObject) args[0];
 		Log.d("Discotheque","new song to play: "+jsonSong.toString());
-
 		String url = null;
 		try
 		{
@@ -110,5 +120,7 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
 			e.printStackTrace();
 		}
 		mediaPlayer.start();
+		double duration = mediaPlayer.getDuration();
+		Log.d("duration is ", String.valueOf(duration));
 	}
 }

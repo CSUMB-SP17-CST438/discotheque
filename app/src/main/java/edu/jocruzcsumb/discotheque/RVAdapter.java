@@ -1,8 +1,6 @@
 package edu.jocruzcsumb.discotheque;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,8 +11,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.InputStream;
-import java.net.URL;
 
 /**
  * Created by Admin on 3/31/2017.
@@ -25,7 +21,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SongViewHolder> {
     SongList songList;
     Context mContext;
     CustomItemClickListener listener;
-    Bitmap bmp;
 
     public static class SongViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
