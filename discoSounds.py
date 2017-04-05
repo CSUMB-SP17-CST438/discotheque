@@ -19,10 +19,10 @@ def getSongURLLocation(track_id):
 	track = '/tracks/' + str(track_id) 
 	tracks = client.get(track)
 	track_stream = client.get(tracks.stream_url, allow_redirects=False)
-	print(track_stream.location)
+	# print(track_stream.location)
 	return track_stream.location
 
-songlist = getSongList('punk')
-t = songlist[0]
-getSongURLLocation(t['id'])
-print("songlist")
+# songlist = getSongList('punk')
+# t = songlist[0]
+# getSongURLLocation(t['id'])
+# print("songlist")

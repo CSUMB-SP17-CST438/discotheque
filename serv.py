@@ -50,11 +50,9 @@ def on_get_songs(data):
 
 @socket.on('song picked')
 def on_song_picked(data):
-    start_at = datetime.now().microseconds
     current_song = data['song']
     stream_url_loc = ds.getSongURLLocation(current_song['id'])
     current_song['stream_url'] = stream_url_loc
-    current_song['start_time']
     socket.emit('song to play', current_song, room=public_room)
 
 
@@ -68,8 +66,11 @@ def on_login(data):
         response = requests.get(
             'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + data['google_t'])
         json = response.json()
-        name = json['name']
-        link = json['picture']['data']['url']
+        print(json)
+        fname = json['given_name'] 
+        lname = json['family_name']
+        link = json['picture']
+        email = json['email']
         mem_found = db.memberExists_by_email(email)
         if mem_found is not None:
             mem = db.getMember(email)
@@ -113,7 +114,8 @@ def on_new_message(data):
 @socket.on('create')
 def on_create(data):
     new_floor = db.floor(data['floor_name'],data['m_id'],data['isPublic'])
-    
+    socket.emit('floor created', {'floor_id':new_floor.floor_id})
+
 
 
 # def get_dt_ms():
