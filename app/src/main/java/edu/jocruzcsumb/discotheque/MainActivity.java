@@ -167,13 +167,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				return;
 			}
 
-			//obj = waiter.getObj(obj);
+			obj = waiter.getObj(obj);
 
 			if(obj == null)
 			{
 				return;
 			}
+			else
+            {
 
+            }
 
 
         }

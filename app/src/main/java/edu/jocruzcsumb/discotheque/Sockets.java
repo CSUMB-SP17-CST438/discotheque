@@ -21,7 +21,7 @@ public class Sockets
 {
 	private static Socket socket = null;
 
-    private static final boolean DEV_SERVER = false;
+    private static final boolean DEV_SERVER = true;
 
     public static String getServer()
 	{
@@ -73,7 +73,7 @@ public class Sockets
 		}
 		//Signal = what to send the server, event = event we wait for.
         public SocketWaiter(String signal, String event)
-			{
+		{
             success = false;
             this.signal=signal;
             this.event=event;
