@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class FB_Frag extends Fragment {
+public class FacebookFragment extends Fragment {
     private LoginButton loginButton;
     private CallbackManager callbackManager;
 
