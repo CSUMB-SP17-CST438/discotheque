@@ -1,5 +1,7 @@
 package edu.jocruzcsumb.discotheque;
 
+import android.content.SharedPreferences;
+
 /**
  * Created by Tommy on 3/22/2017.
  */
@@ -46,6 +48,15 @@ public class User {
         this.genre = genre;
         this.description = description;
         userList = new UserList();
+    }
+
+    public static void setCurrentUser(int id)
+    {
+
+    }
+    public static int getCurrentUser()
+    {
+        return 0;
     }
 
     public String getUserName(){
