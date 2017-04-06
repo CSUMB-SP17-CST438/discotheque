@@ -27,8 +27,17 @@ class sc_test(unittest.TestCase):
 
 	def test_get_messages(self):
 		messages = db.getFloorMessages(1)
-		print(messages)
-		print(messages[0])
+		# print(messages)
+		# print(messages[0])
 		self.assertIsNotNone(messages)
+
+	# def test_user_by_email(self):
+	# 	member = db.memberExists_by_email('thisiaanemail@56735')
+	# 	print("memberrrrrrrrrrr")
+	# 	print(member)
+	# 	mem_to_list = db.getMember('thisiaanemail@56735')
+	# 	print(mem_to_list)
+	# 	self.assertIsNotNone(member)
+
 if __name__ == '__main__':
     unittest.main()

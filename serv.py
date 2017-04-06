@@ -90,6 +90,8 @@ def on_login(data):
         fname = js['first_name']
         lname = js['last_name']
         email = js['email']
+        print("***************************EMAIL************************")
+        print(email)
         link = js['picture']['data']['url']
         mem_found = db.memberExists_by_email(email)
         if mem_found is not None:
