@@ -18,12 +18,11 @@ public class Sockets
 	private static Socket socket = null;
 
 	// TODO: Set to 0 for live server
-	private static final int SELECTED_SERVER = 2;
+	private static final int SELECTED_SERVER = 1;
 	// Append to this list if you want to run a different server :D
 	private static final String[] SERVERS = {
 			"https://disco-theque.herokuapp.com",
 			"http://carsen.ml",
-			"http://devev-jcrzry.c9users.io:8080"
 			//"http://INSERT IP",
 	};
 
