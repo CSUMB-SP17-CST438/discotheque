@@ -152,6 +152,8 @@ def memberExists_by_email(email):
 	found_member = member.query.filter_by(member_email=email).first()
 	return found_member
 
+
+
 def memberExists_by_username(username):
 	found_member = member.query.filter_by(username=username).first()
 	return found_member
@@ -233,7 +235,9 @@ def getFloorMembers(floor_id):
 
 def getMember(email):
 	found_member = member.query.filter_by(member_email=email).first()
-	return found_member
+	mem_sc = member_Schema()
+	f_mem = mem_sc.dump(found_member)
+	return f_mem
 
 
 
