@@ -26,6 +26,10 @@ public class User implements Parcelable {
         friendsList = new UserList();
     }
 
+    public User(String userName, String firstName, String lastName){
+        this(userName, firstName, lastName, "", "", "");
+    }
+
     public User(String userName, String firstName, String lastName, String email, String photo, String bio){
 		this();
         this.userName = userName;
