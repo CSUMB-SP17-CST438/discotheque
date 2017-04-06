@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -126,19 +127,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		Log.d(GOOGLE_AUTH_TAG, "onConnectionFailed");
     }
 
-    private void HandleResult(GoogleSignInResult result)
+    private void HandleResult(GoogleSignInResult r)
 	{
 		Log.d(GOOGLE_AUTH_TAG, "onHandleResult");
-		if(result.isSuccess())
+        final GoogleSignInResult result = r;
+		if(result.isSuccess()) new Thread(new Runnable(){ public void run()
 		{
-
 			Log.d(GOOGLE_AUTH_TAG, "result.isSuccess");
             GoogleSignInAccount account = result.getSignInAccount();
             String name = account.getDisplayName();
             String email = account.getEmail();
             String img_url = account.getPhotoUrl().toString();
-            Sockets.login(LocalUser.LoginType.GOOGLE, account.getIdToken());
-        }
+            if(LocalUser.login(MainActivity.this, LocalUser.LoginType.GOOGLE, account.getIdToken()))
+            {
+                MainActivity.this.runOnUiThread(new Runnable(){public void run()
+                {
+                    Toast.makeText(MainActivity.this, "Login success", Toast.LENGTH_SHORT).show();
+                }});
+                Intent k = new Intent(MainActivity.this, ChatRoomActivity.class);
+                startActivity(k);
+            }
+            else
+            {
+                MainActivity.this.runOnUiThread(new Runnable(){public void run()
+                {
+                    Toast.makeText(MainActivity.this, R.string.dtk_server_login_error, Toast.LENGTH_SHORT).show();
+                }});
+            }
+        }}).start();
 
     }
     @Override

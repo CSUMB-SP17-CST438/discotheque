@@ -18,7 +18,7 @@ public class Sockets
 	private static Socket socket = null;
 
 	// TODO: Set to 0 for live server
-	private static final int SELECTED_SERVER = 1	;
+	private static final int SELECTED_SERVER = 1;
 	// Append to this list if you want to run a different server :D
 	private static final String[] SERVERS = {
 			"https://disco-theque.herokuapp.com",
@@ -43,68 +43,6 @@ public class Sockets
 	{
 		//TODO: AUTH
 		return null;
-	}
-
-	// This is a long operation
-	public static boolean login(LocalUser.LoginType loginType, String token)
-	{
-		//We will emit 'login' and wait for 'login status'
-		SocketWaiter loginWaiter = new SocketWaiter("login","login status");
-		JSONObject obj = new JSONObject();
-		try
-		{
-			obj.put(LocalUser.getTokenJSONKey(loginType), token);
-		}
-		catch(JSONException e)
-		{
-			e.printStackTrace();
-			return false;
-		}
-		// This line of code will send the login message
-		// and wait until it recieves login status back
-		obj = loginWaiter.getObj(obj);
-		
-		if(obj == null){
-			Log.d(TAG, "login returned null (timeout or other error)");
-			return false;
-		} else
-		{
-			int a = 0;
-			String
-					username = null,
-					firstname = null,
-					lastname = null,
-					email = null,
-					photo = null,
-					bio = null;
-			try
-			{
-				a = obj.getInt("authorized");
-				if(a == 1)
-				{
-					//TODO: get user info from JSON
-	//				username = obj.getString("username");
-	//				firstname = obj.getString("firstname");
-	//				lastname = obj.getString("lastname");
-	//				email = obj.getString("email");
-	//				photo = obj.getString("photo");
-	//				bio = obj.getString("bio");
-
-					LocalUser u = new LocalUser(loginType, token, username, firstname, lastname, email, photo, bio);
-					LocalUser.setCurrentUser(u);
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-			catch(JSONException e)
-			{
-				e.printStackTrace();
-				return false;
-			}
-		}
 	}
 
     public static Socket getSocket()

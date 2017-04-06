@@ -18,11 +18,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -61,7 +57,12 @@ public class FacebookFragment extends Fragment
 			Log.d(TAG, "Login Success");
 			AccessToken token = result.getAccessToken();
 
-			Sockets.login(LocalUser.LoginType.FACEBOOK, token.getToken());
+			if(LocalUser.login(context, LocalUser.LoginType.FACEBOOK, token.getToken()))
+            {
+                Intent k = new Intent(FacebookFragment.this.getActivity(), ChatRoomActivity.class);
+                startActivity(k);
+            }
+            else Toast.makeText(context, R.string.dtk_server_login_error, Toast.LENGTH_LONG).show();
 		}
 
 	};
