@@ -5,7 +5,8 @@ flask-marshmallow
 marshmallow-sqlalchemy
 requests
 psycopg2
-eventlet
+gevent
+gevent-websocket
 flask-testing
 soundcloud
 facebook-sdk
