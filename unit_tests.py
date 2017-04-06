@@ -22,7 +22,7 @@ class sc_test(unittest.TestCase):
 		self.assertIsNotNone(new_member)
 
 	def test_add_message(self):
-		nm = db.add_message(1,1,"this is a test...")
+		nm = db.add_message(1,1,"this is a test...nowwww")
 		self.assertEqual(nm,True)
 
 	def test_get_messages(self):
