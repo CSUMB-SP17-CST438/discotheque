@@ -37,6 +37,8 @@ class sc_test(unittest.TestCase):
 	# 	print(member)
 	# 	mem_to_list = db.getMember('thisiaanemail@56735')
 	# 	print(mem_to_list)
+
+	# 	print(db.memberExists_by_email('thisanemaillll@'))
 	# 	self.assertIsNotNone(member)
 
 if __name__ == '__main__':

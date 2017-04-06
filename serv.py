@@ -74,7 +74,7 @@ def on_login(data):
         link = json['picture']
         email = json['email']
         mem_found = db.memberExists_by_email(email)
-        if mem_found is not None:
+        if mem_found:
             mem = db.getMember(email)
             socket.emit("login status", {
                         'authorized': 1, 'user': mem}, room=request.sid)
@@ -94,7 +94,7 @@ def on_login(data):
         print(email)
         link = js['picture']['data']['url']
         mem_found = db.memberExists_by_email(email)
-        if mem_found is not None:
+        if mem_found:
             mem = db.getMember(email)
             socket.emit("login status", {
                         'authorized': 1, 'user': mem}, room=request.sid)

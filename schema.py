@@ -13,8 +13,8 @@ from marshmallow import fields as f
 from sqlalchemy import orm
 from sqlalchemy import desc
 
-serv.app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-# serv.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jcrzr:anchor99@localhost/postgres'
+# serv.app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+serv.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jcrzr:anchor99@localhost/postgres'
 # serv.app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
 
 db = flask_sqlalchemy.SQLAlchemy(serv.app)
@@ -150,7 +150,10 @@ class floor_Schema(ma.ModelSchema):
 ****************************************************************************************************************************************"""
 def memberExists_by_email(email):
 	found_member = member.query.filter_by(member_email=email).first()
-	return found_member
+	if found_member is None:
+		return False
+	else:
+		return True
 
 
 
