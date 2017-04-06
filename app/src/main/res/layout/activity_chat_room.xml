@@ -23,15 +23,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/chat_log"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentTop="true"
-            android:isScrollContainer="false"
-            android:scrollbarAlwaysDrawHorizontalTrack="false"
-            android:scrollbarAlwaysDrawVerticalTrack="true" />
+            android:layout_height="match_parent"
+            android:layout_above="@+id/chat_edit_text"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+
 
         <Button
             android:id="@+id/send_button"

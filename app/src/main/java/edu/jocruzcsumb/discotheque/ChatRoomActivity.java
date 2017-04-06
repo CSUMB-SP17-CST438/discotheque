@@ -6,17 +6,17 @@ import android.media.MediaPlayer;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,9 +26,11 @@ import io.socket.emitter.Emitter;
 public class ChatRoomActivity extends AppCompatActivity implements View.OnClickListener, Emitter.Listener {
     MediaPlayer mediaPlayer;
     private EditText chatField;
-    private TextView chatLog;
     private UserChatMessage userChatMessage;
     private ArrayList<UserChatMessage> chatList = new ArrayList<UserChatMessage>();
+    private RecyclerView mRecyleView;
+    private RVChatAdapter mAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +39,13 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
         Button pickSongButton = (Button) findViewById(R.id.pick_song_button);
         Button send_chat_button = (Button) findViewById(R.id.send_button);
         chatField = (EditText) findViewById(R.id.chat_edit_text);
-        chatLog = (TextView) findViewById(R.id.chat_log);
         pickSongButton.setOnClickListener(this);
         send_chat_button.setOnClickListener(this);
+        mRecyleView = (RecyclerView) findViewById(R.id.rv2);
+        mRecyleView.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setStackFromEnd(true); //scrolls to the bottom
+        mRecyleView.setLayoutManager(llm);
         Sockets.getSocket().on("song to play", this);
         Sockets.getSocket().on("message added", this);
 
@@ -98,11 +104,9 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
                     try {
                         JSONArray jsonArray = jsonSong.getJSONArray("floor_messages");
                         Log.d("JsonArray: ", jsonArray.toString());
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject chat = jsonArray.getJSONObject(i);
-                            Log.d("chat: ", chat.toString());
                             JSONObject member = chat.getJSONObject("member");
-                            Log.d("member: ", member.toString());
                             userChatMessage = new UserChatMessage();
                             userChatMessage.setFirstName(member.getString("member_FName"));
                             userChatMessage.setLastName(member.getString("member_LName"));
@@ -116,21 +120,17 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
                         e.getStackTrace();
                     }
 
-
+                    mAdapter = new RVChatAdapter(ChatRoomActivity.this, chatList);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
-                                chatLog.setText(chatList.get(0).getChatMessage());
-
-
+                            mRecyleView.setAdapter(mAdapter);
                         }
                     });
-
                 }
+
+
             }).start();
-
-
         } else {
             String url = null;
             String startTime = null;
