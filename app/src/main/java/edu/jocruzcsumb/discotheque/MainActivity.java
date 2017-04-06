@@ -4,30 +4,24 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.app.FragmentManager;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
-
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 
 
 import org.json.JSONArray;
@@ -36,14 +30,18 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener {
+import static junit.framework.Assert.fail;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks
+{
 
     //google sign in vars
     private GoogleApiClient googleApiClient;
     private static final int REQ_CODE = 9001;
     private SignInButton SignIn;
 
-
+	private static final String TAG = "MainActivity";
+	private static final String GOOGLE_AUTH_TAG = "Google auth";
 
     //setting listeners
 
@@ -59,16 +57,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FragmentManager fm = getFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
-        if (fragment == null) {
-            fragment = new FB_Frag();
+        if (fragment == null)
+        {
+            fragment = new FacebookFragment();
             fm.beginTransaction()
                     .add(R.id.fragment_container, fragment)
                     .commit();
         }
 
         //Google sign in set up
-        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN.DEFAULT_SIGN_IN).requestEmail().build();
-        googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this).addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions).build();
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN.DEFAULT_SIGN_IN)
+				.requestEmail()
+				.requestServerAuthCode("411633551801-iivlfqvn0mpo3iarr71dn25b15lslr5r.apps.googleusercontent.com")
+				.build();
+
+        googleApiClient = new GoogleApiClient.Builder(this)
+				.enableAutoManage(this, this)
+				.addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)
+				.build();
 
 
 		//google sign in button
@@ -105,16 +111,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
     private void googleSignIn(){
-        Log.d("Discotheque Google Auth", "Sign in attempt");
+        Log.d(GOOGLE_AUTH_TAG, "googleSignIn");
         Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(intent,REQ_CODE);
     }
     private void googleSignOut(){
-		Log.d("Discotheque Google Auth", "Sign out attempt");
+		Log.d(GOOGLE_AUTH_TAG, "googleSignOut");
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(@NonNull Status status) {
-				Log.d("Discotheque Google Auth", "Signed out");
+				Log.d(GOOGLE_AUTH_TAG, "googleSignOut onResult: " + status.getStatusMessage());
             }
         });
     }
@@ -122,63 +128,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //Below are for google sign in/out
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult){
-
+		Log.d(GOOGLE_AUTH_TAG, "onConnectionFailed");
     }
 
+    private void HandleResult(GoogleSignInResult result)
+	{
+		Log.d(GOOGLE_AUTH_TAG, "onHandleResult");
+		if(result.isSuccess())
+		{
 
-    private void HandleResult(GoogleSignInResult result){
-        if(result.isSuccess()){
+			Log.d(GOOGLE_AUTH_TAG, "result.isSuccess");
             GoogleSignInAccount account = result.getSignInAccount();
             String name = account.getDisplayName();
             String email = account.getEmail();
             String img_url = account.getPhotoUrl().toString();
-			Log.d("Discotheque Google Auth", "Logged in as: " + name);
-            Sockets.SocketWaiter waiter = new Sockets.SocketWaiter("login", "login status");
-
-            JSONObject obj = new JSONObject();
-            String t = result.getSignInAccount().getIdToken();
-
-
-			try
-			{
-				obj.put("google_t", t);
-			}
-			catch(JSONException e)
-			{
-				e.printStackTrace();
-				return;
-			}
-
-			obj = waiter.getObj(obj);
-
-			if(obj == null)
-			{
-				return;
-			}
-			else
-            {
-
-            }
-
-
-        }
-        else {
-            //error messages
+            Sockets.login(LocalUser.LoginType.GOOGLE, account.getIdToken());
         }
 
     }
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
         super.onActivityResult(requestCode,resultCode,data);
-
+		Log.d(TAG, "onActivityResult");
         if(requestCode == REQ_CODE){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            HandleResult(result);
-
+			Log.d(TAG, String.valueOf(result.getStatus().getStatusCode()));
+			if(result == null)
+			{
+				Log.d(TAG, "result was null you cunt ass bitch");
+			}
+			else
+			{
+				if(result.getSignInAccount() == null)
+				{
+					fail("result.getSignInAccount was null");
+				}
+				Log.d(TAG, "got result");
+				Log.d(TAG, result.getSignInAccount().getDisplayName());
+				HandleResult(result);
+			}
         }
 
     }
-    //end of google sign in/out code
 
 
+	@Override
+	public void onConnected(@Nullable Bundle bundle)
+	{
+
+	}
+
+	@Override
+	public void onConnectionSuspended(int i)
+	{
+
+	}
 }
