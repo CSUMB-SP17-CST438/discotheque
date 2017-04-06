@@ -12,8 +12,10 @@ import facebook
 public_room = 912837
 
 app = flask.Flask(__name__)
+
+
+
 import schema as db
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
 socket = flask_socketio.SocketIO(app)
 # default route
 
