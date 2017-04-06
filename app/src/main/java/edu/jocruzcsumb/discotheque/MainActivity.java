@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.app.FragmentManager;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,9 +16,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 
 
@@ -27,7 +30,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener {
+import static junit.framework.Assert.fail;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks
+{
 
     //google sign in vars
     private GoogleApiClient googleApiClient;
@@ -60,8 +66,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         //Google sign in set up
-        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN.DEFAULT_SIGN_IN).requestEmail().build();
-        googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this).addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions).build();
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN.DEFAULT_SIGN_IN)
+				.requestEmail()
+				.requestServerAuthCode("411633551801-iivlfqvn0mpo3iarr71dn25b15lslr5r.apps.googleusercontent.com")
+				.build();
+
+        googleApiClient = new GoogleApiClient.Builder(this)
+				.enableAutoManage(this, this)
+				.addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)
+				.build();
 
 
 		//google sign in button
@@ -121,44 +134,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void HandleResult(GoogleSignInResult result)
 	{
 		Log.d(GOOGLE_AUTH_TAG, "onHandleResult");
-		Log.d(GOOGLE_AUTH_TAG, "status:");
-		Log.d(GOOGLE_AUTH_TAG, result.getStatus().getStatusMessage());
-		if(result.isSuccess()){
+		if(result.isSuccess())
+		{
 
 			Log.d(GOOGLE_AUTH_TAG, "result.isSuccess");
             GoogleSignInAccount account = result.getSignInAccount();
             String name = account.getDisplayName();
             String email = account.getEmail();
             String img_url = account.getPhotoUrl().toString();
-			Log.d(GOOGLE_AUTH_TAG, "" + name);
-            Sockets.SocketWaiter waiter = new Sockets.SocketWaiter("login", "login status");
-
-            JSONObject obj = new JSONObject();
-            String t = result.getSignInAccount().getIdToken();
-
-			try
-			{
-				obj.put("google_t", t);
-			}
-			catch(JSONException e)
-			{
-				e.printStackTrace();
-				return;
-			}
-
-			obj = waiter.getObj(obj);
-
-			if(obj == null)
-			{
-				return;
-			}
-			else
-            {
-
-            }
-        }
-        else {
-            //error messages
+            Sockets.login(LocalUser.LoginType.GOOGLE, account.getIdToken());
         }
 
     }
@@ -169,14 +153,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		Log.d(TAG, "onActivityResult");
         if(requestCode == REQ_CODE){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+			Log.d(TAG, String.valueOf(result.getStatus().getStatusCode()));
 			if(result == null)
 			{
 				Log.d(TAG, "result was null you cunt ass bitch");
 			}
 			else
 			{
+				if(result.getSignInAccount() == null)
+				{
+					fail("result.getSignInAccount was null");
+				}
 				Log.d(TAG, "got result");
-				Log.d(TAG, result.toString());
+				Log.d(TAG, result.getSignInAccount().getDisplayName());
 				HandleResult(result);
 			}
         }
@@ -184,4 +173,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+	@Override
+	public void onConnected(@Nullable Bundle bundle)
+	{
+
+	}
+
+	@Override
+	public void onConnectionSuspended(int i)
+	{
+
+	}
 }

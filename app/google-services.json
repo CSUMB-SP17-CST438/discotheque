@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "598475373789",
-    "project_id": "discotheque-163417"
+    "project_number": "411633551801",
+    "project_id": "discotheque-c4b66"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:598475373789:android:f21c5e889f20552a",
+        "mobilesdk_app_id": "1:411633551801:android:f21c5e889f20552a",
         "android_client_info": {
           "package_name": "edu.jocruzcsumb.discotheque"
         }
       },
       "oauth_client": [
         {
-          "client_id": "598475373789-eqs53hf9ifinmv7m06sm2km72uksc8tj.apps.googleusercontent.com",
+          "client_id": "411633551801-vv5i3306dtsufrm6b9t1ddia9q2s9sd2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "edu.jocruzcsumb.discotheque",
-            "certificate_hash": "9ba12cc3c5a09425eed0f29bb475f8be73d7668c"
+            "certificate_hash": "7537a7ade1b3e2ef84088c1035bc9042ac316c1b"
           }
         },
         {
-          "client_id": "598475373789-4i51i1tl2uc3oca8ruhj2jq2p7ai718n.apps.googleusercontent.com",
+          "client_id": "411633551801-iivlfqvn0mpo3iarr71dn25b15lslr5r.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA2fdBvk8SlhtqB1ddvEszemn23KZVzODE"
+          "current_key": "AIzaSyCy5ic_MybNkBj5PQUmpNmdKQNPnJa5gZs"
         }
       ],
       "services": {
