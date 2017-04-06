@@ -11,14 +11,16 @@ import facebook
 
 public_room = 912837
 
-serv = flask.Flask("app")
+app = flask.Flask(__name__)
+
+
+
 import schema as db
-serv.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
-socket = flask_socketio.SocketIO(serv)
+socket = flask_socketio.SocketIO(app)
 # default route
 
 
-@serv.route('/')
+@app.route('/')
 def start():
     return flask.render_template('index.html')
 
@@ -110,7 +112,7 @@ def on_new_message(data):
                 'floor_messages': db.getFloorMessages(floor_id)}, room=request.sid)
 
 
-@serv.route('/floors')
+@app.route('/floors')
 @socket.on('create')
 def on_create(data):
     new_floor = db.floor(data['floor_name'],data['m_id'],data['isPublic'])
@@ -125,7 +127,7 @@ def on_create(data):
 
 if __name__ == '__main__':
     socket.run(
-        serv,
+        app,
         port=int(os.getenv('PORT', '80')),
         host=os.getenv('IP', '0.0.0.0'),
         debug=True)
