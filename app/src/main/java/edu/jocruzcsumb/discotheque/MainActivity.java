@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int REQ_CODE = 9001;
     private SignInButton SignIn;
 
+	private static final String TAG = "MainActivity";
 	private static final String GOOGLE_AUTH_TAG = "Google auth";
 
     //setting listeners
@@ -116,8 +117,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		Log.d(GOOGLE_AUTH_TAG, "onConnectionFailed");
     }
 
-    private void HandleResult(GoogleSignInResult result){
-        if(result.isSuccess()){
+    private void HandleResult(GoogleSignInResult result)
+	{
+		Log.d(GOOGLE_AUTH_TAG, "onHandleResult");
+		Log.d(GOOGLE_AUTH_TAG, "status:");
+		Log.d(GOOGLE_AUTH_TAG, result.getStatus().getStatusMessage());
+		if(result.isSuccess()){
+
+			Log.d(GOOGLE_AUTH_TAG, "result.isSuccess");
             GoogleSignInAccount account = result.getSignInAccount();
             String name = account.getDisplayName();
             String email = account.getEmail();
@@ -156,16 +163,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
         super.onActivityResult(requestCode,resultCode,data);
-
+		Log.d(TAG, "onActivityResult");
         if(requestCode == REQ_CODE){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            HandleResult(result);
+			if(result == null)
+			{
+				Log.d(TAG, "result was null you cunt ass bitch");
+			}
+			else
+			{
+				Log.d(TAG, "got result");
+				Log.d(TAG, result.toString());
+				HandleResult(result);
+			}
         }
 
     }
-    //end of google sign in/out code
 
 
 }
