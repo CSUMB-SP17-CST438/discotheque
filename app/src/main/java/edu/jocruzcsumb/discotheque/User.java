@@ -1,6 +1,6 @@
 package edu.jocruzcsumb.discotheque;
 
-import android.content.SharedPreferences;
+import java.util.ArrayList;
 
 /**
  * Created by Tommy on 3/22/2017.
@@ -8,55 +8,27 @@ import android.content.SharedPreferences;
 
 public class User {
 
-    private String userName;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String photo;
-    private String description;
-    private String genre;
-    private UserList userList;
-
-
+    private String userName = null;
+    private String firstName = null;
+    private String lastName = null;
+    private String email = null;
+    private String photo = null;
+    private String bio = null;
+	private ArrayList<String> genres = null;
+    private UserList friendsList = null;
 
     public User(){
-        userName = "";
-        firstName = "";
-        lastName = "";
-        email = "";
-        photo = "";
-        description = "";
-        genre = "";
-        userList = new UserList();
+		genres = new ArrayList<String>();
+        friendsList = new UserList();
     }
-    public User(String userName, String firstName, String lastName, String email, String photo, String description){
+    public User(String userName, String firstName, String lastName, String email, String photo, String bio){
+		this();
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.photo = photo;
-        this.description = description;
-        userList = new UserList();
-    }
-
-    public User(String userName, String firstName, String lastName, String email, String photo, String genre, String description){
-        this.userName = userName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.photo = photo;
-        this.genre = genre;
-        this.description = description;
-        userList = new UserList();
-    }
-
-    public static void setCurrentUser(int id)
-    {
-
-    }
-    public static int getCurrentUser()
-    {
-        return 0;
+        this.bio = bio;
     }
 
     public String getUserName(){
@@ -73,21 +45,21 @@ public class User {
         return email;
     }
 
-    public String getGenre(){
-        return genre;
+    public ArrayList<String> getGenres(){
+        return genres;
     }
 
     public String getPhoto(){
         return photo;
     }
 
-    public String getDescription(){return description;}
+    public String getBio(){return bio;}
 
     public void setFirstName(String firstName){this.firstName = firstName;}
 
     public void setLastName(String lastName){this.lastName = lastName;}
 
-    public void setDescription(String description){this.description = description;}
+    public void setBio(String bio){this.bio = bio;}
 
     public void setUserName(String userName){
         this.userName = userName;
@@ -101,21 +73,21 @@ public class User {
         this.photo = photo;
     }
 
-    public void setGenre(String genre){
-        this.genre = genre;
+    public void addGenre(String genre){
+        this.genres.add(genre);
     }
 
     public void addFriend(User user){
-        userList.addUser(user);
+        friendsList.addUser(user);
     }
 
     public boolean deleteFriend(User user){
-        return userList.deleteUser(user);
+        return friendsList.deleteUser(user);
     }
 
-    public int numOfFriends(){return userList.numUser();}
+    public int numOfFriends(){return friendsList.numUser();}
 
-    public UserList userList(){return userList;}
+    public UserList userList(){return friendsList;}
 
     public static boolean isValidUsername(String username)
     {

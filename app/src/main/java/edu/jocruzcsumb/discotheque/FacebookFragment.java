@@ -25,43 +25,44 @@ import java.util.Arrays;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class FacebookFragment extends Fragment {
-    private LoginButton loginButton;
-    private CallbackManager callbackManager;
+public class FacebookFragment extends Fragment
+{
+	private LoginButton loginButton;
+	private CallbackManager callbackManager;
 
-    private final Context context = getApplicationContext();
+	private final Context context = getApplicationContext();
 
-    private static final int TOAST_DURATION = Toast.LENGTH_SHORT;
-    private static final String TAG = "Facebook API";
+	private static final int TOAST_DURATION = Toast.LENGTH_SHORT;
+	private static final String TAG = "Facebook API";
 
-    private FacebookCallback<LoginResult> loginCallback = new FacebookCallback<LoginResult>() {
-        //private FacebookCallback<Sharer.Result> shareCallback = new FacebookCallback<Sharer.Result>() {
-        @Override
-        public void onCancel() {
-            Toast.makeText(context, "Login Canceled", TOAST_DURATION).show();
-            Log.d(TAG, "Login Canceled");
-        }
+	private FacebookCallback<LoginResult> loginCallback = new FacebookCallback<LoginResult>()
+	{
+		//private FacebookCallback<Sharer.Result> shareCallback = new FacebookCallback<Sharer.Result>() {
+		@Override
+		public void onCancel()
+		{
+			Toast.makeText(context, "Login Canceled", TOAST_DURATION).show();
+			Log.d(TAG, "Login Canceled");
+		}
 
-        @Override
-        public void onError(FacebookException error) {
-            Toast.makeText(context,"Login Error", TOAST_DURATION).show();
-            Log.d(TAG, "Login Error");
-        }
+		@Override
+		public void onError(FacebookException error)
+		{
+			Toast.makeText(context, "Login Error", TOAST_DURATION).show();
+			Log.d(TAG, "Login Error");
+		}
 
-        @Override
-        public void onSuccess(LoginResult result) {
-            Toast.makeText(context,"Login Success", TOAST_DURATION).show();
-            Log.d(TAG, "Login Success");
-            AccessToken token = result.getAccessToken();
-            JSONObject obj = new JSONObject();
-            try {
-                obj.put("fb_t", token.getToken());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+		@Override
+		public void onSuccess(LoginResult result)
+		{
+			Toast.makeText(context, "Login Success", TOAST_DURATION).show();
+			Log.d(TAG, "Login Success");
+			AccessToken token = result.getAccessToken();
 
-    };
+			Sockets.login(LocalUser.LoginType.FACEBOOK, token.getToken());
+		}
+
+	};
 //    private FacebookCallback<Sharer.Result> shareCallback = new FacebookCallback<Sharer.Result>() {
 //        @Override
 //        public void onCancel() {
@@ -83,28 +84,32 @@ public class FacebookFragment extends Fragment {
 //
 //    };
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+	}
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.facebook_fragment, parent, false);
-        loginButton = (LoginButton) v.findViewById(R.id.loginButton);
-        // If using in a fragment
-        loginButton.setFragment(this);
-        callbackManager = CallbackManager.Factory.create();
-        // Callback registration
-        loginButton.registerCallback(callbackManager, loginCallback);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
+	{
+		View v = inflater.inflate(R.layout.facebook_fragment, parent, false);
+		loginButton = (LoginButton) v.findViewById(R.id.loginButton);
+		// If using in a fragment
+		loginButton.setFragment(this);
+		callbackManager = CallbackManager.Factory.create();
+		// Callback registration
+		loginButton.registerCallback(callbackManager, loginCallback);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+		loginButton.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
 
-                LoginManager.getInstance().logInWithReadPermissions(getActivity(), Arrays.asList("public_profile"));
-            }
-        });
-        return v;
-    }
+				LoginManager.getInstance().logInWithReadPermissions(getActivity(), Arrays.asList("public_profile"));
+			}
+		});
+		return v;
+	}
 }

@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int REQ_CODE = 9001;
     private SignInButton SignIn;
 
-
+	private static final String GOOGLE_AUTH_TAG = "Google auth";
 
     //setting listeners
 
@@ -96,16 +96,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
     private void googleSignIn(){
-        Log.d("Discotheque Google Auth", "Sign in attempt");
+        Log.d(GOOGLE_AUTH_TAG, "googleSignIn");
         Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(intent,REQ_CODE);
     }
     private void googleSignOut(){
-		Log.d("Discotheque Google Auth", "Sign out attempt");
+		Log.d(GOOGLE_AUTH_TAG, "googleSignOut");
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(@NonNull Status status) {
-				Log.d("Discotheque Google Auth", "Signed out");
+				Log.d(GOOGLE_AUTH_TAG, "googleSignOut onResult: " + status.getStatusMessage());
             }
         });
     }
@@ -113,9 +113,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //Below are for google sign in/out
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult){
-
+		Log.d(GOOGLE_AUTH_TAG, "onConnectionFailed");
     }
-
 
     private void HandleResult(GoogleSignInResult result){
         if(result.isSuccess()){
@@ -123,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String name = account.getDisplayName();
             String email = account.getEmail();
             String img_url = account.getPhotoUrl().toString();
-			Log.d("Discotheque Google Auth", "Logged in as: " + name);
+			Log.d(GOOGLE_AUTH_TAG, "" + name);
             Sockets.SocketWaiter waiter = new Sockets.SocketWaiter("login", "login status");
 
             JSONObject obj = new JSONObject();
@@ -150,8 +149,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             {
 
             }
-
-
         }
         else {
             //error messages
@@ -165,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(requestCode == REQ_CODE){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             HandleResult(result);
-
         }
 
     }
