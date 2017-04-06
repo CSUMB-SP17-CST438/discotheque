@@ -3,7 +3,7 @@ package edu.jocruzcsumb.discotheque;
 import android.os.Parcelable;
 import android.os.Parcel;
 
-import android.content.SharedPreferences;
+import java.util.ArrayList;
 
 /**
  * Created by Tommy on 3/22/2017.
@@ -12,60 +12,29 @@ import android.content.SharedPreferences;
 
 public class User implements Parcelable {
 
-    private String member_id;
-    private String userName;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String photo;
-    private String description;
-    private String genre;
-    private UserList userList;
-
-
+    private String userName = null;
+    private String firstName = null;
+    private String lastName = null;
+    private String email = null;
+    private String photo = null;
+    private String bio = null;
+	private ArrayList<String> genres = null;
+    private UserList friendsList = null;
 
     public User(){
-        member_id = "";
-        userName = "";
-        firstName = "";
-        lastName = "";
-        email = "";
-        photo = "";
-        description = "";
-        genre = "";
-        userList = new UserList();
+		genres = new ArrayList<String>();
+        friendsList = new UserList();
     }
-    public User(String userName, String firstName, String lastName, String email, String photo, String description){
+
+    public User(String userName, String firstName, String lastName, String email, String photo, String bio){
+		this();
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.photo = photo;
-        this.description = description;
-        userList = new UserList();
-    }
+        this.bio = bio;
 
-    public User(String member_id, String userName, String firstName, String lastName, String email, String photo, String genre, String description){
-        this.member_id = member_id;
-        this.userName = userName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.photo = photo;
-        this.genre = genre;
-        this.description = description;
-        userList = new UserList();
-    }
-
-    public String getMember_id(){return member_id;}
-
-    public static void setCurrentUser(int id)
-    {
-
-    }
-    public static int getCurrentUser()
-    {
-        return 0;
     }
 
     public String getUserName(){
@@ -82,23 +51,21 @@ public class User implements Parcelable {
         return email;
     }
 
-    public String getGenre(){
-        return genre;
+    public ArrayList<String> getGenres(){
+        return genres;
     }
 
     public String getPhoto(){
         return photo;
     }
 
-    public String getDescription(){return description;}
-
-    public void setMember_id(String member_id){this.member_id = member_id;}
+    public String getBio(){return bio;}
 
     public void setFirstName(String firstName){this.firstName = firstName;}
 
     public void setLastName(String lastName){this.lastName = lastName;}
 
-    public void setDescription(String description){this.description = description;}
+    public void setBio(String bio){this.bio = bio;}
 
     public void setUserName(String userName){
         this.userName = userName;
@@ -112,21 +79,21 @@ public class User implements Parcelable {
         this.photo = photo;
     }
 
-    public void setGenre(String genre){
-        this.genre = genre;
+    public void addGenre(String genre){
+        this.genres.add(genre);
     }
 
     public void addFriend(User user){
-        userList.addUser(user);
+        friendsList.addUser(user);
     }
 
     public boolean deleteFriend(User user){
-        return userList.deleteUser(user);
+        return friendsList.deleteUser(user);
     }
 
-    public int numOfFriends(){return userList.numUser();}
+    public int numOfFriends(){return friendsList.numUser();}
 
-    public UserList userList(){return userList;}
+    public UserList userList(){return friendsList;}
 
     public static boolean isValidUsername(String username)
     {
@@ -150,14 +117,12 @@ public class User implements Parcelable {
 
     public User(Parcel in){
 
-        this.member_id = in.readString();
         this.userName = in.readString();
         this.firstName = in.readString();
         this.lastName = in.readString();
         this.email = in.readString();
         this.photo = in.readString();
-        this.genre = in.readString();
-        this.description = in.readString();
+
     }
 
     @Override
@@ -168,14 +133,11 @@ public class User implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
-        dest.writeString(member_id);
         dest.writeString(userName);
         dest.writeString(firstName);
         dest.writeString(lastName);
         dest.writeString(email);
         dest.writeString(photo);
-        dest.writeString(genre);
-        dest.writeString(description);
 
     }
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
