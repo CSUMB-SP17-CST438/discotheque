@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Discotheque</string>
+    <string name="shared_prefs_file">discotheque</string>
     <string name="facebook_app_id">1890904081186809</string>
 
     <string name="facebook">Log in with Facebook</string>
@@ -52,8 +53,10 @@
     <string name="chat_room_activity_choose_song">Choose Song</string>
     <string name="chat_room_activity_send">Send</string>
     <string name="chat_room_activity_chat">Chat</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
+
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="dtk_server_login_error">Could not authenticate with server</string>
 
 
 </resources>
