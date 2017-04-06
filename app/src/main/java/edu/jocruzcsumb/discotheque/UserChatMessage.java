@@ -17,8 +17,8 @@ public class UserChatMessage extends User{
         pub_time = "";
     }
 
-    public UserChatMessage(String userName, String firstName, String lastName, String email, String photo, String description, String chatMessage, String pub_time){
-        super(userName, firstName, lastName, email, photo, description);
+    public UserChatMessage(String firstName, String lastName, String photo, String chatMessage, String pub_time){
+        super(firstName, lastName, photo);
         this.chatMessage = chatMessage;
         this.pub_time = pub_time;
     }

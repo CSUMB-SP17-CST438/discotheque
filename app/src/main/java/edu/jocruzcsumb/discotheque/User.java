@@ -1,12 +1,16 @@
 package edu.jocruzcsumb.discotheque;
 
+import android.os.Parcelable;
+import android.os.Parcel;
+
 import java.util.ArrayList;
 
 /**
  * Created by Tommy on 3/22/2017.
  */
 
-public class User {
+
+public class User implements Parcelable {
 
     private String userName = null;
     private String firstName = null;
@@ -21,6 +25,11 @@ public class User {
 		genres = new ArrayList<String>();
         friendsList = new UserList();
     }
+
+    public User(String userName, String firstName, String lastName){
+        this(userName, firstName, lastName, "", "", "");
+    }
+
     public User(String userName, String firstName, String lastName, String email, String photo, String bio){
 		this();
         this.userName = userName;
@@ -29,6 +38,7 @@ public class User {
         this.email = email;
         this.photo = photo;
         this.bio = bio;
+
     }
 
     public String getUserName(){
@@ -108,6 +118,43 @@ public class User {
         else if(email.length() < 6) return false;
         return email.contains("@");
     }
+
+    public User(Parcel in){
+
+        this.userName = in.readString();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
+        this.email = in.readString();
+        this.photo = in.readString();
+
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(userName);
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(email);
+        dest.writeString(photo);
+
+    }
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+
 
 
 

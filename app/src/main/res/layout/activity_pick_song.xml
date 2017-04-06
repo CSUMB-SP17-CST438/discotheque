@@ -13,29 +13,10 @@
     android:orientation="vertical"
     >
 
-
-    <TextView
-        android:id="@+id/room_title_TextView"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/CurRoomTitle" />
+        android:layout_height="match_parent" />
 
 
-    <TextView
-        android:id="@+id/curr_artist_textiew"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/currentTrack" />
-
-
-    <TextView
-        android:id="@+id/curr_song_name_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/currentTrack" />
-
-    <ListView
-        android:id="@+id/song_listview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 </LinearLayout>

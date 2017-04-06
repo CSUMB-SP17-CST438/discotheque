@@ -28,6 +28,7 @@ public class Sockets
 
     public static String getServer()
 	{
+
 		return SERVERS[SELECTED_SERVER];
 	}
 
@@ -165,7 +166,7 @@ public class Sockets
 
 			success = true;
 			socketLatch.countDown();
-		}
+	}
 
 
     }

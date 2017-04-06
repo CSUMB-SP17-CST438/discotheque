@@ -1,12 +1,13 @@
 package edu.jocruzcsumb.discotheque;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Tommy on 3/23/2017.
  */
 
-public class SongList {
+public class SongList{
 
     private ArrayList<Song> arrayList;
 
@@ -40,5 +41,8 @@ public class SongList {
         return arrayList.get(index);
     }
 
+    public void sortList(){
+        Collections.sort(arrayList);
+    }
 
 }
