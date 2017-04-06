@@ -3,7 +3,7 @@ import random
 
 class SocketioTestCases(unittest.TestCase):
     def test_song_list(self):
-        client = serv.socket.test_client(serv.serv)
+        client = serv.socket.test_client(serv.app)
         client.emit('join room',"please")
         client.emit("get songs", {'genre':'punk'})
 
@@ -26,7 +26,7 @@ class SocketioTestCases(unittest.TestCase):
     #     self.assertEquals(response_message,"register response")
 
     def test_add_message(self):
-        client = serv.socket.test_client(serv.serv)
+        client = serv.socket.test_client(serv.app)
         client.emit('new message', {'floor':1,'from':2,'message':'this is a test message from socket_tests.'})
         r = client.get_received()
         # response_message = r
