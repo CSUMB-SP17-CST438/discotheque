@@ -31,7 +31,7 @@ public class LocalUser extends User
 	}
 
 	public static final String GOOGLE_TOKEN_KEY = "google_t";
-	public static final String FACEBOOK_TOKEN_KEY = "FB_t";
+	public static final String FACEBOOK_TOKEN_KEY = "fb_t";
 	public static final String SOUNDCLOUD_TOKEN_KEY = "soundcloud_t";
 
 	public static String getTokenJSONKey(LoginType loginType)

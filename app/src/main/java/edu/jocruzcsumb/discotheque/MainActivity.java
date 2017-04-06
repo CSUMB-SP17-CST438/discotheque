@@ -51,7 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FragmentManager fm = getFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
-        if (fragment == null) {
+        if (fragment == null)
+        {
             fragment = new FacebookFragment();
             fm.beginTransaction()
                     .add(R.id.fragment_container, fragment)
@@ -134,7 +135,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             JSONObject obj = new JSONObject();
             String t = result.getSignInAccount().getIdToken();
-
 
 			try
 			{

@@ -1,6 +1,5 @@
 package edu.jocruzcsumb.discotheque;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -22,7 +21,9 @@ import com.facebook.login.widget.LoginButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -64,6 +65,7 @@ public class FacebookFragment extends Fragment
 		}
 
 	};
+
 //    private FacebookCallback<Sharer.Result> shareCallback = new FacebookCallback<Sharer.Result>() {
 //        @Override
 //        public void onCancel() {
@@ -89,6 +91,10 @@ public class FacebookFragment extends Fragment
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+
+		// Callback registration
+		callbackManager = CallbackManager.Factory.create();
+		LoginManager.getInstance().registerCallback(callbackManager, loginCallback);
 	}
 
 	@Override
@@ -96,26 +102,18 @@ public class FacebookFragment extends Fragment
 	{
 		View v = inflater.inflate(R.layout.facebook_fragment, parent, false);
 		loginButton = (LoginButton) v.findViewById(R.id.loginButton);
-		// If using in a fragment
+		List<String> permissions = new ArrayList<String>();
+		permissions.add("public_profile");
+		permissions.add("email");
+		loginButton.setReadPermissions(permissions);
 		loginButton.setFragment(this);
-		callbackManager = CallbackManager.Factory.create();
-		// Callback registration
-		loginButton.registerCallback(callbackManager, loginCallback);
-
-		loginButton.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				LoginManager.getInstance().logInWithReadPermissions(getActivity(), Arrays.asList("public_profile"));
-			}
-		});
 		return v;
 	}
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
+		Log.d(TAG, "onActivityResult");
 		callbackManager.onActivityResult(requestCode, resultCode, data);
 	}
 }
