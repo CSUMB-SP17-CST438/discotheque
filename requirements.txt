@@ -3,11 +3,10 @@ Flask-SocketIO==2.8.2
 Flask-SQLAlchemy==2.1
 psycopg2==2.6.2
 requests==2.13.0
-Flask-SQLAlchemy
 flask-marshmallow
 marshmallow-sqlalchemy
-gevent
-gevent-websocket
 flask-testing
 soundcloud
 facebook-sdk
+gevent
+gevent-websocket
