@@ -13,8 +13,8 @@ from marshmallow import fields as f
 from sqlalchemy import orm
 from sqlalchemy import desc
 
-# serv.app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-serv.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jcrzr:anchor99@localhost/postgres'
+serv.app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+# serv.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jcrzr:anchor99@localhost/postgres'
 # serv.app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
 
 db = flask_sqlalchemy.SQLAlchemy(serv.app)
