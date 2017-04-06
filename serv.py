@@ -13,8 +13,6 @@ public_room = 912837
 
 app = flask.Flask(__name__)
 
-
-
 import schema as db
 socket = flask_socketio.SocketIO(app)
 # default route
@@ -94,6 +92,7 @@ def on_login(data):
         print(email)
         link = js['picture']['data']['url']
         mem_found = db.memberExists_by_email(email)
+        print(mem_found)
         if mem_found:
             mem = db.getMember(email)
             socket.emit("login status", {

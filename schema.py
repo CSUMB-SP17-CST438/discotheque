@@ -13,7 +13,7 @@ from marshmallow import fields as f
 from sqlalchemy import orm
 from sqlalchemy import desc
 
-serv.app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+serv.app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL','postgresql://jcrzr:anchor99@localhost/postgres')
 # serv.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jcrzr:anchor99@localhost/postgres'
 # serv.app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
 
@@ -155,8 +155,6 @@ def memberExists_by_email(email):
 	else:
 		return True
 
-
-
 def memberExists_by_username(username):
 	found_member = member.query.filter_by(username=username).first()
 	return found_member
@@ -240,7 +238,7 @@ def getMember(email):
 	found_member = member.query.filter_by(member_email=email).first()
 	mem_sc = member_Schema()
 	f_mem = mem_sc.dump(found_member)
-	return f_mem
+	return f_mem[0]
 
 
 
