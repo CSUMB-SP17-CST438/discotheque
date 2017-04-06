@@ -52,6 +52,10 @@
     <string name="chat_room_activity_choose_song">Choose Song</string>
     <string name="chat_room_activity_send">Send</string>
     <string name="chat_room_activity_chat">Chat</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
 
 </resources>
