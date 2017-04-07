@@ -1,6 +1,8 @@
 package edu.jocruzcsumb.discotheque;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
@@ -53,6 +55,14 @@ public class LocalUser extends User
 		currentUser = user;
 	}
 
+	private static void signIn(Activity context)
+	{
+		Intent k = new Intent(context, JoinRoomActivity.class);
+		k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		context.startActivity(k);
+		context.finish();
+	}
+
 	private static LoginType parseLoginType(String l)
     {
         switch (l)
@@ -65,19 +75,43 @@ public class LocalUser extends User
     }
 
     //Checks for leftover auth to log in to discotheque server
-    public static boolean silentlogin(Context context) {
+    public static boolean silentlogin(Activity context)
+	{
+		Log.d("Dtk Server", "Silent Login");
         initPrefs(context);
-        LoginType type = parseLoginType(preferences.getString(AUTH_TYPE_KEY, null));
+		String t = preferences.getString(AUTH_TYPE_KEY, null);
+		if(t == null) return false;
+        LoginType type = parseLoginType(t);
         String token = preferences.getString(AUTH_TOKEN_KEY, null);
-        return !(type == null || token == null) && socketLogin(type, token);
+       if( !(type == null || token == null) && socketLogin(type, token))
+	   {
+		   signIn(context);
+		   return true;
+	   }
+	   return false;
     }
 
     //Logs in to discotheque server
-    public static boolean login(Context context, LoginType loginType, String token)
+    public static boolean login(Activity context, LoginType loginType, String token)
     {
         initPrefs(context);
-        return socketLogin(loginType, token);
+        if(socketLogin(loginType, token))
+		{
+			signIn(context);
+			return true;
+		}
+		return false;
     }
+
+    //Logs out of discotheque server and allows user to choose new login infos at MainActivity
+	public static void logout(Activity context)
+	{
+		//TODO: should probably clear entire activity stack
+		Intent k = new Intent(context, MainActivity.class);
+		k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		context.startActivity(k);
+		context.finish();
+	}
 
 	public static LocalUser getCurrentUser()
 	{
