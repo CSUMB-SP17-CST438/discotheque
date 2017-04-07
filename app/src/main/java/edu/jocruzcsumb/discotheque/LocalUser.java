@@ -65,9 +65,13 @@ public class LocalUser extends User
     }
 
     //Checks for leftover auth to log in to discotheque server
-    public static boolean silentlogin(Context context) {
+    public static boolean silentlogin(Context context)
+	{
+		Log.d("Dtk Server", "Silent Login");
         initPrefs(context);
-        LoginType type = parseLoginType(preferences.getString(AUTH_TYPE_KEY, null));
+		String t = preferences.getString(AUTH_TYPE_KEY, null);
+		if(t == null) return false;
+        LoginType type = parseLoginType(t);
         String token = preferences.getString(AUTH_TOKEN_KEY, null);
         return !(type == null || token == null) && socketLogin(type, token);
     }

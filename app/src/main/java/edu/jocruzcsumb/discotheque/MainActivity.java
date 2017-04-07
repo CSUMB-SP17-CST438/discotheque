@@ -47,8 +47,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		if(LocalUser.silentlogin(this))
+		{
+			Intent k = new Intent(this, JoinRoomActivity.class);
+			startActivity(k);
+		}
         setContentView(R.layout.activity_main);
-
         //facebook login fragment code
         FragmentManager fm = getFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
@@ -151,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 {
                     Toast.makeText(MainActivity.this, "Login success", Toast.LENGTH_SHORT).show();
                 }});
-                Intent k = new Intent(MainActivity.this, ChatRoomActivity.class);
+                Intent k = new Intent(MainActivity.this, JoinRoomActivity.class);
                 startActivity(k);
             }
             else

@@ -59,7 +59,7 @@ public class FacebookFragment extends Fragment
 
 			if(LocalUser.login(context, LocalUser.LoginType.FACEBOOK, token.getToken()))
             {
-                Intent k = new Intent(FacebookFragment.this.getActivity(), ChatRoomActivity.class);
+                Intent k = new Intent(FacebookFragment.this.getActivity(), JoinRoomActivity.class);
                 startActivity(k);
             }
             else Toast.makeText(context, R.string.dtk_server_login_error, Toast.LENGTH_LONG).show();
