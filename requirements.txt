@@ -8,5 +8,6 @@ marshmallow-sqlalchemy
 flask-testing
 soundcloud
 facebook-sdk
+
 gevent
 gevent-websocket
