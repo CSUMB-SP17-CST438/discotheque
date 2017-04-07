@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Google sign in set up
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN.DEFAULT_SIGN_IN)
 				.requestEmail()
+				.requestIdToken("411633551801-iivlfqvn0mpo3iarr71dn25b15lslr5r.apps.googleusercontent.com")
 				.requestServerAuthCode("411633551801-iivlfqvn0mpo3iarr71dn25b15lslr5r.apps.googleusercontent.com")
 				.build();
 
@@ -134,7 +135,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		if(result.isSuccess()) new Thread(new Runnable(){ public void run()
 		{
 			Log.d(GOOGLE_AUTH_TAG, "result.isSuccess");
+
             GoogleSignInAccount account = result.getSignInAccount();
+			Log.d(GOOGLE_AUTH_TAG, "Account: " + account.getDisplayName());
+			Log.d(GOOGLE_AUTH_TAG, "IdToken: " + account.getIdToken());
+			Log.d(GOOGLE_AUTH_TAG, "Id: " + account.getId());
+			Log.d(GOOGLE_AUTH_TAG, "GrantedScopes: " + account.getGrantedScopes().toString());
+
             String name = account.getDisplayName();
             String email = account.getEmail();
             String img_url = account.getPhotoUrl().toString();
