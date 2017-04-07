@@ -1,7 +1,9 @@
 package edu.jocruzcsumb.discotheque;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.camera2.params.Face;
 import android.util.Log;
 import android.widget.Toast;
 import android.os.Bundle;
@@ -57,12 +59,8 @@ public class FacebookFragment extends Fragment
 			Log.d(TAG, "Login Success");
 			AccessToken token = result.getAccessToken();
 
-			if(LocalUser.login(context, LocalUser.LoginType.FACEBOOK, token.getToken()))
-            {
-                Intent k = new Intent(FacebookFragment.this.getActivity(), JoinRoomActivity.class);
-                startActivity(k);
-            }
-            else Toast.makeText(context, R.string.dtk_server_login_error, Toast.LENGTH_LONG).show();
+			if(!LocalUser.login(FacebookFragment.this.getActivity(), LocalUser.LoginType.FACEBOOK, token.getToken()))
+				Toast.makeText(context, R.string.dtk_server_login_error, Toast.LENGTH_LONG).show();
 		}
 
 	};

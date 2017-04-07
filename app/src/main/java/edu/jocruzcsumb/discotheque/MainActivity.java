@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		if(LocalUser.silentlogin(this))
 		{
 			Intent k = new Intent(this, JoinRoomActivity.class);
+			k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(k);
+			finish();
 		}
         setContentView(R.layout.activity_main);
         //facebook login fragment code
@@ -149,16 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String name = account.getDisplayName();
             String email = account.getEmail();
             String img_url = account.getPhotoUrl().toString();
-            if(LocalUser.login(MainActivity.this, LocalUser.LoginType.GOOGLE, account.getIdToken()))
-            {
-                MainActivity.this.runOnUiThread(new Runnable(){public void run()
-                {
-                    Toast.makeText(MainActivity.this, "Login success", Toast.LENGTH_SHORT).show();
-                }});
-                Intent k = new Intent(MainActivity.this, JoinRoomActivity.class);
-                startActivity(k);
-            }
-            else
+            if(!LocalUser.login(MainActivity.this, LocalUser.LoginType.GOOGLE, account.getIdToken()))
             {
                 MainActivity.this.runOnUiThread(new Runnable(){public void run()
                 {
