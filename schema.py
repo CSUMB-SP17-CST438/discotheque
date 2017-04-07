@@ -41,12 +41,32 @@ class floor(db.Model):
 
 	floor_messages = db.relationship('message',backref=db.backref('floor',lazy='joined'),lazy='dynamic')
 	public = db.Column(db.Boolean,default=True)
+	songlist = db.Column(db.PickleType)
 
-	def __init__(self,floorName,creator_id,public):
+	def __init__(self,floorName,creator_id,public,genre):
 		self.floorName=floorName
 		self.creator_id = creator_id
 		if public is not None:
 			self.public=public
+		if genre is not None:
+			self.floor_genre=genre
+			
+	def add_member(self,member_id):
+		self.floor_members.append(getMemberObject(member_id))
+		db.session.commit()
+		
+	def rm_member(self,member_id):
+		self.floor_members.delete(getMemberObject(member_id))
+		db.session.commit()
+		
+	def to_list(self):
+		fl_sc = floor_Schema()
+		fl_ = fl_sc.dump(self)
+		return fl_[0]
+	
+	def set_songlist(self,songs):
+		self.songlist = songs
+		db.session.commit()
 
 
 	def __repr__(self):
@@ -86,7 +106,7 @@ class member(db.Model):
 	
 	def to_list(self):
 		mem_sc = member_Schema()
-		f_mem = mem_sc.dump(found_member)
+		f_mem = mem_sc.dump(self)
 		return f_mem[0]
 		
 		
@@ -124,7 +144,7 @@ class message(db.Model):
 ****************************************************************************************************************************************"""
 class f_Schema(ma.ModelSchema):
 	class Meta:
-		model = message
+		model = floor
 
 class member_Schema(ma.Schema):
 	class Meta:
@@ -188,7 +208,14 @@ def add_message(floor_id, member_id, text):
 	db.session.add(new_message)
 	db.session.commit()
 	return True
-
+	
+def add_floor(floor_name,creator_id,public,genre):
+	print(floor_name)
+	new_floor = floor(floor_name,creator_id,public,genre)
+	db.session.add(new_floor)
+	db.session.commit()
+	print("*********************floor added*********************")
+	return new_floor
 # ******************************************************************************************************
 # **************************************END INSERT MESSAGES*********************************************
 # ******************************************************************************************************
@@ -245,6 +272,13 @@ def getMember(email):
 	mem_sc = member_Schema()
 	f_mem = mem_sc.dump(found_member)
 	return f_mem[0]
+	
+def getFloor(floor_id):
+	return floor.query.get(floor_id)
+	
+def getMemberObject(mem_id):
+	return member.query.get(mem_id)
+	
 
 
 

@@ -67,6 +67,8 @@ def on_song_picked(data):
 def on_login(data):
     print("**************************************triggered login*****************************************************************")
     if 'fb_t' not in data:
+        print('google_t: ')
+        print(data)
         response = requests.get(
             'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + data['google_t'])
         json = response.json()
@@ -76,13 +78,14 @@ def on_login(data):
         link = json['picture']
         email = json['email']
         mem_found = memberExists_by_email(email)
+        print(mem_found)
         if mem_found:
             mem = getMember(email)
             socket.emit("login status", {
                         'authorized': 1, 'user': mem}, room=request.sid)
         else:
-            new_mem = registerMember("",fname,lname,email,link).to_list()
-            socket.emit("login status", {'authorized': 1,'user':new_mem}, room=request.sid)
+            new_mem = registerMember("",fname,lname,email,link)
+            print(new_mem.to_list())
 
 #
     if 'google_t' not in data:
@@ -103,8 +106,8 @@ def on_login(data):
                         'authorized': 1, 'user': mem}, room=request.sid)
         else:
             new_mem = registerMember("",fname,lname,email,link)
-            
-            socket.emit("login status", {'authorized': 1,'user':new_mem}, room=request.sid)
+            print(new_mem.to_list())
+            socket.emit("login status", {'authorized': 1,'user':new_mem.to_list()}, room=request.sid)
 
 
 @socket.on('new message')
@@ -118,12 +121,45 @@ def on_new_message(data):
                 'floor_messages': getFloorMessages(floor_id)}, room=request.sid)
 
 
-@app.route('/floors')
-@socket.on('create')
-def on_create(data):
-    new_floor = floor(data['floor_name'],data['m_id'],data['isPublic'])
-    socket.emit('floor created', {'floor_id':new_floor.floor_id})
 
+#function will return floor list object after initializing the object
+#the function should users associated with it. member_id and floorid 
+#floor_name and a floor_genre
+# @app.route('/floors')
+@socket.on('create floor')
+def on_create(data):
+    if data['is_public'] == 1:
+        public = True
+    else:
+        public = False
+    new_floor = add_floor(data['floor_name'],data['member_id'],public,data['floor_genre'])
+    new_floor.add_member(data['member_id'])
+    join_room(new_floor.floor_id)
+    genre = data['floor_genre']
+    songs = ds.getSongList(genre)
+    new_floor.set_songlist(songs)
+    socket.emit('floor created', {'floor':new_floor.to_list(),'song list':songs},room=new_floor.floor_id)
+
+
+@socket.on('join floor')
+#join room, function expects data to be json array/objects
+# expects keys 'floor_id', 'member_id, returns jsonarray to parse
+def on_join_floor(data):
+    floor_id = data['floor_id']
+    join_room(floor_id)
+    floor = getFloor(floor_id)
+    floor.add_member(data['member_id'])
+    socket.emit('member joined', {'floor':floor.to_list()}, room=floor_id)
+    
+@socket.on('leave floor')
+def on_leave_floor(data):
+    current_floor = getFloor(data['floor_id'])
+    current_floor.rm_member(data['member_id'])
+    current_floor = getFloor(data['floor_id'])
+    leave_room(data['floor_id'])
+    socket.emit('member left', {'floor':current_floor.to_list()})
+
+    
 
 
 # def get_dt_ms():
@@ -142,3 +178,6 @@ if __name__ == '__main__':
  # what did you do toda?
  # what is the plan for today?
  # roadblocks?
+
+
+#on login:
