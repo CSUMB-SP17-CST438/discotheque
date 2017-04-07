@@ -2,7 +2,7 @@
 """ This will define the schema for users, rooms/floors, etc. 
 """
 import flask_sqlalchemy
-import serv
+# import serv
 from datetime import datetime
 import os
 import json
@@ -13,12 +13,11 @@ from marshmallow import fields as f
 from sqlalchemy import orm
 from sqlalchemy import desc
 
-serv.app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL','postgresql://jcrzr:anchor99@localhost/postgres')
-# serv.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jcrzr:anchor99@localhost/postgres'
+# serv.app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL','postgresql://jcrzr:anchor99@localhost/postgres')
 # serv.app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
 
-db = flask_sqlalchemy.SQLAlchemy(serv.app)
-ma = Marshmallow(serv.app)
+db = flask_sqlalchemy.SQLAlchemy()
+ma = Marshmallow()
 
 floor_members = db.Table('floor_members',
 	db.Column('floor_id', db.Integer, db.ForeignKey('floor.floor_id')),
@@ -55,12 +54,12 @@ class floor(db.Model):
 
 class member(db.Model):
 	member_id = db.Column(db.Integer, primary_key = True)
-	username = db.Column(db.String(120), unique = True)
-	member_FName = db.Column(db.String(50))
-	member_LName = db.Column(db.String(50))
+	username = db.Column(db.String(120))
+	member_FName = db.Column(db.String(120))
+	member_LName = db.Column(db.String(120))
 	member_email = db.Column(db.String(120))
 	member_password = db.Column(db.String(140))
-	member_img_url = db.Column(db.String(300))
+	member_img_url = db.Column(db.String(500))
 	member_desc = db.Column(db.Text)
 	member_fgenres = db.Column(db.Text)
 
@@ -84,6 +83,13 @@ class member(db.Model):
 		self.member_img_url = imgLink
 		self.member_desc = desc
 		self.member_fgenres = genres
+	
+	def to_list(self):
+		mem_sc = member_Schema()
+		f_mem = mem_sc.dump(found_member)
+		return f_mem[0]
+		
+		
 
 	def __repr__(self):
 		return '<Member: f_name: %r, l_name: %r, username: %r >' %(self.member_FName, self.member_LName, self.username)

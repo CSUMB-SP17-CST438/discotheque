@@ -2,16 +2,16 @@ import serv, unittest
 import random
 
 class SocketioTestCases(unittest.TestCase):
-    def test_song_list(self):
-        client = serv.socket.test_client(serv.app)
-        client.emit('join room',"please")
-        client.emit("get songs", {'genre':'punk'})
+    # def test_song_list(self):
+    #     client = serv.socket.test_client(serv.app)
+    #     client.emit('join room',"please")
+    #     client.emit("get songs", {'genre':'punk'})
 
-        r = client.get_received()
-        # print(r)
-        from_server = r[0]
-        # print (from_server)
-        self.assertIsNot(from_server,None)
+    #     r = client.get_received()
+    #     # print(r)
+    #     from_server = r[0]
+    #     # print (from_server)
+    #     self.assertIsNot(from_server,None)
 
     # def test_register(self):
     #     client = serv.socket.test_client(serv.serv)

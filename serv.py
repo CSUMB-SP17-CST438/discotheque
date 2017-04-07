@@ -12,8 +12,12 @@ import facebook
 public_room = 912837
 
 app = flask.Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL','postgresql://jcrzr:anchor99@localhost/postgres')
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= 1
 
-import schema as db
+from schema import *
+db.init_app(app)
+
 socket = flask_socketio.SocketIO(app)
 # default route
 
@@ -57,7 +61,7 @@ def on_song_picked(data):
 
 
 """this listener is expecting key:pair list (i.e json) with either fb_t for facebook token, or google_t for google token
-	if user exists, function will validate and pass back user information and auth status. else, it will add user reference to db"""
+	if user exists, function will validate and pass back user information and auth status. else, it will add user reference to schema"""
 
 @socket.on('login')
 def on_login(data):
@@ -71,13 +75,13 @@ def on_login(data):
         lname = json['family_name']
         link = json['picture']
         email = json['email']
-        mem_found = db.memberExists_by_email(email)
+        mem_found = memberExists_by_email(email)
         if mem_found:
-            mem = db.getMember(email)
+            mem = getMember(email)
             socket.emit("login status", {
                         'authorized': 1, 'user': mem}, room=request.sid)
         else:
-            new_mem = db.registerMember("",fname,lname,email,link)
+            new_mem = registerMember("",fname,lname,email,link).to_list()
             socket.emit("login status", {'authorized': 1,'user':new_mem}, room=request.sid)
 
 #
@@ -91,14 +95,15 @@ def on_login(data):
         print("***************************EMAIL************************")
         print(email)
         link = js['picture']['data']['url']
-        mem_found = db.memberExists_by_email(email)
+        mem_found = memberExists_by_email(email)
         print(mem_found)
         if mem_found:
-            mem = db.getMember(email)
+            mem = getMember(email)
             socket.emit("login status", {
                         'authorized': 1, 'user': mem}, room=request.sid)
         else:
-            new_mem = db.registerMember("",fname,lname,email,link)
+            new_mem = registerMember("",fname,lname,email,link)
+            
             socket.emit("login status", {'authorized': 1,'user':new_mem}, room=request.sid)
 
 
@@ -108,15 +113,15 @@ def on_new_message(data):
     floor_id = data['floor']
     member_id = data['from']
     text = data['message']
-    db.add_message(floor_id, member_id, text)
+    add_message(floor_id, member_id, text)
     socket.emit("message added", {
-                'floor_messages': db.getFloorMessages(floor_id)}, room=request.sid)
+                'floor_messages': getFloorMessages(floor_id)}, room=request.sid)
 
 
 @app.route('/floors')
 @socket.on('create')
 def on_create(data):
-    new_floor = db.floor(data['floor_name'],data['m_id'],data['isPublic'])
+    new_floor = floor(data['floor_name'],data['m_id'],data['isPublic'])
     socket.emit('floor created', {'floor_id':new_floor.floor_id})
 
 

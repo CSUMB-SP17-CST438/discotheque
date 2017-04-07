@@ -1,14 +1,15 @@
 #unit_tests.py
 import unittest
 import discoSounds as ds
-import schema as db
+from schema import *
 import random
-
+import serv
 class sc_test(unittest.TestCase):
+	db.app = serv.app
 
-	def test_get_songs(self):
-		response = ds.getSongList('punk')
-		self.assertIsNotNone(response)
+	# def test_get_songs(self):
+	# 	response = ds.getSongList('punk')
+	# 	self.assertIsNotNone(response)
 
 	def test_add_user(self):
 		i = random.randint(1,100000)
@@ -18,15 +19,15 @@ class sc_test(unittest.TestCase):
 		lname = "last_n"+str(i)
 		email = "thisiaanemail@"+str(i)
 		img = 'link' + str(i)
-		new_member = db.registerMember(usnm,fname,lname,email,img)
+		new_member = registerMember(usnm,fname,lname,email,img)
 		self.assertIsNotNone(new_member)
 
 	def test_add_message(self):
-		nm = db.add_message(1,1,"this is a test...nowwww")
+		nm = add_message(1,1,"this is a test...nowwww")
 		self.assertEqual(nm,True)
 
 	def test_get_messages(self):
-		messages = db.getFloorMessages(1)
+		messages = getFloorMessages(1)
 		# print(messages)
 		# print(messages[0])
 		self.assertIsNotNone(messages)
