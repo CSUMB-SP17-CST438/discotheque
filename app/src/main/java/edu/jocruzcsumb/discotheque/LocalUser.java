@@ -103,6 +103,16 @@ public class LocalUser extends User
 		return false;
     }
 
+    //Logs out of discotheque server and allows user to choose new login infos at MainActivity
+	public static void logout(Activity context)
+	{
+		//TODO: should probably clear entire activity stack
+		Intent k = new Intent(context, MainActivity.class);
+		k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		context.startActivity(k);
+		context.finish();
+	}
+
 	public static LocalUser getCurrentUser()
 	{
 		if(currentUser == null)
