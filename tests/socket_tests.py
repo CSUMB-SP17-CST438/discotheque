@@ -33,13 +33,26 @@ class SocketioTestCases(unittest.TestCase):
         print(r)
         self.assertIsNotNone(r)
 
-
+    def test_create_floor(self):
+        client = serv.socket.test_client(serv.app)
+        client.emit('create floor',{'floor_name':"new floor name", 'member_id':1,'is_public':True,'floor_genre':'pop'})
+        r = client.get_received()
+        print(r)
+        self.assertIsNotNone(r)
+        
+    def test_join_floor(self):
+        client = serv.socket.test_client(serv.app)
+        client.emit('join floor',{'floor_id':2, 'member_id':1})
+        r = client.get_received()
+        print(r)
+        self.assertIsNotNone(r)
+        
     # def test_login_fb(self):
-    # 	client = serv.socket.test_client(serv.serv)
-    # 	client.emit('login',{'fb_t': 'EAAF55XYSy2sBABpHK2UqcyZAz11UBBrTiMzyDSP9rvm7rvnEiG1oG95UUCWfr2oXmMZArjaGHif5nV3mJIIT8JXg6TnSIIhVXe6NGSBZAHBZC1vIRlN5AxJQFPZAMSei1asovC8oeN3FiMSaCP2cVaoxEBXvAV1VTjgoLEz9g2zBYBpLTIze0wJHIGZB2xZBTwXInD0smTjlFJcgg0oWq8DIlFFgZCTjdFQZD'})
-    # 	r = client.get_received()
-    # 	print(r)
-    # 	self.assertIsNotNone(r)
+    #   client = serv.socket.test_client(serv.app)
+    #   client.emit('login',{'fb_t': 'EAAF55XYSy2sBABpHK2UqcyZAz11UBBrTiMzyDSP9rvm7rvnEiG1oG95UUCWfr2oXmMZArjaGHif5nV3mJIIT8JXg6TnSIIhVXe6NGSBZAHBZC1vIRlN5AxJQFPZAMSei1asovC8oeN3FiMSaCP2cVaoxEBXvAV1VTjgoLEz9g2zBYBpLTIze0wJHIGZB2xZBTwXInD0smTjlFJcgg0oWq8DIlFFgZCTjdFQZD'})
+    #   r = client.get_received()
+    #   print(r)
+    #   self.assertIsNotNone(r)
     
 if __name__ == '__main__':
     unittest.main()

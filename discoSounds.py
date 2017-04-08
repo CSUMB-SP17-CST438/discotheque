@@ -9,8 +9,9 @@ def getSongList(g):
 	i = 0
 	for t in scTracks:
 		#parse track information to what is relevant to us
+		#returns duration in milliseconds to sync songs. 
 		username = t.user['username']
-		new_track = {'id':t.id,'title':t.title, 'creator_user':username,'track_permalink':t.permalink_url,'stream_url':"nothing yet",'artwork':t.artwork_url, 'start_time':'0'}
+		new_track = {'id':t.id,'title':t.title, 'creator_user':username,'track_permalink':t.permalink_url,'stream_url':"nothing yet",'artwork':t.artwork_url, 'duration':t.duration,'start_time':'0'}
 		trackList.append(new_track)
 	return trackList
 
@@ -22,7 +23,7 @@ def getSongURLLocation(track_id):
 	# print(track_stream.location)
 	return track_stream.location
 
-# songlist = getSongList('punk')
+songlist = getSongList('punk')
 # t = songlist[0]
 # getSongURLLocation(t['id'])
-# print("songlist")
+print(songlist)
