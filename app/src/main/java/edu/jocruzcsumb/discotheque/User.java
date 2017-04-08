@@ -1,12 +1,15 @@
 package edu.jocruzcsumb.discotheque;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User implements Serializable
+public class User implements Parcelable
 {
 
     //For json parsing
@@ -16,6 +19,24 @@ public class User implements Serializable
     public static final String JSON_LNAME_TAG = "member_LName";
     public static final String JSON_IMG_URL_TAG = "member_img_url";
 
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>()
+    {
+
+        // This simply calls our new constructor (typically private) and
+        // passes along the unmarshalled `Parcel`, and then returns the new object!
+        @Override
+        public User createFromParcel(Parcel in)
+        {
+            return new User(in);
+        }
+
+        // We just need to copy this and change the type to match our class.
+        @Override
+        public User[] newArray(int size)
+        {
+            return new User[size];
+        }
+    };
     private String userName = null;
     private String firstName = null;
     private String lastName = null;
@@ -59,6 +80,16 @@ public class User implements Serializable
 
     }
 
+    private User(Parcel in)
+    {
+        userName = in.readString();
+        firstName = in.readString();
+        lastName = in.readString();
+        photo = in.readString();
+        bio = in.readString();
+        //TODO
+    }
+
     protected static User parse(JSONObject jsonUser) throws JSONException
     {
         return new User(
@@ -67,6 +98,17 @@ public class User implements Serializable
                 jsonUser.getString(JSON_LNAME_TAG),
                 jsonUser.getString(JSON_IMG_URL_TAG)
         );
+    }
+
+    public static ArrayList<User> parse(JSONArray a) throws JSONException
+    {
+        int arrayLength = a.length();
+        ArrayList<User> userList = new ArrayList<User>();
+        for (int i = 0; i < arrayLength; i++)
+        {
+            userList.add(User.parse(a.getJSONObject(i)));
+        }
+        return userList;
     }
 
     protected static User parseProfile(JSONObject jsonUser) throws JSONException
@@ -189,6 +231,23 @@ public class User implements Serializable
     public UserList getFriendsList()
     {
         return friendsList;
+    }
+
+    @Override
+    public int describeContents()
+    {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags)
+    {
+        dest.writeString(userName);
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(photo);
+        dest.writeString(bio);
+        //TODO
     }
 
 

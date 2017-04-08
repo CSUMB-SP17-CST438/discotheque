@@ -4,31 +4,69 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class FloorActivity extends AppCompatActivity
 {
 
     private static final String TAG = "FloorActivity";
+    // EVENTS are recieved here.
+    BroadcastReceiver r = new BroadcastReceiver()
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            Log.d(TAG, "onRecieve");
+            Log.d(TAG, "intent.getAction() = " + intent.getAction());
+            switch (intent.getAction())
+            {
+                case FloorService.EVENT_SONG_LIST_UPDATE:
+                    ArrayList<Song> songs = intent.getParcelableArrayListExtra(FloorService.EVENT_SONG_LIST_UPDATE);
+
+                    break;
+                case FloorService.EVENT_USER_LIST_UPDATE:
+                    ArrayList<User> users = intent.getParcelableArrayListExtra(FloorService.EVENT_USER_LIST_UPDATE);
+
+                    break;
+                case FloorService.EVENT_MESSAGE_LIST_UPDATE:
+                    ArrayList<Message> messages = intent.getParcelableArrayListExtra(FloorService.EVENT_MESSAGE_LIST_UPDATE);
+
+                    break;
+                case FloorService.EVENT_MESSAGE_ADD:
+                    Message m = intent.getParcelableExtra(FloorService.EVENT_MESSAGE_ADD);
+
+                    break;
+                case FloorService.EVENT_USER_ADD:
+                    User u = intent.getParcelableExtra(FloorService.EVENT_USER_ADD);
+
+                    break;
+                case FloorService.EVENT_USER_REMOVE:
+                    User r = intent.getParcelableExtra(FloorService.EVENT_USER_REMOVE);
+
+                    break;
+            }
+        }
+    };
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -38,7 +76,6 @@ public class FloorActivity extends AppCompatActivity
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -60,7 +97,8 @@ public class FloorActivity extends AppCompatActivity
         f.addAction(FloorService.EVENT_MESSAGE_ADD);
 
         // Set the activity to listen for app broadcasts with the above filter
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(r, f);
+        LocalBroadcastManager.getInstance(getApplicationContext())
+                             .registerReceiver(r, f);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -89,42 +127,19 @@ public class FloorActivity extends AppCompatActivity
 
     }
 
-    BroadcastReceiver r = new BroadcastReceiver()
+    // EVENTS are broadcasted here
+    private void broadcast(String event, Parcelable params)
     {
-        @Override
-        public void onReceive(Context context, Intent intent)
-        {
-            Log.d(TAG, "onRecieve");
-            Log.d(TAG, "intent.getAction() = " + intent.getAction());
-            switch (intent.getAction())
-            {
-                case FloorService.EVENT_SONG_LIST_UPDATE:
+        Intent k = new Intent(event);
+        k.putExtra(event, params);
+        broadcast(k);
+    }
 
-
-                    break;
-                case FloorService.EVENT_USER_LIST_UPDATE:
-
-
-                    break;
-                case FloorService.EVENT_MESSAGE_LIST_UPDATE:
-
-
-                    break;
-                case FloorService.EVENT_MESSAGE_ADD:
-
-
-                    break;
-                case FloorService.EVENT_USER_ADD:
-
-
-                    break;
-                case FloorService.EVENT_USER_REMOVE:
-
-
-                    break;
-            }
-        }
-    };
+    private void broadcast(Intent k)
+    {
+        LocalBroadcastManager.getInstance(getApplicationContext())
+                             .sendBroadcast(k);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
