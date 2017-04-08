@@ -7,9 +7,13 @@ import org.json.JSONObject;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import io.socket.client.IO;
+
+import java.net.ConnectException;
 import java.net.URISyntaxException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import static junit.framework.Assert.fail;
 
 public class Sockets
 {
@@ -33,23 +37,17 @@ public class Sockets
 		return SERVERS[SELECTED_SERVER];
 	}
 
-	//Checks to see if the current user is authed
-	public static boolean isUserAuthenticated()
-	{
-		//TODO: AUTH
-		return true;
-	}
-
-	//Returns the authed user
-	public static User getUser()
-	{
-		//TODO: AUTH
-		return null;
-	}
-
     public static Socket getSocket()
 	{
-		if(socket != null ) return socket;
+		if(socket != null )
+        {
+            if(!socket.connected())
+            {
+                socket = null;
+                return getSocket();
+            }
+            return socket;
+        }
 		try
 		{
 			socket = IO.socket(getServer());
@@ -57,6 +55,7 @@ public class Sockets
 		catch(URISyntaxException e)
 		{
 			e.printStackTrace();
+            fail("Invalid server address bro");
 		}
 		socket.connect();
 		return socket;
@@ -78,7 +77,7 @@ public class Sockets
 		}
 		//Signal = what to send the server, event = event we wait for.
         public SocketWaiter(String signal, String event)
-		{
+        {
             success = false;
             this.signal=signal;
             this.event=event;

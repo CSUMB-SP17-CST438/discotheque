@@ -66,10 +66,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.SongViewHolder> {
 
     @Override
     public void onBindViewHolder(SongViewHolder songViewHolder, int i) {
-        songViewHolder.songName.setText(songList.getSong(i).getSongName());
+        songViewHolder.songName.setText(songList.getSong(i).getName());
         songViewHolder.name.setText(songList.getSong(i).getArtist());
-        if (!songList.getSong(i).getPhoto_link().equals("null")) {
-            Picasso.with(mContext).load(songList.getSong(i).getPhoto_link()).into(songViewHolder.image);
+        if (!songList.getSong(i).getArtworkUrl().equals("null")) {
+            Picasso.with(mContext).load(songList.getSong(i).getArtworkUrl()).into(songViewHolder.image);
 
         }
         else{

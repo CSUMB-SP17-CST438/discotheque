@@ -10,75 +10,66 @@ import static junit.framework.Assert.fail;
  * Created by Tommy on 3/23/2017.
  */
 
-public class Room
+public class Floor
 {
 
-    private String floorName;
-    private int numOfUsers;
-    private SongList songList;
-    private UserList userList;
-    private ArrayList<UserChatMessage> chatList;
+    private String name;
+    private ArrayList<Message> messages = null;
+    private ArrayList<Song> songs = null;
+    private ArrayList<User> users = null;
 
-    public Room()
+    public Floor()
     {
-        floorName = "blank";
-        numOfUsers = 0;
-        songList = new SongList();
-        userList = new UserList();
-        chatList = new ArrayList<UserChatMessage>();
+        messages = new ArrayList<Message>();
+        songs = new ArrayList<Song>();
+        users = new ArrayList<User>();
     }
 
+    public Floor(String name)
+    {
+        this.name = name;
+    }
 
-
-    public static Room parseRoom(JSONObject jsonRoom)
+    public Floor parse(JSONObject jsonFloor)
     {
         //TODO
         fail("nyi");
-        return null;
+        return new Floor();
     }
 
-
-
-    public String getFloorName()
+    public void setMessages(ArrayList<Message> messages)
     {
-        return floorName;
+        this.messages = messages;
     }
 
-    public void addUserToList(User user)
+    public void setSongs(ArrayList<Song> songs)
     {
-        userList.addUser(user);
-        numOfUsers++;
+        this.songs = songs;
     }
 
-    public void addChatMessage(UserChatMessage chatMessage)
+    public void setUsers(ArrayList<User> users)
     {
-        chatList.add(chatMessage);
+        this.users = users;
     }
 
-    public ArrayList<UserChatMessage> getChatList()
+    public ArrayList<Message> getMessages()
     {
-        return chatList;
+        return messages;
     }
 
-    public UserList getUserList()
+    public ArrayList<Song> getSongs()
     {
-        return userList;
+        return songs;
     }
 
-    public SongList getSongList()
+    public ArrayList<User> getUsers()
     {
-        return songList;
+        return users;
     }
 
-    public boolean removeUserFromList(User user)
+    public String getName()
     {
-        if (userList.deleteUser(user))
-        {
-            numOfUsers--;
-            return true;
-        }
-
-        return false;
+        return name;
     }
 
 

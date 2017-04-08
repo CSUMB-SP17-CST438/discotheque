@@ -3,100 +3,161 @@ package edu.jocruzcsumb.discotheque;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import io.socket.emitter.Emitter;
 
 /**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
+ * IntentService that handles all events inside chat room
  */
 public class RoomService extends IntentService
 {
-	// TODO: Rename actions, choose action names that describe tasks that this
-	// IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-	private static final String ACTION_FOO = "edu.jocruzcsumb.discotheque.action.FOO";
-	private static final String ACTION_BAZ = "edu.jocruzcsumb.discotheque.action.BAZ";
+    public static final String TAG = "RoomService";
+    public static final String EVENT_SONG_LIST_UPDATE = "song list";
+    public static final String EVENT_GET_SONG_LIST = "get song list";
+    public static final String EVENT_USER_REMOVE = "member left";
+    public static final String EVENT_USER_ADD = "member joined";
+    public static final String EVENT_NEW_MESSAGE = "message added";
 
-	// TODO: Rename parameters
-	private static final String EXTRA_PARAM1 = "edu.jocruzcsumb.discotheque.extra.PARAM1";
-	private static final String EXTRA_PARAM2 = "edu.jocruzcsumb.discotheque.extra.PARAM2";
+    public static final String MESSAGE_FROM_TAG = "member";
+    public static final String MESSAGE_FLOOR_TAG = "floor";
+    public static final String MESSAGE_TEXT_TAG = "text";
+    public static final String MESSAGE_PUB_TIME_TAG = "pubTime";
+    public static final String MESSAGE_ID_TAG = "mess_id";
 
-	public RoomService()
-	{
-		super("RoomService");
-	}
+    public static final String USER_USERNAME_TAG = "username";
+    public static final String USER_CREATED_FLOORS_TAG = "created_floors";
+    public static final String USER_FNAME_TAG = "member_FName";
+    public static final String USER_LNAME_TAG = "member_LName";
+    public static final String USER_IMG_URL_TAG = "member_img_url";
 
-	/**
-	 * Starts this service to perform action Foo with the given parameters. If
-	 * the service is already performing a task this action will be queued.
-	 *
-	 * @see IntentService
-	 */
-	// TODO: Customize helper method
-	public static void startActionFoo(Context context, String param1, String param2)
-	{
-		Intent intent = new Intent(context, RoomService.class);
-		intent.setAction(ACTION_FOO);
-		intent.putExtra(EXTRA_PARAM1, param1);
-		intent.putExtra(EXTRA_PARAM2, param2);
-		context.startService(intent);
-	}
+    public static final String SONG_NAME_TAG = "title";
+    public static final String SONG_ARTIST_TAG = "creator_user";
+    public static final String SONG_STREAM_URL_TAG = "stream_url";
+    public static final String SONG_ARTWORK_TAG = "artwork";
 
-	/**
-	 * Starts this service to perform action Baz with the given parameters. If
-	 * the service is already performing a task this action will be queued.
-	 *
-	 * @see IntentService
-	 */
-	// TODO: Customize helper method
-	public static void startActionBaz(Context context, String param1, String param2)
-	{
-		Intent intent = new Intent(context, RoomService.class);
-		intent.setAction(ACTION_BAZ);
-		intent.putExtra(EXTRA_PARAM1, param1);
-		intent.putExtra(EXTRA_PARAM2, param2);
-		context.startService(intent);
-	}
+    private static final String ACTION_JOIN_ROOM = "edu.jocruzcsumb.discotheque.action.JOINROOM";
 
-	@Override
-	protected void onHandleIntent(Intent intent)
-	{
-		if(intent != null)
-		{
-			final String action = intent.getAction();
-			if(ACTION_FOO.equals(action))
-			{
-				final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-				final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-				handleActionFoo(param1, param2);
-			}
-			else if(ACTION_BAZ.equals(action))
-			{
-				final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-				final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-				handleActionBaz(param1, param2);
-			}
-		}
-	}
+    private static final String EXTRA_ROOM = "edu.jocruzcsumb.discotheque.extra.ROOM";
 
-	/**
-	 * Handle action Foo in the provided background thread with the provided
-	 * parameters.
-	 */
-	private void handleActionFoo(String param1, String param2)
-	{
-		// TODO: Handle action Foo
-		throw new UnsupportedOperationException("Not yet implemented");
-	}
+    public RoomService()
+    {
+        super("RoomService");
+    }
 
-	/**
-	 * Handle action Baz in the provided background thread with the provided
-	 * parameters.
-	 */
-	private void handleActionBaz(String param1, String param2)
-	{
-		// TODO: Handle action Baz
-		throw new UnsupportedOperationException("Not yet implemented");
-	}
+    /**
+     * Starts this service by joining a room.
+     *
+     * @see IntentService
+     */
+    public static void joinRoom(Context context, String room)
+    {
+        Intent intent = new Intent(context, RoomService.class);
+        intent.setAction(ACTION_JOIN_ROOM);
+        intent.putExtra(EXTRA_ROOM, room);
+        context.startService(intent);
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent)
+    {
+        if (intent != null)
+        {
+            final String action = intent.getAction();
+            if (ACTION_JOIN_ROOM.equals(action))
+            {
+                final String param1 = intent.getStringExtra(EXTRA_ROOM);
+                handleActionJoinRoom(param1);
+            }
+        }
+    }
+
+    private static ArrayList<Song> songs = null;
+    private static ArrayList<Message> messages = null;
+
+    /**
+     * Handle action Join room in the provided background thread with the provided
+     * parameters.
+     */
+    private void handleActionJoinRoom(String room)
+    {
+        Sockets.getSocket()
+               .on(EVENT_SONG_LIST_UPDATE, new Emitter.Listener()
+               {
+                   @Override
+                   public void call(Object... args)
+                   {
+                       Log.d(TAG, EVENT_SONG_LIST_UPDATE);
+                       songs = parseSongList((JSONArray) args[0]);
+                   }
+               });
+        Sockets.getSocket()
+               .emit(EVENT_GET_SONG_LIST);
+        Sockets.getSocket()
+               .on(EVENT_USER_ADD, new Emitter.Listener()
+               {
+                   @Override
+                   public void call(Object... args)
+                   {
+                       Log.d(TAG, EVENT_USER_ADD);
+                       //TODO
+                   }
+               });
+        Sockets.getSocket()
+               .on(EVENT_USER_REMOVE, new Emitter.Listener()
+               {
+                   @Override
+                   public void call(Object... args)
+                   {
+                       Log.d(TAG, EVENT_USER_REMOVE);
+                       //TODO
+                   }
+               });
+        Sockets.getSocket()
+               .on(EVENT_NEW_MESSAGE, new Emitter.Listener()
+               {
+                   @Override
+                   public void call(Object... args)
+                   {
+                       Log.d(TAG, EVENT_NEW_MESSAGE);
+                       try
+                       {
+                           messages.add(Message.parse((JSONObject) args[0]));
+                       }
+                       catch (JSONException e)
+                       {
+                           e.printStackTrace();
+                       }
+                   }
+               });
+    }
+
+    private ArrayList<Song> parseSongList(JSONArray a)
+    {
+        if (a != null)
+        {
+            try
+            {
+                Log.d(TAG, a.toString());
+                int arrayLength = a.length();
+                ArrayList<Song> songList = new ArrayList<Song>();
+                for (int i = 0; i < arrayLength; i++)
+                {
+                    songList.add(Song.parse(a.getJSONObject(i)));
+                }
+                return songList;
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 }

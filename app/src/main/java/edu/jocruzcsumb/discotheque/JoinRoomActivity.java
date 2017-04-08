@@ -14,7 +14,7 @@ import java.util.concurrent.CountDownLatch;
 public class JoinRoomActivity extends AppCompatActivity implements View.OnClickListener
 {
 	private ListView listView;
-	private Room floorRoom;
+	private Floor floorRoom;
 	private Sockets socket = new Sockets();
 	private SongList songList = new SongList();
 	private JSONArray jsonArray;
