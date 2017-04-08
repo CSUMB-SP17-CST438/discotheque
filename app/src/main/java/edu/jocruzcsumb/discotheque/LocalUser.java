@@ -54,7 +54,7 @@ public class LocalUser extends User
 
     private static void signIn(Activity context)
     {
-        Intent k = new Intent(context, JoinRoomActivity.class);
+        Intent k = new Intent(context, PickFloorActivity.class);
         k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(k);
         context.finish();

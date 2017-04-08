@@ -19,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         if (LocalUser.silentLogin(this))
         {
-            Intent k = new Intent(this, JoinRoomActivity.class);
+            Intent k = new Intent(this, PickFloorActivity.class);
             k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(k);
             finish();
@@ -66,18 +67,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
               .commit();
         }
 
-        //Google sign in setUrl up
+        // Google API setup
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestIdToken("411633551801-iivlfqvn0mpo3iarr71dn25b15lslr5r.apps.googleusercontent.com")
                 .requestServerAuthCode("411633551801-iivlfqvn0mpo3iarr71dn25b15lslr5r.apps.googleusercontent.com")
                 .build();
 
+        // Get the API Client obj
         googleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)
                 .build();
 
+        // Attempt silent sign in
+        OptionalPendingResult<GoogleSignInResult> pendingResult =
+                 Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+         if (pendingResult.isDone()) {
+             // There's an immediate result available.
+             MainActivity.this.handleResult(pendingResult.get());
+         } else {
+             // There's no immediate result ready
+
+             // We may want to add a progress indicator right here
+             pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                 @Override
+                 public void onResult(@NonNull GoogleSignInResult result) {
+
+                     MainActivity.this.handleResult(result);
+                 }
+             });
+         }
 
         //google sign in button
         SignIn = (SignInButton) findViewById(R.id.google_login_btn);
@@ -104,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.guest_login_btn:
                 //go to activity
-                Intent guestLogin = new Intent(MainActivity.this, JoinRoomActivity.class);
+                Intent guestLogin = new Intent(MainActivity.this, PickFloorActivity.class);
                 startActivity(guestLogin);
 
                 break;
@@ -144,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(GOOGLE_AUTH_TAG, "onConnectionFailed");
     }
 
-    private void HandleResult(GoogleSignInResult r)
+    public void handleResult(GoogleSignInResult r)
     {
         Log.d(GOOGLE_AUTH_TAG, "onHandleResult");
         final GoogleSignInResult result = r;
@@ -207,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d(TAG, "got result");
                 Log.d(TAG, result.getSignInAccount()
                                  .getDisplayName());
-                HandleResult(result);
+                handleResult(result);
             }
         }
 

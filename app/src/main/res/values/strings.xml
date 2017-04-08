@@ -57,6 +57,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="dtk_server_login_error">Could not authenticate with server</string>
+    <string name="title_activity_floor">FloorActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 
 </resources>
