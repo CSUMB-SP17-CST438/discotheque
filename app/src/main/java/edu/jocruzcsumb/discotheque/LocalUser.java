@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +14,11 @@ import static junit.framework.Assert.fail;
 // For a user who has logged in on this local device
 public class LocalUser extends User
 {
+    private static final String JSON_EMAIL_TAG = "email";
+    private static final String JSON_TOKEN_TAG = "token";
+    private static final String JSON_LOGIN_TYPE_TAG = "login_type";
+
+    private static final String TAG = "LocalUser";
     public static final String GOOGLE_TOKEN_KEY = "google_t";
     public static final String FACEBOOK_TOKEN_KEY = "fb_t";
     public static final String SOUNDCLOUD_TOKEN_KEY = "soundcloud_t";
@@ -30,12 +34,22 @@ public class LocalUser extends User
     private LoginType loginType = null;
     private String token = null;
 
-    public LocalUser(LoginType loginType, String token, String email, String userName, String firstName, String lastName, String photo, String bio)
+    public LocalUser(LoginType loginType, String token, String email, User u)
     {
-        super(userName, firstName, lastName, photo, bio);
+        super(u.getUserName(), u.getFirstName(), u.getLastName(), u.getPhoto(), u.getBio());
         this.loginType = loginType;
         this.token = token;
         this.email = email;
+    }
+
+    protected static LocalUser parse(JSONObject jsonLocalUser) throws JSONException
+    {
+        //TODO: get user info from JSON
+        return new LocalUser(
+                parseLoginType(jsonLocalUser.getString(JSON_LOGIN_TYPE_TAG)),
+                jsonLocalUser.getString(JSON_TOKEN_TAG),
+                jsonLocalUser.getString(JSON_EMAIL_TAG),
+                User.parse(jsonLocalUser));
     }
 
     private static void signIn(Activity context)
@@ -62,9 +76,9 @@ public class LocalUser extends User
     }
 
     //Checks for leftover auth to log in to discotheque server
-    public static boolean silentlogin(Activity context)
+    public static boolean silentLogin(Activity context)
     {
-        Log.d("Dtk Server", "Silent Login");
+        Log.d(TAG, "Silent Login");
         initPrefs(context);
         String t = preferences.getString(AUTH_TYPE_KEY, null);
         if (t == null)
@@ -171,33 +185,18 @@ public class LocalUser extends User
 
         if (obj == null)
         {
-            Log.d("DTK-Server Login", "login returned null (timeout or other error)");
+            Log.d(TAG, "login returned null (timeout or other error)");
             return false;
         }
         else
         {
             int a = 0;
-            String
-                    username = null,
-                    firstname = null,
-                    lastname = null,
-                    email = null,
-                    photo = null,
-                    bio = null;
             try
             {
                 a = obj.getInt("authorized");
                 if (a == 1)
                 {
-                    //TODO: get user info from JSON
-                    //				username = obj.getString("username");
-                    //				firstname = obj.getString("firstname");
-                    //				lastname = obj.getString("lastname");
-                    //				email = obj.getString("email");
-                    //				photo = obj.getString("photo");
-                    //				bio = obj.getString("bio");
-
-                    LocalUser u = new LocalUser(loginType, token, username, firstname, lastname, email, photo, bio);
+                    LocalUser u = parse(obj);
                     LocalUser.setCurrentUser(u);
                     return true;
                 }

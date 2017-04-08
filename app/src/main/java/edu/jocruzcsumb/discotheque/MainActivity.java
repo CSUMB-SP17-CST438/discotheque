@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		if(LocalUser.silentlogin(this))
+		if(LocalUser.silentLogin(this))
 		{
 			Intent k = new Intent(this, JoinRoomActivity.class);
 			k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -59,13 +59,24 @@ public class User implements Serializable
 
     }
 
-    public static User parse(JSONObject jsonUser) throws JSONException
-    {//TODO: PARSE EVEN MORE USER INFO
-        String userName = jsonUser.getString(JSON_USERNAME_TAG);
-        String firstName = jsonUser.getString(JSON_FNAME_TAG);
-        String lastName = jsonUser.getString(JSON_LNAME_TAG);
-        String photo = jsonUser.getString(JSON_IMG_URL_TAG);
-        return new User(userName, firstName, lastName, photo);
+    protected static User parse(JSONObject jsonUser) throws JSONException
+    {
+        return new User(
+                jsonUser.getString(JSON_USERNAME_TAG),
+                jsonUser.getString(JSON_FNAME_TAG),
+                jsonUser.getString(JSON_LNAME_TAG),
+                jsonUser.getString(JSON_IMG_URL_TAG)
+        );
+    }
+    protected static User parseProfile(JSONObject jsonUser) throws JSONException
+    {
+        //TODO: PARSE EVEN MORE USER INFO
+        return new User(
+                jsonUser.getString(JSON_USERNAME_TAG),
+                jsonUser.getString(JSON_FNAME_TAG),
+                jsonUser.getString(JSON_LNAME_TAG),
+                jsonUser.getString(JSON_IMG_URL_TAG)
+        );
     }
 
     public static boolean isValidUsername(String username)

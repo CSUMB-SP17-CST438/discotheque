@@ -44,12 +44,13 @@ public class Song implements Comparable<Song>, Serializable
 
     public static Song parse(JSONObject jsonSong) throws JSONException
     {
-        String title = jsonSong.getString(JSON_TITLE_TAG);
-        String artist = jsonSong.getString(JSON_ARTIST_TAG);
-        String streamUrl = jsonSong.getString(JSON_STREAM_URL_TAG);
-        String artworkUrl = jsonSong.getString(JSON_ARTWORK_TAG);
-        boolean randomized = jsonSong.getBoolean(JSON_RANDOM_TAG);
-        return new Song(title, artist, streamUrl, artworkUrl, randomized);
+        return new Song(
+                jsonSong.getString(JSON_TITLE_TAG),
+                jsonSong.getString(JSON_ARTIST_TAG),
+                jsonSong.getString(JSON_STREAM_URL_TAG),
+                jsonSong.getString(JSON_ARTWORK_TAG),
+                jsonSong.getBoolean(JSON_RANDOM_TAG)
+        );
     }
 
     public boolean getIsUserPicked()
