@@ -16,9 +16,9 @@ import io.socket.emitter.Emitter;
 /**
  * IntentService that handles all events inside chat room
  */
-public class RoomService extends IntentService
+public class FloorService extends IntentService
 {
-    public static final String TAG = "RoomService";
+    public static final String TAG = "FloorService";
     public static final String EVENT_SONG_LIST_UPDATE = "song list";
     public static final String EVENT_USER_LIST_UPDATE = "user list";//TODO
     public static final String EVENT_MESSAGE_LIST_UPDATE = "message list";//TODO
@@ -40,9 +40,9 @@ public class RoomService extends IntentService
 
     private static final Floor floor = null;
 
-    public RoomService()
+    public FloorService()
     {
-        super("RoomService");
+        super("FloorService");
     }
 
     /**
@@ -52,7 +52,7 @@ public class RoomService extends IntentService
      */
     public static void joinRoom(Context context, String room)
     {
-        Intent intent = new Intent(context, RoomService.class);
+        Intent intent = new Intent(context, FloorService.class);
         intent.setAction(ACTION_JOIN_ROOM);
         intent.putExtra(EXTRA_ROOM, room);
         context.startService(intent);

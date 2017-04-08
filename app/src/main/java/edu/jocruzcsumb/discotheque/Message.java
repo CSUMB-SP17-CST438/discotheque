@@ -3,6 +3,7 @@ package edu.jocruzcsumb.discotheque;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import static junit.framework.Assert.fail;
@@ -11,7 +12,7 @@ import static junit.framework.Assert.fail;
  * Created by Carsen on 4/7/17.
  */
 
-public class Message
+public class Message implements Serializable
 {
 
     //For JSON parsing

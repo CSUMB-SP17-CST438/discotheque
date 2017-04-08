@@ -2,6 +2,7 @@ package edu.jocruzcsumb.discotheque;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.fail;
@@ -10,7 +11,7 @@ import static junit.framework.Assert.fail;
  * Created by Tommy on 3/23/2017.
  */
 
-public class Floor
+public class Floor implements Serializable
 {
 
     private String name;

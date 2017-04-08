@@ -38,7 +38,7 @@
             android:value="@string/facebook_app_id" />
 
         <service
-            android:name=".RoomService"
+            android:name=".FloorService"
             android:exported="false"></service>
         <service
             android:name=".StreamService"

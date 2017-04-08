@@ -3,11 +3,13 @@ package edu.jocruzcsumb.discotheque;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by Tommy on 3/23/2017.
  */
 
-public class Song implements Comparable<Song>
+public class Song implements Comparable<Song>, Serializable
 {
 
     private String title;
