@@ -179,6 +179,7 @@ public class User implements Serializable
         return friendsList;
     }
 
+
 //
 //    public User(Parcel in){
 //

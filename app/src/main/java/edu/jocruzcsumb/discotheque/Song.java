@@ -12,28 +12,34 @@ import java.io.Serializable;
 public class Song implements Comparable<Song>, Serializable
 {
 
-    private String title;
-    private String artist;
-    private String streamUrl;
-    private String artworkUrl;
+    private String title = null;
+    private String artist = null;
+    private String streamUrl = null;
+    private String artworkUrl = null;
+
+    // This tells us whether the song was picked by a user, or randomized by the server.
+    // If a song is picked by a user, it should be moved just above the first randomized song in the list
+    private boolean randomized;
 
     public static final String JSON_TITLE_TAG = "title";
     public static final String JSON_ARTIST_TAG = "creator_user";
     public static final String JSON_STREAM_URL_TAG = "stream_url";
     public static final String JSON_ARTWORK_TAG = "artwork";
+    public static final String JSON_RANDOM_TAG = "random";
 
     public Song()
     {
-
+        randomized = true;
     }
 
-    public Song(String title, String artist, String streamUrl, String artworkUrl)
+    public Song(String title, String artist, String streamUrl, String artworkUrl, boolean randomized)
     {
         this();
         this.title = title;
         this.artist = artist;
         this.streamUrl = streamUrl;
         this.artworkUrl = artworkUrl;
+        this.randomized = randomized;
     }
 
     public static Song parse(JSONObject jsonSong) throws JSONException
@@ -42,7 +48,17 @@ public class Song implements Comparable<Song>, Serializable
         String artist = jsonSong.getString(JSON_ARTIST_TAG);
         String streamUrl = jsonSong.getString(JSON_STREAM_URL_TAG);
         String artworkUrl = jsonSong.getString(JSON_ARTWORK_TAG);
-        return new Song(title, artist, streamUrl, artworkUrl);
+        boolean randomized = jsonSong.getBoolean(JSON_RANDOM_TAG);
+        return new Song(title, artist, streamUrl, artworkUrl, randomized);
+    }
+
+    public boolean getIsUserPicked()
+    {
+        return !randomized;
+    }
+    public boolean getIsRandomized()
+    {
+        return randomized;
     }
 
     public String getArtworkUrl()
