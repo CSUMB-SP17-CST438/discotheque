@@ -38,24 +38,14 @@ public class Floor implements Serializable
         return new Floor();
     }
 
-    public void setMessages(ArrayList<Message> messages)
-    {
-        this.messages = messages;
-    }
-
-    public void setSongs(ArrayList<Song> songs)
-    {
-        this.songs = songs;
-    }
-
-    public void setUsers(ArrayList<User> users)
-    {
-        this.users = users;
-    }
-
     public ArrayList<Message> getMessages()
     {
         return messages;
+    }
+
+    public void setMessages(ArrayList<Message> messages)
+    {
+        this.messages = messages;
     }
 
     public ArrayList<Song> getSongs()
@@ -63,9 +53,19 @@ public class Floor implements Serializable
         return songs;
     }
 
+    public void setSongs(ArrayList<Song> songs)
+    {
+        this.songs = songs;
+    }
+
     public ArrayList<User> getUsers()
     {
         return users;
+    }
+
+    public void setUsers(ArrayList<User> users)
+    {
+        this.users = users;
     }
 
     public String getName()

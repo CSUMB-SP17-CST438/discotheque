@@ -68,6 +68,7 @@ public class User implements Serializable
                 jsonUser.getString(JSON_IMG_URL_TAG)
         );
     }
+
     protected static User parseProfile(JSONObject jsonUser) throws JSONException
     {
         //TODO: PARSE EVEN MORE USER INFO

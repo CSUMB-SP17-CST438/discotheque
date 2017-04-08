@@ -1,8 +1,8 @@
 package edu.jocruzcsumb.discotheque;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -75,7 +75,8 @@ public class FloorService extends IntentService
 
     private void broadcast(Intent k)
     {
-        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(k);
+        LocalBroadcastManager.getInstance(getApplicationContext())
+                             .sendBroadcast(k);
     }
 
     /**
@@ -155,7 +156,7 @@ public class FloorService extends IntentService
                        {
                            u = User.parse((JSONObject) args[0]);
                        }
-                       catch(JSONException e)
+                       catch (JSONException e)
                        {
                            e.printStackTrace();
                            Log.w(TAG, EVENT_USER_ADD + ": failed to parse json");
@@ -163,7 +164,8 @@ public class FloorService extends IntentService
                        }
 
                        // Add the user to the floor object
-                       floor.getUsers().add(u);
+                       floor.getUsers()
+                            .add(u);
 
                        // Broadcast the event (so that RoomActivity can update)
                        Intent k = new Intent(EVENT_USER_ADD);
@@ -185,7 +187,7 @@ public class FloorService extends IntentService
                        {
                            u = User.parse((JSONObject) args[0]);
                        }
-                       catch(JSONException e)
+                       catch (JSONException e)
                        {
                            e.printStackTrace();
                            Log.w(TAG, EVENT_USER_REMOVE + ": failed to parse json");
@@ -193,7 +195,8 @@ public class FloorService extends IntentService
                        }
 
                        // Remove the user from the floor object
-                       floor.getUsers().remove(u);
+                       floor.getUsers()
+                            .remove(u);
 
                        // Broadcast the event (so that RoomActivity can update)
                        Intent k = new Intent(EVENT_USER_REMOVE);
@@ -215,7 +218,7 @@ public class FloorService extends IntentService
                        {
                            m = Message.parse((JSONObject) args[0]);
                        }
-                       catch(JSONException e)
+                       catch (JSONException e)
                        {
                            e.printStackTrace();
                            Log.w(TAG, EVENT_MESSAGE_ADD + ": failed to parse json");
@@ -223,7 +226,8 @@ public class FloorService extends IntentService
                        }
 
                        // Add the user to the floor object
-                       floor.getMessages().add(m);
+                       floor.getMessages()
+                            .add(m);
 
                        // Broadcast the event (so that RoomActivity can update)
                        Intent k = new Intent(EVENT_MESSAGE_ADD);
