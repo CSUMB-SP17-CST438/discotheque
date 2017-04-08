@@ -48,7 +48,9 @@ public class ViewProfileActivity extends AppCompatActivity implements View.OnCli
         editFirstName.setText(user.getFirstName());
         editLastName.setText(user.getLastName());
         editDescription.setText(user.getBio());
-        editEmail.setText(user.getEmail());
+
+        //TODO: TOMMY, YOU ONLY GET EMAIL FOR LOCALUSER
+        //editEmail.setText(user.getEmail());
         //editGenres.setText(user.get);
 
 

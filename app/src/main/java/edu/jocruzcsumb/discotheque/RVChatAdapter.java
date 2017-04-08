@@ -69,7 +69,7 @@ public class RVChatAdapter extends RecyclerView.Adapter<RVChatAdapter.ChatViewHo
         chatViewHolder.message.setText(userChatList.get(i).getChatMessage());
        // chatViewHolder.time.setText(userChatList.get(i).getPub_time());
 //        if (!userChatList.get(i).getPhoto().equals("null")) {
-//            Picasso.with(mContext).load(songList.getSong(i).getPhoto_link()).into(chatViewHolder.image);
+//            Picasso.with(mContext).load(songList.getSong(i).getArtworkUrl()).into(chatViewHolder.image);
 //
 //        }
 //        else{
