@@ -23,7 +23,6 @@ import java.util.ArrayList;
 
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_MESSAGE_SEND;
 
-
 /**
  * Chat area fragment yo
  */
@@ -36,7 +35,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener
     private static final String TAG = "ChatFragment";
     private static final String ARG_FLOOR_ID = "section_number";
     private ChatFragment.ChatAdapter chatAdapter;
-    private RecyclerView recyleView;
+    private RecyclerView recyclerView;
 
     private int floorId;
 
@@ -116,11 +115,11 @@ public class ChatFragment extends Fragment implements View.OnClickListener
         Button send_chat_button = (Button) rootView.findViewById(R.id.send_button);
         chatField = (EditText) rootView.findViewById(R.id.chat_edit_text);
         send_chat_button.setOnClickListener(this);
-        recyleView = (RecyclerView) rootView.findViewById(R.id.rv2);
-        recyleView.setHasFixedSize(true);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.rv2);
+        recyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
         llm.setStackFromEnd(true); //scrolls to the bottom
-        recyleView.setLayoutManager(llm);
+        recyclerView.setLayoutManager(llm);
 
 
         return rootView;

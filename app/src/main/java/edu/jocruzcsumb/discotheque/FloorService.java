@@ -430,12 +430,27 @@ public class FloorService extends IntentService
         broadcast(EVENT_FLOOR_JOINED, floor);
 
         //Set up the mediaplayer
-        MediaPlayer player = new MediaPlayer();
 
-        //TODO: loop this method in another thread once we know what is going on
-        startPlayer(player);
+        final MediaPlayer m1 = new MediaPlayer(), m2 = new MediaPlayer();
+        CountDownLatch l1 = new CountDownLatch(1), l2 = new CountDownLatch(1);
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                //TODO: play media in a loop, taking turns with m1 and m2
+            }
+        }).start();
 
-        // Now we shall wait for the EVENT_LEAVE_FLOOR from the UI.
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                //TODO: play media in a loop, taking turns with m1 and m2
+            }
+        }).start();
+
         try
         {
             floorLatch.await();
