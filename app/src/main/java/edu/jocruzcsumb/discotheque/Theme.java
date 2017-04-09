@@ -16,7 +16,7 @@ public class Theme implements Parcelable
         //TODO
     }
 
-    public Theme parse(JSONObject jsonTheme)
+    public static Theme parse(JSONObject jsonTheme)
     {
         //TODO
         return null;
