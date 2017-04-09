@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -13,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
@@ -101,7 +104,8 @@ public class FloorService extends IntentService
                     break;
                 case FloorService.EVENT_LEAVE_FLOOR:
                     Log.d(TAG, EVENT_LEAVE_FLOOR);
-                    Sockets.getSocket().emit(EVENT_LEAVE_FLOOR);
+                    Sockets.getSocket()
+                           .emit(EVENT_LEAVE_FLOOR);
                     floorLatch.countDown();
                     break;
             }
@@ -135,7 +139,7 @@ public class FloorService extends IntentService
             if (ACTION_JOIN_FLOOR.equals(action))
             {
                 final int floorId = intent.getIntExtra(Floor.TAG, 0);
-                if(floorId != 0)
+                if (floorId != 0)
                 {
                     handleActionJoinFloor(floorId);
                 }
@@ -341,7 +345,7 @@ public class FloorService extends IntentService
 
                        // Add the user to the floor object
                        FloorService.this.floor.getUsers()
-                                         .add(u);
+                                              .add(u);
 
                        // Broadcast the event (so that FloorActivity can update)
                        broadcast(EVENT_USER_ADD, u);
@@ -370,7 +374,7 @@ public class FloorService extends IntentService
 
                        // Remove the user from the floor object
                        FloorService.this.floor.getUsers()
-                                         .remove(u);
+                                              .remove(u);
 
                        // Broadcast the event (so that FloorActivity can update)
                        broadcast(EVENT_USER_REMOVE, u);
@@ -399,7 +403,7 @@ public class FloorService extends IntentService
 
                        // Add the user to the floor object
                        FloorService.this.floor.getMessages()
-                                         .add(m);
+                                              .add(m);
 
                        // Broadcast the event (so that FloorActivity can update)
                        broadcast(EVENT_MESSAGE_ADD, m);
@@ -425,6 +429,12 @@ public class FloorService extends IntentService
 
         broadcast(EVENT_FLOOR_JOINED, floor);
 
+        //Set up the mediaplayer
+        MediaPlayer player = new MediaPlayer();
+
+        //TODO: loop this method in another thread once we know what is going on
+        startPlayer(player);
+
         // Now we shall wait for the EVENT_LEAVE_FLOOR from the UI.
         try
         {
@@ -435,5 +445,26 @@ public class FloorService extends IntentService
             e.printStackTrace();
             Log.w(TAG, "The floorLatch was interruped, leaving the floor");
         }
+    }
+
+    public void startPlayer(MediaPlayer player)
+    {
+        Song c = floor.getSongs().get(0);
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try
+        {
+            String url = c.getUrl();
+            Log.d(TAG, "song url chosen: " + url);
+            player.setDataSource(url);
+            player.prepare();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            Log.w(TAG, "Could not start song: " + c.getName());
+            return;
+        }
+        double duration = player.getDuration();
+        Log.d(TAG, "Song duration: " + String.valueOf(duration));
     }
 }

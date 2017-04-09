@@ -103,8 +103,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     {
                         MainActivity.this.handleResult(result);
                         findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-                        l.countDown();
                     }
+                    l.countDown();
                 }
             });
         }
@@ -131,7 +131,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(k);
                     finish();
                 }
-                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                MainActivity.this.runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                    }
+                });
             }
         }).start();
 

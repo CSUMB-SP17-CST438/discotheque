@@ -30,14 +30,14 @@ public class Floor implements Parcelable
 
 
     private User creator;
-    private long id;
+    private int id;
     private String name;
     private ArrayList<Message> messages = null;
     private ArrayList<Song> songs = null;
     private ArrayList<User> users = null;
     private Theme theme = null;
 
-    public Floor(long id, String name, User creator)
+    public Floor(int id, String name, User creator)
     {
         this.id = id;
         this.name = name;
@@ -46,7 +46,7 @@ public class Floor implements Parcelable
 
     protected Floor(Parcel in)
     {
-        id = in.readLong();
+        id = in.readInt();
         name = in.readString();
         creator = in.readParcelable(User.class.getClassLoader());
         users = in.createTypedArrayList(User.CREATOR);
@@ -73,7 +73,7 @@ public class Floor implements Parcelable
     public static Floor parse(JSONObject jsonFloor) throws JSONException
     {
         return new Floor(
-                jsonFloor.getLong(JSON_ID_TAG),
+                jsonFloor.getInt(JSON_ID_TAG),
                 jsonFloor.getString(JSON_NAME_TAG),
                 User.parse(jsonFloor.getJSONObject(JSON_CREATOR_TAG))
         );
@@ -143,12 +143,17 @@ public class Floor implements Parcelable
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
-        dest.writeLong(id);
+        dest.writeInt(id);
         dest.writeString(name);
         dest.writeParcelable(creator, flags);
         dest.writeTypedList(users);
         dest.writeTypedList(songs);
         dest.writeTypedList(messages);
         dest.writeParcelable(theme, flags);
+    }
+
+    public int getId()
+    {
+        return id;
     }
 }
