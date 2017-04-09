@@ -13,20 +13,12 @@ import java.util.concurrent.CountDownLatch;
 
 public class PickFloorActivity extends AppCompatActivity implements View.OnClickListener
 {
-    private ListView listView;
-    private Floor floorRoom;
-    private Sockets socket = new Sockets();
-    private SongList songList = new SongList();
-    private JSONArray jsonArray;
-    private CountDownLatch socketLatch;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_room);
 
-        //TODO: Change to use the new FloorActivity and FloorService
         //TODO: Get the list of rooms from server
 
         Button room = (Button) findViewById(R.id.TEMP_go_to_room);
@@ -41,8 +33,11 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 
             case R.id.TEMP_go_to_room:
                 //go to activity
-                Intent goToRoom = new Intent(PickFloorActivity.this, ChatRoomActivity.class);
-                startActivity(goToRoom);
+                Intent k = new Intent(PickFloorActivity.this, FloorActivity.class);
+
+                k.putExtra(Floor.TAG,new Long(0));
+
+                startActivity(k);
 
                 break;
         }

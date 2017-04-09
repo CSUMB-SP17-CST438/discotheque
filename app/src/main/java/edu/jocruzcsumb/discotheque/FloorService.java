@@ -14,11 +14,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 import io.socket.emitter.Emitter;
 
 /**
- * IntentService that handles all events inside chat room
+ * IntentService that handles all events inside chat floor
  */
 public class FloorService extends IntentService
 {
@@ -65,12 +66,14 @@ public class FloorService extends IntentService
     public static final String EVENT_FLOOR_JOINED = ""; //TODO
 
     // The action that is sent to start the FloorService
-    private static final String ACTION_JOIN_FLOOR = "edu.jocruzcsumb.discotheque.action.JOINROOM";
+    private static final String ACTION_JOIN_FLOOR = "edu.jocruzcsumb.discotheque.action.JOINFLOOR";
 
     // Probably will not use this.
-    private static final String EXTRA_FLOOR = "edu.jocruzcsumb.discotheque.extra.ROOM";
+    private static final String EXTRA_FLOOR = "edu.jocruzcsumb.discotheque.extra.FLOOR";
 
-    private static final Floor floor = null;
+    private Floor floor = null;
+    private CountDownLatch floorLatch = null;
+
     BroadcastReceiver r = new BroadcastReceiver()
     {
         @Override
@@ -94,11 +97,12 @@ public class FloorService extends IntentService
                     break;
                 case FloorService.EVENT_MESSAGE_SEND:
                     Log.d(TAG, EVENT_MESSAGE_SEND);
-                    intent.getSerializableExtra(EVENT_MESSAGE_SEND);
+                    //TODO
                     break;
                 case FloorService.EVENT_LEAVE_FLOOR:
                     Log.d(TAG, EVENT_LEAVE_FLOOR);
-
+                    Sockets.getSocket().emit(EVENT_LEAVE_FLOOR);
+                    floorLatch.countDown();
                     break;
             }
         }
@@ -110,15 +114,15 @@ public class FloorService extends IntentService
     }
 
     /**
-     * Starts this service by joining a room.
+     * Starts this service by joining a floor.
      *
      * @see IntentService
      */
-    public static void joinRoom(Context context, String room)
+    public static void joinFloor(Context context, int floorId)
     {
         Intent intent = new Intent(context, FloorService.class);
         intent.setAction(ACTION_JOIN_FLOOR);
-        intent.putExtra(EXTRA_FLOOR, room);
+        intent.putExtra(EXTRA_FLOOR, floorId);
         context.startService(intent);
     }
 
@@ -130,8 +134,15 @@ public class FloorService extends IntentService
             final String action = intent.getAction();
             if (ACTION_JOIN_FLOOR.equals(action))
             {
-                final String param1 = intent.getStringExtra(EXTRA_FLOOR);
-                handleActionJoinRoom(param1);
+                final int floorId = intent.getIntExtra(Floor.TAG, 0);
+                if(floorId != 0)
+                {
+                    handleActionJoinFloor(floorId);
+                }
+                else
+                {
+                    Log.w(TAG, "Could not join room because floorId was 0");
+                }
             }
         }
     }
@@ -158,26 +169,25 @@ public class FloorService extends IntentService
     }
 
     /**
-     * Handle action Join room in the provided background thread with the provided
+     * Handle action Join floor in the provided background thread with the provided
      * parameters.
      */
-    private void handleActionJoinRoom(String room)
+    private void handleActionJoinFloor(int floorId)
     {
+        //This holds the service open until the room is left
+        floorLatch = new CountDownLatch(1);
 
         // This tells the service what LocalBroadcast Events to listen for
         IntentFilter f = new IntentFilter();
-        f.addAction(FloorService.EVENT_GET_SONG_LIST);
-        f.addAction(FloorService.EVENT_GET_USER_LIST);
-        f.addAction(FloorService.EVENT_GET_MESSAGE_LIST);
-        f.addAction(FloorService.EVENT_LEAVE_FLOOR);
-        f.addAction(FloorService.EVENT_MESSAGE_SEND);
+        f.addAction(EVENT_GET_SONG_LIST);
+        f.addAction(EVENT_GET_USER_LIST);
+        f.addAction(EVENT_GET_MESSAGE_LIST);
+        f.addAction(EVENT_LEAVE_FLOOR);
+        f.addAction(EVENT_MESSAGE_SEND);
 
         // Set the activity to listen for app broadcasts with the above filter
         LocalBroadcastManager.getInstance(getApplicationContext())
                              .registerReceiver(r, f);
-
-        //TODO get the current floor from server
-        Sockets.SocketWaiter waiter = new Sockets.SocketWaiter(EVENT_JOIN_FLOOR, EVENT_FLOOR_JOINED);
 
         // List Events
         Sockets.getSocket()
@@ -216,9 +226,9 @@ public class FloorService extends IntentService
                        }
 
                        // Set songs
-                       floor.setSongs(l);
+                       FloorService.this.floor.setSongs(l);
 
-                       // Broadcast the event (so that RoomActivity can update)
+                       // Broadcast the event (so that FloorActivity can update)
                        broadcast(EVENT_SONG_LIST_UPDATE, l);
                    }
                });
@@ -258,9 +268,9 @@ public class FloorService extends IntentService
                        }
 
                        // Set users
-                       floor.setUsers(l);
+                       FloorService.this.floor.setUsers(l);
 
-                       // Broadcast the event (so that RoomActivity can update)
+                       // Broadcast the event (so that FloorActivity can update)
                        broadcast(EVENT_USER_LIST_UPDATE, l);
                    }
                });
@@ -300,9 +310,9 @@ public class FloorService extends IntentService
                        }
 
                        // Set Messages
-                       floor.setMessages(l);
+                       FloorService.this.floor.setMessages(l);
 
-                       // Broadcast the event (so that RoomActivity can update)
+                       // Broadcast the event (so that FloorActivity can update)
                        broadcast(EVENT_MESSAGE_LIST_UPDATE, l);
                    }
                });
@@ -330,10 +340,10 @@ public class FloorService extends IntentService
                        }
 
                        // Add the user to the floor object
-                       floor.getUsers()
-                            .add(u);
+                       FloorService.this.floor.getUsers()
+                                         .add(u);
 
-                       // Broadcast the event (so that RoomActivity can update)
+                       // Broadcast the event (so that FloorActivity can update)
                        broadcast(EVENT_USER_ADD, u);
                    }
                });
@@ -359,10 +369,10 @@ public class FloorService extends IntentService
                        }
 
                        // Remove the user from the floor object
-                       floor.getUsers()
-                            .remove(u);
+                       FloorService.this.floor.getUsers()
+                                         .remove(u);
 
-                       // Broadcast the event (so that RoomActivity can update)
+                       // Broadcast the event (so that FloorActivity can update)
                        broadcast(EVENT_USER_REMOVE, u);
                    }
                });
@@ -388,12 +398,42 @@ public class FloorService extends IntentService
                        }
 
                        // Add the user to the floor object
-                       floor.getMessages()
-                            .add(m);
+                       FloorService.this.floor.getMessages()
+                                         .add(m);
 
-                       // Broadcast the event (so that RoomActivity can update)
+                       // Broadcast the event (so that FloorActivity can update)
                        broadcast(EVENT_MESSAGE_ADD, m);
                    }
                });
+
+
+        // Finally, ask the server to join the floor and retreive the floor object.
+        Sockets.SocketWaiter waiter = new Sockets.SocketWaiter(EVENT_JOIN_FLOOR, EVENT_FLOOR_JOINED);
+
+        JSONObject obj = new JSONObject();
+        try
+        {
+            obj.put(Floor.JSON_ID_TAG, floorId);
+            floor = Floor.parse(waiter.getObj(obj));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+            Log.w(TAG, EVENT_FLOOR_JOINED + ": Unable to parse floor from json");
+
+        }
+
+        broadcast(EVENT_FLOOR_JOINED, floor);
+
+        // Now we shall wait for the EVENT_LEAVE_FLOOR from the UI.
+        try
+        {
+            floorLatch.await();
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+            Log.w(TAG, "The floorLatch was interruped, leaving the floor");
+        }
     }
 }

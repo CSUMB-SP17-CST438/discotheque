@@ -30,6 +30,10 @@ public class FloorActivity extends AppCompatActivity
 {
 
     private static final String TAG = "FloorActivity";
+
+    private Floor floor = null;
+
+
     // EVENTS are recieved here.
     BroadcastReceiver r = new BroadcastReceiver()
     {
@@ -40,28 +44,52 @@ public class FloorActivity extends AppCompatActivity
             Log.d(TAG, "intent.getAction() = " + intent.getAction());
             switch (intent.getAction())
             {
+                case FloorService.EVENT_FLOOR_JOINED:
+                    floor = intent.getParcelableExtra(FloorService.EVENT_FLOOR_JOINED);
+                    //TODO: Update the UI
+
+
+                    break;
                 case FloorService.EVENT_SONG_LIST_UPDATE:
                     ArrayList<Song> songs = intent.getParcelableArrayListExtra(FloorService.EVENT_SONG_LIST_UPDATE);
+                    floor.setSongs(songs);
+                    //TODO: Update the UI
+
 
                     break;
                 case FloorService.EVENT_USER_LIST_UPDATE:
                     ArrayList<User> users = intent.getParcelableArrayListExtra(FloorService.EVENT_USER_LIST_UPDATE);
+                    floor.setUsers(users);
+                    //TODO: Update the UI
+
 
                     break;
                 case FloorService.EVENT_MESSAGE_LIST_UPDATE:
                     ArrayList<Message> messages = intent.getParcelableArrayListExtra(FloorService.EVENT_MESSAGE_LIST_UPDATE);
+                    floor.setMessages(messages);
+                    //TODO: Update the UI
+
 
                     break;
                 case FloorService.EVENT_MESSAGE_ADD:
                     Message m = intent.getParcelableExtra(FloorService.EVENT_MESSAGE_ADD);
+                    floor.getMessages().add(m);
+                    //TODO: Update the UI
+
 
                     break;
                 case FloorService.EVENT_USER_ADD:
                     User u = intent.getParcelableExtra(FloorService.EVENT_USER_ADD);
+                    floor.getUsers().add(u);
+                    //TODO: Update the UI
+
 
                     break;
                 case FloorService.EVENT_USER_REMOVE:
                     User r = intent.getParcelableExtra(FloorService.EVENT_USER_REMOVE);
+                    floor.getUsers().remove(r);
+                    //TODO: Update the UI
+
 
                     break;
             }
@@ -89,6 +117,7 @@ public class FloorActivity extends AppCompatActivity
 
         // This tells the activity what LocalBroadcast Events to listen for
         IntentFilter f = new IntentFilter();
+        f.addAction(FloorService.EVENT_FLOOR_JOINED);
         f.addAction(FloorService.EVENT_SONG_LIST_UPDATE);
         f.addAction(FloorService.EVENT_USER_LIST_UPDATE);
         f.addAction(FloorService.EVENT_MESSAGE_LIST_UPDATE);
@@ -99,6 +128,19 @@ public class FloorActivity extends AppCompatActivity
         // Set the activity to listen for app broadcasts with the above filter
         LocalBroadcastManager.getInstance(getApplicationContext())
                              .registerReceiver(r, f);
+
+        // Start the floor service
+        Intent i = getIntent();
+        int floorId = i.getIntExtra(Floor.TAG, 0);
+        if(floorId == 0)
+        {
+            Log.w(TAG, "No floor was passed to this activity, aborting...");
+            finish();
+        }
+        else
+        {
+            FloorService.joinFloor(this, floorId);
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

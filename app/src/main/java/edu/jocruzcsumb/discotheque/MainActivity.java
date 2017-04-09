@@ -26,6 +26,7 @@ import com.google.android.gms.common.api.Status;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 import static junit.framework.Assert.fail;
 
@@ -47,13 +48,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        if (LocalUser.silentLogin(this))
-        {
-            Intent k = new Intent(this, PickFloorActivity.class);
-            k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(k);
-            finish();
-        }
         setContentView(R.layout.activity_main);
         //facebook login fragment code
         FragmentManager fm = getFragmentManager();
@@ -80,24 +74,66 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)
                 .build();
 
+        final CountDownLatch l = new CountDownLatch(1);
+
         // Attempt silent sign in
         OptionalPendingResult<GoogleSignInResult> pendingResult =
-                 Auth.GoogleSignInApi.silentSignIn(googleApiClient);
-         if (pendingResult.isDone()) {
-             // There's an immediate result available.
-             MainActivity.this.handleResult(pendingResult.get());
-         } else {
-             // There's no immediate result ready
+                Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+        if (pendingResult.isDone())
+        {
+            GoogleSignInResult r = pendingResult.get();
+            if(r.isSuccess())
+            {
+                // There's an immediate result available.
+                MainActivity.this.handleResult(pendingResult.get());
+                l.countDown();
+            }
+        }
+        else
+        {
+            // There's no immediate result ready
 
-             // We may want to add a progress indicator right here
-             pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                 @Override
-                 public void onResult(@NonNull GoogleSignInResult result) {
+            // We may want to add a progress indicator right here
+            pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>()
+            {
+                @Override
+                public void onResult(@NonNull GoogleSignInResult result)
+                {
+                    if(result.isSuccess())
+                    {
+                        MainActivity.this.handleResult(result);
+                        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                        l.countDown();
+                    }
+                }
+            });
+        }
 
-                     MainActivity.this.handleResult(result);
-                 }
-             });
-         }
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    l.await();
+                }
+                catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                    findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                    return;
+                }
+                if (LocalUser.silentLogin(MainActivity.this))
+                {
+                    Intent k = new Intent(MainActivity.this, PickFloorActivity.class);
+                    k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(k);
+                    finish();
+                }
+                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+            }
+        }).start();
 
         //google sign in button
         SignIn = (SignInButton) findViewById(R.id.google_login_btn);
