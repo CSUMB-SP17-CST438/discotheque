@@ -28,6 +28,8 @@ floor_members = db.Table('floor_members',
 # 		db.Column('floor_id', db.Integer, db.ForeignKey('floor.floor_id'))
 # 		)
 
+
+
 class floor(db.Model):
 	floor_id = db.Column(db.Integer,primary_key = True)
 	floor_name = db.Column(db.String(120),unique=True)
@@ -41,6 +43,7 @@ class floor(db.Model):
 
 	floor_messages = db.relationship('message',backref=db.backref('floor',lazy='joined'),lazy='dynamic')
 	public = db.Column(db.Boolean,default=True)
+
 	songlist = db.Column(db.PickleType)
 
 	def __init__(self,floorName,creator_id,public,genre):
@@ -68,9 +71,12 @@ class floor(db.Model):
 		self.songlist = songs
 		db.session.commit()
 
+	# def get_songlist(self):
+	# return self.songs.loads()
+
 
 	def __repr__(self):
-		return '<Floor: {floor_id: %r, floor_name: %r, floor_is_public: %r>' %(self.floorID,self.floorName,self.public)
+		return '<Floor: {floor_id: %r, floor_name: %r, floor_is_public: %r>' %(self.floor_id,self.floor_name,self.public)
 
 class member(db.Model):
 	member_id = db.Column(db.Integer, primary_key = True)
