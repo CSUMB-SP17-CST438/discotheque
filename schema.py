@@ -65,6 +65,11 @@ class floor(db.Model):
 	def to_list(self):
 		fl_sc = floor_Schema()
 		fl_ = fl_sc.dump(self)
+		creator = getMemberObject(self.creator_id)
+		fl_[0].pop('member',None)
+		cr = creator.to_simple_list()
+		cr.pop('created_floors',None)
+		fl_[0]['creator'] = cr
 		return fl_[0]
 	
 	def set_songlist(self,songs):

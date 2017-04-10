@@ -57,7 +57,7 @@ class sc_test(unittest.TestCase):
 	
 	def test_get_floors(self):
 		db.app = serv.app
-		floors = getFloors()
+		floors = getPublicFloors()
 		print(floors)
 
 		self.assertIsNotNone(floors)
