@@ -126,7 +126,7 @@ public class FloorService extends IntentService
 	{
 		Intent intent = new Intent(context, FloorService.class);
 		intent.setAction(ACTION_JOIN_FLOOR);
-		intent.putExtra(EXTRA_FLOOR, floorId);
+		intent.putExtra(Floor.JSON_ID_TAG, floorId);
 		context.startService(intent);
 	}
 
@@ -138,7 +138,7 @@ public class FloorService extends IntentService
 			final String action = intent.getAction();
 			if(ACTION_JOIN_FLOOR.equals(action))
 			{
-				final int floorId = intent.getIntExtra(Floor.TAG, 0);
+				final int floorId = intent.getIntExtra(Floor.JSON_ID_TAG, 0);
 				if(floorId != 0)
 				{
 					handleActionJoinFloor(floorId);
@@ -418,18 +418,32 @@ public class FloorService extends IntentService
 		try
 		{
 			obj.put(Floor.JSON_ID_TAG, floorId);
-			floor = Floor.parse(waiter.getObj(obj));
+			obj.put(LocalUser.JSON_ID_TAG, LocalUser.getCurrentUser().getId());
+			obj = waiter.getObj(obj);
+			if(obj == null)
+			{
+				Log.w(TAG, EVENT_FLOOR_JOINED + "Returned null");
+				return;
+			}
+			floor = Floor.parse(obj);
 		}
 		catch(JSONException e)
 		{
 			e.printStackTrace();
 			Log.w(TAG, EVENT_FLOOR_JOINED + ": Unable to parse floor from json");
+			return;
+		}
 
+		if(floor == null)
+		{
+			Log.w(TAG, "Floor was null");
+			return;
 		}
 
 		broadcast(EVENT_FLOOR_JOINED, floor);
 
 		//Set up the mediaplayer
+		Log.d(TAG, "Starting seamless player");
 		SeamlessMediaPlayer seamlessMediaPlayer = new SeamlessMediaPlayer(this);
 
 		try
@@ -441,26 +455,5 @@ public class FloorService extends IntentService
 			e.printStackTrace();
 			Log.w(TAG, "The floorLatch was interruped, leaving the floor");
 		}
-	}
-
-	public void startPlayer(MediaPlayer player)
-	{
-		Song c = floor.getSongs().get(0);
-		player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-		try
-		{
-			String url = c.getUrl();
-			Log.d(TAG, "song url chosen: " + url);
-			player.setDataSource(url);
-			player.prepare();
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-			Log.w(TAG, "Could not start song: " + c.getName());
-			return;
-		}
-		double duration = player.getDuration();
-		Log.d(TAG, "Song duration: " + String.valueOf(duration));
 	}
 }

@@ -65,7 +65,7 @@ public class PickSongActivity extends AppCompatActivity
 						for(int i = 0; i < arrayLength; i++)
 						{
 							JSONObject object = jsonArray.getJSONObject(i);
-							Song song = new Song();
+							Song song = null;//new Song();
 							song.setName(object.getString("title"));
 							song.setArtist(object.getString("creator_user"));
 							song.setUrl(object.getString("stream_url"));
