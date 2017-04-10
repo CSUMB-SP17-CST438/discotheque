@@ -145,7 +145,7 @@ def on_create(data):
     songs = ds.getSongList(genre)
     new_floor.set_songlist(songs)
     updated_floor = getFloor(new_floor.floor_id)
-    socket.emit('floor created', {updated_floor.to_list()},room=new_floor.floor_id)
+    socket.emit('floor created', {'floor':updated_floor.to_list()},room=new_floor.floor_id)
 
 
 @socket.on('join floor')
@@ -162,7 +162,7 @@ def on_join_floor(data):
 	floor_to_join = getFloor(floor_id)
 	floor_to_join.add_member(data['member_id'])
 	print(floor_to_join.to_list())
-	socket.emit('floor joined', {floor_to_join.to_list()}, room=request.sid)
+	socket.emit('floor joined', {'floor':floor_to_join.to_list()}, room=request.sid)
     
 @socket.on('leave floor')
 def on_leave_floor(data):
@@ -170,7 +170,7 @@ def on_leave_floor(data):
     current_floor.rm_member(data['member_id'])
     current_floor = getFloor(data['floor_id'])
     leave_room(data['floor_id'])
-    socket.emit('member left', {current_floor.to_list()}, room=request.sid)
+    socket.emit('member left', {'floor':current_floor.to_list()}, room=request.sid)
 
     
 
