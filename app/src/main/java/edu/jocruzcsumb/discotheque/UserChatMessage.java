@@ -1,45 +1,48 @@
 package edu.jocruzcsumb.discotheque;
 
-import java.util.HashMap;
-
 /**
  * Created by Tommy on 3/23/2017.
  */
 
-public class UserChatMessage extends User{
+public class UserChatMessage extends User
+{
 
-    private String chatMessage;
-    private String pub_time;
+	private String chatMessage;
+	private String pub_time;
 
-    public UserChatMessage(){
-        super();
-        chatMessage = "";
-        pub_time = "";
-    }
+	public UserChatMessage()
+	{
+		super();
+		chatMessage = "";
+		pub_time = "";
+	}
 
-    public UserChatMessage(String firstName, String lastName, String photo, String chatMessage, String pub_time){
-        super(firstName, lastName, photo);
-        this.chatMessage = chatMessage;
-        this.pub_time = pub_time;
-    }
+	public UserChatMessage(String firstName, String lastName, String photo, String chatMessage, String pub_time)
+	{
+		super(firstName, lastName, photo);
+		this.chatMessage = chatMessage;
+		this.pub_time = pub_time;
+	}
 
-    public String getChatMessage(){
-        return chatMessage;
-    }
+	public String getChatMessage()
+	{
+		return chatMessage;
+	}
 
-    public String getPub_time(){
-        return pub_time;
-    }
+	public void setChatMessage(String chatMessage)
+	{
+		this.chatMessage = chatMessage;
+	}
 
-    public void setPub_time(String pub_time){this.pub_time = pub_time;}
+	public String getPub_time()
+	{
+		return pub_time;
+	}
 
-    public void setChatMessage(String chatMessage){
-        this.chatMessage = chatMessage;
-    }
-
-
-
-
+	public void setPub_time(String pub_time)
+	{
+		this.pub_time = pub_time;
+	}
 
 
 }
