@@ -13,6 +13,13 @@
     android:orientation="vertical"
     >
 
+    <Button
+        android:id="@+id/signout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="Signout" />
+
 
     <TextView
         android:id="@+id/lister_rooms_title"
@@ -33,11 +40,12 @@
         android:orientation="vertical"
 
         />
-
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/room_listview"
         android:layout_width="match_parent"
-        android:layout_height="210dp" />
+        android:layout_height="210dp"
+         />
+
 
     <TextView
         android:id="@+id/temp_button"
