@@ -82,12 +82,11 @@ def on_login(data):
         print(mem_found)
         if mem_found:
             mem = getMember(email)
-            socket.emit("login status", {
-                        'authorized': 1, 'user': mem}, room=request.sid)
+            socket.emit("login status", userEmit(new_mem), room=request.sid)
         else:
             new_mem = registerMember("",fname,lname,email,link)
             print(new_mem.to_list())
-            socket.emit("login status", {'authorized': 1,'user':new_mem.to_list()}, room=request.sid)
+            socket.emit("login status", userEmit(new_mem), room=request.sid)
 
 #
     if 'google_t' not in data:
@@ -104,12 +103,11 @@ def on_login(data):
         print(mem_found)
         if mem_found:
             mem = getMember(email)
-            socket.emit("login status", {
-                        'authorized': 1, 'user': mem}, room=request.sid)
+            socket.emit("login status", userEmit(new_mem), room=request.sid)
         else:
             new_mem = registerMember("",fname,lname,email,link)
             print(new_mem.to_list())
-            socket.emit("login status", {'authorized': 1,'user':new_mem.to_list()}, room=request.sid)
+            socket.emit("login status", userEmit(new_mem), room=request.sid)
 
 
 @socket.on('new message')
@@ -162,6 +160,10 @@ def on_leave_floor(data):
     socket.emit('member left', {'floor':current_floor.to_list()})
 
     
+
+def userEmit(FLAG, member):
+ 	if flag ==1:
+ 		return {'authorized': 1,'email': member.email, user:member.to_simple_list}
 
 
 # def get_dt_ms():

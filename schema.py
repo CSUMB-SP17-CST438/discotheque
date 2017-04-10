@@ -114,6 +114,11 @@ class member(db.Model):
 		mem_sc = member_Schema()
 		f_mem = mem_sc.dump(self)
 		return f_mem[0]
+
+	def to_simple_list(self):
+		mem_sc = emailless_member()
+		f_mem = mem_sc.dump(self)
+		return f_mem[0]
 		
 		
 
@@ -167,6 +172,15 @@ class floor_Schema(ma.ModelSchema):
 	class Meta:
 		model = floor
 	members = f.Nested(member_Schema,many=True)
+
+
+
+
+class emailless_member(ma.Schema):
+	class Meta:
+		fields = ('username','member_FName','member_LName','member_img_url','created_floors'
+			)
+		created_floors = f.Nested(f_Schema,many=True, exclude=('floor_members'))
 
 
 """*************************************************************************************************************************************
