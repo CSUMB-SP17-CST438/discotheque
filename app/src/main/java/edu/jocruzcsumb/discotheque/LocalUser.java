@@ -117,6 +117,7 @@ public class LocalUser extends User
 		//TODO: should probably clear entire activity stack
 		Intent k = new Intent(context, MainActivity.class);
 		k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        k.putExtra("signout", true);
 		context.startActivity(k);
 		context.finish();
 	}

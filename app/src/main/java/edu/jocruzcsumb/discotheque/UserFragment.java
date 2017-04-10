@@ -30,7 +30,6 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
      * fragment.
      */
     private static final String TAG = "UserFragment";
-    private static final String ARG_FLOOR_ID = "section_number";
     private static ArrayList<User> users = null;
     // EVENTS are recieved here.
     BroadcastReceiver r = new BroadcastReceiver() {
@@ -42,6 +41,7 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
                 case FloorService.EVENT_GET_USER_LIST:
                     //get all users
                     Floor floor = intent.getParcelableExtra(FloorService.EVENT_FLOOR_JOINED);
+                    floorId = floor.getId();
                     users = floor.getUsers();
                     break;
             }
@@ -58,10 +58,9 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
 
     }
 
-    public static UserFragment newInstance(int floorId) {
+    public static UserFragment newInstance() {
         UserFragment fragment = new UserFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_FLOOR_ID, floorId);
         fragment.setArguments(args);
         return fragment;
 
@@ -75,9 +74,6 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
 
         LocalBroadcastManager.getInstance(this.getContext())
                 .registerReceiver(r, f);
-
-        // Get the floorid
-        floorId = getArguments().getInt(ARG_FLOOR_ID);
 
         View rootView = inflater.inflate(R.layout.fragment_user, container, false);
         userPhoto = (ImageView) rootView.findViewById(R.id.userPhoto);

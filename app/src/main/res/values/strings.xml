@@ -62,6 +62,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="chat_fragment_title">Chat</string>
+    <string name="song_fragment_title">Songs</string>
+    <string name="user_fragment_title">Users</string>
 
 
 </resources>

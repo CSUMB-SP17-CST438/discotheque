@@ -78,69 +78,72 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		final CountDownLatch l = new CountDownLatch(1);
 
 
-		//Thread for dtk silent sign in
-		final Thread t = new Thread(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				if(LocalUser.silentLogin(MainActivity.this))
-				{
-					Intent k = new Intent(MainActivity.this, PickFloorActivity.class);
-					k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					startActivity(k);
-					finish();
-				}
-				MainActivity.this.runOnUiThread(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-					}
-				});
-			}
-		});
-		// Attempt silent sign in
-		OptionalPendingResult<GoogleSignInResult> pendingResult =
-				Auth.GoogleSignInApi.silentSignIn(googleApiClient);
-		if(pendingResult.isDone())
-		{
-			Log.d(TAG,"pendingResult.isDone() = true");
-			GoogleSignInResult r = pendingResult.get();
-			if(r.isSuccess())
-			{
-				// There's an immediate result available.
-				MainActivity.this.handleResult(pendingResult.get());
-			}
-			else
-			{
-				t.start();
-			}
-		}
-		else
-		{
-			Log.d(TAG,"pendingResult.isDone() = false");
-			// There's no immediate result ready
+        if(!getIntent().getBooleanExtra("signout", false))
+        {
+            //Thread for dtk silent sign in
+            final Thread t = new Thread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    if (LocalUser.silentLogin(MainActivity.this))
+                    {
+                        Intent k = new Intent(MainActivity.this, PickFloorActivity.class);
+                        k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(k);
+                        finish();
+                    }
+                    MainActivity.this.runOnUiThread(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                        }
+                    });
+                }
+            });
+            // Attempt silent sign in
+            OptionalPendingResult<GoogleSignInResult> pendingResult =
+                    Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+            if (pendingResult.isDone())
+            {
+                Log.d(TAG, "pendingResult.isDone() = true");
+                GoogleSignInResult r = pendingResult.get();
+                if (r.isSuccess())
+                {
+                    // There's an immediate result available.
+                    MainActivity.this.handleResult(pendingResult.get());
+                }
+                else
+                {
+                    t.start();
+                }
+            }
+            else
+            {
+                Log.d(TAG, "pendingResult.isDone() = false");
+                // There's no immediate result ready
 
-			// We may want to add a progress indicator right here
-			pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>()
-			{
-				@Override
-				public void onResult(@NonNull GoogleSignInResult result)
-				{
-					Log.d(TAG, "Google Silent login onResult");
-					if(result.isSuccess())
-					{
-						Log.d(TAG, "result.isSuccess()");
-						MainActivity.this.handleResult(result);
-						findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-					}
-					else t.start();
-				}
-			});
-		}
-
+                // We may want to add a progress indicator right here
+                pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>()
+                {
+                    @Override
+                    public void onResult(@NonNull GoogleSignInResult result)
+                    {
+                        Log.d(TAG, "Google Silent login onResult");
+                        if (result.isSuccess())
+                        {
+                            Log.d(TAG, "result.isSuccess()");
+                            MainActivity.this.handleResult(result);
+                            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                        }
+                        else t.start();
+                    }
+                });
+            }
+        }
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 		//google sign in button
 		SignIn = (SignInButton) findViewById(R.id.google_login_btn);
 		SignIn.setOnClickListener(this);
