@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -35,9 +34,13 @@ public class FloorActivity extends AppCompatActivity
 	private static final String TAG = "FloorActivity";
 
 	private Floor floor = null;
+    private ImageView albumCoverView;
+    private TextView songInfoView;
 
 
 	// EVENTS are recieved here.
+    // IDK whatever dumbass decided to make BroadcastReciever a class and not an interface,
+    // but fuck them
 	BroadcastReceiver r = new BroadcastReceiver()
 	{
 		@Override
@@ -48,10 +51,17 @@ public class FloorActivity extends AppCompatActivity
 			switch(intent.getAction())
 			{
                 case SeamlessMediaPlayer.EVENT_SONG_STARTED:
-                    Song s = intent.getParcelableExtra(EVENT_SONG_STARTED);
+                    final Song s = intent.getParcelableExtra(EVENT_SONG_STARTED);
                     Log.d(TAG, EVENT_SONG_STARTED + ": " + s.getName() + " - " + s.getArtist());
                     //TODO: Update the UI
-
+                    FloorActivity.this.runOnUiThread(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            songInfoView.setText((s.getName() + " - " + s.getArtist()));
+                        }
+                    });
 
                     break;
                 case EVENT_SONG_STOPPED:
@@ -178,17 +188,8 @@ public class FloorActivity extends AppCompatActivity
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 		tabLayout.setupWithViewPager(mViewPager);
 
-		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-		fab.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View view)
-			{
-				Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-						.setAction("Action", null)
-						.show();
-			}
-		});
+        albumCoverView = (ImageView) findViewById(R.id.song_artwork);
+        songInfoView = (TextView) findViewById(R.id.song_title_text);
 
 	}
 
