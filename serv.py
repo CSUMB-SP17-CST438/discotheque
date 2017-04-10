@@ -8,6 +8,7 @@ import json
 import datetime
 import requests
 import facebook
+import time
 
 public_room = 912837
 
@@ -81,11 +82,11 @@ def on_login(data):
         print(mem_found)
         if mem_found:
             mem = getMember(email)
-            socket.emit("login status", {
-                        'authorized': 1, 'user': mem}, room=request.sid)
+            socket.emit("login status", userEmit(new_mem), room=request.sid)
         else:
             new_mem = registerMember("",fname,lname,email,link)
             print(new_mem.to_list())
+            socket.emit("login status", userEmit(new_mem), room=request.sid)
 
 #
     if 'google_t' not in data:
@@ -102,12 +103,11 @@ def on_login(data):
         print(mem_found)
         if mem_found:
             mem = getMember(email)
-            socket.emit("login status", {
-                        'authorized': 1, 'user': mem}, room=request.sid)
+            socket.emit("login status", userEmit(new_mem), room=request.sid)
         else:
             new_mem = registerMember("",fname,lname,email,link)
             print(new_mem.to_list())
-            socket.emit("login status", {'authorized': 1,'user':new_mem.to_list()}, room=request.sid)
+            socket.emit("login status", userEmit(new_mem), room=request.sid)
 
 
 @socket.on('new message')
@@ -149,7 +149,7 @@ def on_join_floor(data):
     join_room(floor_id)
     floor = getFloor(floor_id)
     floor.add_member(data['member_id'])
-    socket.emit('member joined', {'floor':floor.to_list()}, room=floor_id)
+    socket.emit('member joined', {'floor':floor.to_list()}, room=floor_id) 
     
 @socket.on('leave floor')
 def on_leave_floor(data):
@@ -160,6 +160,10 @@ def on_leave_floor(data):
     socket.emit('member left', {'floor':current_floor.to_list()})
 
     
+
+def userEmit(FLAG, member):
+ 	if flag ==1:
+ 		return {'authorized': 1,'email': member.email, user:member.to_simple_list}
 
 
 # def get_dt_ms():

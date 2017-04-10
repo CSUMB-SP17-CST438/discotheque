@@ -23,7 +23,7 @@ def getSongURLLocation(track_id):
 	# print(track_stream.location)
 	return track_stream.location
 
-songlist = getSongList('punk')
+# songlist = getSongList('punk')
 # t = songlist[0]
 # getSongURLLocation(t['id'])
-print(songlist)
+# print(songlist)
