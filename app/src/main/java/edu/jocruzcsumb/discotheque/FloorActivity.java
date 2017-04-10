@@ -272,7 +272,7 @@ public class FloorActivity extends AppCompatActivity
 				case 1:
 					return SongFragment.newInstance();
 				case 2:
-					return ChatFragment.newInstance();
+					return UserFragment.newInstance();
 				case 3:
 					return ChatFragment.newInstance();
 			}
@@ -291,11 +291,11 @@ public class FloorActivity extends AppCompatActivity
 			switch(position)
 			{
 				case 0:
-					return "Chat";
+					return getString(R.string.chat_fragment_title);
 				case 1:
-					return "Songs";
+					return getString(R.string.song_fragment_title);
 				case 2:
-					return "Other?";
+					return getString(R.string.user_fragment_title);
 				case 3:
 					return "Other?";
 			}
