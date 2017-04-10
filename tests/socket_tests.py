@@ -35,7 +35,9 @@ class SocketioTestCases(unittest.TestCase):
 
     def test_create_floor(self):
         client = serv.socket.test_client(serv.app)
-        client.emit('create floor',{'floor_name':"new floor name", 'member_id':1,'is_public':True,'floor_genre':'Pop'})
+        i = random.randint(1,2222)
+        fl_name = "floor"+str(i)
+        client.emit('create floor',{'floor_name':fl_name, 'member_id':1,'is_public':True,'floor_genre':'Pop'})
         r = client.get_received()
         print("************************create_floor**************************")
         # print(r)
@@ -43,7 +45,7 @@ class SocketioTestCases(unittest.TestCase):
         
     def test_join_floor(self):
         client = serv.socket.test_client(serv.app)
-        client.emit('join floor',{'floor_id':4, 'member_id':1})
+        client.emit('join floor',{'floor_id':1, 'member_id':1})
         r = client.get_received()
         print("**************************test_join_floor***********")
         # print(r)
