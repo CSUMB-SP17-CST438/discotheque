@@ -153,7 +153,8 @@ def on_create(data):
 # expects keys 'floor_id', 'member_id, returns jsonarray to parse
 def on_join_floor(data):
 	print("******************TRIGGERED JOIN FLOOR ***********************")
-	# print(())
+	print(("floor_id:" + data['floor_id']))
+	print(("member_id:" + data['member_id']))
 	floor_id = data['floor_id']
 	join_room(floor_id)
 	floor = getFloor(floor_id)
