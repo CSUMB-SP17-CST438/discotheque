@@ -63,6 +63,14 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 		this.context = context;
 		this.songs = new ArrayList<Song>();
 
+
+		//Set up the media players
+		for(int i = 0; i < 2; i++)
+		{
+			m[i] = new MediaPlayer();
+			m[i].setOnCompletionListener(l[i]);
+		}
+
 		// Recieve song events
 		IntentFilter f = new IntentFilter();
 		f.addAction(EVENT_SONG_LIST_UPDATE);
@@ -71,13 +79,6 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 				.registerReceiver(this, f);
 		LocalBroadcastManager b = LocalBroadcastManager.getInstance(context.getApplicationContext());
 		b.registerReceiver(this, f);
-
-		//Set up the media players
-		for(int i = 0; i < 2; i++)
-		{
-			m[i] = new MediaPlayer();
-			m[i].setOnCompletionListener(l[i]);
-		}
 
 		// Request the song list
 		Intent k = new Intent(EVENT_GET_SONG_LIST);

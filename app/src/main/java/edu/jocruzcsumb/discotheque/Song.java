@@ -2,6 +2,7 @@ package edu.jocruzcsumb.discotheque;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 
 public class Song implements Comparable<Song>, Parcelable
 {
+
+	public static final String TAG = "Song";
 
 	public static final String JSON_TITLE_TAG = "title";
 	public static final String JSON_ARTIST_TAG = "creator_user";
@@ -72,6 +75,7 @@ public class Song implements Comparable<Song>, Parcelable
 
 	public static Song parse(JSONObject jsonSong) throws JSONException
 	{
+		Log.d(TAG, jsonSong.toString());
 		long s = (jsonSong.has(JSON_START_TIME_TAG)? jsonSong.getLong(JSON_START_TIME_TAG) : 0);
 		return new Song(
 				jsonSong.getString(JSON_TITLE_TAG),
@@ -85,6 +89,7 @@ public class Song implements Comparable<Song>, Parcelable
 
 	public static ArrayList<Song> parse(JSONArray a) throws JSONException
 	{
+		Log.d(TAG, a.toString());
 		int arrayLength = a.length();
 		ArrayList<Song> songList = new ArrayList<Song>();
 		for(int i = 0; i < arrayLength; i++)

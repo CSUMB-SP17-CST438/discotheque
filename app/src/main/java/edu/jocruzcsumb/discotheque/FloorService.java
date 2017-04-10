@@ -425,7 +425,7 @@ public class FloorService extends IntentService
 				Log.w(TAG, EVENT_FLOOR_JOINED + "Returned null");
 				return;
 			}
-			floor = Floor.parse(obj);
+			floor = Floor.parseAdvanced(obj);
 		}
 		catch(JSONException e)
 		{
