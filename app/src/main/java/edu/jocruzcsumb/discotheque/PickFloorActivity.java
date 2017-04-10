@@ -43,7 +43,7 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 				//go to activity
 				Intent k = new Intent(PickFloorActivity.this, FloorActivity.class);
 
-				k.putExtra(Floor.TAG, new Long(0));
+				k.putExtra(Floor.TAG, 1);
 
 				startActivity(k);
 

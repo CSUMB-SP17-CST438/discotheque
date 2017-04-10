@@ -17,6 +17,7 @@ public class LocalUser extends User
 	public static final String GOOGLE_TOKEN_KEY = "google_t";
 	public static final String FACEBOOK_TOKEN_KEY = "fb_t";
 	public static final String SOUNDCLOUD_TOKEN_KEY = "soundcloud_t";
+	public static final String JSON_ID_TAG = "member_id";
 	private static final String JSON_EMAIL_TAG = "email";
 	private static final String JSON_TOKEN_TAG = "token";
 	private static final String JSON_LOGIN_TYPE_TAG = "login_type";
@@ -29,16 +30,19 @@ public class LocalUser extends User
 	//Singleton CurrentUser
 	private static LocalUser currentUser = null;
 	private static SharedPreferences preferences = null;
+
+	private int id;
 	private String email = null;
 	private LoginType loginType = null;
 	private String token = null;
 
-	public LocalUser(LoginType loginType, String token, String email, User u)
+	public LocalUser(LoginType loginType, String email, String token, int id, User u)
 	{
 		super(u.getUserName(), u.getFirstName(), u.getLastName(), u.getPhoto(), u.getBio());
+		this.id = id;
 		this.loginType = loginType;
-		this.token = token;
 		this.email = email;
+		this.token = token;
 	}
 
 	protected static LocalUser parse(JSONObject jsonLocalUser) throws JSONException
@@ -46,8 +50,9 @@ public class LocalUser extends User
 		//TODO: get user info from JSON
 		return new LocalUser(
 				parseLoginType(jsonLocalUser.getString(JSON_LOGIN_TYPE_TAG)),
-				jsonLocalUser.getString(JSON_TOKEN_TAG),
 				jsonLocalUser.getString(JSON_EMAIL_TAG),
+				jsonLocalUser.getString(JSON_TOKEN_TAG),
+				jsonLocalUser.getInt(JSON_ID_TAG),
 				User.parse(jsonLocalUser));
 	}
 
@@ -201,7 +206,13 @@ public class LocalUser extends User
 				a = obj.getInt("authorized");
 				if(a == 1)
 				{
-					LocalUser u = new LocalUser(loginType, token, obj.getString("email"), User.parse(obj.getJSONObject("user")));
+					LocalUser u = new LocalUser(
+							loginType,
+							obj.getString(JSON_EMAIL_TAG),
+							token,
+							obj.getInt(JSON_ID_TAG),
+							User.parse(obj.getJSONObject("user"))
+					);
 					LocalUser.setCurrentUser(u);
 					return true;
 				}
@@ -241,6 +252,11 @@ public class LocalUser extends User
 	public String getEmail()
 	{
 		return email;
+	}
+
+	public int getId()
+	{
+		return id;
 	}
 
 	public enum LoginType

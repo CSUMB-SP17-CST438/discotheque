@@ -78,8 +78,6 @@ public class PickSongActivity extends AppCompatActivity {
 		//}
 		//final ListView listView = songListView;
 		//songList = socket.getSongList("punk");
-
-
 		//button reference to widgets
 //					String[] data = new String[songList.size()];
 //					for(int i = 0; i < songList.size(); i++)
