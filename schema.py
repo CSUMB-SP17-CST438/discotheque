@@ -71,6 +71,16 @@ class floor(db.Model):
 		self.songlist = songs
 		db.session.commit()
 
+	def to_list_with_songlist(self):
+		fl_sc = floor_Schema_without_songlist()
+		floor_obj = fl_sc.dump(self)
+		print("************floor object*************")
+		print(floor_obj)
+		print("*************************songlist*******************")
+
+		floor_obj[0]['songlist'] = self.songlist
+
+		return floor_obj[0]
 	# def get_songlist(self):
 	# return self.songs.loads()
 
@@ -119,6 +129,8 @@ class member(db.Model):
 		mem_sc = emailless_member()
 		f_mem = mem_sc.dump(self)
 		return f_mem[0]
+
+
 		
 		
 
@@ -168,10 +180,16 @@ class message_Schema(ma.ModelSchema):
 		model = message
 	member = f.Nested(member_Schema, many=False)
 
+
 class floor_Schema(ma.ModelSchema):
-	class Meta:
+	class Meta():
 		model = floor
 	members = f.Nested(member_Schema,many=True)
+
+class floor_Schema_without_songlist(ma.Schema):
+	class Meta():
+		fields = ('floor_id','floor_name','floor_genre','floor_messages','creator_id','public', 'songlist')
+	songlist = ''
 
 
 
@@ -236,6 +254,8 @@ def add_floor(floor_name,creator_id,public,genre):
 	db.session.commit()
 	print("*********************floor added*********************")
 	return new_floor
+
+
 # ******************************************************************************************************
 # **************************************END INSERT MESSAGES*********************************************
 # ******************************************************************************************************
@@ -298,6 +318,10 @@ def getFloor(floor_id):
 	
 def getMemberObject(mem_id):
 	return member.query.get(mem_id)
+
+def getMemberObject_by_email(email):
+	return member.query.filter_by(member_email=email).first()
+
 	
 
 

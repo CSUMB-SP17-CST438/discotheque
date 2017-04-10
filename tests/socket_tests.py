@@ -37,13 +37,15 @@ class SocketioTestCases(unittest.TestCase):
         client = serv.socket.test_client(serv.app)
         client.emit('create floor',{'floor_name':"new floor name", 'member_id':1,'is_public':True,'floor_genre':'pop'})
         r = client.get_received()
+        print("************************create_floor**************************")
         print(r)
         self.assertIsNotNone(r)
         
     def test_join_floor(self):
         client = serv.socket.test_client(serv.app)
-        client.emit('join floor',{'floor_id':2, 'member_id':1})
+        client.emit('join floor',{'floor_id':4, 'member_id':1})
         r = client.get_received()
+        print("**************************test_join_floor***********")
         print(r)
         self.assertIsNotNone(r)
         
