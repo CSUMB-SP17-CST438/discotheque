@@ -35,7 +35,7 @@ class SocketioTestCases(unittest.TestCase):
 
     def test_create_floor(self):
         client = serv.socket.test_client(serv.app)
-        client.emit('create floor',{'floor_name':"new floor name", 'member_id':1,'is_public':True,'floor_genre':'Pop'})
+        client.emit('create floor',{'floor_name':"new floor name", 'member_id':1,'is_public':True,'floor_genre':'pop'})
         r = client.get_received()
         print("************************create_floor**************************")
         # print(r)

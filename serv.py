@@ -143,8 +143,6 @@ def on_create(data):
     join_room(new_floor.floor_id)
     genre = data['floor_genre']
     songs = ds.getSongList(genre)
-    print("***************join songlist***************")
-    print(songs)
     new_floor.set_songlist(songs)
     updated_floor = getFloor(new_floor.floor_id)
     socket.emit('floor created', {'floor':updated_floor.to_list()},room=new_floor.floor_id)
