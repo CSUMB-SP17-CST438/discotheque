@@ -1,26 +1,23 @@
 package edu.jocruzcsumb.discotheque;
 
 import android.util.Log;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
-import io.socket.client.IO;
 
-import java.net.ConnectException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.net.URISyntaxException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 import static junit.framework.Assert.fail;
 
 public class Sockets
 {
 	private static final String TAG = "DTK Socket";
-
-	private static Socket socket = null;
-
 	// TODO: Set to 0 for live server
 	private static final int SELECTED_SERVER = 1;
 	// Append to this list if you want to run a different server :D
@@ -30,24 +27,25 @@ public class Sockets
 			"http://devev-jcrzry.c9users.io:8080"
 			//"http://INSERT IP",
 	};
+	private static Socket socket = null;
 
-    public static String getServer()
+	public static String getServer()
 	{
 
 		return SERVERS[SELECTED_SERVER];
 	}
 
-    public static Socket getSocket()
+	public static Socket getSocket()
 	{
-		if(socket != null )
-        {
-            if(!socket.connected())
-            {
-                socket = null;
-                return getSocket();
-            }
-            return socket;
-        }
+		if(socket != null)
+		{
+			if(!socket.connected())
+			{
+				socket = null;
+				return getSocket();
+			}
+			return socket;
+		}
 		try
 		{
 			socket = IO.socket(getServer());
@@ -55,42 +53,44 @@ public class Sockets
 		catch(URISyntaxException e)
 		{
 			e.printStackTrace();
-            fail("Invalid server address bro");
+			fail("Invalid server address bro");
 		}
 		socket.connect();
 		return socket;
 	}
 
-    public static class SocketWaiter implements Emitter.Listener
+	public static class SocketWaiter implements Emitter.Listener
 	{
 		private static final long TIMEOUT = 20L;
-        private boolean success;
-        private CountDownLatch socketLatch;
-        private String signal, event;
+		private boolean success;
+		private CountDownLatch socketLatch;
+		private String signal, event;
 		private JSONObject json;
 		private JSONArray jsonArray;
 		private boolean arrayMode;
+
 		//event = the event we wait for.
 		public SocketWaiter(String event)
 		{
 			this(null, event);
 		}
-		//Signal = what to send the server, event = event we wait for.
-        public SocketWaiter(String signal, String event)
-        {
-            success = false;
-            this.signal=signal;
-            this.event=event;
-        }
 
-        public JSONObject getObj(JSONObject params)
-        {
+		//Signal = what to send the server, event = event we wait for.
+		public SocketWaiter(String signal, String event)
+		{
+			success = false;
+			this.signal = signal;
+			this.event = event;
+		}
+
+		public JSONObject getObj(JSONObject params)
+		{
 			arrayMode = false;
 			json = null;
 			socketLatch = new CountDownLatch(1);
 			success = false;
 
-			Log.d(TAG, "Sending socket event: "+signal);
+			Log.d(TAG, "Sending socket event: " + signal);
 
 			if(signal != null)
 			{
@@ -114,10 +114,10 @@ public class Sockets
 			return null;
 		}
 
-        public JSONObject getObj()
-        {
+		public JSONObject getObj()
+		{
 			return getObj(null);
-        }
+		}
 
 		public JSONArray getArray(JSONObject params)
 		{
@@ -126,7 +126,7 @@ public class Sockets
 			socketLatch = new CountDownLatch(1);
 			success = false;
 
-			Log.d(TAG, "Sending event: "+signal);
+			Log.d(TAG, "Sending event: " + signal);
 
 			if(signal != null)
 			{
@@ -155,17 +155,19 @@ public class Sockets
 		{
 			return getArray(null);
 		}
+
 		@Override
-		public void call(Object... args) {
-			Log.d(TAG, "Received event: "+event);
+		public void call(Object... args)
+		{
+			Log.d(TAG, "Received event: " + event);
 
 			if(arrayMode) jsonArray = (JSONArray) args[0];
 			else json = (JSONObject) args[0];
 
 			success = true;
 			socketLatch.countDown();
+		}
+
+
 	}
-
-
-    }
 }
