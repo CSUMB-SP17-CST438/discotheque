@@ -163,7 +163,7 @@ def on_leave_floor(data):
     
 
 def userEmit(member):
- 		return {'authorized': 1,'email': member.email, user:member.to_simple_list}
+ 	return {'authorized': 1,'email': member.member_email, 'user':member.to_simple_list}
 
 
 # def get_dt_ms():
