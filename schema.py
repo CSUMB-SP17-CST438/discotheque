@@ -12,12 +12,14 @@ from flask_marshmallow import Marshmallow
 from marshmallow import fields as f
 from sqlalchemy import orm
 from sqlalchemy import desc
-
+import jsonpickle
 # serv.app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL','postgresql://jcrzr:anchor99@localhost/postgres')
 # serv.app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
 
 db = flask_sqlalchemy.SQLAlchemy()
 ma = Marshmallow()
+pickl = jsonpickle.pickler.Pickler()
+unpickl = jsonpickle.unpickler.Unpickler()
 
 floor_members = db.Table('floor_members',
 	db.Column('floor_id', db.Integer, db.ForeignKey('floor.floor_id')),
@@ -71,16 +73,13 @@ class floor(db.Model):
 		cr.pop('created_floors',None)
 		fl_[0]['creator'] = cr
 		fl_[0]['floor_members'] = getFloorMembers(self.floor_id)
-		members = []
-		# print(self.floor_members)
-		# for i in self.floor_members:
-		# 	mem = getMemberObject(i)
-		# 	members.append(mem.to_simple_list())
 		fl_[0]['floor_messages'] = getFloorMessages(self.floor_id)
+		sl = unpickl.restore(self.songlist)
+		fl_[0]['songlist'] = sl
 		return fl_[0]
 	
 	def set_songlist(self,songs):
-		self.songlist = songs
+		self.songlist = pickl.flatten(songs)
 		db.session.commit()
 
 	def to_list_with_songlist(self):
