@@ -23,6 +23,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_FLOOR;
+
 
 public class SongFragment extends Fragment
 {
@@ -102,8 +104,9 @@ public class SongFragment extends Fragment
         f.addAction(FloorService.EVENT_SONG_LIST_UPDATE);
 
         // Set the activity to listen for app broadcasts with the above filter
-        LocalBroadcastManager.getInstance(this.getContext())
-                .registerReceiver(r, f);
+        LocalBroadcastManager m = LocalBroadcastManager.getInstance(this.getContext());
+        m.registerReceiver(r, f);
+        m.sendBroadcast(new Intent(EVENT_GET_FLOOR));
 
         View rootView = inflater.inflate(R.layout.fragment_song, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv);

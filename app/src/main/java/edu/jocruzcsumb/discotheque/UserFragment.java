@@ -19,6 +19,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_FLOOR_JOINED;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_FLOOR;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_USER_LIST;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_LIST_UPDATE;
+
 /**
  * Created by Peter on 4/9/2017.
  */
@@ -37,14 +42,19 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "onRecieve");
             Log.d(TAG, "intent.getAction() = " + intent.getAction());
-            switch (intent.getAction()) {
-                case FloorService.EVENT_GET_USER_LIST:
+            if(intent.getAction().equals(EVENT_FLOOR_JOINED))
+            {
                     //get all users
                     Floor floor = intent.getParcelableExtra(FloorService.EVENT_FLOOR_JOINED);
                     floorId = floor.getId();
                     users = floor.getUsers();
-                    break;
             }
+            else if(intent.getAction().equals(EVENT_USER_LIST_UPDATE))
+            {
+                users = intent.getParcelableArrayListExtra(EVENT_USER_LIST_UPDATE);
+            }
+
+            //TODO PETER UPDATE THE UI WITH THE NEW users ARRAYLIST
         }
 
     };
@@ -70,10 +80,11 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // This tells the activity what LocalBroadcast Events to listen for
         IntentFilter f = new IntentFilter();
-        f.addAction(FloorService.EVENT_GET_USER_LIST);
+        f.addAction(EVENT_GET_USER_LIST);
 
-        LocalBroadcastManager.getInstance(this.getContext())
-                .registerReceiver(r, f);
+        LocalBroadcastManager m = LocalBroadcastManager.getInstance(this.getContext());
+        m.registerReceiver(r, f);
+        m.sendBroadcast(new Intent(EVENT_GET_FLOOR));
 
         View rootView = inflater.inflate(R.layout.fragment_user, container, false);
         userPhoto = (ImageView) rootView.findViewById(R.id.userPhoto);

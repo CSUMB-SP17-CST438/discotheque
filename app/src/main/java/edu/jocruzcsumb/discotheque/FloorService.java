@@ -28,14 +28,17 @@ public class FloorService extends IntentService
 {
 	public static final String TAG = "FloorService";
 
-	// When the Song List is updated for the Floor
-	public static final String EVENT_SONG_LIST_UPDATE = "song list";
+    // Requests the Floor object
+    public static final String EVENT_GET_FLOOR = "get floor";
+
+    // When the Song List is updated for the Floor
+    public static final String EVENT_SONG_LIST_UPDATE = "song list";
 
 	// When the Message List is updated for the Floor
-	public static final String EVENT_USER_LIST_UPDATE = "user list";//TODO
+	public static final String EVENT_USER_LIST_UPDATE = "user list";
 
 	// When the Message List is updated for the Floor
-	public static final String EVENT_MESSAGE_LIST_UPDATE = "message list";//TODO
+	public static final String EVENT_MESSAGE_LIST_UPDATE = "message list";
 
 	// When the UI requests the most recent Song List
 	public static final String EVENT_GET_SONG_LIST = "get song list";
@@ -66,7 +69,7 @@ public class FloorService extends IntentService
 
 	// When the server acknowledges that the client has joined the floor
 	// This event also contains the entire floor object according to Ryan
-	public static final String EVENT_FLOOR_JOINED = "floor joined"; //TODO
+	public static final String EVENT_FLOOR_JOINED = "floor joined";
 
 	// The action that is sent to start the FloorService
 	private static final String ACTION_JOIN_FLOOR = "edu.jocruzcsumb.discotheque.action.JOINFLOOR";
@@ -86,10 +89,14 @@ public class FloorService extends IntentService
 			Log.d(TAG, "intent.getAction() = " + intent.getAction());
 			switch(intent.getAction())
 			{
-				case FloorService.EVENT_GET_SONG_LIST:
-					Log.d(TAG, EVENT_GET_SONG_LIST);
-					broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
-					break;
+                case FloorService.EVENT_GET_FLOOR:
+                    Log.d(TAG, EVENT_GET_FLOOR);
+                    broadcast(EVENT_FLOOR_JOINED, floor);
+                    break;
+                case FloorService.EVENT_GET_SONG_LIST:
+                    Log.d(TAG, EVENT_GET_SONG_LIST);
+                    broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
+                    break;
 				case FloorService.EVENT_GET_USER_LIST:
 					Log.d(TAG, EVENT_GET_USER_LIST);
 					broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
@@ -187,7 +194,8 @@ public class FloorService extends IntentService
 		f.addAction(EVENT_GET_USER_LIST);
 		f.addAction(EVENT_GET_MESSAGE_LIST);
 		f.addAction(EVENT_LEAVE_FLOOR);
-		f.addAction(EVENT_MESSAGE_SEND);
+        f.addAction(EVENT_MESSAGE_SEND);
+        f.addAction(EVENT_GET_FLOOR);
 
 		// Set the activity to listen for app broadcasts with the above filter
 		LocalBroadcastManager.getInstance(getApplicationContext())
