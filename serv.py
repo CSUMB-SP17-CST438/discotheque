@@ -162,8 +162,7 @@ def on_leave_floor(data):
 
     
 
-def userEmit(FLAG, member):
- 	if flag ==1:
+def userEmit(member):
  		return {'authorized': 1,'email': member.email, user:member.to_simple_list}
 
 
