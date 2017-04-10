@@ -17,11 +17,11 @@ import org.json.JSONObject;
 public class ViewProfileActivity extends AppCompatActivity implements View.OnClickListener
 {
 
-    private EditText editFirstName;
-    private EditText editLastName;
-    private EditText editEmail;
-    private EditText editDescription;
-    private EditText editGenres;
+	private EditText editFirstName;
+	private EditText editLastName;
+	private EditText editEmail;
+	private EditText editDescription;
+	private EditText editGenres;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -41,18 +41,17 @@ public class ViewProfileActivity extends AppCompatActivity implements View.OnCli
 		fab.setOnClickListener(this);
 		viewFriends.setOnClickListener(this);
 
-        //pass object from previous activity
-        Intent in = getIntent();
-        User user = (User) in.getParcelableExtra("user");
+		//pass object from previous activity
+		Intent in = getIntent();
+		User user = (User) in.getParcelableExtra("user");
 
-        editFirstName.setText(user.getFirstName());
-        editLastName.setText(user.getLastName());
-        editDescription.setText(user.getBio());
+		editFirstName.setText(user.getFirstName());
+		editLastName.setText(user.getLastName());
+		editDescription.setText(user.getBio());
 
-        //TODO: TOMMY, YOU ONLY GET EMAIL FOR LOCALUSER
-        //editEmail.setText(user.getEmail());
-        //editGenres.setText(user.get);
-
+		//TODO: TOMMY, YOU ONLY GET EMAIL FOR LOCALUSER
+		//editEmail.setText(user.getEmail());
+		//editGenres.setText(user.get);
 
 
 	}
@@ -61,28 +60,31 @@ public class ViewProfileActivity extends AppCompatActivity implements View.OnCli
 	@Override
 	public void onClick(View view)
 	{
-		switch(view.getId()){
+		switch(view.getId())
+		{
 			case R.id.fab:
-			    String tempfirstName, tempLastName, tempDescription, tempEmail, tempGenres;
-                tempfirstName = editFirstName.getText().toString();
-                tempLastName = editLastName.getText().toString();
-                tempDescription = editDescription.getText().toString();
-                tempEmail = editEmail.getText().toString();
-                tempGenres = editGenres.getText().toString();
-                JSONObject jsonObject = new JSONObject();
+				String tempfirstName, tempLastName, tempDescription, tempEmail, tempGenres;
+				tempfirstName = editFirstName.getText().toString();
+				tempLastName = editLastName.getText().toString();
+				tempDescription = editDescription.getText().toString();
+				tempEmail = editEmail.getText().toString();
+				tempGenres = editGenres.getText().toString();
+				JSONObject jsonObject = new JSONObject();
 
-                try{
-                    jsonObject.put("firstName", tempfirstName);
-                    jsonObject.put("lastName", tempLastName);
-                    jsonObject.put("description", tempDescription);
-                    jsonObject.put("tempEmail", tempEmail);
-                    jsonObject.put("genre", tempGenres);
-                }
-                catch(JSONException e){
-                    e.printStackTrace();
-                }
+				try
+				{
+					jsonObject.put("firstName", tempfirstName);
+					jsonObject.put("lastName", tempLastName);
+					jsonObject.put("description", tempDescription);
+					jsonObject.put("tempEmail", tempEmail);
+					jsonObject.put("genre", tempGenres);
+				}
+				catch(JSONException e)
+				{
+					e.printStackTrace();
+				}
 
-                Sockets.getSocket().emit("update user", jsonObject);
+				Sockets.getSocket().emit("update user", jsonObject);
 
 				Snackbar.make(view, "Profile info saved", Snackbar.LENGTH_LONG)
 						.setAction("Action", null).show();
