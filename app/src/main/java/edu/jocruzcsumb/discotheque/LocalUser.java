@@ -117,6 +117,12 @@ public class LocalUser extends User
         context.finish();
     }
 
+    public static boolean isLoggedIn()
+    {
+        return currentUser!=null;
+    }
+
+
     public static LocalUser getCurrentUser()
     {
         if (currentUser == null)
@@ -196,7 +202,7 @@ public class LocalUser extends User
                 a = obj.getInt("authorized");
                 if (a == 1)
                 {
-                    LocalUser u = parse(obj);
+                    LocalUser u = new LocalUser(loginType, token, obj.getString("email"), User.parse(obj.getJSONObject("user")));
                     LocalUser.setCurrentUser(u);
                     return true;
                 }

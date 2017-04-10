@@ -4,31 +4,100 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class FloorActivity extends AppCompatActivity
 {
 
     private static final String TAG = "FloorActivity";
+
+    private Floor floor = null;
+
+
+    // EVENTS are recieved here.
+    BroadcastReceiver r = new BroadcastReceiver()
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            Log.d(TAG, "onRecieve");
+            Log.d(TAG, "intent.getAction() = " + intent.getAction());
+            switch (intent.getAction())
+            {
+                case FloorService.EVENT_FLOOR_JOINED:
+                    floor = intent.getParcelableExtra(FloorService.EVENT_FLOOR_JOINED);
+                    //TODO: Update the UI
+
+
+                    break;
+                case FloorService.EVENT_SONG_LIST_UPDATE:
+                    ArrayList<Song> songs = intent.getParcelableArrayListExtra(FloorService.EVENT_SONG_LIST_UPDATE);
+                    floor.setSongs(songs);
+                    //TODO: Update the UI
+
+
+                    break;
+                case FloorService.EVENT_USER_LIST_UPDATE:
+                    ArrayList<User> users = intent.getParcelableArrayListExtra(FloorService.EVENT_USER_LIST_UPDATE);
+                    floor.setUsers(users);
+                    //TODO: Update the UI
+
+
+                    break;
+                case FloorService.EVENT_MESSAGE_LIST_UPDATE:
+                    ArrayList<Message> messages = intent.getParcelableArrayListExtra(FloorService.EVENT_MESSAGE_LIST_UPDATE);
+                    floor.setMessages(messages);
+                    //TODO: Update the UI
+
+
+                    break;
+                case FloorService.EVENT_MESSAGE_ADD:
+                    Message m = intent.getParcelableExtra(FloorService.EVENT_MESSAGE_ADD);
+                    floor.getMessages()
+                         .add(m);
+                    //TODO: Update the UI
+
+
+                    break;
+                case FloorService.EVENT_USER_ADD:
+                    User u = intent.getParcelableExtra(FloorService.EVENT_USER_ADD);
+                    floor.getUsers()
+                         .add(u);
+                    //TODO: Update the UI
+
+
+                    break;
+                case FloorService.EVENT_USER_REMOVE:
+                    User r = intent.getParcelableExtra(FloorService.EVENT_USER_REMOVE);
+                    floor.getUsers()
+                         .remove(r);
+                    //TODO: Update the UI
+
+
+                    break;
+            }
+        }
+    };
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -38,7 +107,6 @@ public class FloorActivity extends AppCompatActivity
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -52,6 +120,7 @@ public class FloorActivity extends AppCompatActivity
 
         // This tells the activity what LocalBroadcast Events to listen for
         IntentFilter f = new IntentFilter();
+        f.addAction(FloorService.EVENT_FLOOR_JOINED);
         f.addAction(FloorService.EVENT_SONG_LIST_UPDATE);
         f.addAction(FloorService.EVENT_USER_LIST_UPDATE);
         f.addAction(FloorService.EVENT_MESSAGE_LIST_UPDATE);
@@ -60,7 +129,21 @@ public class FloorActivity extends AppCompatActivity
         f.addAction(FloorService.EVENT_MESSAGE_ADD);
 
         // Set the activity to listen for app broadcasts with the above filter
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(r, f);
+        LocalBroadcastManager.getInstance(getApplicationContext())
+                             .registerReceiver(r, f);
+
+        // Start the floor service
+        Intent i = getIntent();
+        int floorId = i.getIntExtra(Floor.TAG, 0);
+        if (floorId == 0)
+        {
+            Log.w(TAG, "No floor was passed to this activity, aborting...");
+            finish();
+        }
+        else
+        {
+            FloorService.joinFloor(this, floorId);
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -89,42 +172,19 @@ public class FloorActivity extends AppCompatActivity
 
     }
 
-    BroadcastReceiver r = new BroadcastReceiver()
+    // EVENTS are broadcasted here
+    private void broadcast(String event, Parcelable params)
     {
-        @Override
-        public void onReceive(Context context, Intent intent)
-        {
-            Log.d(TAG, "onRecieve");
-            Log.d(TAG, "intent.getAction() = " + intent.getAction());
-            switch (intent.getAction())
-            {
-                case FloorService.EVENT_SONG_LIST_UPDATE:
+        Intent k = new Intent(event);
+        k.putExtra(event, params);
+        broadcast(k);
+    }
 
-
-                    break;
-                case FloorService.EVENT_USER_LIST_UPDATE:
-
-
-                    break;
-                case FloorService.EVENT_MESSAGE_LIST_UPDATE:
-
-
-                    break;
-                case FloorService.EVENT_MESSAGE_ADD:
-
-
-                    break;
-                case FloorService.EVENT_USER_ADD:
-
-
-                    break;
-                case FloorService.EVENT_USER_REMOVE:
-
-
-                    break;
-            }
-        }
-    };
+    private void broadcast(Intent k)
+    {
+        LocalBroadcastManager.getInstance(getApplicationContext())
+                             .sendBroadcast(k);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -205,15 +265,21 @@ public class FloorActivity extends AppCompatActivity
         @Override
         public Fragment getItem(int position)
         {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch (position)
+            {
+                case 0:
+                    return ChatFragment.newInstance(floor.getId());
+                case 1:
+                    return null;
+                case 2:
+                    return null;
+            }
+            return null;
         }
 
         @Override
         public int getCount()
         {
-            // Show 3 total pages.
             return 3;
         }
 
@@ -223,11 +289,11 @@ public class FloorActivity extends AppCompatActivity
             switch (position)
             {
                 case 0:
-                    return "SECTION 1";
+                    return "Chat";
                 case 1:
-                    return "SECTION 2";
+                    return "Songs";
                 case 2:
-                    return "SECTION 3";
+                    return "Other?";
             }
             return null;
         }

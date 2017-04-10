@@ -1,8 +1,11 @@
 package edu.jocruzcsumb.discotheque;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.fail;
@@ -11,31 +14,79 @@ import static junit.framework.Assert.fail;
  * Created by Tommy on 3/23/2017.
  */
 
-public class Floor implements Serializable
+public class Floor implements Parcelable
 {
+    //regular parse
+    public static final String TAG = "Floor";
+    public static final String JSON_ID_TAG = "id";
+    public static final String JSON_NAME_TAG = "name";
+    public static final String JSON_CREATOR_TAG = "creator";
 
+    //Advanced parse
+    public static final String JSON_SONGS_TAG = "songs";
+    public static final String JSON_USERS_TAG = "users";
+    public static final String JSON_MESSAGES_TAG = "messages";
+    public static final String JSON_THEME_TAG = "theme";
+
+
+    private User creator;
+    private int id;
     private String name;
     private ArrayList<Message> messages = null;
     private ArrayList<Song> songs = null;
     private ArrayList<User> users = null;
+    private Theme theme = null;
 
-    public Floor()
+    public Floor(int id, String name, User creator)
     {
-        messages = new ArrayList<Message>();
-        songs = new ArrayList<Song>();
-        users = new ArrayList<User>();
-    }
-
-    public Floor(String name)
-    {
+        this.id = id;
         this.name = name;
+        this.creator = creator;
     }
 
-    public Floor parse(JSONObject jsonFloor)
+    protected Floor(Parcel in)
     {
-        //TODO
-        fail("nyi");
-        return new Floor();
+        id = in.readInt();
+        name = in.readString();
+        creator = in.readParcelable(User.class.getClassLoader());
+        users = in.createTypedArrayList(User.CREATOR);
+        songs = in.createTypedArrayList(Song.CREATOR);
+        messages = in.createTypedArrayList(Message.CREATOR);
+        theme = in.readParcelable(Theme.class.getClassLoader());
+    }
+
+    public static final Creator<Floor> CREATOR = new Creator<Floor>()
+    {
+        @Override
+        public Floor createFromParcel(Parcel in)
+        {
+            return new Floor(in);
+        }
+
+        @Override
+        public Floor[] newArray(int size)
+        {
+            return new Floor[size];
+        }
+    };
+
+    public static Floor parse(JSONObject jsonFloor) throws JSONException
+    {
+        return new Floor(
+                jsonFloor.getInt(JSON_ID_TAG),
+                jsonFloor.getString(JSON_NAME_TAG),
+                User.parse(jsonFloor.getJSONObject(JSON_CREATOR_TAG))
+        );
+    }
+
+    public Floor parseAdvanced(JSONObject jsonFloor) throws JSONException
+    {
+        Floor f = parse(jsonFloor);
+        f.setUsers(User.parse(jsonFloor.getJSONArray(JSON_USERS_TAG)));
+        f.setSongs(Song.parse(jsonFloor.getJSONArray(JSON_SONGS_TAG)));
+        f.setMessages(Message.parse(jsonFloor.getJSONArray(JSON_MESSAGES_TAG)));
+        f.setTheme(Theme.parse(jsonFloor.getJSONObject(JSON_THEME_TAG)));
+        return f;
     }
 
     public ArrayList<Message> getMessages()
@@ -68,10 +119,41 @@ public class Floor implements Serializable
         this.users = users;
     }
 
+    public void setTheme(Theme theme)
+    {
+        this.theme = theme;
+    }
+
+    public Theme getTheme()
+    {
+        return theme;
+    }
+
     public String getName()
     {
         return name;
     }
 
+    @Override
+    public int describeContents()
+    {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags)
+    {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeParcelable(creator, flags);
+        dest.writeTypedList(users);
+        dest.writeTypedList(songs);
+        dest.writeTypedList(messages);
+        dest.writeParcelable(theme, flags);
+    }
+
+    public int getId()
+    {
+        return id;
+    }
 }
