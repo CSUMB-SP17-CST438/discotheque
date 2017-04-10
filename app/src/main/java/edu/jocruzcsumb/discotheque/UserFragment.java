@@ -48,11 +48,8 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
                     users = floor.getUsers();
                     break;
             }
-            else{
-                users = intent.getParcelableArrayListExtra(FloorService.EVENT_USER_LIST_UPDATE);
-            }
-        }
-        }
+                 }
+
     };
     private UserFragment.UserAdapter userAdapter;
     private RecyclerView recyclerView;
@@ -71,7 +68,7 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
         return fragment;
 
     }
-    @Overide
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         // This tells the activity what LocalBroadcast Events to listen for
         IntentFilter f = new IntentFilter();
@@ -126,7 +123,9 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
         @Override
         public void onBindViewHolder(UserFragment.UserAdapter.UserViewHolder userViewHolder, int i)
         {
-            userViewHolder.userPhoto.setText(users.get(i).getPhoto())
+            //userViewHolder.userPhoto.setText(users.get(i).getPhoto());
+            //TODO set profile picture
+            //maybe setImageResource?
             userViewHolder.username.setText(users.get(i).getFirstName() + " " + users.get(i).getLastName());
         }
         @Override
