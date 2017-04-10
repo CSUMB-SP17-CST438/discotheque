@@ -187,18 +187,19 @@ class floor_Schema(ma.ModelSchema):
 	members = f.Nested(member_Schema,many=True)
 
 class floor_Schema_without_songlist(ma.Schema):
-	class Meta():
+	class Meta:
 		fields = ('floor_id','floor_name','floor_genre','floor_messages','creator_id','public', 'songlist')
 	songlist = ''
-
-
-
 
 class emailless_member(ma.Schema):
 	class Meta:
 		fields = ('username','member_FName','member_LName','member_img_url','created_floors'
 			)
 		created_floors = f.Nested(f_Schema,many=True, exclude=('floor_members'))
+
+class simple_floor_Schema(ma.Schema):
+	class Meta:
+		fields = ('floor_id','floor_name','floor_genre','creator_id')
 
 
 """*************************************************************************************************************************************
@@ -322,8 +323,14 @@ def getMemberObject(mem_id):
 def getMemberObject_by_email(email):
 	return member.query.filter_by(member_email=email).first()
 
-	
+def getPublicFloors():
+	all_floors = floor.query.filter_by(public=True).all()
+	simple_schema = simple_floor_Schema()
+	fl_list = []
+	for f in all_floors:
+		fl_list.append(simple_schema.dump(f).data)
 
+	return fl_list
 
 
 """*************************************************************************************************************************************
