@@ -5,7 +5,7 @@ client = sc.Client(client_id="8c1cf28d0d2834808a2eda6645da717b",client_secret='6
 def getSongList(g):
 	##number of results per page
 	trackList = []
-	scTracks = client.get('/tracks', genres=g, limit=40, streamable='True', track_type='original', order='created_at')
+	scTracks = client.get('/tracks', tags=g, limit=40, streamable='True', track_type='original', order='created_at')
 	i = 0
 	for t in scTracks:
 		#parse track information to what is relevant to us
@@ -34,10 +34,10 @@ def getSongURLLocation(track_id):
 	# print(track_stream.location)
 	return track_stream.location
 
-songlist = getSongList('punk')
-t = songlist[0]
-# print(getSongURLLocation(t['id']))
-# sl = add_stream_urls(songlist)
-print(songlist)
+# songlist = getSongList('punk')
+# t = songlist[0]
+# # print(getSongURLLocation(t['id']))
+# # sl = add_stream_urls(songlist)
+# print(songlist)
 
 # print(songlist)
