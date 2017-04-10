@@ -2,6 +2,7 @@ package edu.jocruzcsumb.discotheque;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,6 +18,8 @@ import static junit.framework.Assert.fail;
 
 public class Message implements Parcelable
 {
+
+	public static final String TAG = "Message";
 
 	//For JSON parsing
 	public static final String JSON_FROM_TAG = "member";
@@ -69,6 +72,7 @@ public class Message implements Parcelable
 
 	public static Message parse(JSONObject jsonMessage) throws JSONException
 	{
+		Log.d(TAG, jsonMessage.toString());
 		User author = User.parse(jsonMessage.getJSONObject(JSON_FROM_TAG));
 		String text = jsonMessage.getString(JSON_TEXT_TAG);
 		long pubTime = jsonMessage.getLong(JSON_PUB_TIME_TAG);
@@ -81,6 +85,7 @@ public class Message implements Parcelable
 	public static ArrayList<Message> parse(JSONArray a) throws JSONException
 	{
 		int arrayLength = a.length();
+		Log.d(TAG, a.toString());
 		ArrayList<Message> messageList = new ArrayList<Message>();
 		for(int i = 0; i < arrayLength; i++)
 		{

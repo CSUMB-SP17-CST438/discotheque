@@ -9,8 +9,8 @@ xmlns:tools="http://schemas.android.com/tools"
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/chat_edit_text"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -24,6 +24,7 @@ xmlns:tools="http://schemas.android.com/tools"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+
         android:text="@string/chat_room_activity_send" />
 
     <EditText

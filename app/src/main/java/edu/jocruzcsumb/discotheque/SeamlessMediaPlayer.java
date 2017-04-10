@@ -63,6 +63,15 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 		this.context = context;
 		this.songs = new ArrayList<Song>();
 
+
+		//Set up the media players
+		for(int i = 0; i < 2; i++)
+		{
+			m[i] = new MediaPlayer();
+			m[i].setOnCompletionListener(l[i]);
+            s[i]=null;
+		}
+
 		// Recieve song events
 		IntentFilter f = new IntentFilter();
 		f.addAction(EVENT_SONG_LIST_UPDATE);
@@ -72,13 +81,6 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 		LocalBroadcastManager b = LocalBroadcastManager.getInstance(context.getApplicationContext());
 		b.registerReceiver(this, f);
 
-		//Set up the media players
-		for(int i = 0; i < 2; i++)
-		{
-			m[i] = new MediaPlayer();
-			m[i].setOnCompletionListener(l[i]);
-		}
-
 		// Request the song list
 		Intent k = new Intent(EVENT_GET_SONG_LIST);
 		b.sendBroadcast(k);
@@ -86,7 +88,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 
 	private void reset(int i)
 	{
-		m[i].release();
+		//m[i].release();
 		m[i].reset();
 		m[i].setAudioStreamType(AudioManager.STREAM_MUSIC);
 		try
@@ -110,7 +112,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 
 	private void checkSongs()
 	{
-		if(s[current] != songs.get(0))
+		if(songs.size() > 0 && s[current] != songs.get(0))
 		{
 			s[current] = songs.get(0);
 			// The currently playing song has been invalidated, stop and restart player[current]
@@ -119,8 +121,9 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 			// TODO: Seek to start time
 			// m[current].seekTo();
 			m[current].start();
+            Log.d(TAG, "started playback");
 		}
-		if(s[next] != songs.get(1))
+		if(songs.size() > 1 && s[next] != songs.get(1))
 		{
 			s[next] = songs.get(1);
 			// The next song has been invalidated, reset the player[next]
@@ -131,12 +134,10 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		Log.d(TAG, "onRecieve");
-		Log.d(TAG, "intent.getAction() = " + intent.getAction());
-
 		// Upate the song list
 		if(intent.getAction().equals(EVENT_FLOOR_JOINED))
 		{
+            Log.d(TAG, "Floor Joined");
 			Floor f = intent.getParcelableExtra(EVENT_FLOOR_JOINED);
 			songs = f.getSongs();
 		}
@@ -144,6 +145,12 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 		{
 			songs = intent.getParcelableArrayListExtra(EVENT_SONG_LIST_UPDATE);
 		}
+		Log.d(TAG, "Got Song List");
+		for(Song s:songs)
+        {
+            Log.d(TAG, "Song: " + s.getName() + " - " + s.getArtist());
+            Log.d(TAG, "Url: " + s.getUrl());
+        }
 		checkSongs();
 	}
 }
