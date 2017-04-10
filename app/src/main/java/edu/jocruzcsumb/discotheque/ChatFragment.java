@@ -51,6 +51,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener
 							.equals(FloorService.EVENT_FLOOR_JOINED))
 					{
 						Floor floor = intent.getParcelableExtra(FloorService.EVENT_FLOOR_JOINED);
+						floorId = floor.getId();
 						messages = floor.getMessages();
 					}
 					else
@@ -84,11 +85,10 @@ public class ChatFragment extends Fragment implements View.OnClickListener
 	 * Returns a new instance of this fragment for the given section
 	 * number.
 	 */
-	public static ChatFragment newInstance(int floorId)
+	public static ChatFragment newInstance()
 	{
 		ChatFragment fragment = new ChatFragment();
 		Bundle args = new Bundle();
-		args.putInt(ARG_FLOOR_ID, floorId);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -105,9 +105,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener
 		// Set the activity to listen for app broadcasts with the above filter
 		LocalBroadcastManager.getInstance(this.getContext())
 				.registerReceiver(r, f);
-
-		// Get the floorid
-		floorId = getArguments().getInt(ARG_FLOOR_ID);
 
 		View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
 		Button send_chat_button = (Button) rootView.findViewById(R.id.send_button);

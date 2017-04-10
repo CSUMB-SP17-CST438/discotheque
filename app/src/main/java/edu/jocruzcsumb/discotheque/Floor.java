@@ -2,7 +2,9 @@ package edu.jocruzcsumb.discotheque;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,9 +19,9 @@ public class Floor implements Parcelable
 	public static final String TAG = "Floor";
 
     //regular parse
-    public static final String JSON_ID_TAG = "id";
-    public static final String JSON_NAME_TAG = "name";
-    public static final String JSON_CREATOR_TAG = "creator";
+    public static final String JSON_NAME_TAG = "floor_name";
+    public static final String JSON_ID_TAG = "floor_id";
+    public static final String JSON_CREATOR_TAG = "member";
 
     //Advanced parse
     public static final String JSON_SONGS_TAG = "songs";
@@ -69,14 +71,30 @@ public class Floor implements Parcelable
         }
     };
 
-    public static Floor parse(JSONObject jsonFloor) throws JSONException
-    {
-        return new Floor(
-                jsonFloor.getInt(JSON_ID_TAG),
-                jsonFloor.getString(JSON_NAME_TAG),
-                User.parse(jsonFloor.getJSONObject(JSON_CREATOR_TAG))
-        );
-    }
+	public static Floor parse(JSONObject jsonFloor) throws JSONException
+	{
+		Log.d(TAG, "Parse Floor: " + jsonFloor.toString());
+		Log.d(TAG, "Parse Floor: has tag floor: " + (jsonFloor.has("floor")?"true":"false"));
+		jsonFloor = jsonFloor.getJSONObject("floor");
+		Log.d(TAG, "Parse Floor: has tag floor_id: " + (jsonFloor.has("floor_id")?"true":"false"));
+
+		return new Floor(
+				jsonFloor.getInt(JSON_ID_TAG),
+				jsonFloor.getString(JSON_NAME_TAG),
+				User.parse(jsonFloor.getJSONObject(JSON_CREATOR_TAG))
+		);
+	}
+
+	public static ArrayList<Floor> parse(JSONArray a) throws JSONException
+	{
+		int arrayLength = a.length();
+		ArrayList<Floor> floorList = new ArrayList<Floor>();
+		for(int i = 0; i < arrayLength; i++)
+		{
+			floorList.add(parse(a.getJSONObject(i)));
+		}
+		return floorList;
+	}
 
     public Floor parseAdvanced(JSONObject jsonFloor) throws JSONException
     {

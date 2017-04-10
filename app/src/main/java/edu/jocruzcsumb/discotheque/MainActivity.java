@@ -76,17 +76,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 		final CountDownLatch l = new CountDownLatch(1);
 
+
+		//Thread for dtk silent sign in
+		final Thread t = new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if(LocalUser.silentLogin(MainActivity.this))
+				{
+					Intent k = new Intent(MainActivity.this, PickFloorActivity.class);
+					k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(k);
+					finish();
+				}
+				MainActivity.this.runOnUiThread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+					}
+				});
+			}
+		});
 		// Attempt silent sign in
 		OptionalPendingResult<GoogleSignInResult> pendingResult =
 				Auth.GoogleSignInApi.silentSignIn(googleApiClient);
 		if(pendingResult.isDone())
 		{
+			Log.d(TAG,"pendingResult.isDone()");
 			GoogleSignInResult r = pendingResult.get();
 			if(r.isSuccess())
 			{
 				// There's an immediate result available.
 				MainActivity.this.handleResult(pendingResult.get());
-				l.countDown();
+			}
+			else
+			{
+				t.start();
 			}
 		}
 		else
@@ -104,43 +132,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 						MainActivity.this.handleResult(result);
 						findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 					}
-					l.countDown();
+					else t.start();
 				}
 			});
 		}
-
-		new Thread(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				try
-				{
-					l.await();
-				}
-				catch(InterruptedException e)
-				{
-					e.printStackTrace();
-					findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-					return;
-				}
-				if(LocalUser.silentLogin(MainActivity.this))
-				{
-					Intent k = new Intent(MainActivity.this, PickFloorActivity.class);
-					k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					startActivity(k);
-					finish();
-				}
-				MainActivity.this.runOnUiThread(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-					}
-				});
-			}
-		}).start();
 
 		//google sign in button
 		SignIn = (SignInButton) findViewById(R.id.google_login_btn);

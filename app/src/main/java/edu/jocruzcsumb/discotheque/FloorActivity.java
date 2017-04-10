@@ -268,11 +268,13 @@ public class FloorActivity extends AppCompatActivity
 			switch(position)
 			{
 				case 0:
-					return ChatFragment.newInstance(floor.getId());
+					return ChatFragment.newInstance();
 				case 1:
-					return null;
+					return ChatFragment.newInstance();
 				case 2:
-					return null;
+					return ChatFragment.newInstance();
+				case 3:
+					return ChatFragment.newInstance();
 			}
 			return null;
 		}
@@ -280,7 +282,7 @@ public class FloorActivity extends AppCompatActivity
 		@Override
 		public int getCount()
 		{
-			return 3;
+			return 4;
 		}
 
 		@Override
@@ -293,6 +295,8 @@ public class FloorActivity extends AppCompatActivity
 				case 1:
 					return "Songs";
 				case 2:
+					return "Other?";
+				case 3:
 					return "Other?";
 			}
 			return null;
