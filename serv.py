@@ -153,11 +153,12 @@ def on_create(data):
 # expects keys 'floor_id', 'member_id, returns jsonarray to parse
 def on_join_floor(data):
 	print("******************TRIGGERED JOIN FLOOR ***********************")
-    floor_id = data['floor_id']
-    join_room(floor_id)
-    floor = getFloor(floor_id)
-    floor.add_member(data['member_id'])
-    socket.emit('floor joined', {'floor':floor.to_list()}, room=floor_id) 
+	# print(())
+	floor_id = data['floor_id']
+	join_room(floor_id)
+	floor = getFloor(floor_id)
+	floor.add_member(data['member_id'])
+	socket.emit('floor joined', {'floor':floor.to_list()}, room=floor_id)
     
 @socket.on('leave floor')
 def on_leave_floor(data):
