@@ -39,8 +39,9 @@ class SocketioTestCases(unittest.TestCase):
         fl_name = "floor"+str(i)
         client.emit('create floor',{'floor_name':fl_name, 'member_id':1,'is_public':True,'floor_genre':'Pop'})
         r = client.get_received()
-        print("************************create_floor**************************")
-        # print(r)
+        print("************************create_floor**************************") 
+        song = r[0]['args'][0]['floor']['songlist']
+        print(song)
         self.assertIsNotNone(r)
         
     def test_join_floor(self):
@@ -49,9 +50,9 @@ class SocketioTestCases(unittest.TestCase):
         r = client.get_received()
         print("**************************test_join_floor***********")
         # print(r)
-        song = r[0]['args'][0]['floor']['songlist'][0]['title']
-        # print("*******************songlist*******************")
-        # print(song)
+        song = r[0]['args'][0]['floor']['songlist'][0]['stream_url']
+        print("*******************songlist*******************")
+        print(song)
         self.assertIsNotNone(song)
         
     # def test_login_fb(self):

@@ -5,14 +5,17 @@ client = sc.Client(client_id="8c1cf28d0d2834808a2eda6645da717b",client_secret='6
 def getSongList(g):
 	##number of results per page
 	trackList = []
-	scTracks = client.get('/tracks', tags=g, limit=40, streamable='True', track_type='original', order='created_at')
+	scTracks = client.get('/tracks', tags=g, limit=50, streamable='True', track_type='original', order='created_at')
 	i = 0
 	for t in scTracks:
 		#parse track information to what is relevant to us
 		#returns duration in milliseconds to sync songs. 
 		username = t.user['username']
-		new_track = {'id':t.id,'title':t.title, 'creator_user':username,'track_permalink':t.permalink_url,'stream_url':"nothing yet",'artwork':t.artwork_url, 'duration':t.duration,'start_time':'0'}
+		new_track = {'id':t.id,'title':t.title, 'creator_user':username,'track_permalink':t.permalink_url,'stream_url':"",'artwork':t.artwork_url, 'duration':t.duration,'start_time':'0'}
 		trackList.append(new_track)
+
+	for x in range(0,4):
+		trackList[x]['stream_url'] = getSongURLLocation(trackList[x]['id'])
 	return trackList
 
 
@@ -23,3 +26,4 @@ def getSongURLLocation(track_id):
 	# print(track_stream.location)
 	return track_stream.location
 
+# print(getSongList("rock"))
