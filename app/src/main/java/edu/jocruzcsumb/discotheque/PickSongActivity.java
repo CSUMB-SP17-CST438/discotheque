@@ -1,7 +1,7 @@
 package edu.jocruzcsumb.discotheque;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,7 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PickSongActivity extends AppCompatActivity {
+public class PickSongActivity extends AppCompatActivity
+{
 
 	private SongList songList = new SongList();
 	private JSONArray jsonArray = null;
@@ -20,13 +21,14 @@ public class PickSongActivity extends AppCompatActivity {
 	private RVAdapter mAdapter;
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pick_song);
+	@Override
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_pick_song);
 
-        //used to change to the current song
-        TextView roomTitle = (TextView) findViewById(R.id.lister_rooms_title);
+		//used to change to the current song
+		TextView roomTitle = (TextView) findViewById(R.id.lister_rooms_title);
 //        TextView CurrentSong = (TextView) findViewById(R.id.curr_song_name_textview);
 //        TextView currentArtist = (TextView) findViewById(R.id.curr_artist_textiew);
 //        final ListView songListView = (ListView) findViewById(R.id.song_listview);
@@ -35,13 +37,13 @@ public class PickSongActivity extends AppCompatActivity {
 		LinearLayoutManager llm = new LinearLayoutManager(this);
 		mRecyleView.setLayoutManager(llm);
 		new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-				Log.d("Discotheque","starting socket thread");
+		{
+			@Override
+			public void run()
+			{
+				Log.d("Discotheque", "starting socket thread");
 				Sockets.getSocket().emit("join room", "pls");
-                Sockets.SocketWaiter waiter = new Sockets.SocketWaiter("get songs", "song list");
+				Sockets.SocketWaiter waiter = new Sockets.SocketWaiter("get songs", "song list");
 				JSONObject obj = new JSONObject();
 				try
 				{
@@ -52,15 +54,15 @@ public class PickSongActivity extends AppCompatActivity {
 					e.printStackTrace();
 				}
 				//This waits for the jsonArray to get back
-                jsonArray = waiter.getArray(obj);
+				jsonArray = waiter.getArray(obj);
 
-				if (jsonArray != null)
+				if(jsonArray != null)
 				{
 					try
 					{
 						Log.d("json array", jsonArray.toString());
 						int arrayLength = jsonArray.length();
-						for (int i = 0; i < arrayLength; i++)
+						for(int i = 0; i < arrayLength; i++)
 						{
 							JSONObject object = jsonArray.getJSONObject(i);
 							Song song = new Song();
@@ -68,7 +70,7 @@ public class PickSongActivity extends AppCompatActivity {
 							song.setArtist(object.getString("creator_user"));
 							song.setUrl(object.getString("stream_url"));
 							song.setArtworkUrl(object.getString("artwork"));
-							Log.d("Discotheque","song: "+song.getName());
+							Log.d("Discotheque", "song: " + song.getName());
 							songList.addSong(song);
 						}
 					}
@@ -91,18 +93,22 @@ public class PickSongActivity extends AppCompatActivity {
 
 					//final ArrayAdapter<String> adapter = new ArrayAdapter<String>(PickSongActivity.this, android.R.layout.simple_list_item_1, data);
 					songList.sortList();
-					mAdapter = new RVAdapter(PickSongActivity.this, songList, new CustomItemClickListener() {
+					mAdapter = new RVAdapter(PickSongActivity.this, songList, new CustomItemClickListener()
+					{
 						@Override
-						public void onItemClick(View v, int position) {
+						public void onItemClick(View v, int position)
+						{
 							JSONObject obj = new JSONObject();
 							JSONObject tempObject = new JSONObject();
 							//Toast.makeText(PickSongActivity.this, position, Toast.LENGTH_SHORT).show();
 							Song song = songList.getSong(position);
 							try
 							{
-								for(int i = 0; i < jsonArray.length(); i++){
+								for(int i = 0; i < jsonArray.length(); i++)
+								{
 									tempObject = jsonArray.getJSONObject(i);
-									if(tempObject.getString("title").equals(song.getName())){
+									if(tempObject.getString("title").equals(song.getName()))
+									{
 										break;
 									}
 								}
@@ -113,14 +119,16 @@ public class PickSongActivity extends AppCompatActivity {
 							{
 								e.printStackTrace();
 							}
-							Sockets.getSocket().emit("song picked",obj);
+							Sockets.getSocket().emit("song picked", obj);
 							finish();
 
 						}
 					});
-					runOnUiThread(new Runnable() {
+					runOnUiThread(new Runnable()
+					{
 						@Override
-						public void run() {
+						public void run()
+						{
 
 							//listView.setAdapter(adapter);
 							mRecyleView.setAdapter(mAdapter);
@@ -156,7 +164,7 @@ public class PickSongActivity extends AppCompatActivity {
 				{
 					Log.d("Discotheque", "JSON was null");
 				}
-            }
-        }).start();
-    }
+			}
+		}).start();
+	}
 }

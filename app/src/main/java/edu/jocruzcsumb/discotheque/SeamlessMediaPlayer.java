@@ -57,6 +57,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 			};
 	private Context context;
 	private ArrayList<Song> songs = null;
+
 	public SeamlessMediaPlayer(Context context)
 	{
 		this.context = context;
