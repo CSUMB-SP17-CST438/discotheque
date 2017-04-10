@@ -33,11 +33,12 @@
         android:orientation="vertical"
 
         />
-
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/room_listview"
         android:layout_width="match_parent"
-        android:layout_height="210dp" />
+        android:layout_height="210dp"
+         />
+
 
     <TextView
         android:id="@+id/temp_button"
