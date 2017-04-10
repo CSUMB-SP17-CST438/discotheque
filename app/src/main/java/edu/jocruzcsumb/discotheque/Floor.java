@@ -16,8 +16,9 @@ import static junit.framework.Assert.fail;
 
 public class Floor implements Parcelable
 {
-    //regular parse
     public static final String TAG = "Floor";
+
+    //regular parse
     public static final String JSON_ID_TAG = "id";
     public static final String JSON_NAME_TAG = "name";
     public static final String JSON_CREATOR_TAG = "creator";

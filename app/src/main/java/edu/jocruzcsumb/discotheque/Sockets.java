@@ -22,7 +22,7 @@ public class Sockets
 	private static Socket socket = null;
 
 	// TODO: Set to 0 for live server
-	private static final int SELECTED_SERVER = 0;
+	private static final int SELECTED_SERVER = 1;
 	// Append to this list if you want to run a different server :D
 	private static final String[] SERVERS = {
 			"https://disco-theque.herokuapp.com",
@@ -63,7 +63,7 @@ public class Sockets
 
     public static class SocketWaiter implements Emitter.Listener
 	{
-		private static final long TIMEOUT = 8L;
+		private static final long TIMEOUT = 20L;
         private boolean success;
         private CountDownLatch socketLatch;
         private String signal, event;
@@ -118,8 +118,6 @@ public class Sockets
         {
 			return getObj(null);
         }
-
-
 
 		public JSONArray getArray(JSONObject params)
 		{

@@ -119,7 +119,6 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
             // TODO: Seek to start time
             // m[current].seekTo();
             m[current].start();
-
         }
         if(s[next] != songs.get(1))
         {
@@ -127,7 +126,6 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
             // The next song has been invalidated, reset the player[next]
             reset(next);
         }
-
     }
 
     @Override

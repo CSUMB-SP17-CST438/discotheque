@@ -432,24 +432,8 @@ public class FloorService extends IntentService
         //Set up the mediaplayer
 
         final MediaPlayer m1 = new MediaPlayer(), m2 = new MediaPlayer();
-        CountDownLatch l1 = new CountDownLatch(1), l2 = new CountDownLatch(1);
-        new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                //TODO: play media in a loop, taking turns with m1 and m2
-            }
-        }).start();
 
-        new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                //TODO: play media in a loop, taking turns with m1 and m2
-            }
-        }).start();
+
 
         try
         {
