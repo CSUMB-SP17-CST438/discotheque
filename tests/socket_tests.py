@@ -30,7 +30,7 @@ class SocketioTestCases(unittest.TestCase):
         client.emit('new message', {'floor':1,'from':2,'message':'this is a test message from socket_tests.'})
         r = client.get_received()
         # response_message = r
-        print(r)
+        # print(r)
         self.assertIsNotNone(r)
 
     def test_create_floor(self):
@@ -38,7 +38,7 @@ class SocketioTestCases(unittest.TestCase):
         client.emit('create floor',{'floor_name':"new floor name", 'member_id':1,'is_public':True,'floor_genre':'pop'})
         r = client.get_received()
         print("************************create_floor**************************")
-        print(r)
+        # print(r)
         self.assertIsNotNone(r)
         
     def test_join_floor(self):
@@ -46,8 +46,11 @@ class SocketioTestCases(unittest.TestCase):
         client.emit('join floor',{'floor_id':4, 'member_id':1})
         r = client.get_received()
         print("**************************test_join_floor***********")
-        print(r)
-        self.assertIsNotNone(r)
+        # print(r)
+        song = r[0]['args'][0]['floor']['songlist'][0]['title']
+        # print("*******************songlist*******************")
+        # print(song)
+        self.assertIsNotNone(song)
         
     # def test_login_fb(self):
     #   client = serv.socket.test_client(serv.app)

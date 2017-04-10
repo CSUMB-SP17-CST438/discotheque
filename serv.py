@@ -153,11 +153,16 @@ def on_create(data):
 # expects keys 'floor_id', 'member_id, returns jsonarray to parse
 def on_join_floor(data):
 	print("******************TRIGGERED JOIN FLOOR ***********************")
-    floor_id = data['floor_id']
-    join_room(floor_id)
-    floor = getFloor(floor_id)
-    floor.add_member(data['member_id'])
-    socket.emit('floor joined', {'floor':floor.to_list()}, room=floor_id) 
+	print("floor_id:" )
+	print(data['floor_id'])
+	print("member_id:")
+	print(data['member_id'])
+	floor_id = data['floor_id']
+	join_room(floor_id)
+	floor_to_join = getFloor(floor_id)
+	floor_to_join.add_member(data['member_id'])
+	print(floor_to_join.to_list())
+	socket.emit('floor joined', {'floor':floor_to_join.to_list()}, room=request.sid)
     
 @socket.on('leave floor')
 def on_leave_floor(data):
@@ -165,7 +170,7 @@ def on_leave_floor(data):
     current_floor.rm_member(data['member_id'])
     current_floor = getFloor(data['floor_id'])
     leave_room(data['floor_id'])
-    socket.emit('member left', {'floor':current_floor.to_list()})
+    socket.emit('member left', {'floor':current_floor.to_list()}, room=request.sid)
 
     
 

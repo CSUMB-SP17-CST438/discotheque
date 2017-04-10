@@ -12,12 +12,14 @@ from flask_marshmallow import Marshmallow
 from marshmallow import fields as f
 from sqlalchemy import orm
 from sqlalchemy import desc
-
+import jsonpickle
 # serv.app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL','postgresql://jcrzr:anchor99@localhost/postgres')
 # serv.app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
 
 db = flask_sqlalchemy.SQLAlchemy()
 ma = Marshmallow()
+pickl = jsonpickle.pickler.Pickler()
+unpickl = jsonpickle.unpickler.Unpickler()
 
 floor_members = db.Table('floor_members',
 	db.Column('floor_id', db.Integer, db.ForeignKey('floor.floor_id')),
@@ -65,10 +67,19 @@ class floor(db.Model):
 	def to_list(self):
 		fl_sc = floor_Schema()
 		fl_ = fl_sc.dump(self)
+		creator = getMemberObject(self.creator_id)
+		fl_[0].pop('member',None)
+		cr = creator.to_simple_list()
+		cr.pop('created_floors',None)
+		fl_[0]['creator'] = cr
+		fl_[0]['floor_members'] = getFloorMembers(self.floor_id)
+		fl_[0]['floor_messages'] = getFloorMessages(self.floor_id)
+		sl = unpickl.restore(self.songlist)
+		fl_[0]['songlist'] = sl
 		return fl_[0]
 	
 	def set_songlist(self,songs):
-		self.songlist = songs
+		self.songlist = pickl.flatten(songs)
 		db.session.commit()
 
 	def to_list_with_songlist(self):
@@ -301,11 +312,14 @@ def getFloorMessages(floor_id):
 
 
 def getFloorMembers(floor_id):
-	membs = floor.query.get(floor_id).floor_members.order_by(member.username)
+	membs = floor.query.get(floor_id).floor_members
 	memb_schem = member_Schema()
 	floor_members = []
+	count = 0
 	for m in membs:
-		members.append(memb_schem.dump(m).data)
+		floor_members.append(memb_schem.dump(m).data)
+		floor_members[count].pop('created_floors',None)
+		count+=1
 	return floor_members
 
 def getMember(email):
@@ -329,7 +343,6 @@ def getPublicFloors():
 	fl_list = []
 	for f in all_floors:
 		fl_list.append(simple_schema.dump(f).data)
-
 	return fl_list
 
 
