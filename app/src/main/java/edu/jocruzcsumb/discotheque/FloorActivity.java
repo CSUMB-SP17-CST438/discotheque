@@ -26,6 +26,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STARTED;
+import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STOPPED;
+
 public class FloorActivity extends AppCompatActivity
 {
 
@@ -44,36 +47,51 @@ public class FloorActivity extends AppCompatActivity
 			Log.d(TAG, "intent.getAction() = " + intent.getAction());
 			switch(intent.getAction())
 			{
-				case FloorService.EVENT_FLOOR_JOINED:
-					floor = intent.getParcelableExtra(FloorService.EVENT_FLOOR_JOINED);
-					//TODO: Update the UI
+                case SeamlessMediaPlayer.EVENT_SONG_STARTED:
+                    Song s = intent.getParcelableExtra(EVENT_SONG_STARTED);
+                    Log.d(TAG, EVENT_SONG_STARTED + ": " + s.getName() + " - " + s.getArtist());
+                    //TODO: Update the UI
 
 
-					break;
+                    break;
+                case EVENT_SONG_STOPPED:
+                    Song x = intent.getParcelableExtra(EVENT_SONG_STOPPED);
+
+                    //TODO: Update the UI
+
+
+                    break;
+                case FloorService.EVENT_FLOOR_JOINED:
+                    floor = intent.getParcelableExtra(FloorService.EVENT_FLOOR_JOINED);
+                    //TODO: Update the UI
+
+
+                    break;
 				case FloorService.EVENT_SONG_LIST_UPDATE:
 					ArrayList<Song> songs = intent.getParcelableArrayListExtra(FloorService.EVENT_SONG_LIST_UPDATE);
-					floor.setSongs(songs);
+					if(floor != null) floor.setSongs(songs);
 					//TODO: Update the UI
 
 
 					break;
 				case FloorService.EVENT_USER_LIST_UPDATE:
 					ArrayList<User> users = intent.getParcelableArrayListExtra(FloorService.EVENT_USER_LIST_UPDATE);
-					floor.setUsers(users);
+                    if(floor != null) floor.setUsers(users);
 					//TODO: Update the UI
 
 
 					break;
 				case FloorService.EVENT_MESSAGE_LIST_UPDATE:
 					ArrayList<Message> messages = intent.getParcelableArrayListExtra(FloorService.EVENT_MESSAGE_LIST_UPDATE);
-					floor.setMessages(messages);
+                    if(floor != null) floor.setMessages(messages);
 					//TODO: Update the UI
 
 
 					break;
 				case FloorService.EVENT_MESSAGE_ADD:
 					Message m = intent.getParcelableExtra(FloorService.EVENT_MESSAGE_ADD);
-					floor.getMessages()
+                    if(floor != null)
+                        floor.getMessages()
 							.add(m);
 					//TODO: Update the UI
 
@@ -81,7 +99,8 @@ public class FloorActivity extends AppCompatActivity
 					break;
 				case FloorService.EVENT_USER_ADD:
 					User u = intent.getParcelableExtra(FloorService.EVENT_USER_ADD);
-					floor.getUsers()
+                    if(floor != null)
+                        floor.getUsers()
 							.add(u);
 					//TODO: Update the UI
 
@@ -89,7 +108,8 @@ public class FloorActivity extends AppCompatActivity
 					break;
 				case FloorService.EVENT_USER_REMOVE:
 					User r = intent.getParcelableExtra(FloorService.EVENT_USER_REMOVE);
-					floor.getUsers()
+                    if(floor != null)
+                        floor.getUsers()
 							.remove(r);
 					//TODO: Update the UI
 

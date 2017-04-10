@@ -91,19 +91,19 @@ public class FloorService extends IntentService
 			{
                 case FloorService.EVENT_GET_FLOOR:
                     Log.d(TAG, EVENT_GET_FLOOR);
-                    broadcast(EVENT_FLOOR_JOINED, floor);
+                    if(floor != null) broadcast(EVENT_FLOOR_JOINED, floor);
                     break;
                 case FloorService.EVENT_GET_SONG_LIST:
                     Log.d(TAG, EVENT_GET_SONG_LIST);
-                    broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
+                    if(floor != null) broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
                     break;
 				case FloorService.EVENT_GET_USER_LIST:
 					Log.d(TAG, EVENT_GET_USER_LIST);
-					broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
+                    if(floor != null) broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
 					break;
 				case FloorService.EVENT_GET_MESSAGE_LIST:
 					Log.d(TAG, EVENT_GET_USER_LIST);
-					broadcast(EVENT_MESSAGE_LIST_UPDATE, floor.getMessages());
+                    if(floor != null) broadcast(EVENT_MESSAGE_LIST_UPDATE, floor.getMessages());
 					break;
 				case FloorService.EVENT_MESSAGE_SEND:
 					Log.d(TAG, EVENT_MESSAGE_SEND);
@@ -452,6 +452,7 @@ public class FloorService extends IntentService
         Log.d(TAG, "Starting seamless player");
         SeamlessMediaPlayer seamlessMediaPlayer = new SeamlessMediaPlayer(this);
 
+        Log.d(TAG, EVENT_FLOOR_JOINED);
 		broadcast(EVENT_FLOOR_JOINED, floor);
 
 

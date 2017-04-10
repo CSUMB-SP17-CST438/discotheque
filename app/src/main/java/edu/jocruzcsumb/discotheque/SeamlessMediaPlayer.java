@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -26,6 +27,9 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 	private MediaPlayer[] m = new MediaPlayer[2];
 	private Song[] s = new Song[2];
 
+    public static final String EVENT_SONG_STARTED = "song started";
+    public static final String EVENT_SONG_STOPPED = "song stopped";
+
 	private int current = 0;
 	private int next = 1;
 
@@ -39,6 +43,9 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 						public void onCompletion(MediaPlayer mp)
 						{
 							m[1].start();
+                            Intent k = new Intent(EVENT_SONG_STARTED);
+                            k.putExtra(EVENT_SONG_STARTED, s[1]);
+                            LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(k);
 							reset(0);
 							swap();
 
@@ -50,6 +57,9 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 						public void onCompletion(MediaPlayer mp)
 						{
 							m[0].start();
+                            Intent k = new Intent(EVENT_SONG_STARTED);
+                            k.putExtra(EVENT_SONG_STARTED, s[0]);
+                            LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(k);
 							reset(1);
 							swap();
 						}
