@@ -20,7 +20,9 @@ public class Song implements Comparable<Song>, Parcelable
 	public static final String JSON_ARTIST_TAG = "creator_user";
 	public static final String JSON_STREAM_URL_TAG = "stream_url";
 	public static final String JSON_ARTWORK_TAG = "artwork";
-	public static final String JSON_RANDOM_TAG = "random";
+	public static final String JSON_CHOOSEN_BY_TAG = "random";
+
+	public static final String JSON_START_TIME_TAG = "start_time";
 
 	public static final Parcelable.Creator<Song> CREATOR = new Parcelable.Creator<Song>()
 	{
@@ -43,23 +45,19 @@ public class Song implements Comparable<Song>, Parcelable
 	private String artist = null;
 	private String streamUrl = null;
 	private String artworkUrl = null;
-	// This tells us whether the song was picked by a user, or randomized by the server.
-	// If a song is picked by a user, it should be moved just above the first randomized song in the list
-	private boolean randomized;
+	// This tells us whether the song was picked by a user, or chosenBy by the server.
+	// If a song is picked by a user, it should be moved just above the first chosenBy song in the list
+	private String chosenBy;
+	private long startTime;
 
-	public Song()
+	public Song(String title, String artist, String streamUrl, String artworkUrl, String chosenBy, long startTime)
 	{
-		randomized = true;
-	}
-
-	public Song(String title, String artist, String streamUrl, String artworkUrl, boolean randomized)
-	{
-		this();
 		this.title = title;
 		this.artist = artist;
 		this.streamUrl = streamUrl;
 		this.artworkUrl = artworkUrl;
-		this.randomized = randomized;
+		this.chosenBy = chosenBy;
+		this.startTime = startTime;
 	}
 
 	private Song(Parcel in)
@@ -68,17 +66,20 @@ public class Song implements Comparable<Song>, Parcelable
 		artist = in.readString();
 		streamUrl = in.readString();
 		artworkUrl = in.readString();
-		randomized = in.readInt() == 1;
+		chosenBy = in.readString();
+		startTime = in.readLong();
 	}
 
 	public static Song parse(JSONObject jsonSong) throws JSONException
 	{
+		long s = (jsonSong.has(JSON_START_TIME_TAG)? jsonSong.getLong(JSON_START_TIME_TAG) : 0);
 		return new Song(
 				jsonSong.getString(JSON_TITLE_TAG),
 				jsonSong.getString(JSON_ARTIST_TAG),
 				jsonSong.getString(JSON_STREAM_URL_TAG),
 				jsonSong.getString(JSON_ARTWORK_TAG),
-				jsonSong.getBoolean(JSON_RANDOM_TAG)
+				jsonSong.getString(JSON_CHOOSEN_BY_TAG),
+				s
 		);
 	}
 
@@ -93,14 +94,9 @@ public class Song implements Comparable<Song>, Parcelable
 		return songList;
 	}
 
-	public boolean getIsUserPicked()
+	public String getChosenBy()
 	{
-		return !randomized;
-	}
-
-	public boolean getIsRandomized()
-	{
-		return randomized;
+		return chosenBy;
 	}
 
 	public String getArtworkUrl()
@@ -172,6 +168,12 @@ public class Song implements Comparable<Song>, Parcelable
 		dest.writeString(artist);
 		dest.writeString(streamUrl);
 		dest.writeString(artworkUrl);
-		dest.writeInt(randomized? 1 : 0);
+		dest.writeString(chosenBy);
+		dest.writeLong(startTime);
+	}
+
+	public long getStartTime()
+	{
+		return startTime;
 	}
 }

@@ -66,7 +66,7 @@ public class FloorService extends IntentService
 
 	// When the server acknowledges that the client has joined the floor
 	// This event also contains the entire floor object according to Ryan
-	public static final String EVENT_FLOOR_JOINED = ""; //TODO
+	public static final String EVENT_FLOOR_JOINED = "floor joined"; //TODO
 
 	// The action that is sent to start the FloorService
 	private static final String ACTION_JOIN_FLOOR = "edu.jocruzcsumb.discotheque.action.JOINFLOOR";
