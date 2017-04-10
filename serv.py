@@ -81,7 +81,7 @@ def on_login(data):
         mem_found = memberExists_by_email(email)
         print(mem_found)
         if mem_found:
-            mem = getMember(email)
+            mem = getMemberObject_by_email(email)
             socket.emit("login status", userEmit(mem), room=request.sid)
         else:
             new_mem = registerMember("",fname,lname,email,link)
@@ -102,7 +102,7 @@ def on_login(data):
         mem_found = memberExists_by_email(email)
         print(mem_found)
         if mem_found:
-            mem = getMember(email)
+            mem = getMemberObject_by_email(email)
             socket.emit("login status", userEmit(mem), room=request.sid)
         else:
             new_mem = registerMember("",fname,lname,email,link)
@@ -138,8 +138,8 @@ def on_create(data):
     genre = data['floor_genre']
     songs = ds.getSongList(genre)
     new_floor.set_songlist(songs)
-    updated_floor = getFloor(new_floor)
-    socket.emit('floor created', {'floor':new_floor.to_list},room=new_floor.floor_id)
+    updated_floor = getFloor(new_floor.floor_id)
+    socket.emit('floor created', {'floor':updated_floor.to_list()},room=new_floor.floor_id)
 
 
 @socket.on('join floor')
@@ -150,7 +150,7 @@ def on_join_floor(data):
     join_room(floor_id)
     floor = getFloor(floor_id)
     floor.add_member(data['member_id'])
-    socket.emit('member joined', {'floor':floor.to_list()}, room=floor_id) 
+    socket.emit('floor joined', {'floor':floor.to_list()}, room=floor_id) 
     
 @socket.on('leave floor')
 def on_leave_floor(data):
@@ -162,8 +162,7 @@ def on_leave_floor(data):
 
     
 
-def userEmit(FLAG, member):
- 	if flag ==1:
+def userEmit(member):
  		return {'authorized': 1,'email': member.email, user:member.to_simple_list}
 
 

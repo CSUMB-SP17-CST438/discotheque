@@ -4,6 +4,7 @@ import discoSounds as ds
 from schema import *
 import random
 import serv
+from schema import *
 class sc_test(unittest.TestCase):
 	db.app = serv.app
 
@@ -31,6 +32,29 @@ class sc_test(unittest.TestCase):
 		# print(messages)
 		# print(messages[0])
 		self.assertIsNotNone(messages)
+
+	def test_get_user(self):
+		us = member.query.get(1)
+		usl = us.to_simple_list()
+		print(usl)
+		self.assertIsNotNone(us.to_simple_list())
+
+ 	
+	def test_get_songlist(self):
+		db.app = serv.app
+		floor1 = floor.query.get(1)
+		print("foor:")
+		print(floor1)
+		sl = ds.getSongList("punk")
+		floor1.set_songlist(sl)
+		floorRefresh = floor.query.get(1)
+		print(floorRefresh.songlist)
+		solist = floorRefresh.songlist
+		print("songlist")
+		print(solist[0])
+		self.assertIsNotNone(floorRefresh.songlist)
+
+	
 
 	# def test_user_by_email(self):
 	# 	member = db.memberExists_by_email('thisiaanemail@56735')
