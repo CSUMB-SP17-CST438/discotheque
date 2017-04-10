@@ -51,6 +51,7 @@ public class SongFragment extends Fragment
                     .equals(FloorService.EVENT_FLOOR_JOINED))
             {
                 Floor floor = intent.getParcelableExtra(FloorService.EVENT_FLOOR_JOINED);
+                floorId = floor.getId();
                 songs = floor.getSongs();
             }
             else
@@ -85,11 +86,10 @@ public class SongFragment extends Fragment
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static SongFragment newInstance(int floorId)
+    public static SongFragment newInstance()
     {
         SongFragment fragment = new SongFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_FLOOR_ID, floorId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -104,9 +104,6 @@ public class SongFragment extends Fragment
         // Set the activity to listen for app broadcasts with the above filter
         LocalBroadcastManager.getInstance(this.getContext())
                 .registerReceiver(r, f);
-
-        // Get the floorid
-        floorId = getArguments().getInt(ARG_FLOOR_ID);
 
         View rootView = inflater.inflate(R.layout.fragment_song, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv);

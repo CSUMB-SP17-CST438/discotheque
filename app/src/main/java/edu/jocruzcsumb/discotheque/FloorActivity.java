@@ -270,7 +270,7 @@ public class FloorActivity extends AppCompatActivity
 				case 0:
 					return ChatFragment.newInstance();
 				case 1:
-					return SongFragment.newInstance(floor.getId());
+					return SongFragment.newInstance();
 				case 2:
 					return ChatFragment.newInstance();
 				case 3:
