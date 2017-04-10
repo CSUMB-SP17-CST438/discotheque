@@ -70,6 +70,13 @@ class floor(db.Model):
 		cr = creator.to_simple_list()
 		cr.pop('created_floors',None)
 		fl_[0]['creator'] = cr
+		fl_[0]['floor_members'] = getFloorMembers(self.floor_id)
+		members = []
+		# print(self.floor_members)
+		# for i in self.floor_members:
+		# 	mem = getMemberObject(i)
+		# 	members.append(mem.to_simple_list())
+		fl_[0]['floor_messages'] = getFloorMessages(self.floor_id)
 		return fl_[0]
 	
 	def set_songlist(self,songs):
@@ -306,11 +313,14 @@ def getFloorMessages(floor_id):
 
 
 def getFloorMembers(floor_id):
-	membs = floor.query.get(floor_id).floor_members.order_by(member.username)
+	membs = floor.query.get(floor_id).floor_members
 	memb_schem = member_Schema()
 	floor_members = []
+	count = 0
 	for m in membs:
-		members.append(memb_schem.dump(m).data)
+		floor_members.append(memb_schem.dump(m).data)
+		floor_members[count].pop('created_floors',None)
+		count+=1
 	return floor_members
 
 def getMember(email):
@@ -334,7 +344,6 @@ def getPublicFloors():
 	fl_list = []
 	for f in all_floors:
 		fl_list.append(simple_schema.dump(f).data)
-
 	return fl_list
 
 
