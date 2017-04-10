@@ -161,7 +161,7 @@ def on_join_floor(data):
 	join_room(floor_id)
 	floor_to_join = getFloor(floor_id)
 	floor_to_join.add_member(data['member_id'])
-	print()
+	print(floor_to_join.to_list())
 	socket.emit('floor joined', {'floor':floor_to_join.to_list()}, room=floor_id)
     
 @socket.on('leave floor')
