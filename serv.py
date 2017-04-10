@@ -81,7 +81,7 @@ def on_login(data):
         mem_found = memberExists_by_email(email)
         print(mem_found)
         if mem_found:
-            mem = getMember(email)
+            mem = getMemberObject(email)
             socket.emit("login status", userEmit(mem), room=request.sid)
         else:
             new_mem = registerMember("",fname,lname,email,link)
@@ -102,7 +102,7 @@ def on_login(data):
         mem_found = memberExists_by_email(email)
         print(mem_found)
         if mem_found:
-            mem = getMember(email)
+            mem = getMemberObject(email)
             socket.emit("login status", userEmit(mem), room=request.sid)
         else:
             new_mem = registerMember("",fname,lname,email,link)
