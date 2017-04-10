@@ -33,22 +33,19 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
     private static final String ARG_FLOOR_ID = "section_number";
     private static ArrayList<User> users = null;
     // EVENTS are recieved here.
-    BroadcastReceiver r = new BroadcastReceiver()
-    {
+    BroadcastReceiver r = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent)
-        {
+        public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "onRecieve");
             Log.d(TAG, "intent.getAction() = " + intent.getAction());
-            switch(intent.getAction())
-            {
+            switch (intent.getAction()) {
                 case FloorService.EVENT_GET_USER_LIST:
-                //get all users
+                    //get all users
                     Floor floor = intent.getParcelableExtra(FloorService.EVENT_FLOOR_JOINED);
                     users = floor.getUsers();
                     break;
             }
-                 }
+        }
 
     };
     private UserFragment.UserAdapter userAdapter;
@@ -57,10 +54,11 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
     private ImageView userPhoto;
     private TextView username;
 
-    public UserFragment(){
+    public UserFragment() {
 
     }
-    public static UserFragment newInstance(int floorId){
+
+    public static UserFragment newInstance(int floorId) {
         UserFragment fragment = new UserFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_FLOOR_ID, floorId);
@@ -68,8 +66,9 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
         return fragment;
 
     }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // This tells the activity what LocalBroadcast Events to listen for
         IntentFilter f = new IntentFilter();
         f.addAction(FloorService.EVENT_GET_USER_LIST);
@@ -90,57 +89,53 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
 
 
     }
+
     @Override
-    public void onClick(View v)
-    {
+    public void onClick(View v) {
         //TODO: show profile'
 
-   }
-    public class UserAdapter extends RecyclerView.Adapter<UserFragment.UserAdapter.UserViewHolder>
-    {
+    }
+
+    public class UserAdapter extends RecyclerView.Adapter<UserFragment.UserAdapter.UserViewHolder> {
         Context mContext;
         ArrayList<User> users = null;
 
-        UserAdapter(Context mContext, ArrayList<User> users)
-        {
+        UserAdapter(Context mContext, ArrayList<User> users) {
             this.users = users;
             this.mContext = mContext;
         }
-        public int getItemCount()
-        {
+
+        public int getItemCount() {
             return users.size();
         }
 
         @Override
-        public UserFragment.UserAdapter.UserViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
-        {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.activity_user_list, viewGroup, false);
+        public UserFragment.UserAdapter.UserViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.activity_user, viewGroup, false);
             UserFragment.UserAdapter.UserViewHolder svh = new UserFragment.UserAdapter.UserViewHolder(v);
             return svh;
         }
 
 
         @Override
-        public void onBindViewHolder(UserFragment.UserAdapter.UserViewHolder userViewHolder, int i)
-        {
+        public void onBindViewHolder(UserFragment.UserAdapter.UserViewHolder userViewHolder, int i) {
             //userViewHolder.userPhoto.setText(users.get(i).getPhoto());
             //TODO set profile picture
             //maybe setImageResource?
             userViewHolder.username.setText(users.get(i).getFirstName() + " " + users.get(i).getLastName());
         }
+
         @Override
-        public void onAttachedToRecyclerView(RecyclerView recyclerView)
-        {
+        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
             super.onAttachedToRecyclerView(recyclerView);
         }
-        public class UserViewHolder extends RecyclerView.ViewHolder
-        {
+
+        public class UserViewHolder extends RecyclerView.ViewHolder {
             CardView cv;
             TextView username;
             ImageView userPhoto;
 
-            UserViewHolder(View itemView)
-            {
+            UserViewHolder(View itemView) {
                 super(itemView);
                 cv = (CardView) itemView.findViewById(R.id.chatCardView);
                 username = (TextView) itemView.findViewById(R.id.username);
@@ -152,3 +147,4 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
 
 
     }
+}
