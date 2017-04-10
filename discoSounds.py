@@ -11,20 +11,9 @@ def getSongList(g):
 		#parse track information to what is relevant to us
 		#returns duration in milliseconds to sync songs. 
 		username = t.user['username']
-		# stream = client.get(t.stream_url,allow_redirects=False).location
 		new_track = {'id':t.id,'title':t.title, 'creator_user':username,'track_permalink':t.permalink_url,'stream_url':"nothing yet",'artwork':t.artwork_url, 'duration':t.duration,'start_time':'0'}
 		trackList.append(new_track)
-	for x in range(0,4):
-		streamLoc = getSongURLLocation(trackList[x]['id'])
-		trackList[x]['stream_url'] = streamLoc
 	return trackList
-
-def add_stream_urls(songlist):
-	for x in range(0,6):
-		streamLoc = getSongURLLocation(songlist[x]['id'])
-		songlist[x]['stream_url'] = streamLoc
-	return songlist
-
 
 
 def getSongURLLocation(track_id):
@@ -34,10 +23,7 @@ def getSongURLLocation(track_id):
 	# print(track_stream.location)
 	return track_stream.location
 
-songlist = getSongList('punk')
-t = songlist[0]
-# print(getSongURLLocation(t['id']))
-# sl = add_stream_urls(songlist)
-print(songlist)
-
+# songlist = getSongList('punk')
+# t = songlist[0]
+# getSongURLLocation(t['id'])
 # print(songlist)
