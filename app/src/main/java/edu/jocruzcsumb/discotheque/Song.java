@@ -2,6 +2,7 @@ package edu.jocruzcsumb.discotheque;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,11 +17,13 @@ import java.util.ArrayList;
 public class Song implements Comparable<Song>, Parcelable
 {
 
+	public static final String TAG = "Song";
+
 	public static final String JSON_TITLE_TAG = "title";
 	public static final String JSON_ARTIST_TAG = "creator_user";
 	public static final String JSON_STREAM_URL_TAG = "stream_url";
 	public static final String JSON_ARTWORK_TAG = "artwork";
-	public static final String JSON_CHOOSEN_BY_TAG = "random";
+	public static final String JSON_CHOSEN_BY_TAG = "random";
 
 	public static final String JSON_START_TIME_TAG = "start_time";
 
@@ -72,19 +75,22 @@ public class Song implements Comparable<Song>, Parcelable
 
 	public static Song parse(JSONObject jsonSong) throws JSONException
 	{
+		Log.d(TAG, jsonSong.toString());
 		long s = (jsonSong.has(JSON_START_TIME_TAG)? jsonSong.getLong(JSON_START_TIME_TAG) : 0);
+        String c = (jsonSong.has(JSON_CHOSEN_BY_TAG)?jsonSong.getString(JSON_CHOSEN_BY_TAG):"server");
 		return new Song(
 				jsonSong.getString(JSON_TITLE_TAG),
 				jsonSong.getString(JSON_ARTIST_TAG),
 				jsonSong.getString(JSON_STREAM_URL_TAG),
 				jsonSong.getString(JSON_ARTWORK_TAG),
-				jsonSong.getString(JSON_CHOOSEN_BY_TAG),
+				c,
 				s
 		);
 	}
 
 	public static ArrayList<Song> parse(JSONArray a) throws JSONException
 	{
+		Log.d(TAG, a.toString());
 		int arrayLength = a.length();
 		ArrayList<Song> songList = new ArrayList<Song>();
 		for(int i = 0; i < arrayLength; i++)

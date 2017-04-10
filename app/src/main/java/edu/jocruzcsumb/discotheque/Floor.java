@@ -24,9 +24,9 @@ public class Floor implements Parcelable
     public static final String JSON_CREATOR_TAG = "creator";
 
     //Advanced parse
-    public static final String JSON_SONGS_TAG = "songs";
-    public static final String JSON_USERS_TAG = "users";
-    public static final String JSON_MESSAGES_TAG = "messages";
+    public static final String JSON_SONGS_TAG = "songlist";
+    public static final String JSON_USERS_TAG = "floor_members";
+    public static final String JSON_MESSAGES_TAG = "floor_messages";
     public static final String JSON_THEME_TAG = "theme";
 
 
@@ -74,8 +74,9 @@ public class Floor implements Parcelable
 	public static Floor parse(JSONObject jsonFloor) throws JSONException
 	{
 		Log.d(TAG, "Parse Floor: " + jsonFloor.toString());
-		Log.d(TAG, "Parse Floor: has tag floor: " + (jsonFloor.has("floor")?"true":"false"));
-		jsonFloor = jsonFloor.getJSONObject("floor");
+		boolean sub = (jsonFloor.has("floor"));
+		Log.d(TAG, "Parse Floor: has tag floor: " + (sub?"true":"false"));
+		if(sub) jsonFloor = jsonFloor.getJSONObject("floor");
 		Log.d(TAG, "Parse Floor: has tag floor_id: " + (jsonFloor.has("floor_id")?"true":"false"));
 
 		return new Floor(
@@ -96,13 +97,15 @@ public class Floor implements Parcelable
 		return floorList;
 	}
 
-    public Floor parseAdvanced(JSONObject jsonFloor) throws JSONException
+    public static Floor parseAdvanced(JSONObject jsonFloor) throws JSONException
     {
+		boolean sub = (jsonFloor.has("floor"));
+	    if(sub) jsonFloor = jsonFloor.getJSONObject("floor");
         Floor f = parse(jsonFloor);
         f.setUsers(User.parse(jsonFloor.getJSONArray(JSON_USERS_TAG)));
-        f.setSongs(Song.parse(jsonFloor.getJSONArray(JSON_SONGS_TAG)));
+        f.setSongs(Song.parse(new JSONArray(jsonFloor.getString(JSON_SONGS_TAG))));
         f.setMessages(Message.parse(jsonFloor.getJSONArray(JSON_MESSAGES_TAG)));
-        f.setTheme(Theme.parse(jsonFloor.getJSONObject(JSON_THEME_TAG)));
+        //f.setTheme(Theme.parse(jsonFloor.getJSONObject(JSON_THEME_TAG)));
         return f;
     }
 

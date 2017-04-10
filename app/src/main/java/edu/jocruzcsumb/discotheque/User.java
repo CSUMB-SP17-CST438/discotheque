@@ -2,6 +2,7 @@ package edu.jocruzcsumb.discotheque;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 
 public class User implements Parcelable
 {
+	public static final String TAG = "Member";
 
 	//For json parsing
 	public static final String JSON_USERNAME_TAG = "username";
@@ -92,6 +94,7 @@ public class User implements Parcelable
 
 	protected static User parse(JSONObject jsonUser) throws JSONException
 	{
+		Log.d(TAG, jsonUser.toString());
 		return new User(
 				jsonUser.getString(JSON_USERNAME_TAG),
 				jsonUser.getString(JSON_FNAME_TAG),
@@ -102,6 +105,7 @@ public class User implements Parcelable
 
 	public static ArrayList<User> parse(JSONArray a) throws JSONException
 	{
+		Log.d(TAG, a.toString());
 		int arrayLength = a.length();
 		ArrayList<User> userList = new ArrayList<User>();
 		for(int i = 0; i < arrayLength; i++)
