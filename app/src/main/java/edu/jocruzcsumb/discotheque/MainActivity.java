@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		FragmentManager fm = getFragmentManager();
 		Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
+		Sockets.getSocket();
 		if(fragment == null)
 		{
 			fragment = new FacebookFragment();
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				Auth.GoogleSignInApi.silentSignIn(googleApiClient);
 		if(pendingResult.isDone())
 		{
-			Log.d(TAG,"pendingResult.isDone()");
+			Log.d(TAG,"pendingResult.isDone() = true");
 			GoogleSignInResult r = pendingResult.get();
 			if(r.isSuccess())
 			{
@@ -119,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		}
 		else
 		{
+			Log.d(TAG,"pendingResult.isDone() = false");
 			// There's no immediate result ready
 
 			// We may want to add a progress indicator right here
@@ -127,8 +129,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				@Override
 				public void onResult(@NonNull GoogleSignInResult result)
 				{
+					Log.d(TAG, "Google Silent login onResult");
 					if(result.isSuccess())
 					{
+						Log.d(TAG, "result.isSuccess()");
 						MainActivity.this.handleResult(result);
 						findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 					}

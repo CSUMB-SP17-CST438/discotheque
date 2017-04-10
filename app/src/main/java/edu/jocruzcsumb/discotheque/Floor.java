@@ -21,7 +21,7 @@ public class Floor implements Parcelable
     //regular parse
     public static final String JSON_NAME_TAG = "floor_name";
     public static final String JSON_ID_TAG = "floor_id";
-    public static final String JSON_CREATOR_TAG = "member";
+    public static final String JSON_CREATOR_TAG = "creator";
 
     //Advanced parse
     public static final String JSON_SONGS_TAG = "songs";
