@@ -126,6 +126,12 @@ def on_new_message(data):
 #the function should users associated with it. member_id and floorid 
 #floor_name and a floor_genre
 # @app.route('/floors')
+@socket.on('get floors')
+def on_get_floors(data):
+	socket.emit("floor list", getPublicFloors())
+
+
+
 @socket.on('create floor')
 def on_create(data):
     if data['is_public'] == 1:
@@ -163,7 +169,7 @@ def on_leave_floor(data):
     
 
 def userEmit(member):
- 	return {'authorized': 1,'email': member.member_email, 'user':member.to_simple_list()}
+ 	return {'authorized': 1,'email': member.member_email,'member_id':member.member_id, 'user':member.to_simple_list()}
 
 
 # def get_dt_ms():
