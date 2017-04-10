@@ -103,9 +103,9 @@ public class Floor implements Parcelable
 	    if(sub) jsonFloor = jsonFloor.getJSONObject("floor");
         Floor f = parse(jsonFloor);
         f.setUsers(User.parse(jsonFloor.getJSONArray(JSON_USERS_TAG)));
-        f.setSongs(Song.parse(jsonFloor.getJSONArray(JSON_SONGS_TAG)));
+        f.setSongs(Song.parse(new JSONArray(jsonFloor.getString(JSON_SONGS_TAG))));
         f.setMessages(Message.parse(jsonFloor.getJSONArray(JSON_MESSAGES_TAG)));
-        f.setTheme(Theme.parse(jsonFloor.getJSONObject(JSON_THEME_TAG)));
+        //f.setTheme(Theme.parse(jsonFloor.getJSONObject(JSON_THEME_TAG)));
         return f;
     }
 

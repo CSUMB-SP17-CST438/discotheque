@@ -23,7 +23,7 @@ public class Song implements Comparable<Song>, Parcelable
 	public static final String JSON_ARTIST_TAG = "creator_user";
 	public static final String JSON_STREAM_URL_TAG = "stream_url";
 	public static final String JSON_ARTWORK_TAG = "artwork";
-	public static final String JSON_CHOOSEN_BY_TAG = "random";
+	public static final String JSON_CHOSEN_BY_TAG = "random";
 
 	public static final String JSON_START_TIME_TAG = "start_time";
 
@@ -77,12 +77,13 @@ public class Song implements Comparable<Song>, Parcelable
 	{
 		Log.d(TAG, jsonSong.toString());
 		long s = (jsonSong.has(JSON_START_TIME_TAG)? jsonSong.getLong(JSON_START_TIME_TAG) : 0);
+        String c = (jsonSong.has(JSON_CHOSEN_BY_TAG)?jsonSong.getString(JSON_CHOSEN_BY_TAG):"server");
 		return new Song(
 				jsonSong.getString(JSON_TITLE_TAG),
 				jsonSong.getString(JSON_ARTIST_TAG),
 				jsonSong.getString(JSON_STREAM_URL_TAG),
 				jsonSong.getString(JSON_ARTWORK_TAG),
-				jsonSong.getString(JSON_CHOOSEN_BY_TAG),
+				c,
 				s
 		);
 	}
