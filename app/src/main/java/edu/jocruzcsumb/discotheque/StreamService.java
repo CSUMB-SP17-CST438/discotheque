@@ -1,8 +1,8 @@
 package edu.jocruzcsumb.discotheque;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
