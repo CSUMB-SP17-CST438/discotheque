@@ -51,7 +51,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener
 
 
 						messages = intent.getParcelableArrayListExtra(FloorService.EVENT_MESSAGE_LIST_UPDATE);
-						floorId = messages.get(0).getFloor();
+						if(messages.size() > 0)floorId = messages.get(0).getFloor();
 					//TODO: Update the UI
 
 					addChatTOUI();
