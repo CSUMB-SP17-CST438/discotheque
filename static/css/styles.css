@@ -1,0 +1,113 @@
+body {
+    background-image: url("../img/dt2.jpg");
+    height: 500px;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'Roboto';
+    color: white;
+}
+
+#intro {
+    margin:0 auto;
+    position: relative;
+    text-align: center;
+    font-family: 'Roboto';
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 60px;
+}
+
+#logo{
+    top:-10%;
+    position:relative;
+    max-width: 100px; 
+    max-height: 100px;
+}
+
+#feature1{
+    margin:0 auto;
+    position: relative;
+    margin-top: 100px;
+    text-align: center;
+    font-family: 'Roboto';
+    font-weight: bold;
+    height:400px;
+    width:95%;
+    background-color: rgba(0, 0, 0, .5);
+    font-size: 125%;
+}
+
+#fe1{
+    margin-left: 100px;
+    margin-top: 50px;
+    float:left;
+    max-height:300px;
+    max-width:200px;
+}
+
+#feature2{
+    margin:0 auto;
+    position: relative;
+    margin-top: 100px;
+    text-align: center;
+    font-family: 'Roboto';
+    font-weight: bold;
+    height:400px;
+    width:95%;
+    font-size: 125%;
+}
+
+#fe2{
+    margin-right: 100px;
+    margin-top: 50px;
+    float:right;
+    max-height:300px;
+    max-width:200px;
+}
+
+#feature3{
+    font-size: 125%;
+    margin:0 auto;
+    position: relative;
+    margin-top: 100px;
+    text-align: center;
+    font-family: 'Roboto';
+    font-weight: bold;
+    height:400px;
+    width:95%;
+    background-color: rgba(0, 0, 0, .5);
+}
+
+#fe3{
+    margin-left: 100px;
+    margin-top: 50px;
+    float:left;
+    max-height:300px;
+    max-width:200px;
+}
+
+#conclusion{
+    margin:0 auto;
+    position: relative;
+    margin-top: 100px;
+    text-align: center;
+    font-family: 'Roboto';
+    font-weight: bold;
+    height:400px;
+    width:95%;
+    font-size: 125%;
+}
+
+#disco3{
+    max-height:300px;
+    max-width:400px;
+    opacity:0.8;
+}
+
+footer{
+    text-align: center;
+}
