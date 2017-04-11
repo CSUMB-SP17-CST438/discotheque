@@ -46,18 +46,12 @@ public class ChatFragment extends Fragment implements View.OnClickListener
 			switch(intent.getAction())
 			{
 				case FloorService.EVENT_MESSAGE_LIST_UPDATE:
-				case FloorService.EVENT_FLOOR_JOINED:
-					if(intent.getAction()
-							.equals(FloorService.EVENT_FLOOR_JOINED))
-					{
-						Floor floor = intent.getParcelableExtra(FloorService.EVENT_FLOOR_JOINED);
-						floorId = floor.getId();
-						messages = floor.getMessages();
-					}
-					else
-					{
+
+
+
+
 						messages = intent.getParcelableArrayListExtra(FloorService.EVENT_MESSAGE_LIST_UPDATE);
-					}
+						floorId = messages.get(0).getFloor();
 					//TODO: Update the UI
 
 					addChatTOUI();
@@ -105,7 +99,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener
 		IntentFilter f = new IntentFilter();
 		f.addAction(FloorService.EVENT_MESSAGE_LIST_UPDATE);
 		f.addAction(FloorService.EVENT_MESSAGE_ADD);
-		f.addAction(FloorService.EVENT_FLOOR_JOINED);
 
 		// Set the activity to listen for app broadcasts with the above filter
 		LocalBroadcastManager.getInstance(this.getContext())

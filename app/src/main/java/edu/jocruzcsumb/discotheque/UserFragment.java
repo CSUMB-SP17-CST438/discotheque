@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
      * fragment.
      */
     private static final String TAG = "UserFragment";
+    private static final String ARG_FLOOR_ID = "section_number";
     private static ArrayList<User> users = null;
     // EVENTS are recieved here.
     BroadcastReceiver r = new BroadcastReceiver() {
@@ -44,7 +46,8 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
             Log.d(TAG, "intent.getAction() = " + intent.getAction());
             if(intent.getAction().equals(EVENT_FLOOR_JOINED))
             {
-                    //get all users
+
+                //get all users
                     Floor floor = intent.getParcelableExtra(FloorService.EVENT_FLOOR_JOINED);
                     floorId = floor.getId();
                     users = floor.getUsers();
@@ -101,9 +104,12 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
         View rootView = inflater.inflate(R.layout.fragment_user, container, false);
         userPhoto = (ImageView) rootView.findViewById(R.id.userPhoto);
         username = (TextView) rootView.findViewById(R.id.username);
-
+        LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
+        llm.setStackFromEnd(true); //scrolls to the bottom
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv3);
         recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(llm);
+
         return rootView;
 
 
