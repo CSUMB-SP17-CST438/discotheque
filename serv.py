@@ -138,6 +138,8 @@ def on_create(data):
         public = True
     else:
         public = False
+    print("******************join songlist message")
+    print(data)
     new_floor = add_floor(data['floor_name'],data['member_id'],public,data['floor_genre'])
     new_floor.add_member(data['member_id'])
     join_room(new_floor.floor_id)
