@@ -37,10 +37,8 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_join_room);
 		recyclerView = (RecyclerView) findViewById(R.id.room_listview);
-		Button room = (Button) findViewById(R.id.TEMP_go_to_room);
 		logout = (Button) findViewById(R.id.signout);
 		logout.setOnClickListener(this);
-		room.setOnClickListener(this);
 		recyclerView.setHasFixedSize(true);
 		LinearLayoutManager llm = new LinearLayoutManager(this);
     	recyclerView.setLayoutManager(llm);

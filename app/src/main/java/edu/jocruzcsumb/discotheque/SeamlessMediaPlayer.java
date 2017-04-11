@@ -32,6 +32,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 
 	private int current = 0;
 	private int next = 1;
+	private boolean lock = false;
 
 	//TODO when player object is started, we seek to utc.now - utc start time
 	private long timeStarted = 0;
@@ -42,13 +43,19 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 						@Override
 						public void onCompletion(MediaPlayer mp)
 						{
-							m[1].start();
-                            Intent k = new Intent(EVENT_SONG_STARTED);
-                            k.putExtra(EVENT_SONG_STARTED, s[1]);
-                            LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(k);
-							reset(0);
-							swap();
-
+							mp.release();
+							if(!lock)
+							{
+								lock = true;
+								Log.d(TAG, "onCompletion: start");
+								m[1].start();
+								Intent k = new Intent(EVENT_SONG_STARTED);
+								k.putExtra(EVENT_SONG_STARTED, s[1]);
+								LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(k);
+								reset(0);
+								swap();
+								lock = false;
+							}
 						}
 					},
 					new MediaPlayer.OnCompletionListener()
@@ -56,12 +63,19 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 						@Override
 						public void onCompletion(MediaPlayer mp)
 						{
-							m[0].start();
-                            Intent k = new Intent(EVENT_SONG_STARTED);
-                            k.putExtra(EVENT_SONG_STARTED, s[0]);
-                            LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(k);
-							reset(1);
-							swap();
+							mp.release();
+							if(!lock)
+							{
+								lock = true;
+								Log.d(TAG, "onCompletion: start");
+								m[0].start();
+								Intent k = new Intent(EVENT_SONG_STARTED);
+								k.putExtra(EVENT_SONG_STARTED, s[0]);
+								LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(k);
+								reset(1);
+								swap();
+								lock = false;
+							}
 						}
 					}
 			};
@@ -111,6 +125,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 			e.printStackTrace();
 			Log.w(TAG, "Could not prepare song");
 		}
+		m[i].setOnCompletionListener(l[i]);
 	}
 
 	private void swap()
@@ -122,22 +137,36 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 
 	private void checkSongs()
 	{
+		if(lock)
+		{
+			Log.d(TAG, "couldnt checkSongs because lock");
+			return;
+		}
 		if(songs.size() > 0 && s[current] != songs.get(0))
 		{
+			lock = true;
 			s[current] = songs.get(0);
 			// The currently playing song has been invalidated, stop and restart player[current]
-			m[current].stop();
+			if(m[current].isPlaying())m[current].stop();
 			reset(current);
 			// TODO: Seek to start time
 			// m[current].seekTo();
+			Log.d(TAG, "checkSongs: start");
 			m[current].start();
-            Log.d(TAG, "started playback");
+			Intent k = new Intent(EVENT_SONG_STARTED);
+			k.putExtra(EVENT_SONG_STARTED, s[current]);
+			LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(k);
+
+			Log.d(TAG, "started playback");
+			lock = false;
 		}
 		if(songs.size() > 1 && s[next] != songs.get(1))
 		{
+			lock=true;
 			s[next] = songs.get(1);
 			// The next song has been invalidated, reset the player[next]
 			reset(next);
+			lock=false;
 		}
 	}
 
@@ -156,11 +185,11 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 			songs = intent.getParcelableArrayListExtra(EVENT_SONG_LIST_UPDATE);
 		}
 		Log.d(TAG, "Got Song List");
-		for(Song s:songs)
-        {
-            Log.d(TAG, "Song: " + s.getName() + " - " + s.getArtist());
-            Log.d(TAG, "Url: " + s.getUrl());
-        }
+//		for(Song s:songs)
+//        {
+//            Log.d(TAG, "Song: " + s.getName() + " - " + s.getArtist());
+//            Log.d(TAG, "Url: " + s.getUrl());
+//        }
 		checkSongs();
 	}
 }
