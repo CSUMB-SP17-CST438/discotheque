@@ -60,12 +60,15 @@ public class ChatFragment extends Fragment implements View.OnClickListener
 					}
 					//TODO: Update the UI
 
+					addChatTOUI();
+
 
 					break;
 				case FloorService.EVENT_MESSAGE_ADD:
 					Message m = intent.getParcelableExtra(FloorService.EVENT_MESSAGE_ADD);
 					messages.add(m);
 					//TODO: Update the UI
+					addChatTOUI();
 
 
 					break;
@@ -76,6 +79,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener
 	private RecyclerView recyclerView;
 	private int floorId;
 	private EditText chatField;
+
+
 
 	public ChatFragment()
 	{
@@ -118,6 +123,21 @@ public class ChatFragment extends Fragment implements View.OnClickListener
 
 
 		return rootView;
+	}
+
+	private void addChatTOUI(){
+
+		chatAdapter = new ChatAdapter(getActivity(), messages);
+		Log.d(TAG, messages.toString());
+		getActivity().runOnUiThread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				recyclerView.setAdapter(chatAdapter);
+			}
+		});
+
 	}
 
 	@Override
