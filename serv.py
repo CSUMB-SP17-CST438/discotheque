@@ -117,8 +117,8 @@ def on_new_message(data):
     member_id = data['from']
     text = data['message']
     add_message(floor_id, member_id, text)
-    socket.emit("message added", {
-                'floor_messages': getFloorMessages(floor_id)}, room=request.sid)
+    socket.emit("message list", {
+                'floor_messages': getFloorMessages(floor_id)}, room=floor_id)
 
 
 
