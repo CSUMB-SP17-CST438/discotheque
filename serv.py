@@ -11,7 +11,6 @@ import facebook
 import time
 
 public_room = 912837
-
 app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL','postgresql://jcrzr:anchor99@localhost/postgres')
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= 1
@@ -175,12 +174,17 @@ def on_leave_floor(data):
     current_floor.rm_member(data['member_id'])
     current_floor = getFloor(data['floor_id'])
     leave_room(data['floor_id'])
-    socket.emit('member left', {'floor':current_floor.to_list()}, room=request.sid)
+    socket.emit('member left', {'floor':current_floor.to_list()}, room=data['floor_id'])
 
     
 
 def userEmit(member):
  	return {'authorized': 1,'email': member.member_email,'member_id':member.member_id, 'user':member.to_simple_list()}
+
+
+
+def create_thread(songlist):
+	thread = threading.thread
 
 
 # def get_dt_ms():

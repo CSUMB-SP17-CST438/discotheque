@@ -61,7 +61,7 @@ class floor(db.Model):
 		db.session.commit()
 		
 	def rm_member(self,member_id):
-		self.floor_members.delete(getMemberObject(member_id))
+		self.floor_members.remove(getMemberObject(member_id))
 		db.session.commit()
 		
 	def to_list(self):
@@ -85,19 +85,24 @@ class floor(db.Model):
 	def to_list_with_songlist(self):
 		fl_sc = floor_Schema_without_songlist()
 		floor_obj = fl_sc.dump(self)
-		print("************floor object*************")
-		print(floor_obj)
-		print("*************************songlist*******************")
-
 		floor_obj[0]['songlist'] = self.songlist
-
 		return floor_obj[0]
-	# def get_songlist(self):
-	# return self.songs.loads()
 
+	def isActive(self):
+		# print("****floor_members_active_****")
+		print(self.floor_members)
+		if len(self.floor_members) ==0:
+			return False;
+		else:
+			return True
 
 	def __repr__(self):
 		return '<Floor: {floor_id: %r, floor_name: %r, floor_is_public: %r>' %(self.floor_id,self.floor_name,self.public)
+
+"""********************************************************************************************************************
+*********************************************END FLOOR CLASS **********************************************************
+***********************************************************************************************************************
+***********************************************************************************************************************"""
 
 class member(db.Model):
 	member_id = db.Column(db.Integer, primary_key = True)

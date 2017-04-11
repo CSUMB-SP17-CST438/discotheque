@@ -1,4 +1,5 @@
 import soundcloud as sc
+import json
 # client_secret='67422b6c159a389c9cfed1a9607227ef'
 
 client = sc.Client(client_id="8c1cf28d0d2834808a2eda6645da717b",client_secret='67422b6c159a389c9cfed1a9607227ef')
@@ -26,4 +27,14 @@ def getSongURLLocation(track_id):
 	# print(track_stream.location)
 	return track_stream.location
 
-# print(getSongList("rock"))
+def refresh_streams(songList):
+	for x in range(0,4):
+		songList[x]['stream_url'] = getSongURLLocation(songList[x]['id'])
+	return songList
+
+# print("********songlist*******")
+# songs = getSongList("rock")
+# print(json.dumps(songs,indent=4))
+
+# print("****refreshed*****")
+# print(json.dumps(refresh_streams(songs),indent=4))

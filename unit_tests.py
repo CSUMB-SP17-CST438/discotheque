@@ -4,7 +4,7 @@ import discoSounds as ds
 from schema import *
 import random
 import serv
-from schema import *
+from schema import *	
 class sc_test(unittest.TestCase):
 	db.app = serv.app
 
@@ -54,13 +54,34 @@ class sc_test(unittest.TestCase):
 		# print(solist[0])
 		self.assertIsNotNone(floorRefresh.songlist)
 
-	
 	def test_get_floors(self):
 		db.app = serv.app
 		floors = getPublicFloors()
 		# print(floors)
-
 		self.assertIsNotNone(floors)
+
+	def test_floor_not_active(self):
+		print("******floor NOT active*****")
+		new_floor = add_floor("empty_floor", 1,True,"punk")
+		boole = getFloor(new_floor.floor_id).isActive()
+		self.assertEqual(boole,False,"THE FLOOR IS NOT CURRENTLY ACTIVE.")
+
+	def test_floor_active(self):
+		print("***********floor is active******")
+		new_floor = add_floor("empty_floor", 1,True,"punk")
+		new_floor.add_member(1)
+		boole = getFloor(new_floor.floor_id).isActive()
+		self.assertEqual(boole,True,"THE FLOOR IS CURRENTLY ACTIVE.")
+
+	# def test_refresh_streams(self):
+	# 	songs = ds.getSongList("rock")
+	# 	print(json.dumps(songs[0],indent=4))
+	# 	refreshed = ds.refresh_streams(songs)
+	# 	print(json.dumps(refreshed[0],indent=4))
+	# 	self.assertEqual(refreshed[0]['stream_url'],songs[0]['stream_url'])
+
+
+
 	# def test_user_by_email(self):
 	# 	member = db.memberExists_by_email('thisiaanemail@56735')
 	# 	print("memberrrrrrrrrrr")
