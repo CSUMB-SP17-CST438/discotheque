@@ -11,6 +11,7 @@
     tools:context="edu.jocruzcsumb.discotheque.MainActivity"
     android:weightSum="1"
     android:orientation="vertical"
+    android:background="@drawable/background_logoxxxhdi"
     >
     <RelativeLayout
         android:id="@+id/loadingPanel"
@@ -23,6 +24,10 @@
             android:layout_height="wrap_content"
             android:indeterminate="true" />
     </RelativeLayout>
+
+
+
+
     <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,17 +36,7 @@
 
         />
 
-    <TextView
-        android:id="@+id/login_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.30"
-        android:ems="10"
-        android:gravity="center"
-        android:inputType="textPersonName"
-        android:text="Will be pretty picture"
-        android:textColor="#ffffff"
-        android:textSize="20pt" />
+
 
     <Button
         android:id="@+id/guest_login_btn"
