@@ -144,7 +144,7 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
 
             UserViewHolder(View itemView) {
                 super(itemView);
-                cv = (CardView) itemView.findViewById(R.id.chatCardView);
+                cv = (CardView) itemView.findViewById(R.id.userCardView);
                 username = (TextView) itemView.findViewById(R.id.username);
                 userPhoto = (ImageView) itemView.findViewById(R.id.userPhoto);
 
