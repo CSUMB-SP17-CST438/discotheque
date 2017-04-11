@@ -130,7 +130,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener
 		Log.d(TAG, "addChatTOUI");
 		chatAdapter = new ChatAdapter(getActivity(), messages);
 		Log.d(TAG, messages.toString());
-		getActivity().runOnUiThread(new Runnable()
+		getActivity()
+                .runOnUiThread(new Runnable()
 		{
 			@Override
 			public void run()
