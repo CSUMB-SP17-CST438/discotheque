@@ -89,21 +89,27 @@ public class FloorService extends IntentService
 			Log.d(TAG, "intent.getAction() = " + intent.getAction());
 			switch(intent.getAction())
 			{
-                case FloorService.EVENT_GET_FLOOR:
-                    if(floor != null) broadcast(EVENT_FLOOR_JOINED, floor);
-                    else Log.w(TAG, EVENT_GET_FLOOR + ": Floor was null");
-                    break;
-                case FloorService.EVENT_GET_SONG_LIST:
-                    if(floor != null) broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
-	                else Log.w(TAG, EVENT_GET_SONG_LIST + ": Floor was null");
-                    break;
+				case FloorService.EVENT_GET_FLOOR:
+					if(floor != null)
+					{
+						broadcast(EVENT_FLOOR_JOINED, floor);
+						broadcast(EVENT_MESSAGE_LIST_UPDATE, floor.getMessages());
+						broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
+						broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
+					}
+					else Log.w(TAG, EVENT_GET_FLOOR + ": Floor was null");
+					break;
+				case FloorService.EVENT_GET_SONG_LIST:
+					if(floor != null) broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
+					else Log.w(TAG, EVENT_GET_SONG_LIST + ": Floor was null");
+					break;
 				case FloorService.EVENT_GET_USER_LIST:
-                    if(floor != null) broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
-                    else Log.w(TAG, EVENT_GET_USER_LIST + ": Floor was null");
+					if(floor != null) broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
+					else Log.w(TAG, EVENT_GET_USER_LIST + ": Floor was null");
 					break;
 				case FloorService.EVENT_GET_MESSAGE_LIST:
-                    if(floor != null) broadcast(EVENT_MESSAGE_LIST_UPDATE, floor.getMessages());
-                    else Log.w(TAG, EVENT_GET_MESSAGE_LIST + ": Floor was null");
+					if(floor != null) broadcast(EVENT_MESSAGE_LIST_UPDATE, floor.getMessages());
+					else Log.w(TAG, EVENT_GET_MESSAGE_LIST + ": Floor was null");
 					break;
 				case FloorService.EVENT_MESSAGE_SEND:
 					JSONObject jsonObject = new JSONObject();
@@ -220,10 +226,10 @@ public class FloorService extends IntentService
 					{
 						Log.d(TAG, EVENT_SONG_LIST_UPDATE);
 
-						JSONArray a = (JSONArray) args[0];
+						JSONObject o = (JSONObject) args[0];
 						ArrayList<Song> l = null;
 
-						if(a == null)
+						if(o == null)
 						{
 							Log.w(TAG, EVENT_SONG_LIST_UPDATE + ": json was null");
 							return;
@@ -232,6 +238,7 @@ public class FloorService extends IntentService
 						// Parse JSON
 						try
 						{
+							JSONArray a = o.getJSONArray("songlist");
 							l = Song.parse(a);
 						}
 						catch(JSONException e)
@@ -262,10 +269,10 @@ public class FloorService extends IntentService
 					{
 						Log.d(TAG, EVENT_USER_LIST_UPDATE);
 
-						JSONArray a = (JSONArray) args[0];
+						JSONObject o = (JSONObject) args[0];
 						ArrayList<User> l = null;
 
-						if(a == null)
+						if(o == null)
 						{
 							Log.w(TAG, EVENT_USER_LIST_UPDATE + ": json was null");
 							return;
@@ -274,6 +281,7 @@ public class FloorService extends IntentService
 						// Parse JSON
 						try
 						{
+							JSONArray a = o.getJSONArray("floor_members");
 							l = User.parse(a);
 						}
 						catch(JSONException e)
@@ -304,10 +312,10 @@ public class FloorService extends IntentService
 					{
 						Log.d(TAG, EVENT_MESSAGE_LIST_UPDATE);
 
-						JSONArray a = (JSONArray) args[0];
+						JSONObject o = (JSONObject) args[0];
 						ArrayList<Message> l = null;
 
-						if(a == null)
+						if(o == null)
 						{
 							Log.w(TAG, EVENT_MESSAGE_LIST_UPDATE + ": json was null");
 							return;
@@ -316,6 +324,7 @@ public class FloorService extends IntentService
 						// Parse JSON
 						try
 						{
+							JSONArray a = o.getJSONArray("floor_messages");
 							l = Message.parse(a);
 						}
 						catch(JSONException e)
@@ -464,6 +473,9 @@ public class FloorService extends IntentService
 
         Log.d(TAG, EVENT_FLOOR_JOINED);
 		broadcast(EVENT_FLOOR_JOINED, floor);
+		broadcast(EVENT_MESSAGE_LIST_UPDATE, floor.getMessages());
+		broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
+		broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
 
 
 		try

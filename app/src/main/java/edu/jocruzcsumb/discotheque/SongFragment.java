@@ -102,6 +102,7 @@ public class SongFragment extends Fragment
         // This tells the activity what LocalBroadcast Events to listen for
         IntentFilter f = new IntentFilter();
         f.addAction(FloorService.EVENT_SONG_LIST_UPDATE);
+        f.addAction(FloorService.EVENT_FLOOR_JOINED);
 
         // Set the activity to listen for app broadcasts with the above filter
         LocalBroadcastManager m = LocalBroadcastManager.getInstance(this.getContext());

@@ -75,10 +75,9 @@ public class Message implements Parcelable
 		Log.d(TAG, jsonMessage.toString());
 		User author = User.parse(jsonMessage.getJSONObject(JSON_FROM_TAG));
 		String text = jsonMessage.getString(JSON_TEXT_TAG);
-		long pubTime = jsonMessage.getLong(JSON_PUB_TIME_TAG);
+		long pubTime = 0;//long pubTime = jsonMessage.getLong(JSON_PUB_TIME_TAG);
 		int floor = jsonMessage.getInt(JSON_FLOOR_TAG);
 		int id = jsonMessage.getInt(JSON_ID_TAG);
-		fail("NYI");
 		return new Message(id, author, text, floor, pubTime);
 	}
 
