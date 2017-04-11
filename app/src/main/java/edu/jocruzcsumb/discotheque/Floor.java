@@ -82,7 +82,7 @@ public class Floor implements Parcelable
 		return new Floor(
 				jsonFloor.getInt(JSON_ID_TAG),
 				jsonFloor.getString(JSON_NAME_TAG),
-				User.parse(jsonFloor.getJSONObject(JSON_CREATOR_TAG))
+				null//User.parse(jsonFloor.getJSONObject(JSON_CREATOR_TAG))
 		);
 	}
 
