@@ -113,8 +113,6 @@ public class SongFragment extends Fragment
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
         recyclerView.setLayoutManager(llm);
-
-
         return rootView;
     }
 

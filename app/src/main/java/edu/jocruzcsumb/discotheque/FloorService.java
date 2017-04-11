@@ -59,7 +59,7 @@ public class FloorService extends IntentService
 	public static final String EVENT_MESSAGE_ADD = "add message";
 
 	//When the current LocalUser sends a message
-	public static final String EVENT_MESSAGE_SEND = "send message";
+	public static final String EVENT_MESSAGE_SEND = "new message";
 
 	// When the user requests to join the floor
 	public static final String EVENT_JOIN_FLOOR = "join floor";
@@ -90,24 +90,34 @@ public class FloorService extends IntentService
 			switch(intent.getAction())
 			{
                 case FloorService.EVENT_GET_FLOOR:
-                    Log.d(TAG, EVENT_GET_FLOOR);
                     if(floor != null) broadcast(EVENT_FLOOR_JOINED, floor);
+                    else Log.w(TAG, EVENT_GET_FLOOR + ": Floor was null");
                     break;
                 case FloorService.EVENT_GET_SONG_LIST:
-                    Log.d(TAG, EVENT_GET_SONG_LIST);
                     if(floor != null) broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
+	                else Log.w(TAG, EVENT_GET_SONG_LIST + ": Floor was null");
                     break;
 				case FloorService.EVENT_GET_USER_LIST:
-					Log.d(TAG, EVENT_GET_USER_LIST);
                     if(floor != null) broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
+                    else Log.w(TAG, EVENT_GET_USER_LIST + ": Floor was null");
 					break;
 				case FloorService.EVENT_GET_MESSAGE_LIST:
-					Log.d(TAG, EVENT_GET_USER_LIST);
                     if(floor != null) broadcast(EVENT_MESSAGE_LIST_UPDATE, floor.getMessages());
+                    else Log.w(TAG, EVENT_GET_MESSAGE_LIST + ": Floor was null");
 					break;
 				case FloorService.EVENT_MESSAGE_SEND:
-					Log.d(TAG, EVENT_MESSAGE_SEND);
-					//TODO
+					JSONObject jsonObject = new JSONObject();
+					try
+					{
+						jsonObject.put("floor", floor.getId()); //floor_id
+						jsonObject.put("from", LocalUser.getCurrentUser().getId()); //member_id
+						jsonObject.put("message", ((Message)intent.getParcelableExtra(EVENT_MESSAGE_SEND)).getText());
+					}
+					catch(JSONException e)
+					{
+						e.printStackTrace();
+					}
+					Sockets.getSocket().emit(EVENT_MESSAGE_SEND, jsonObject);
 					break;
 				case FloorService.EVENT_LEAVE_FLOOR:
 					Log.d(TAG, EVENT_LEAVE_FLOOR);
