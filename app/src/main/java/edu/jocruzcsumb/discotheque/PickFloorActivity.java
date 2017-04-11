@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -44,15 +45,21 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 		LinearLayoutManager llm = new LinearLayoutManager(this);
     	recyclerView.setLayoutManager(llm);
 
-		//TODO: Get the list of rooms from server
-
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				floorList = new ArrayList<Floor>();
 				Sockets.SocketWaiter waiter = new Sockets.SocketWaiter("get floors", "floor list");
-				jsonObject = waiter.getArray();
+				JSONObject jsonObject2 = new JSONObject();
+				try{
+					jsonObject2.put("pls","pls");
 
+				}catch(JSONException e){
+					e.printStackTrace();
+				}
+
+				jsonObject = waiter.getArray(jsonObject2);
+				Log.d(TAG, jsonObject.toString());
 				if(jsonObject != null) {
 					try {
 						floorList = Floor.parse(jsonObject);
@@ -64,6 +71,7 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 						@Override
 						public void onItemClick(View v, int position) {
 							Floor floor = floorList.get(position);
+							Log.d(TAG, String.valueOf(floor.getId()));
 							Intent k = new Intent(PickFloorActivity.this, FloorActivity.class);
 							k.putExtra(Floor.TAG, floor.getId());
 							startActivity(k);
@@ -83,7 +91,7 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 				}
 
 			}
-		});
+		}).start();
 	}
 
 	@Override
@@ -92,18 +100,19 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 		switch(v.getId())
 		{
 
-			case R.id.TEMP_go_to_room:
-				//go to activity
-				Intent k = new Intent(PickFloorActivity.this, FloorActivity.class);
-
-				k.putExtra(Floor.TAG, 2);
-
-				startActivity(k);
-
-				break;
+//			case R.id.TEMP_go_to_room:
+//				//go to activity
+//				Intent k = new Intent(PickFloorActivity.this, FloorActivity.class);
+//
+//				k.putExtra(Floor.TAG, 2);
+//
+//				startActivity(k);
+//
+//				break;
 
 			case R.id.signout:
 				LocalUser.logout(PickFloorActivity.this);
+				break;
 
 		}
 	}

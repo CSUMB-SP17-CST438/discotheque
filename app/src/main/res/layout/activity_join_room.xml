@@ -47,19 +47,4 @@
          />
 
 
-    <TextView
-        android:id="@+id/temp_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.10"
-        android:text="GoToRoom_temp" />
-
-    <Button
-        android:id="@+id/TEMP_go_to_room"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.10"
-        android:text="Enter Chat Room 1" />
-
-
 </LinearLayout>
