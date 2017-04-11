@@ -35,7 +35,7 @@ public class FloorService extends IntentService
     public static final String EVENT_SONG_LIST_UPDATE = "song list";
 
 	// When the Message List is updated for the Floor
-	public static final String EVENT_USER_LIST_UPDATE = "user list";
+	public static final String EVENT_USER_LIST_UPDATE = "member list update";
 
 	// When the Message List is updated for the Floor
 	public static final String EVENT_MESSAGE_LIST_UPDATE = "message list";

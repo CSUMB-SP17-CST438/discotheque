@@ -11,7 +11,7 @@
     tools:context="edu.jocruzcsumb.discotheque.MainActivity"
     android:weightSum="1"
     android:orientation="vertical"
-    android:background="@drawable/background_logoxxxhdi"
+
     >
     <RelativeLayout
         android:id="@+id/loadingPanel"
@@ -32,9 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.50"
-        android:orientation="vertical"
-
-        />
+        android:orientation="vertical" />
 
 
 
@@ -52,16 +50,12 @@
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_login_btn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        ></com.google.android.gms.common.SignInButton>
-
+        android:layout_height="wrap_content" />
 
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="58dp">
     </FrameLayout>
-
 
 </LinearLayout>

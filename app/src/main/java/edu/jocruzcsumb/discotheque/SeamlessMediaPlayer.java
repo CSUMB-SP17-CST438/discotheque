@@ -21,7 +21,7 @@ import static edu.jocruzcsumb.discotheque.FloorService.EVENT_SONG_LIST_UPDATE;
  * Created by carsen on 4/9/17.
  */
 
-public class SeamlessMediaPlayer extends BroadcastReceiver
+public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlayer.OnCompletionListener
 {
 	private static final String TAG = "SeamlessMediaPlayer";
 	private MediaPlayer[] m = new MediaPlayer[2];
@@ -36,49 +36,6 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 
 	//TODO when player object is started, we seek to utc.now - utc start time
 	private long timeStarted = 0;
-	private MediaPlayer.OnCompletionListener[] l = new MediaPlayer.OnCompletionListener[]
-			{
-					new MediaPlayer.OnCompletionListener()
-					{
-						@Override
-						public void onCompletion(MediaPlayer mp)
-						{
-							mp.release();
-							if(!lock)
-							{
-								lock = true;
-								Log.d(TAG, "onCompletion: start");
-								m[1].start();
-								Intent k = new Intent(EVENT_SONG_STARTED);
-								k.putExtra(EVENT_SONG_STARTED, s[1]);
-								LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(k);
-								reset(0);
-								swap();
-								lock = false;
-							}
-						}
-					},
-					new MediaPlayer.OnCompletionListener()
-					{
-						@Override
-						public void onCompletion(MediaPlayer mp)
-						{
-							mp.release();
-							if(!lock)
-							{
-								lock = true;
-								Log.d(TAG, "onCompletion: start");
-								m[0].start();
-								Intent k = new Intent(EVENT_SONG_STARTED);
-								k.putExtra(EVENT_SONG_STARTED, s[0]);
-								LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(k);
-								reset(1);
-								swap();
-								lock = false;
-							}
-						}
-					}
-			};
 	private Context context;
 	private ArrayList<Song> songs = null;
 
@@ -92,7 +49,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 		for(int i = 0; i < 2; i++)
 		{
 			m[i] = new MediaPlayer();
-			m[i].setOnCompletionListener(l[i]);
+			m[i].setOnCompletionListener(this);
             s[i]=null;
 		}
 
@@ -125,7 +82,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 			e.printStackTrace();
 			Log.w(TAG, "Could not prepare song");
 		}
-		m[i].setOnCompletionListener(l[i]);
+		m[i].setOnCompletionListener(this);
 	}
 
 	private void swap()
@@ -191,5 +148,17 @@ public class SeamlessMediaPlayer extends BroadcastReceiver
 //            Log.d(TAG, "Url: " + s.getUrl());
 //        }
 		checkSongs();
+	}
+
+	@Override
+	public void onCompletion(MediaPlayer mediaPlayer)
+	{
+		Log.d(TAG, "onCompletion");
+		m[next].start();
+		songs.remove(s[current]);
+		swap();
+		checkSongs();
+		mediaPlayer.release();
+
 	}
 }
