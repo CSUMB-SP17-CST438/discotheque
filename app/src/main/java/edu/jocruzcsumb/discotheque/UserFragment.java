@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_FLOOR_JOINED;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_FLOOR;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_USER_LIST;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_JOIN_FLOOR;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_LIST_UPDATE;
 
 /**
@@ -51,10 +52,13 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
                     Floor floor = intent.getParcelableExtra(FloorService.EVENT_FLOOR_JOINED);
                     floorId = floor.getId();
                     users = floor.getUsers();
+                Log.d(TAG, "users in EVENT_FLOOR_JOIN " + users.toString());
             }
-            else if(intent.getAction().equals(EVENT_USER_LIST_UPDATE))
+            else
             {
                 users = intent.getParcelableArrayListExtra(EVENT_USER_LIST_UPDATE);
+                Log.d(TAG, "users in EVENT_USER_LIST_UPDATE " + users.toString());
+
             }
 
             //TODO PETER UPDATE THE UI WITH THE NEW users ARRAYLIST
@@ -95,7 +99,8 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // This tells the activity what LocalBroadcast Events to listen for
         IntentFilter f = new IntentFilter();
-        f.addAction(EVENT_GET_USER_LIST);
+        f.addAction(EVENT_USER_LIST_UPDATE);
+        f.addAction(EVENT_JOIN_FLOOR);
 
         LocalBroadcastManager m = LocalBroadcastManager.getInstance(this.getContext());
         m.registerReceiver(r, f);

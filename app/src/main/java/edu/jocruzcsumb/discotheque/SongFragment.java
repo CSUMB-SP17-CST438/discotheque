@@ -56,7 +56,7 @@ public class SongFragment extends Fragment
                 floorId = floor.getId();
                 songs = floor.getSongs();
             }
-            else
+            else if(intent.getAction().equals(FloorService.EVENT_SONG_LIST_UPDATE))
             {
                 songs = intent.getParcelableArrayListExtra(FloorService.EVENT_SONG_LIST_UPDATE);
             }
@@ -69,6 +69,8 @@ public class SongFragment extends Fragment
                     //TODO: Broadcast song picked.
                 }
             });
+            if(getActivity() == null)
+                Log.d(TAG, "getActivity was null for soem reason");
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
