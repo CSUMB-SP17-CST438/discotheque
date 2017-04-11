@@ -50,7 +50,7 @@ public class FloorActivity extends AppCompatActivity
 			Log.d(TAG, "intent.getAction() = " + intent.getAction());
 			switch(intent.getAction())
 			{
-                case SeamlessMediaPlayer.EVENT_SONG_STARTED:
+                case EVENT_SONG_STARTED:
                     final Song s = intent.getParcelableExtra(EVENT_SONG_STARTED);
                     Log.d(TAG, EVENT_SONG_STARTED + ": " + s.getName() + " - " + s.getArtist());
                     //TODO: Update the UI
@@ -157,6 +157,7 @@ public class FloorActivity extends AppCompatActivity
 		f.addAction(FloorService.EVENT_USER_ADD);
 		f.addAction(FloorService.EVENT_USER_REMOVE);
 		f.addAction(FloorService.EVENT_MESSAGE_ADD);
+		f.addAction(SeamlessMediaPlayer.EVENT_SONG_STARTED);
 
 		// Set the activity to listen for app broadcasts with the above filter
 		LocalBroadcastManager.getInstance(getApplicationContext())
