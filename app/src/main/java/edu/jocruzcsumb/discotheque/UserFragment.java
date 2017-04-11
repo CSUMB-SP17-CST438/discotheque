@@ -55,6 +55,18 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
             }
 
             //TODO PETER UPDATE THE UI WITH THE NEW users ARRAYLIST
+            userAdapter = new UserFragment.UserAdapter(getActivity(), users);
+            Log.d(TAG, users.toString());
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    recyclerView.setAdapter(userAdapter);
+                }
+            });
+
+
         }
 
     };
@@ -96,6 +108,8 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
 
 
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -144,7 +158,7 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
 
             UserViewHolder(View itemView) {
                 super(itemView);
-                cv = (CardView) itemView.findViewById(R.id.chatCardView);
+                cv = (CardView) itemView.findViewById(R.id.userCardView);
                 username = (TextView) itemView.findViewById(R.id.username);
                 userPhoto = (ImageView) itemView.findViewById(R.id.userPhoto);
 
