@@ -11,7 +11,6 @@ import facebook
 import time
 
 public_room = 912837
-
 app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL','postgresql://jcrzr:anchor99@localhost/postgres')
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= 1
@@ -73,19 +72,19 @@ def on_login(data):
         response = requests.get(
             'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + data['google_t'])
         json = response.json()
-        print(json)
+        # print(json)
         fname = json['given_name'] 
         lname = json['family_name']
         link = json['picture']
         email = json['email']
         mem_found = memberExists_by_email(email)
-        print(mem_found)
+        # print(mem_found)
         if mem_found:
             mem = getMemberObject_by_email(email)
             socket.emit("login status", userEmit(mem), room=request.sid)
         else:
             new_mem = registerMember("",fname,lname,email,link)
-            print(new_mem.to_list())
+            # print(new_mem.to_list())
             socket.emit("login status", userEmit(new_mem), room=request.sid)
 
 #
@@ -97,7 +96,6 @@ def on_login(data):
         lname = js['last_name']
         email = js['email']
         print("***************************EMAIL************************")
-        print(email)
         link = js['picture']['data']['url']
         mem_found = memberExists_by_email(email)
         print(mem_found)
@@ -117,8 +115,8 @@ def on_new_message(data):
     member_id = data['from']
     text = data['message']
     add_message(floor_id, member_id, text)
-    socket.emit("message added", {
-                'floor_messages': getFloorMessages(floor_id)}, room=request.sid)
+    socket.emit("message list", {
+                'floor_messages': getFloorMessages(floor_id)}, room=floor_id)
 
 
 
@@ -139,7 +137,6 @@ def on_create(data):
     else:
         public = False
     print("******************join songlist message")
-    print(data)
     new_floor = add_floor(data['floor_name'],data['member_id'],public,data['floor_genre'])
     new_floor.add_member(data['member_id'])
     join_room(new_floor.floor_id)
@@ -163,8 +160,13 @@ def on_join_floor(data):
 	join_room(floor_id)
 	floor_to_join = getFloor(floor_id)
 	floor_to_join.add_member(data['member_id'])
-	print(floor_to_join.to_list())
+	# print(floor_to_join.to_list())
+	floor_list = floor_to_join.to_list()
+	
 	socket.emit('floor joined', {'floor':floor_to_join.to_list()}, room=request.sid)
+	print("***memlist update***")
+	print(floor_list['floor_members'])
+	socket.emit('member list update', {'floor members': floor_list['floor_members']},room=floor_to_join.floor_id)
     
 @socket.on('leave floor')
 def on_leave_floor(data):
@@ -172,12 +174,17 @@ def on_leave_floor(data):
     current_floor.rm_member(data['member_id'])
     current_floor = getFloor(data['floor_id'])
     leave_room(data['floor_id'])
-    socket.emit('member left', {'floor':current_floor.to_list()}, room=request.sid)
+    socket.emit('member left', {'floor':current_floor.to_list()}, room=data['floor_id'])
 
     
 
 def userEmit(member):
  	return {'authorized': 1,'email': member.member_email,'member_id':member.member_id, 'user':member.to_simple_list()}
+
+
+
+def create_thread(songlist):
+	thread = threading.thread
 
 
 # def get_dt_ms():

@@ -2,30 +2,31 @@
 <html>
     <head>
         <style>
-            @import url('https://fonts.googleapis.com/css?family=Roboto');
-            @import url("css/styles.css");
+            @import 'https://fonts.googleapis.com/css?family=Roboto';
+            @import "{{url_for('static',filename='css/styles.css')}}";
         </style>
     <title> Discotheque </title>
     </head>
     <body>
         <div id="intro">
             <h1>Discotheque</h1>
-            <img src="/LandingPageProject3/img/dt_Logo_temp-02.png" id = "logo"></img>
-            <h2>Listen to music alone, with others.</h2>
+            <img src="{{url_for('static',filename='img/dt_Logo_temp-02.png')}}" id = "logo"></img>
+            <h2>A Social Music Experience.</h2>
+            <p> <a href = "{{url_for('static', filename='app-release.apk')}}">Alpha Release 1.0.0</a></p>
         </div>
         <div id="feature1">
-            <img src="/LandingPageProject3/img/RoomSelect.png" id = "fe1"></img>
+            <img src="{{url_for('static',filename='img/RoomSelect.png')}}" id = "fe1"></img>
             <br /> <br /> <br />
             With Discotheque, your room is your dance floor.  Pick from a variety of themes and genres.
         </div>
         
         <div id="feature2">
-            <img src="/LandingPageProject3/img/Profile.png" id = "fe2"></img>
+            <img src="{{url_for('static',filename='img/Profile.png')}}" id = "fe2"></img>
             <br /> <br /> <br />
             Customize your profile to fit your Discotheque tastes.  
         </div>
         <div id="feature3">
-            <img src="/LandingPageProject3/img/AliceRoomSong.png" id = "fe3"></img>
+            <img src="{{url_for('static',filename='img/AliceRoomSong.png')}}" id = "fe3"></img>
             <br /> <br /> <br />
             Within a room bring up the song list.  View the current songs title, artist, and length.  See what your friends have chosen to play next.
         </div>
@@ -34,7 +35,7 @@
             <br /> <br /> <br />
             Download Discotheque today and enjoy a silent disco.
             <br />
-            <img src="/LandingPageProject3/img/disco3.jpg" id = "disco3"></img>
+            <img src="{{url_for('static',filename='img/disco3.jpg')}}" id = "disco3"></img>
         </div>
         <hr>
         <footer>
