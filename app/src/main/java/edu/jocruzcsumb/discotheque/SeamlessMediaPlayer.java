@@ -21,7 +21,7 @@ import static edu.jocruzcsumb.discotheque.FloorService.EVENT_SONG_LIST_UPDATE;
  * Created by carsen on 4/9/17.
  */
 
-public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlayer.OnCompletionListener
+public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener
 {
 	private static final String TAG = "SeamlessMediaPlayer";
 	private MediaPlayer[] m = new MediaPlayer[2];
@@ -49,14 +49,12 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 		for(int i = 0; i < 2; i++)
 		{
 			m[i] = new MediaPlayer();
-			m[i].setOnCompletionListener(this);
             s[i]=null;
 		}
 
 		// Recieve song events
 		IntentFilter f = new IntentFilter();
 		f.addAction(EVENT_SONG_LIST_UPDATE);
-		f.addAction(EVENT_FLOOR_JOINED);
 		LocalBroadcastManager.getInstance(context.getApplicationContext())
 				.registerReceiver(this, f);
 		LocalBroadcastManager b = LocalBroadcastManager.getInstance(context.getApplicationContext());
@@ -82,7 +80,6 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 			e.printStackTrace();
 			Log.w(TAG, "Could not prepare song");
 		}
-		m[i].setOnCompletionListener(this);
 	}
 
 	private void swap()
@@ -110,6 +107,8 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 			// m[current].seekTo();
 			Log.d(TAG, "checkSongs: start");
 			m[current].start();
+			m[current].setOnCompletionListener(this);
+			m[current].setOnErrorListener(this);
 			Intent k = new Intent(EVENT_SONG_STARTED);
 			k.putExtra(EVENT_SONG_STARTED, s[current]);
 			LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(k);
@@ -130,24 +129,18 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		// Upate the song list
-		if(intent.getAction().equals(EVENT_FLOOR_JOINED))
-		{
-            Log.d(TAG, "Floor Joined");
-			Floor f = intent.getParcelableExtra(EVENT_FLOOR_JOINED);
-			songs = f.getSongs();
-		}
-		else if(intent.getAction().equals(EVENT_FLOOR_JOINED))
+		if(intent.getAction().equals(EVENT_SONG_LIST_UPDATE))
 		{
 			songs = intent.getParcelableArrayListExtra(EVENT_SONG_LIST_UPDATE);
-		}
-		Log.d(TAG, "Got Song List");
+			Log.d(TAG, "Got Song List");
+			checkSongs();
+
 //		for(Song s:songs)
 //        {
 //            Log.d(TAG, "Song: " + s.getName() + " - " + s.getArtist());
 //            Log.d(TAG, "Url: " + s.getUrl());
 //        }
-		checkSongs();
+		}
 	}
 
 	@Override
@@ -155,10 +148,18 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 	{
 		Log.d(TAG, "onCompletion");
 		m[next].start();
+		m[next].setOnCompletionListener(this);
+		m[next].setOnErrorListener(this);
 		songs.remove(s[current]);
 		swap();
 		checkSongs();
 		mediaPlayer.release();
+	}
 
+	@Override
+	public boolean onError(MediaPlayer mediaPlayer, int i, int i1)
+	{
+		Log.e(TAG, "onError: (" + String.valueOf(i) + ", " + String.valueOf(i1)+ ")");
+		return false;
 	}
 }
