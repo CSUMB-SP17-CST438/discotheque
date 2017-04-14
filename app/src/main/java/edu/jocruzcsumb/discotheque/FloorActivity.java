@@ -46,8 +46,7 @@ public class FloorActivity extends AppCompatActivity
 		@Override
 		public void onReceive(Context context, Intent intent)
 		{
-			Log.d(TAG, "onRecieve");
-			Log.d(TAG, "intent.getAction() = " + intent.getAction());
+            Log.d(TAG, "onRecieve: " + intent.getAction());
 			switch(intent.getAction())
 			{
                 case EVENT_SONG_STARTED:

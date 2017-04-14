@@ -5,8 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -15,7 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
@@ -217,226 +214,6 @@ public class FloorService extends IntentService
 		LocalBroadcastManager.getInstance(getApplicationContext())
 				.registerReceiver(r, f);
 
-		// List Events
-		Sockets.getSocket()
-				.on(EVENT_SONG_LIST_UPDATE, new Emitter.Listener()
-				{
-					@Override
-					public void call(Object... args)
-					{
-						Log.d(TAG, EVENT_SONG_LIST_UPDATE);
-
-						JSONObject o = (JSONObject) args[0];
-						ArrayList<Song> l = null;
-
-						if(o == null)
-						{
-							Log.w(TAG, EVENT_SONG_LIST_UPDATE + ": json was null");
-							return;
-						}
-
-						// Parse JSON
-						try
-						{
-							JSONArray a = o.getJSONArray("songlist");
-							l = Song.parse(a);
-						}
-						catch(JSONException e)
-						{
-							e.printStackTrace();
-							Log.w(TAG, EVENT_SONG_LIST_UPDATE + ": failed to parse json");
-							return;
-						}
-
-						if(l == null)
-						{
-							Log.w(TAG, EVENT_SONG_LIST_UPDATE + ": arraylist was null");
-							return;
-						}
-
-						// Set songs
-						FloorService.this.floor.setSongs(l);
-
-						// Broadcast the event (so that FloorActivity can update)
-						broadcast(EVENT_SONG_LIST_UPDATE, l);
-					}
-				});
-		Sockets.getSocket()
-				.on(EVENT_USER_LIST_UPDATE, new Emitter.Listener()
-				{
-					@Override
-					public void call(Object... args)
-					{
-						Log.d(TAG, EVENT_USER_LIST_UPDATE);
-
-						JSONObject o = (JSONObject) args[0];
-						ArrayList<User> l = null;
-
-						if(o == null)
-						{
-							Log.w(TAG, EVENT_USER_LIST_UPDATE + ": json was null");
-							return;
-						}
-
-						// Parse JSON
-						try
-						{
-							JSONArray a = o.getJSONArray("floor_members");
-							l = User.parse(a);
-						}
-						catch(JSONException e)
-						{
-							e.printStackTrace();
-							Log.w(TAG, EVENT_USER_LIST_UPDATE + ": failed to parse json");
-							return;
-						}
-
-						if(l == null)
-						{
-							Log.w(TAG, EVENT_USER_LIST_UPDATE + ": arraylist was null");
-							return;
-						}
-
-						// Set users
-						FloorService.this.floor.setUsers(l);
-
-						// Broadcast the event (so that FloorActivity can update)
-						broadcast(EVENT_USER_LIST_UPDATE, l);
-					}
-				});
-		Sockets.getSocket()
-				.on(EVENT_MESSAGE_LIST_UPDATE, new Emitter.Listener()
-				{
-					@Override
-					public void call(Object... args)
-					{
-						Log.d(TAG, EVENT_MESSAGE_LIST_UPDATE);
-
-						JSONObject o = (JSONObject) args[0];
-						ArrayList<Message> l = null;
-
-						if(o == null)
-						{
-							Log.w(TAG, EVENT_MESSAGE_LIST_UPDATE + ": json was null");
-							return;
-						}
-
-						// Parse JSON
-						try
-						{
-							JSONArray a = o.getJSONArray("floor_messages");
-							l = Message.parse(a);
-						}
-						catch(JSONException e)
-						{
-							e.printStackTrace();
-							Log.w(TAG, EVENT_MESSAGE_LIST_UPDATE + ": failed to parse json");
-							return;
-						}
-
-						if(l == null)
-						{
-							Log.w(TAG, EVENT_MESSAGE_LIST_UPDATE + ": arraylist was null");
-							return;
-						}
-
-						// Set Messages
-						FloorService.this.floor.setMessages(l);
-
-						// Broadcast the event (so that FloorActivity can update)
-						broadcast(EVENT_MESSAGE_LIST_UPDATE, l);
-					}
-				});
-
-		// Add Events
-		Sockets.getSocket()
-				.on(EVENT_USER_ADD, new Emitter.Listener()
-				{
-					@Override
-					public void call(Object... args)
-					{
-						Log.d(TAG, EVENT_USER_ADD);
-
-						User u = null;
-						// Get the user object
-						try
-						{
-							u = User.parse((JSONObject) args[0]);
-						}
-						catch(JSONException e)
-						{
-							e.printStackTrace();
-							Log.w(TAG, EVENT_USER_ADD + ": failed to parse json");
-							return;
-						}
-
-						// Add the user to the floor object
-						FloorService.this.floor.getUsers()
-								.add(u);
-
-						// Broadcast the event (so that FloorActivity can update)
-						broadcast(EVENT_USER_ADD, u);
-					}
-				});
-		Sockets.getSocket()
-				.on(EVENT_USER_REMOVE, new Emitter.Listener()
-				{
-					@Override
-					public void call(Object... args)
-					{
-						Log.d(TAG, EVENT_USER_REMOVE);
-
-						User u = null;
-						// Get the user object
-						try
-						{
-							u = User.parse((JSONObject) args[0]);
-						}
-						catch(JSONException e)
-						{
-							e.printStackTrace();
-							Log.w(TAG, EVENT_USER_REMOVE + ": failed to parse json");
-							return;
-						}
-
-						// Remove the user from the floor object
-						FloorService.this.floor.getUsers()
-								.remove(u);
-
-						// Broadcast the event (so that FloorActivity can update)
-						broadcast(EVENT_USER_REMOVE, u);
-					}
-				});
-		Sockets.getSocket()
-				.on(EVENT_MESSAGE_ADD, new Emitter.Listener()
-				{
-					@Override
-					public void call(Object... args)
-					{
-						Log.d(TAG, EVENT_MESSAGE_ADD);
-
-						Message m = null;
-						// Get the user object
-						try
-						{
-							m = Message.parse((JSONObject) args[0]);
-						}
-						catch(JSONException e)
-						{
-							e.printStackTrace();
-							Log.w(TAG, EVENT_MESSAGE_ADD + ": failed to parse json");
-							return;
-						}
-
-						// Add the user to the floor object
-						FloorService.this.floor.getMessages()
-								.add(m);
-
-						// Broadcast the event (so that FloorActivity can update)
-						broadcast(EVENT_MESSAGE_ADD, m);
-					}
-				});
-
 
 		// Finally, ask the server to join the floor and retreive the floor object.
 		Sockets.SocketWaiter waiter = new Sockets.SocketWaiter(EVENT_JOIN_FLOOR, EVENT_FLOOR_JOINED);
@@ -477,7 +254,7 @@ public class FloorService extends IntentService
 		broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
 		broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
 
-
+        registerSocketEvents();
 		try
 		{
 			floorLatch.await();
@@ -487,5 +264,245 @@ public class FloorService extends IntentService
 			e.printStackTrace();
 			Log.w(TAG, "The floorLatch was interruped, leaving the floor");
 		}
+		unregisterSocketEvents();
 	}
+
+	private void unregisterSocketEvents()
+    {
+        for(String e: new String[]
+            {
+                    EVENT_FLOOR_JOINED,
+                    EVENT_SONG_LIST_UPDATE,
+                    EVENT_MESSAGE_LIST_UPDATE,
+                    EVENT_USER_LIST_UPDATE,
+                    EVENT_MESSAGE_ADD,
+                    EVENT_USER_ADD,
+                    EVENT_USER_REMOVE,
+            })
+        Sockets.getSocket().off(e);
+    }
+
+	private void registerSocketEvents()
+    {
+        // List Events
+        Sockets.getSocket()
+               .on(EVENT_SONG_LIST_UPDATE, new Emitter.Listener()
+               {
+                   @Override
+                   public void call(Object... args)
+                   {
+                       Log.d(TAG, EVENT_SONG_LIST_UPDATE);
+
+                       JSONObject o = (JSONObject) args[0];
+                       ArrayList<Song> l = null;
+
+                       if(o == null)
+                       {
+                           Log.w(TAG, EVENT_SONG_LIST_UPDATE + ": json was null");
+                           return;
+                       }
+
+                       // Parse JSON
+                       try
+                       {
+                           JSONArray a = o.getJSONArray("songlist");
+                           l = Song.parse(a);
+                       }
+                       catch(JSONException e)
+                       {
+                           e.printStackTrace();
+                           Log.w(TAG, EVENT_SONG_LIST_UPDATE + ": failed to parse json");
+                           return;
+                       }
+
+                       if(l == null)
+                       {
+                           Log.w(TAG, EVENT_SONG_LIST_UPDATE + ": arraylist was null");
+                           return;
+                       }
+
+                       // Set songs
+                       FloorService.this.floor.setSongs(l);
+
+                       // Broadcast the event (so that FloorActivity can update)
+                       broadcast(EVENT_SONG_LIST_UPDATE, l);
+                   }
+               });
+        Sockets.getSocket()
+               .on(EVENT_USER_LIST_UPDATE, new Emitter.Listener()
+               {
+                   @Override
+                   public void call(Object... args)
+                   {
+                       Log.d(TAG, EVENT_USER_LIST_UPDATE);
+
+                       JSONObject o = (JSONObject) args[0];
+                       ArrayList<User> l = null;
+
+                       if(o == null)
+                       {
+                           Log.w(TAG, EVENT_USER_LIST_UPDATE + ": json was null");
+                           return;
+                       }
+
+                       // Parse JSON
+                       try
+                       {
+                           Log.d(TAG, o.toString());
+                           JSONArray a = o.getJSONArray("floor members");
+                           l = User.parse(a);
+                       }
+                       catch(JSONException e)
+                       {
+                           e.printStackTrace();
+                           Log.w(TAG, EVENT_USER_LIST_UPDATE + ": failed to parse json");
+                           return;
+                       }
+
+                       if(l == null)
+                       {
+                           Log.w(TAG, EVENT_USER_LIST_UPDATE + ": arraylist was null");
+                           return;
+                       }
+
+                       // Set users
+                       FloorService.this.floor.setUsers(l);
+
+                       // Broadcast the event (so that FloorActivity can update)
+                       broadcast(EVENT_USER_LIST_UPDATE, l);
+                   }
+               });
+        Sockets.getSocket()
+               .on(EVENT_MESSAGE_LIST_UPDATE, new Emitter.Listener()
+               {
+                   @Override
+                   public void call(Object... args)
+                   {
+                       Log.d(TAG, EVENT_MESSAGE_LIST_UPDATE);
+
+                       JSONObject o = (JSONObject) args[0];
+                       ArrayList<Message> l = null;
+
+                       if(o == null)
+                       {
+                           Log.w(TAG, EVENT_MESSAGE_LIST_UPDATE + ": json was null");
+                           return;
+                       }
+
+                       // Parse JSON
+                       try
+                       {
+                           JSONArray a = o.getJSONArray("floor_messages");
+                           l = Message.parse(a);
+                       }
+                       catch(JSONException e)
+                       {
+                           e.printStackTrace();
+                           Log.w(TAG, EVENT_MESSAGE_LIST_UPDATE + ": failed to parse json");
+                           return;
+                       }
+
+                       if(l == null)
+                       {
+                           Log.w(TAG, EVENT_MESSAGE_LIST_UPDATE + ": arraylist was null");
+                           return;
+                       }
+
+                       // Set Messages
+                       FloorService.this.floor.setMessages(l);
+
+                       // Broadcast the event (so that FloorActivity can update)
+                       broadcast(EVENT_MESSAGE_LIST_UPDATE, l);
+                   }
+               });
+
+        // Add Events
+        Sockets.getSocket()
+               .on(EVENT_USER_ADD, new Emitter.Listener()
+               {
+                   @Override
+                   public void call(Object... args)
+                   {
+                       Log.d(TAG, EVENT_USER_ADD);
+
+                       User u = null;
+                       // Get the user object
+                       try
+                       {
+                           u = User.parse((JSONObject) args[0]);
+                       }
+                       catch(JSONException e)
+                       {
+                           e.printStackTrace();
+                           Log.w(TAG, EVENT_USER_ADD + ": failed to parse json");
+                           return;
+                       }
+
+                       // Add the user to the floor object
+                       FloorService.this.floor.getUsers()
+                                              .add(u);
+
+                       // Broadcast the event (so that FloorActivity can update)
+                       broadcast(EVENT_USER_ADD, u);
+                   }
+               });
+        Sockets.getSocket()
+               .on(EVENT_USER_REMOVE, new Emitter.Listener()
+               {
+                   @Override
+                   public void call(Object... args)
+                   {
+                       Log.d(TAG, EVENT_USER_REMOVE);
+
+                       User u = null;
+                       // Get the user object
+                       try
+                       {
+                           u = User.parse((JSONObject) args[0]);
+                       }
+                       catch(JSONException e)
+                       {
+                           e.printStackTrace();
+                           Log.w(TAG, EVENT_USER_REMOVE + ": failed to parse json");
+                           return;
+                       }
+
+                       // Remove the user from the floor object
+                       FloorService.this.floor.getUsers()
+                                              .remove(u);
+
+                       // Broadcast the event (so that FloorActivity can update)
+                       broadcast(EVENT_USER_REMOVE, u);
+                   }
+               });
+        Sockets.getSocket()
+               .on(EVENT_MESSAGE_ADD, new Emitter.Listener()
+               {
+                   @Override
+                   public void call(Object... args)
+                   {
+                       Log.d(TAG, EVENT_MESSAGE_ADD);
+
+                       Message m = null;
+                       // Get the user object
+                       try
+                       {
+                           m = Message.parse((JSONObject) args[0]);
+                       }
+                       catch(JSONException e)
+                       {
+                           e.printStackTrace();
+                           Log.w(TAG, EVENT_MESSAGE_ADD + ": failed to parse json");
+                           return;
+                       }
+
+                       // Add the user to the floor object
+                       FloorService.this.floor.getMessages()
+                                              .add(m);
+
+                       // Broadcast the event (so that FloorActivity can update)
+                       broadcast(EVENT_MESSAGE_ADD, m);
+                   }
+               });
+    }
 }
