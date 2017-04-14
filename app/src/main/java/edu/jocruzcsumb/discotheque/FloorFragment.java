@@ -21,7 +21,6 @@ public class FloorFragment extends Fragment
 		@Override
 		public void onReceive(Context context, Intent intent)
 		{
-
 		}
 	};
 
