@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_FLOOR_JOINED;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_SONG_LIST;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_SONG_LIST_UPDATE;
 
@@ -44,14 +42,6 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 		this.context = context;
 		this.songs = new ArrayList<Song>();
 
-
-		//Set up the media players
-		for(int i = 0; i < 2; i++)
-		{
-			m[i] = new MediaPlayer();
-            s[i]=null;
-		}
-
 		// Recieve song events
 		IntentFilter f = new IntentFilter();
 		f.addAction(EVENT_SONG_LIST_UPDATE);
@@ -67,12 +57,12 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 
 	private void reset(int i)
 	{
-		//m[i].release();
-		m[i].reset();
+		m[i] = new MediaPlayer();
 		m[i].setAudioStreamType(AudioManager.STREAM_MUSIC);
 		try
 		{
 			m[i].setDataSource(s[i].getUrl());
+            m[i].setLooping(false);
 			m[i].prepare();
 		}
 		catch(IOException e)
@@ -101,7 +91,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 			lock = true;
 			s[current] = songs.get(0);
 			// The currently playing song has been invalidated, stop and restart player[current]
-			if(m[current].isPlaying())m[current].stop();
+			if(m[current] != null && m[current].isPlaying())m[current].stop();
 			reset(current);
 			// TODO: Seek to start time
 			// m[current].seekTo();
@@ -147,13 +137,24 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 	public void onCompletion(MediaPlayer mediaPlayer)
 	{
 		Log.d(TAG, "onCompletion");
-		m[next].start();
-		m[next].setOnCompletionListener(this);
-		m[next].setOnErrorListener(this);
-		songs.remove(s[current]);
+
+        // Swap the mediaplayers
 		swap();
-		checkSongs();
+
+        //Start the next song
+		m[current].start();
+		m[current].setOnCompletionListener(this);
+		m[current].setOnErrorListener(this);
+
+        //Broadcast
+        Intent k = new Intent(EVENT_SONG_STARTED);
+        k.putExtra(EVENT_SONG_STARTED, s[current]);
+        LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(k);
+
 		mediaPlayer.release();
+        // Remove the song we just played and then re check the song list
+		songs.remove(s[next]);
+		checkSongs();
 	}
 
 	@Override
