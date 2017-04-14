@@ -45,12 +45,10 @@ public class User implements Parcelable
 	private String photo = null;
 	private String bio = null;
 	private ArrayList<String> genres = null;
-	private UserList friendsList = null;
 
 	public User()
 	{
 		genres = new ArrayList<String>();
-		friendsList = new UserList();
 	}
 
 	public User(String userName, String firstName, String lastName)
@@ -230,11 +228,6 @@ public class User implements Parcelable
 	public void setBio(String bio)
 	{
 		this.bio = bio;
-	}
-
-	public UserList getFriendsList()
-	{
-		return friendsList;
 	}
 
 	@Override

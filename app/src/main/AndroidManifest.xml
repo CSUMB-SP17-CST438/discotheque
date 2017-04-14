@@ -26,12 +26,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".PickFloorActivity"/>
-        <activity android:name=".PickSongActivity"/>
         <activity
             android:name=".ViewProfileActivity"
             android:label="@string/title_activity_view_profile"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ChatRoomActivity"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

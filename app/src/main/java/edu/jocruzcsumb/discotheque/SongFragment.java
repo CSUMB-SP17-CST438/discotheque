@@ -48,7 +48,7 @@ public class SongFragment extends FloorFragment
 				songs = intent.getParcelableArrayListExtra(FloorService.EVENT_SONG_LIST_UPDATE);
 			}
 
-			songAdapter = new SongAdapter(getActivity(), songs, new CustomItemClickListener()
+			songAdapter = new SongAdapter(getActivity(), songs, new RecyclerViewListener()
 			{
 				@Override
 				public void onItemClick(View v, int position)
@@ -111,10 +111,10 @@ public class SongFragment extends FloorFragment
 	{
 		Context mContext;
 		ArrayList<Song> songs = null;
-		CustomItemClickListener listener;
+		RecyclerViewListener listener;
 
 
-		SongAdapter(Context mContext, ArrayList<Song> songs, CustomItemClickListener listener)
+		SongAdapter(Context mContext, ArrayList<Song> songs, RecyclerViewListener listener)
 		{
 			this.songs = songs;
 			this.mContext = mContext;
