@@ -1,12 +1,8 @@
 package edu.jocruzcsumb.discotheque;
 
-import android.content.BroadcastReceiver;
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,98 +10,39 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_FLOOR_JOINED;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_FLOOR;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_USER_LIST;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_JOIN_FLOOR;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_LIST_UPDATE;
-
 /**
  * Created by Peter on 4/9/2017.
  */
 
-public class UserFragment  extends Fragment implements View.OnClickListener {
+public class UserFragment extends FloorFragment implements View.OnClickListener
+{
 
     /**
      * The fragment argument representing the section number for this
      * fragment.
      */
     private static final String TAG = "UserFragment";
-    private static final String ARG_FLOOR_ID = "section_number";
-    private static ArrayList<User> users = null;
-    // EVENTS are recieved here.
-    BroadcastReceiver r = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "onRecieve");
-            Log.d(TAG, "intent.getAction() = " + intent.getAction());
-            if(intent.getAction().equals(EVENT_FLOOR_JOINED))
-            {
-
-                //get all users
-                    Floor floor = intent.getParcelableExtra(FloorService.EVENT_FLOOR_JOINED);
-                    floorId = floor.getId();
-                    users = floor.getUsers();
-                Log.d(TAG, "users in EVENT_FLOOR_JOIN " + users.toString());
-            }
-            else
-            {
-                users = intent.getParcelableArrayListExtra(EVENT_USER_LIST_UPDATE);
-                Log.d(TAG, "users in EVENT_USER_LIST_UPDATE " + users.toString());
-
-            }
-
-            //TODO PETER UPDATE THE UI WITH THE NEW users ARRAYLIST
-            userAdapter = new UserFragment.UserAdapter(getActivity(), users);
-            Log.d(TAG, users.toString());
-            getActivity().runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    recyclerView.setAdapter(userAdapter);
-                }
-            });
-
-
-        }
-
-    };
     private UserFragment.UserAdapter userAdapter;
     private RecyclerView recyclerView;
-    private int floorId;
     private ImageView userPhoto;
     private TextView username;
 
-    public UserFragment() {
-
-    }
-
-    public static UserFragment newInstance() {
+    public static UserFragment newInstance()
+    {
         UserFragment fragment = new UserFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
-
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // This tells the activity what LocalBroadcast Events to listen for
-        IntentFilter f = new IntentFilter();
-        f.addAction(EVENT_USER_LIST_UPDATE);
-        f.addAction(EVENT_JOIN_FLOOR);
-
-        LocalBroadcastManager m = LocalBroadcastManager.getInstance(this.getContext());
-        m.registerReceiver(r, f);
-        m.sendBroadcast(new Intent(EVENT_GET_FLOOR));
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View rootView = inflater.inflate(R.layout.fragment_user, container, false);
         userPhoto = (ImageView) rootView.findViewById(R.id.userPhoto);
         username = (TextView) rootView.findViewById(R.id.username);
@@ -114,60 +51,120 @@ public class UserFragment  extends Fragment implements View.OnClickListener {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv3);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(llm);
-
+        if (floor == null)
+        {
+            Log.w(TAG, "floor was null");
+        }
+        else
+        {
+            updateListUI(floor.getUsers());
+        }
         return rootView;
-
-
     }
 
-
+    @Override
+    public void onUserListUpdate(ArrayList<User> users)
+    {
+        updateListUI(users);
+    }
 
     @Override
-    public void onClick(View v) {
+    public void onFloorJoined(Floor floor)
+    {
+        updateListUI(floor.getUsers());
+    }
+
+    @Override
+    public void onUserAdded(User u)
+    {
+        updateListUI(floor.getUsers());
+    }
+
+    @Override
+    public void onUserRemoved(User u)
+    {
+        updateListUI(floor.getUsers());
+    }
+
+    public void updateListUI(final ArrayList<User> users)
+    {
+        // check that we can access the parent activity
+        Activity a = getActivity();
+        if (a == null)
+        {
+            Log.e(TAG, "onSongListUpdate: getActivity returned null, cancelling update");
+            return;
+        }
+
+        userAdapter = new UserFragment.UserAdapter(a, users);
+        a.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                recyclerView.setAdapter(userAdapter);
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View v)
+    {
         //TODO: show profile'
 
     }
 
-    public class UserAdapter extends RecyclerView.Adapter<UserFragment.UserAdapter.UserViewHolder> {
+    public class UserAdapter extends RecyclerView.Adapter<UserFragment.UserAdapter.UserViewHolder>
+    {
         Context mContext;
         ArrayList<User> users = null;
 
-        UserAdapter(Context mContext, ArrayList<User> users) {
+        UserAdapter(Context mContext, ArrayList<User> users)
+        {
             this.users = users;
             this.mContext = mContext;
         }
 
-        public int getItemCount() {
+        public int getItemCount()
+        {
             return users.size();
         }
 
         @Override
-        public UserFragment.UserAdapter.UserViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.activity_user, viewGroup, false);
+        public UserFragment.UserAdapter.UserViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
+        {
+            View v = LayoutInflater.from(viewGroup.getContext())
+                                   .inflate(R.layout.activity_user, viewGroup, false);
             UserFragment.UserAdapter.UserViewHolder svh = new UserFragment.UserAdapter.UserViewHolder(v);
             return svh;
         }
 
 
         @Override
-        public void onBindViewHolder(UserFragment.UserAdapter.UserViewHolder userViewHolder, int i) {
+        public void onBindViewHolder(UserFragment.UserAdapter.UserViewHolder userViewHolder, int i)
+        {
             //userViewHolder.userPhoto.setText(users.get(i).getPhoto());
             //TODO set profile picture
             //maybe setImageResource?
-            userViewHolder.username.setText(users.get(i).getFirstName() + " " + users.get(i).getLastName());
+            userViewHolder.username.setText(users.get(i)
+                                                 .getFirstName() + " " + users.get(i)
+                                                                              .getLastName());
         }
 
         @Override
-        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        public void onAttachedToRecyclerView(RecyclerView recyclerView)
+        {
             super.onAttachedToRecyclerView(recyclerView);
         }
 
-        public class UserViewHolder extends RecyclerView.ViewHolder {
+        public class UserViewHolder extends RecyclerView.ViewHolder
+        {
             CardView cv;
             TextView username;
             ImageView userPhoto;
 
-            UserViewHolder(View itemView) {
+            UserViewHolder(View itemView)
+            {
                 super(itemView);
                 cv = (CardView) itemView.findViewById(R.id.userCardView);
                 username = (TextView) itemView.findViewById(R.id.username);

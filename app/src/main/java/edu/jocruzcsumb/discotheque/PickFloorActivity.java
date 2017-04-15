@@ -65,7 +65,7 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 						e.printStackTrace();
 					}
 
-					floorAdapter = new FloorAdapter(PickFloorActivity.this, floorList, new CustomItemClickListener() {
+					floorAdapter = new FloorAdapter(PickFloorActivity.this, floorList, new RecyclerViewListener() {
 						@Override
 						public void onItemClick(View v, int position) {
 							Floor floor = floorList.get(position);
@@ -121,9 +121,9 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 
 		ArrayList<Floor> floorList;
 		Context mContext;
-		CustomItemClickListener listener;
+		RecyclerViewListener listener;
 
-		FloorAdapter(Context mContext, ArrayList<Floor> floorList, CustomItemClickListener listener)
+		FloorAdapter(Context mContext, ArrayList<Floor> floorList, RecyclerViewListener listener)
 		{
 			this.floorList = floorList;
 			this.mContext = mContext;
