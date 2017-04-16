@@ -82,8 +82,7 @@ public class FloorService extends IntentService
 		@Override
 		public void onReceive(Context context, Intent intent)
 		{
-			Log.d(TAG, "onRecieve");
-			Log.d(TAG, "intent.getAction() = " + intent.getAction());
+			Log.v(TAG, "onRecieve: " + intent.getAction());
 			switch(intent.getAction())
 			{
 				case FloorService.EVENT_GET_FLOOR:
@@ -122,10 +121,8 @@ public class FloorService extends IntentService
 					}
 					Sockets.getSocket().emit(EVENT_MESSAGE_SEND, jsonObject);
 					break;
-				case FloorService.EVENT_LEAVE_FLOOR:
-					Log.d(TAG, EVENT_LEAVE_FLOOR);
-					Sockets.getSocket()
-							.emit(EVENT_LEAVE_FLOOR);
+				case EVENT_LEAVE_FLOOR:
+					Log.v(TAG, EVENT_LEAVE_FLOOR);
 					floorLatch.countDown();
 					break;
 			}
@@ -248,7 +245,7 @@ public class FloorService extends IntentService
         Log.d(TAG, "Starting seamless player");
         SeamlessMediaPlayer seamlessMediaPlayer = new SeamlessMediaPlayer(this);
 
-        Log.d(TAG, EVENT_FLOOR_JOINED);
+        Log.v(TAG, EVENT_FLOOR_JOINED);
 		broadcast(EVENT_FLOOR_JOINED, floor);
 		broadcast(EVENT_MESSAGE_LIST_UPDATE, floor.getMessages());
 		broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
@@ -264,6 +261,8 @@ public class FloorService extends IntentService
 			e.printStackTrace();
 			Log.w(TAG, "The floorLatch was interruped, leaving the floor");
 		}
+		Sockets.getSocket().emit(EVENT_LEAVE_FLOOR);
+		seamlessMediaPlayer.stop();
 		unregisterSocketEvents();
 	}
 

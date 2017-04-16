@@ -163,4 +163,10 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 		Log.e(TAG, "onError: (" + String.valueOf(i) + ", " + String.valueOf(i1)+ ")");
 		return false;
 	}
+
+	public void stop()
+	{
+        if(m[next].isPlaying())m[next].stop();
+        if(m[current].isPlaying())m[current].stop();
+	}
 }
