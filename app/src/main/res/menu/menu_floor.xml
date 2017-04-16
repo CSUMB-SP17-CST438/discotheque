@@ -7,4 +7,9 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_leave_floor"
+        android:orderInCategory="100"
+        android:title="@string/action_leave_floor"
+        app:showAsAction="never"/>
 </menu>
