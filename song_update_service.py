@@ -17,7 +17,6 @@ import json
 import threading
 import discoSounds as ds
 import time
-from serv import * 
 
 class songUpdateThread(threading.Thread):
 	def __init__(self,thread_name,floor_id,songlist,socket):
