@@ -9,6 +9,7 @@ import datetime
 import requests
 import facebook
 import time
+from song_update_service import *
 
 public_room = 912837
 app = flask.Flask(__name__)
@@ -20,7 +21,7 @@ db.init_app(app)
 
 socket = flask_socketio.SocketIO(app)
 # default route
-
+thread_holder = SongThreadHolder(socket)
 
 @app.route('/')
 def start():
@@ -130,6 +131,8 @@ def on_get_floors(data):
 
 
 
+
+#function assumes that the client sends floor_name,member_id,is_public, and floor_genre
 @socket.on('create floor')
 def on_create(data):
     if data['is_public'] == 1:
@@ -142,7 +145,8 @@ def on_create(data):
     join_room(new_floor.floor_id)
     genre = data['floor_genre']
     songs = ds.getSongList(genre)
-    new_floor.set_songlist(songs)
+    thread_holder.add_thread(new_floor.floor_name,new_floor.floor_id,songs)
+    new_floor.set_songlist(thread_holder.find_thread(new_floor.floor_id).songlist)
     updated_floor = getFloor(new_floor.floor_id)
     socket.emit('floor created', {'floor':updated_floor.to_list()},room=new_floor.floor_id)
 
@@ -162,7 +166,8 @@ def on_join_floor(data):
 	floor_to_join.add_member(data['member_id'])
 	# print(floor_to_join.to_list())
 	floor_list = floor_to_join.to_list()
-	
+	thread_holder.add_thread(floor_to_join.floor_name,floor_to_join.floor_id,floor_list['songlist'])
+	floor_to_join.set_songlist(thread_holder.find_thread(floor_to_join.floor_id).songlist)
 	socket.emit('floor joined', {'floor':floor_to_join.to_list()}, room=request.sid)
 	print("***memlist update***")
 	print(floor_list['floor_members'])
@@ -175,6 +180,10 @@ def on_leave_floor(data):
     current_floor = getFloor(data['floor_id'])
     leave_room(data['floor_id'])
     socket.emit('member left', {'floor':current_floor.to_list()}, room=data['floor_id'])
+    if not current_floor.isActive():
+    	thread_holder.update_thead_status(current_floor.floor_id,current_floor.isActive())
+
+    
 
     
 
