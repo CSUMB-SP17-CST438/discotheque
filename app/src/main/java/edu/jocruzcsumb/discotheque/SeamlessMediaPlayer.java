@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_SONG_LIST;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_SONG_LIST_UPDATE;
+
 /**
  * Created by carsen on 4/9/17.
  */
@@ -31,6 +32,8 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 	private int next = 1;
 	private boolean lock = false;
 
+	//TODO when player object is started, we seek to utc.now - utc start time
+	private long timeStarted = 0;
 	private Context context;
 	private ArrayList<Song> songs = null;
 
@@ -84,7 +87,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 			Log.d(TAG, "couldnt checkSongs because lock");
 			return;
 		}
-		if(songs.size() > 0 && s[current] != songs.get(0) && songs.get(0).getStartTime() != 0)
+		if(songs.size() > 0 && s[current] != songs.get(0))
 		{
 			lock = true;
 			s[current] = songs.get(0);
@@ -115,7 +118,6 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
                 }
                 m[current].start();
             }
-
 			m[current].setOnCompletionListener(this);
 			m[current].setOnErrorListener(this);
 			Intent k = new Intent(EVENT_SONG_STARTED);
@@ -125,7 +127,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 			Log.d(TAG, "started playback");
 			lock = false;
 		}
-		if(songs.size() > 1 && s[next] != songs.get(1) && songs.get(1).getStartTime() != 0)
+		if(songs.size() > 1 && s[next] != songs.get(1))
 		{
 			lock=true;
 			s[next] = songs.get(1);
