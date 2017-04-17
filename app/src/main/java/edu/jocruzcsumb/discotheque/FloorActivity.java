@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_LEAVE_FLOOR;
 import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STARTED;
 import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STOPPED;
 
@@ -194,6 +195,12 @@ public class FloorActivity extends AppCompatActivity
 	}
 
 	// EVENTS are broadcasted here
+    private void broadcast(String event)
+    {
+        Intent k = new Intent(event);
+        broadcast(k);
+    }
+
 	private void broadcast(String event, Parcelable params)
 	{
 		Intent k = new Intent(event);
@@ -223,11 +230,15 @@ public class FloorActivity extends AppCompatActivity
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 
-		//noinspection SimplifiableIfStatement
-		if(id == R.id.action_settings)
-		{
-			return true;
-		}
+        switch(id)
+        {
+            case R.id.action_settings:
+                break;
+            case R.id.action_leave_floor:
+                broadcast(EVENT_LEAVE_FLOOR);
+                finish();
+                break;
+        }
 
 		return super.onOptionsItemSelected(item);
 	}
