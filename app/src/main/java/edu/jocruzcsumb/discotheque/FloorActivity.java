@@ -38,6 +38,12 @@ public class FloorActivity extends AppCompatActivity
     private ImageView albumCoverView;
     private TextView songInfoView;
 
+    @Override
+    public void onBackPressed()
+    {
+        broadcast(EVENT_LEAVE_FLOOR);
+        super.onBackPressed();
+    }
 
 	// EVENTS are recieved here.
     // IDK whatever dumbass decided to make BroadcastReciever a class and not an interface,
