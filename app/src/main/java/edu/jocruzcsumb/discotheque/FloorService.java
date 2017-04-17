@@ -122,6 +122,7 @@ public class FloorService extends IntentService
 					Sockets.getSocket().emit(EVENT_MESSAGE_SEND, jsonObject);
 					break;
 				case EVENT_LEAVE_FLOOR:
+					Log.v(TAG, EVENT_LEAVE_FLOOR);
 					floorLatch.countDown();
 					break;
 			}

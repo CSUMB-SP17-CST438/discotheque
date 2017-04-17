@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_SONG_LIST;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_SONG_LIST_UPDATE;
+
 /**
  * Created by carsen on 4/9/17.
  */
@@ -31,6 +32,8 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 	private int next = 1;
 	private boolean lock = false;
 
+	//TODO when player object is started, we seek to utc.now - utc start time
+	private long timeStarted = 0;
 	private Context context;
 	private ArrayList<Song> songs = null;
 
@@ -83,38 +86,17 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 			Log.d(TAG, "couldnt checkSongs because lock");
 			return;
 		}
-		if(songs.size() > 0 && s[current] != songs.get(0) && songs.get(0).getStartTime() != 0)
+		if(songs.size() > 0 && s[current] != songs.get(0))
 		{
 			lock = true;
 			s[current] = songs.get(0);
 			// The currently playing song has been invalidated, stop and restart player[current]
 			if(m[current] != null && m[current].isPlaying())m[current].stop();
 			reset(current);
-
-            long localtime = System.currentTimeMillis() / 1000;
-            long songtime =s[current].getStartTime();
-
-            Log.d(TAG, "CURRENT TIME: " + String.valueOf(localtime));
-            Log.d(TAG, "SONG START TIME: " + String.valueOf(songtime));
-            if(localtime >= songtime)
-            {
-                m[current].seekTo(1000*(int)(localtime - songtime));
-                m[current].start();
-            }
-            else //(localtime < songtime)
-            {
-                try
-                {
-                    Thread.sleep(1000*(songtime-localtime));
-                }
-                catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                    return;
-                }
-                m[current].start();
-            }
-
+			// TODO: Seek to start time
+			// m[current].seekTo();
+			Log.d(TAG, "checkSongs: start");
+			m[current].start();
 			m[current].setOnCompletionListener(this);
 			m[current].setOnErrorListener(this);
 			Intent k = new Intent(EVENT_SONG_STARTED);
@@ -124,7 +106,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 			Log.d(TAG, "started playback");
 			lock = false;
 		}
-		if(songs.size() > 1 && s[next] != songs.get(1) && songs.get(1).getStartTime() != 0)
+		if(songs.size() > 1 && s[next] != songs.get(1))
 		{
 			lock=true;
 			s[next] = songs.get(1);
