@@ -58,6 +58,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 		m[i].setAudioStreamType(AudioManager.STREAM_MUSIC);
 		try
 		{
+            Log.v(TAG, "setDataSource("+ s[i].getUrl() +")");
 			m[i].setDataSource(s[i].getUrl());
             m[i].setLooping(false);
 			m[i].prepare();
@@ -65,7 +66,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 		catch(IOException e)
 		{
 			e.printStackTrace();
-			Log.w(TAG, "Could not prepare song");
+			Log.e(TAG, "Could not prepare song");
 		}
 	}
 
@@ -98,8 +99,8 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
             Log.d(TAG, "SONG START TIME: " + String.valueOf(songtime));
             if(localtime >= songtime)
             {
-                m[current].seekTo(1000*(int)(localtime - songtime));
                 m[current].start();
+                m[current].seekTo(1000*(int)(localtime - songtime));
             }
             else //(localtime < songtime)
             {
