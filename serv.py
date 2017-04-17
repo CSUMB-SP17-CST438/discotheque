@@ -53,12 +53,15 @@ def on_get_songs(data):
     socket.emit('song list', songs, room=public_room)
 
 
+
+#expects floor_id, and song_id as arguments.
+#updates songlist with song_picked added as the next song in the playlist to be played.
 @socket.on('song picked')
 def on_song_picked(data):
     current_song = data['song']
-    stream_url_loc = ds.getSongURLLocation(current_song['id'])
+    thread_holder.find_thread(data['floor_id']).update_list(current_song['id'])
     current_song['stream_url'] = stream_url_loc
-    socket.emit('song to play', current_song, room=public_room)
+    socket.emit('song to play', current_song, room=floor_id)
 
 
 """this listener is expecting key:pair list (i.e json) with either fb_t for facebook token, or google_t for google token
