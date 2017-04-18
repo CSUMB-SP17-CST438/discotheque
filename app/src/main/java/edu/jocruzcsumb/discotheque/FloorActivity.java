@@ -33,7 +33,7 @@ public class FloorActivity extends AppCompatActivity
 
 	private static final String TAG = "FloorActivity";
 
-	private Floor floor = null;
+	public Floor floor = null;
     private ImageView albumCoverView;
     private TextView songInfoView;
 
@@ -46,8 +46,7 @@ public class FloorActivity extends AppCompatActivity
 		@Override
 		public void onReceive(Context context, Intent intent)
 		{
-			Log.d(TAG, "onRecieve");
-			Log.d(TAG, "intent.getAction() = " + intent.getAction());
+            Log.d(TAG, "onRecieve: " + intent.getAction());
 			switch(intent.getAction())
 			{
                 case EVENT_SONG_STARTED:
@@ -295,8 +294,6 @@ public class FloorActivity extends AppCompatActivity
 					return SongFragment.newInstance();
 				case 2:
 					return UserFragment.newInstance();
-				case 3:
-					return ChatFragment.newInstance();
 			}
 			return null;
 		}
@@ -304,7 +301,7 @@ public class FloorActivity extends AppCompatActivity
 		@Override
 		public int getCount()
 		{
-			return 4;
+			return 3;
 		}
 
 		@Override
@@ -318,8 +315,6 @@ public class FloorActivity extends AppCompatActivity
 					return getString(R.string.song_fragment_title);
 				case 2:
 					return getString(R.string.user_fragment_title);
-				case 3:
-					return "Other?";
 			}
 			return null;
 		}
