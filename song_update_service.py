@@ -18,6 +18,7 @@ import threading
 import discoSounds as ds
 import time
 import math 
+from queue import Queue
 
 class songUpdateThread(threading.Thread):
 	def __init__(self,thread_name,floor_id,songlist,socket):
@@ -32,11 +33,22 @@ class songUpdateThread(threading.Thread):
 		self.SLU_TAG = "songlist update"
 		self.stopper = threading.Event()
 		self.socket = socket
+		self.songQ = Queue(maxsize=0)
+
+	def list_to_queue(self):
+		for s in self.songlist:
+			self.songQ.put(s)
 
 	def run(self):
 		print("Starting thread..")
 		self.send_updates()
 		print("Ending thread..")
+
+
+
+	def queue_updates(self):
+		while not self.q.empty():
+			
 
 	def send_updates(self):
 		position = 0
@@ -47,7 +59,7 @@ class songUpdateThread(threading.Thread):
 					self.songlist[0] = ds.refresh_song(self.songlist[0],self.start_time)
 					self.songlist[0]['start_time'] = self.start_time
 					del self.songlist[1]
-					st = math.floor(self.start_time+(self.songlist[position]['duration']/1000))
+					st = math.floor(self.start_time+(self.songlist[position]['duration']/1000)+2)
 					self.songlist[1] = ds.refresh_song(self.songlist[1],st)
 					del self.songlist[2]
 					self.socket.emit(self.SLU_TAG, self.songlist,room=self.floor_id)
@@ -109,6 +121,7 @@ class SongThreadHolder:
 		for t in self.threads:
 			if t.floor_id == floor_id:
 				return t
+		return None
 
 	def update_thread_status(self,floor_id,FLAG):
 		if FLAG == False:

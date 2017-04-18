@@ -14,7 +14,7 @@ from song_update_service import *
 public_room = 912837
 app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL','postgresql://jcrzr:anchor99@localhost/postgres')
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= 1
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= 0
 
 from schema import *
 db.init_app(app)
@@ -168,9 +168,18 @@ def on_join_floor(data):
 	floor_to_join = getFloor(floor_id)
 	floor_to_join.add_member(data['member_id'])
 	# print(floor_to_join.to_list())
+	#need to check if floor exists before creating thread. 
+	if thread_holder.find_thread(floor_id) is None:
+		#create a new songlist update thread
+		floor_list = floor_to_join.to_list()
+		thread_holder.add_thread(floor_to_join.floor_name,floor_to_join.floor_id,floor_list['songlist'])
+		floor_to_join.set_songlist(thread_holder.find_thread(floor_to_join.floor_id).songlist)
+	
+	#refresh floor object after new songlist has been updated
+	floor_to_join = getFloor(floor_id)
+	print("****floor songlist***")
 	floor_list = floor_to_join.to_list()
-	thread_holder.add_thread(floor_to_join.floor_name,floor_to_join.floor_id,floor_list['songlist'])
-	floor_to_join.set_songlist(thread_holder.find_thread(floor_to_join.floor_id).songlist)
+	print(json.dumps(floor_list['songlist'],indent=4))
 	socket.emit('floor joined', {'floor':floor_to_join.to_list()}, room=request.sid)
 	print("***memlist update***")
 	print(floor_list['floor_members'])
@@ -178,13 +187,14 @@ def on_join_floor(data):
     
 @socket.on('leave floor')
 def on_leave_floor(data):
-    current_floor = getFloor(data['floor_id'])
-    current_floor.rm_member(data['member_id'])
-    current_floor = getFloor(data['floor_id'])
-    leave_room(data['floor_id'])
-    socket.emit('member left', {'floor':current_floor.to_list()}, room=data['floor_id'])
-    if not current_floor.isActive():
-    	thread_holder.update_thead_status(current_floor.floor_id,current_floor.isActive())
+	print("************leave floor triggered************")
+	current_floor = getFloor(data['floor_id'])
+	current_floor.rm_member(data['member_id'])
+	current_floor = getFloor(data['floor_id'])
+	leave_room(data['floor_id'])
+	socket.emit('member left', {'floor':current_floor.to_list()}, room=data['floor_id'])
+	if not current_floor.isActive():
+		thread_holder.update_thead_status(current_floor.floor_id,current_floor.isActive())
 
     
 
@@ -201,7 +211,6 @@ def create_thread(songlist):
 
 # def get_dt_ms():
 # 	epoch = datetime.datetime.utcfromtimestamp(0)
-
 #     return (dt - epoch).total_seconds() * 1000.0
 
 if __name__ == '__main__':

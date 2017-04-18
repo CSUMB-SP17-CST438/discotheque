@@ -17,6 +17,7 @@ import jsonpickle
 # serv.app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
 
 db = flask_sqlalchemy.SQLAlchemy()
+
 ma = Marshmallow()
 pickl = jsonpickle.pickler.Pickler()
 unpickl = jsonpickle.unpickler.Unpickler()
