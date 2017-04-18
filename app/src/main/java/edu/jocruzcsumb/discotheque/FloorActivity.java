@@ -23,9 +23,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_FLOOR_JOINED;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_LEAVE_FLOOR;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_MESSAGE_ADD;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_MESSAGE_LIST_UPDATE;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_SONG_LIST_UPDATE;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_ADD;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_LIST_UPDATE;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_REMOVE;
 import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STARTED;
 import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STOPPED;
 
@@ -71,35 +81,35 @@ public class FloorActivity extends AppCompatActivity
 
 
                     break;
-                case FloorService.EVENT_FLOOR_JOINED:
-                    floor = intent.getParcelableExtra(FloorService.EVENT_FLOOR_JOINED);
+                case EVENT_FLOOR_JOINED:
+                    floor = intent.getParcelableExtra(EVENT_FLOOR_JOINED);
                     //TODO: Update the UI
 
 
                     break;
-				case FloorService.EVENT_SONG_LIST_UPDATE:
-					ArrayList<Song> songs = intent.getParcelableArrayListExtra(FloorService.EVENT_SONG_LIST_UPDATE);
+				case EVENT_SONG_LIST_UPDATE:
+					ArrayList<Song> songs = intent.getParcelableArrayListExtra(EVENT_SONG_LIST_UPDATE);
 					if(floor != null) floor.setSongs(songs);
 					//TODO: Update the UI
 
 
 					break;
-				case FloorService.EVENT_USER_LIST_UPDATE:
-					ArrayList<User> users = intent.getParcelableArrayListExtra(FloorService.EVENT_USER_LIST_UPDATE);
+				case EVENT_USER_LIST_UPDATE:
+					ArrayList<User> users = intent.getParcelableArrayListExtra(EVENT_USER_LIST_UPDATE);
                     if(floor != null) floor.setUsers(users);
 					//TODO: Update the UI
 
 
 					break;
-				case FloorService.EVENT_MESSAGE_LIST_UPDATE:
-					ArrayList<Message> messages = intent.getParcelableArrayListExtra(FloorService.EVENT_MESSAGE_LIST_UPDATE);
+				case EVENT_MESSAGE_LIST_UPDATE:
+					ArrayList<Message> messages = intent.getParcelableArrayListExtra(EVENT_MESSAGE_LIST_UPDATE);
                     if(floor != null) floor.setMessages(messages);
 					//TODO: Update the UI
 
 
 					break;
-				case FloorService.EVENT_MESSAGE_ADD:
-					Message m = intent.getParcelableExtra(FloorService.EVENT_MESSAGE_ADD);
+				case EVENT_MESSAGE_ADD:
+					Message m = intent.getParcelableExtra(EVENT_MESSAGE_ADD);
                     if(floor != null)
                         floor.getMessages()
 							.add(m);
@@ -107,8 +117,8 @@ public class FloorActivity extends AppCompatActivity
 
 
 					break;
-				case FloorService.EVENT_USER_ADD:
-					User u = intent.getParcelableExtra(FloorService.EVENT_USER_ADD);
+				case EVENT_USER_ADD:
+					User u = intent.getParcelableExtra(EVENT_USER_ADD);
                     if(floor != null)
                         floor.getUsers()
 							.add(u);
@@ -116,8 +126,8 @@ public class FloorActivity extends AppCompatActivity
 
 
 					break;
-				case FloorService.EVENT_USER_REMOVE:
-					User r = intent.getParcelableExtra(FloorService.EVENT_USER_REMOVE);
+				case EVENT_USER_REMOVE:
+					User r = intent.getParcelableExtra(EVENT_USER_REMOVE);
                     if(floor != null)
                         floor.getUsers()
 							.remove(r);
@@ -150,13 +160,13 @@ public class FloorActivity extends AppCompatActivity
 
 		// This tells the activity what LocalBroadcast Events to listen for
 		IntentFilter f = new IntentFilter();
-		f.addAction(FloorService.EVENT_FLOOR_JOINED);
-		f.addAction(FloorService.EVENT_SONG_LIST_UPDATE);
-		f.addAction(FloorService.EVENT_USER_LIST_UPDATE);
-		f.addAction(FloorService.EVENT_MESSAGE_LIST_UPDATE);
-		f.addAction(FloorService.EVENT_USER_ADD);
-		f.addAction(FloorService.EVENT_USER_REMOVE);
-		f.addAction(FloorService.EVENT_MESSAGE_ADD);
+		f.addAction(EVENT_FLOOR_JOINED);
+		f.addAction(EVENT_SONG_LIST_UPDATE);
+		f.addAction(EVENT_USER_LIST_UPDATE);
+		f.addAction(EVENT_MESSAGE_LIST_UPDATE);
+		f.addAction(EVENT_USER_ADD);
+		f.addAction(EVENT_USER_REMOVE);
+		f.addAction(EVENT_MESSAGE_ADD);
 		f.addAction(SeamlessMediaPlayer.EVENT_SONG_STARTED);
 
 		// Set the activity to listen for app broadcasts with the above filter
@@ -193,6 +203,13 @@ public class FloorActivity extends AppCompatActivity
         songInfoView = (TextView) findViewById(R.id.song_title_text);
 
 	}
+
+    @Override
+    public void onBackPressed()
+    {
+        broadcast(EVENT_LEAVE_FLOOR);
+        super.onBackPressed();
+    }
 
 	// EVENTS are broadcasted here
     private void broadcast(String event)

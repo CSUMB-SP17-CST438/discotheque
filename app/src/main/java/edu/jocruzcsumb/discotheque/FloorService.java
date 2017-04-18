@@ -261,9 +261,20 @@ public class FloorService extends IntentService
 			e.printStackTrace();
 			Log.w(TAG, "The floorLatch was interruped, leaving the floor");
 		}
-		Sockets.getSocket().emit(EVENT_LEAVE_FLOOR);
-		seamlessMediaPlayer.stop();
-		unregisterSocketEvents();
+        seamlessMediaPlayer.stop();
+        unregisterSocketEvents();
+        obj = new JSONObject();
+        try
+        {
+            obj.put("floor_id", floor.getId());
+            obj.put("member_id", LocalUser.getCurrentUser().getId());
+            Sockets.getSocket().emit(EVENT_LEAVE_FLOOR, obj);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+            Log.e(TAG, "could not create json to leave floor");
+        }
 	}
 
 	private void unregisterSocketEvents()
