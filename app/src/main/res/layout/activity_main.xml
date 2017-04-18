@@ -26,11 +26,20 @@
             android:indeterminate="true" />
     </RelativeLayout>
     <Space
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.50"
         android:orientation="vertical"
 
+        />
+
+    <ImageView
+        android:id="@+id/splash_Logo_ImageView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/all_logo"
+        android:ems="10"
+        android:gravity="center"
         />
 
     <TextView
@@ -41,9 +50,9 @@
         android:ems="10"
         android:gravity="center"
         android:inputType="textPersonName"
-        android:text="Will be pretty picture"
+        android:text="Discoeque"
         android:textColor="#ffffff"
-        android:textSize="20pt" />
+        android:textSize="25pt" />
 
     <Button
         android:id="@+id/guest_login_btn"
