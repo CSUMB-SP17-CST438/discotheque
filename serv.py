@@ -186,6 +186,10 @@ def userEmit(member):
 def create_thread(songlist):
 	thread = threading.thread
 
+#This event is for the privacy policy page
+@app.route('/privacy')
+def privacy():
+    return flask.render_template('privacy.html')
 
 # def get_dt_ms():
 # 	epoch = datetime.datetime.utcfromtimestamp(0)
