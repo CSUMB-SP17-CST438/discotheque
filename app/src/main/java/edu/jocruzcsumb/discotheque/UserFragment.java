@@ -47,7 +47,7 @@ public class UserFragment extends FloorFragment implements View.OnClickListener
         userPhoto = (ImageView) rootView.findViewById(R.id.userPhoto);
         username = (TextView) rootView.findViewById(R.id.username);
         LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
-        llm.setStackFromEnd(true); //scrolls to the bottom
+        //llm.setStackFromEnd(true); //scrolls to the bottom
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv3);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(llm);
