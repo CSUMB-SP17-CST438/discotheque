@@ -2,6 +2,7 @@ package edu.jocruzcsumb.discotheque;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,13 +14,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 /**
  * Created by Peter on 4/9/2017.
  */
 
-public class UserFragment extends FloorFragment implements View.OnClickListener
+public class UserFragment extends FloorFragment
 {
 
     /**
@@ -47,7 +50,7 @@ public class UserFragment extends FloorFragment implements View.OnClickListener
         userPhoto = (ImageView) rootView.findViewById(R.id.userPhoto);
         username = (TextView) rootView.findViewById(R.id.username);
         LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
-        llm.setStackFromEnd(true); //scrolls to the bottom
+        //llm.setStackFromEnd(true); //scrolls to the bottom
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv3);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(llm);
@@ -89,14 +92,24 @@ public class UserFragment extends FloorFragment implements View.OnClickListener
     public void updateListUI(final ArrayList<User> users)
     {
         // check that we can access the parent activity
-        Activity a = getActivity();
+        final Activity a = getActivity();
         if (a == null)
         {
             Log.e(TAG, "onSongListUpdate: getActivity returned null, cancelling update");
             return;
         }
 
-        userAdapter = new UserFragment.UserAdapter(a, users);
+        userAdapter = new UserFragment.UserAdapter(a, users, new RecyclerViewListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                User user = users.get(position);
+                Log.d(TAG, user.toString());
+                //TODO: pass user to profile activity
+                Intent intent = new Intent(a, ViewProfileActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
+            }
+        });
         a.runOnUiThread(new Runnable()
         {
             @Override
@@ -107,22 +120,19 @@ public class UserFragment extends FloorFragment implements View.OnClickListener
         });
     }
 
-    @Override
-    public void onClick(View v)
-    {
-        //TODO: show profile'
-
-    }
 
     public class UserAdapter extends RecyclerView.Adapter<UserFragment.UserAdapter.UserViewHolder>
     {
         Context mContext;
         ArrayList<User> users = null;
+        RecyclerViewListener listener;
 
-        UserAdapter(Context mContext, ArrayList<User> users)
+
+        UserAdapter(Context mContext, ArrayList<User> users, RecyclerViewListener listener)
         {
             this.users = users;
             this.mContext = mContext;
+            this.listener = listener;
         }
 
         public int getItemCount()
@@ -135,7 +145,18 @@ public class UserFragment extends FloorFragment implements View.OnClickListener
         {
             View v = LayoutInflater.from(viewGroup.getContext())
                                    .inflate(R.layout.activity_user, viewGroup, false);
-            UserFragment.UserAdapter.UserViewHolder svh = new UserFragment.UserAdapter.UserViewHolder(v);
+            final UserFragment.UserAdapter.UserViewHolder svh = new UserFragment.UserAdapter.UserViewHolder(v);
+            v.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+
+                    listener.onItemClick(v, svh.getAdapterPosition());
+
+                }
+            });
+
+
+
             return svh;
         }
 
@@ -143,9 +164,12 @@ public class UserFragment extends FloorFragment implements View.OnClickListener
         @Override
         public void onBindViewHolder(UserFragment.UserAdapter.UserViewHolder userViewHolder, int i)
         {
-            //userViewHolder.userPhoto.setText(users.get(i).getPhoto());
             //TODO set profile picture
-            //maybe setImageResource?
+            Picasso.with(mContext)
+                    .load(users.get(i)
+                            .getPhoto())
+                    .into(userViewHolder.userPhoto);
+
             userViewHolder.username.setText(users.get(i)
                                                  .getFirstName() + " " + users.get(i)
                                                                               .getLastName());
