@@ -1,0 +1,10 @@
+body {
+    background-image: url("../img/dt2.jpg");
+    height: 500px;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'Roboto';
+    color: white;
+}
