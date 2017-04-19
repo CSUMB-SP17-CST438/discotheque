@@ -19,8 +19,6 @@ import org.json.JSONObject;
 
 public class ViewProfileActivity extends AppCompatActivity implements View.OnClickListener
 {
-
-
 	private TextView editBio;
 	private ImageView image;
 

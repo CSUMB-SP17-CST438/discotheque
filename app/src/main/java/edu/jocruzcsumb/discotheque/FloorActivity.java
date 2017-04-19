@@ -29,6 +29,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_FLOOR_JOINED;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_FLOOR;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_LEAVE_FLOOR;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_MESSAGE_ADD;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_MESSAGE_LIST_UPDATE;
@@ -172,6 +173,7 @@ public class FloorActivity extends AppCompatActivity
 		// Set the activity to listen for app broadcasts with the above filter
 		LocalBroadcastManager.getInstance(getApplicationContext())
 				.registerReceiver(r, f);
+        broadcast(EVENT_GET_FLOOR);
 
 		// Start the floor service
 		Intent i = getIntent();

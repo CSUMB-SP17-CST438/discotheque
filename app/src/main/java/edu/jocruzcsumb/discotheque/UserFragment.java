@@ -144,7 +144,7 @@ public class UserFragment extends FloorFragment
         public UserFragment.UserAdapter.UserViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
         {
             View v = LayoutInflater.from(viewGroup.getContext())
-                                   .inflate(R.layout.activity_user, viewGroup, false);
+                                   .inflate(R.layout.list_user, viewGroup, false);
             final UserFragment.UserAdapter.UserViewHolder svh = new UserFragment.UserAdapter.UserViewHolder(v);
             v.setOnClickListener(new View.OnClickListener(){
                 @Override

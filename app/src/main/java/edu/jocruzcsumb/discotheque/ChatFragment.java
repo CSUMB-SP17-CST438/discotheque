@@ -1,5 +1,6 @@
 package edu.jocruzcsumb.discotheque;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -75,11 +76,12 @@ public class ChatFragment extends FloorFragment implements View.OnClickListener
 
     private void updateListUI(final ArrayList<Message> messages)
     {
+        Activity a = getActivity();
+        if(a == null) return;
         Log.d(TAG, "updateListUI");
-        chatAdapter = new ChatAdapter(getActivity(), messages);
+        chatAdapter = new ChatAdapter(a, messages);
         Log.d(TAG, messages.toString());
-        getActivity()
-                .runOnUiThread(new Runnable()
+        a.runOnUiThread(new Runnable()
                 {
                     @Override
                     public void run()
@@ -124,7 +126,7 @@ public class ChatFragment extends FloorFragment implements View.OnClickListener
         public ChatFragment.ChatAdapter.ChatViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
         {
             View v = LayoutInflater.from(viewGroup.getContext())
-                                   .inflate(R.layout.activity_chat_list, viewGroup, false);
+                                   .inflate(R.layout.list_chat, viewGroup, false);
             ChatFragment.ChatAdapter.ChatViewHolder svh = new ChatFragment.ChatAdapter.ChatViewHolder(v);
             return svh;
         }
