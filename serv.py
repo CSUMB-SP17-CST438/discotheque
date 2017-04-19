@@ -158,32 +158,36 @@ def on_create(data):
 #join room, function expects data to be json array/objects
 # expects keys 'floor_id', 'member_id, returns jsonarray to parse
 def on_join_floor(data):
-	print("******************TRIGGERED JOIN FLOOR ***********************")
-	print("floor_id:" )
-	print(data['floor_id'])
-	print("member_id:")
-	print(data['member_id'])
-	floor_id = data['floor_id']
-	join_room(floor_id)
-	floor_to_join = getFloor(floor_id)
-	floor_to_join.add_member(data['member_id'])
-	# print(floor_to_join.to_list())
-	#need to check if floor exists before creating thread.
-	if thread_holder.find_thread(floor_id) is None:
-		#create a new songlist update thread
-		floor_list = floor_to_join.to_list()
-		thread_holder.add_thread(floor_to_join.floor_name,floor_to_join.floor_id,floor_list['songlist'])
-	floor_to_join.set_songlist(thread_holder.find_thread(floor_to_join.floor_id).songlist)
-	#refresh floor object after new songlist has been updated
-	floor_to_join = getFloor(floor_id)
-	print("****floor songlist***")
-	floor_list = floor_to_join.to_list()
-	print(json.dumps(floor_list['songlist'],indent=4))
-	socket.emit('floor joined', {'floor':floor_to_join.to_list()}, room=request.sid)
-	print("***memlist update***")
-	print(floor_list['floor_members'])
-	socket.emit('member list update', {'floor members': floor_list['floor_members']},room=floor_to_join.floor_id)
-    
+    print("******************TRIGGERED JOIN FLOOR ***********************")
+    print("floor_id:" )
+    print(data['floor_id'])
+    print("member_id:")
+    print(data['member_id'])
+    floor_id = data['floor_id']
+    join_room(floor_id)
+    floor_to_join = getFloor(floor_id)
+    floor_to_join.add_member(data['member_id'])
+    # print(floor_to_join.to_list())
+    #need to check if floor exists before creating thread.
+    if thread_holder.find_thread(floor_id) is None:
+    	#create a new songlist update thread
+        print("thread is none")
+        floor_list = floor_to_join.to_list()
+        thread_holder.add_thread(floor_to_join.floor_name,floor_to_join.floor_id,floor_list['songlist'])
+
+    else:
+        print("thread is active")
+        floor_to_join.set_songlist(thread_holder.find_thread(floor_to_join.floor_id).songlist)
+        #refresh floor object after new songlist has been updated
+        floor_to_join = getFloor(floor_id)
+        print("****floor songlist***")
+        floor_list = floor_to_join.to_list()
+        print(json.dumps(floor_list['songlist'],indent=4))
+        socket.emit('floor joined', {'floor':floor_to_join.to_list()}, room=request.sid)
+        print("***memlist update***")
+        print(floor_list['floor_members'])
+        socket.emit('member list update', {'floor members': floor_list['floor_members']},room=floor_to_join.floor_id)
+
 @socket.on('leave floor')
 def on_leave_floor(data):
 	print("************leave floor triggered************")

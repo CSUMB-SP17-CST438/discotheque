@@ -26,11 +26,11 @@ class SocketioTestCases(unittest.TestCase):
         
     def test_join_floor(self):
         client = serv.socket.test_client(serv.app)
-        client2 = serv.socket.test_client(serv.app)
+        # client2 = serv.socket.test_client(serv.app)
         client.emit('join floor',{'floor_id':1, 'member_id':1})
 
-        r = client.get_received()
-        client2.emit('join floor',{'floor_id':1, 'member_id':2})
+        # r = client.get_received()
+        # client2.emit('join floor',{'floor_id':1, 'member_id':2})
         print("**************************test_join_floor***********")
         # print(r)
         # song = r[0]['args'][0]['floor']['songlist'][0]['stream_url']

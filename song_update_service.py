@@ -216,11 +216,13 @@ class SongThreadHolder:
 		return self.threads
 	
 	def add_thread(self,thread_name,floor_id,songlist):
+		print("inside add thread")
 		new_thread = songUpdateThread(thread_name,floor_id,songlist,self.socket)
 		new_thread.start()
 		self.threads.append(new_thread)
 
 	def find_thread(self,floor_id):
+		print("print inside find thread")
 		for t in self.threads:
 			if t.floor_id == floor_id:
 				return t
