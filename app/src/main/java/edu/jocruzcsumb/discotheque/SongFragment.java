@@ -123,7 +123,7 @@ public class SongFragment extends FloorFragment
         public SongFragment.SongAdapter.SongViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
         {
             View v = LayoutInflater.from(viewGroup.getContext())
-                                   .inflate(R.layout.activity_song_list_view, viewGroup, false);
+                                   .inflate(R.layout.list_song, viewGroup, false);
             final SongAdapter.SongViewHolder svh = new SongAdapter.SongViewHolder(v);
             v.setOnClickListener(new View.OnClickListener()
             {

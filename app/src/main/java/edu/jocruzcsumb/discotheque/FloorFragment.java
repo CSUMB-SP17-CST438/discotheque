@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -114,7 +115,6 @@ public abstract class FloorFragment extends Fragment
         LocalBroadcastManager.getInstance(this.getContext())
                              .registerReceiver(r, f);
     }
-
     // EVENTS are broadcasted here
     protected void broadcast(String event)
     {
