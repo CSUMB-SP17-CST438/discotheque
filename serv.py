@@ -168,13 +168,12 @@ def on_join_floor(data):
 	floor_to_join = getFloor(floor_id)
 	floor_to_join.add_member(data['member_id'])
 	# print(floor_to_join.to_list())
-	#need to check if floor exists before creating thread. 
+	#need to check if floor exists before creating thread.
 	if thread_holder.find_thread(floor_id) is None:
 		#create a new songlist update thread
 		floor_list = floor_to_join.to_list()
 		thread_holder.add_thread(floor_to_join.floor_name,floor_to_join.floor_id,floor_list['songlist'])
-		floor_to_join.set_songlist(thread_holder.find_thread(floor_to_join.floor_id).songlist)
-	
+	floor_to_join.set_songlist(thread_holder.find_thread(floor_to_join.floor_id).songlist)
 	#refresh floor object after new songlist has been updated
 	floor_to_join = getFloor(floor_id)
 	print("****floor songlist***")
@@ -195,10 +194,6 @@ def on_leave_floor(data):
 	socket.emit('member left', {'floor':current_floor.to_list()}, room=data['floor_id'])
 	if not current_floor.isActive():
 		thread_holder.update_thead_status(current_floor.floor_id,current_floor.isActive())
-
-    
-
-    
 
 def userEmit(member):
  	return {'authorized': 1,'email': member.member_email,'member_id':member.member_id, 'user':member.to_simple_list()}

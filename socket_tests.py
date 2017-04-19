@@ -24,40 +24,40 @@ class SocketioTestCases(unittest.TestCase):
     #     # print(song)
     #     self.assertIsNotNone(r)
         
-    # def test_join_floor(self):
-    #     client = serv.socket.test_client(serv.app)
-    #     client2 = serv.socket.test_client(serv.app)
-    #     client.emit('join floor',{'floor_id':1, 'member_id':1})
-
-    #     r = client.get_received()
-    #     client2.emit('join floor',{'floor_id':1, 'member_id':2})
-    #     print("**************************test_join_floor***********")
-    #     # print(r)
-    #     # song = r[0]['args'][0]['floor']['songlist'][0]['stream_url']
-    #     print("*******************songlist*******************")
-    #     secR = client.get_received()
-    #     print(json.dumps(secR,indent=4))
-    #     # print(song)
-    #     self.assertIsNone(None)
-
-    def test_leave_floor(self):
-        db.app = serv.app 
+    def test_join_floor(self):
         client = serv.socket.test_client(serv.app)
         client2 = serv.socket.test_client(serv.app)
-        new_mem = registerMember("us","fname","lname","email22222","img")
-        client.emit('join floor',{'floor_id':1, 'member_id':new_mem.member_id})
+        client.emit('join floor',{'floor_id':1, 'member_id':1})
 
         r = client.get_received()
+        client2.emit('join floor',{'floor_id':1, 'member_id':2})
         print("**************************test_join_floor***********")
         # print(r)
         # song = r[0]['args'][0]['floor']['songlist'][0]['stream_url']
-        client.get_received()
-        print("***************leave floor*****************")
-        client.emit('leave floor',{'floor_id':1,'member_id':new_mem.member_id})
-        rep2 = client.get_received()
-        print(r)
+        print("*******************songlist*******************")
+        secR = client.get_received()
+        print(json.dumps(secR,indent=4))
         # print(song)
         self.assertIsNone(None)
+
+    # def test_leave_floor(self):
+    #     db.app = serv.app 
+    #     client = serv.socket.test_client(serv.app)
+    #     client2 = serv.socket.test_client(serv.app)
+    #     new_mem = registerMember("us","fname","lname","email22222","img")
+    #     client.emit('join floor',{'floor_id':1, 'member_id':new_mem.member_id})
+
+    #     r = client.get_received()
+    #     print("**************************test_join_floor***********")
+    #     # print(r)
+    #     # song = r[0]['args'][0]['floor']['songlist'][0]['stream_url']
+    #     client.get_received()
+    #     print("***************leave floor*****************")
+    #     client.emit('leave floor',{'floor_id':1,'member_id':new_mem.member_id})
+    #     rep2 = client.get_received()
+    #     print(r)
+    #     # print(song)
+    #     self.assertIsNone(None)
 
         
 

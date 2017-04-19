@@ -114,8 +114,10 @@ class songUpdateThread(threading.Thread):
 					self.sleep_duration += math.floor((_song['duration']/1000)+2)
 					self.songQ.update_pos(1,(1,current_song))
 					print("*****queue init emit****")
-					self.socket.emit(self.SLU_TAG,self.songQ.to_list())
-					print(json.dumps(self.songQ.to_list(),indent=4))
+					sl = self.songQ.to_list()
+					self.songlist = sl
+					self.socket.emit(self.SLU_TAG,sl)
+					print(json.dumps(sl,indent=4))
 					print("removing top two songs")
 					_,s = self.songQ.get()
 					self.songQ.add_to_end(s)
@@ -135,6 +137,7 @@ class songUpdateThread(threading.Thread):
 					print("song",json.dumps(self.songQ.peek(),indent=4))
 					print("*****updated list*****")
 					sl = self.songQ.to_list()
+					self.songlist = sl
 					print(json.dumps(sl,indent=4))
 					self.socket.emit(self.SLU_TAG,sl,room=self.floor_id)
 					self.songQ.get()
