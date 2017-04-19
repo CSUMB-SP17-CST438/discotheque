@@ -53,7 +53,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 		// Request the song list
 		Intent k = new Intent(EVENT_GET_SONG_LIST);
 		b.sendBroadcast(k);
-        lock = true;
+        //lock = true;
 	}
 
 	private void reset(int i)
