@@ -61,7 +61,6 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 		m[i].setAudioStreamType(AudioManager.STREAM_MUSIC);
 		try
 		{
-            Log.v(TAG, "setDataSource("+ s[i].getUrl() +")");
 			m[i].setDataSource(s[i].getUrl());
             m[i].setLooping(false);
 			m[i].prepare();
@@ -69,7 +68,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 		catch(IOException e)
 		{
 			e.printStackTrace();
-			Log.e(TAG, "Could not prepare song");
+			Log.w(TAG, "Could not prepare song");
 		}
 	}
 
@@ -94,30 +93,10 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 			// The currently playing song has been invalidated, stop and restart player[current]
 			if(m[current] != null && m[current].isPlaying())m[current].stop();
 			reset(current);
-
-            long localtime = System.currentTimeMillis() / 1000;
-            long songtime =s[current].getStartTime();
-
-            Log.d(TAG, "CURRENT TIME: " + String.valueOf(localtime));
-            Log.d(TAG, "SONG START TIME: " + String.valueOf(songtime));
-            if(localtime >= songtime)
-            {
-                m[current].start();
-                m[current].seekTo(1000*(int)(localtime - songtime));
-            }
-            else //(localtime < songtime)
-            {
-                try
-                {
-                    Thread.sleep(1000*(songtime-localtime));
-                }
-                catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                    return;
-                }
-                m[current].start();
-            }
+			// TODO: Seek to start time
+			// m[current].seekTo();
+			Log.d(TAG, "checkSongs: start");
+			m[current].start();
 			m[current].setOnCompletionListener(this);
 			m[current].setOnErrorListener(this);
 			Intent k = new Intent(EVENT_SONG_STARTED);
