@@ -18,7 +18,62 @@ import threading
 import discoSounds as ds
 import time
 import math 
-from queue import Queue
+from queue import PriorityQueue
+
+class SongQueue(PriorityQueue):
+	def __init__(self,maxsize):
+		super(SongQueue,self).__init__()
+		self.current_priority = 0
+		self.least_priority = 0
+
+	def fill(self,songlist):
+		for s in songlist:
+			self.put((self.least_priority,s))
+			self.least_priority+=1
+
+	def to_list(self):
+		songlist = []
+		position = 0
+		while position != self.qsize():
+			_,song = self.queue[position]
+			songlist.append(song)
+			position+=1
+		return songlist
+
+	def add_to_end(self,song):
+		self.put((self.least_priority,song))
+
+
+	def promote_priority(self,song):
+		#frees up spot for the song whose priotity will be changed
+		for i in range(self.current_priority+1,self.qsize()):
+			pri,song2move = self.queue[i]
+			print(pri+1)
+			self.queue[i] = (pri+1), song2move
+		#inserts the promoted song to the next priority level and increase the current priority index
+
+		self.queue.insert(self.current_priority+1,((self.current_priority+1),song))
+		self.current_priority += 1
+		for i in range(self.current_priority+2,self.qsize()):
+			priority_, found_song = self.queue[i]
+			if song == found_song:
+				self.queue.remove((priority_,song))
+
+	def get(self):
+		self.current_priority-=1
+		return super(SongQueue,self).get()
+
+	#allows user to see the item at front of queue without removing
+	def peek(self):
+		_, song = self.queue[0] 
+		return song
+	def peek_pos(self,position):
+		_,song = self.queue[position]
+		return song
+
+	def update_pos(self,pos,song):
+		self.queue[pos] = song
+
 
 class songUpdateThread(threading.Thread):
 	def __init__(self,thread_name,floor_id,songlist,socket):
@@ -33,53 +88,91 @@ class songUpdateThread(threading.Thread):
 		self.SLU_TAG = "songlist update"
 		self.stopper = threading.Event()
 		self.socket = socket
-		self.songQ = Queue(maxsize=0)
-
-	def list_to_queue(self):
-		for s in self.songlist:
-			self.songQ.put(s)
+		self.songQ = SongQueue(maxsize=0)
 
 	def run(self):
 		print("Starting thread..")
-		self.send_updates()
+		# self.send_updates()
+		self.songQ.fill(self.songlist)
+		self.queue_updates()
 		print("Ending thread..")
 
-
-
 	def queue_updates(self):
-		while not self.q.empty():
-			
-
-	def send_updates(self):
 		position = 0
-		while(not self.stopper.is_set()):
-			for t in self.songlist:
-				if self.current_song_position == 0:
-					self.start_time = math.floor(time.time() + 2.0)
-					self.songlist[0] = ds.refresh_song(self.songlist[0],self.start_time)
-					self.songlist[0]['start_time'] = self.start_time
-					del self.songlist[1]
-					st = math.floor(self.start_time+(self.songlist[position]['duration']/1000)+2)
-					self.songlist[1] = ds.refresh_song(self.songlist[1],st)
-					del self.songlist[2]
-					self.socket.emit(self.SLU_TAG, self.songlist,room=self.floor_id)
-					print("***********init emit*******")
-					print(json.dumps(self.songlist,indent=4))
-					self.current_song_position +=1
-					self.sleep_duration = (self.songlist[0]['duration']/1000)-1.0
-					self.start_time = math.floor(self.start_time + self.sleep_duration)
-					# sleep(duration)
+		while not self.stopper.is_set():
+			while not self.songQ.empty():
+				if position == 0:
+					self.start_time = math.floor(time.time() + 2)
+					_song = self.songQ.peek()
+					current_song = ds.refresh_song(_song,self.start_time)
+					self.songQ.update_pos(0,(0,current_song))
+					#update information for seconf song in list
+					_song = self.songQ.peek_pos(1)
+					self.sleep_duration = math.floor((_song['duration']/1000)+2)
+					self.start_time += math.floor(self.start_time+self.sleep_duration)
+					current_song = ds.refresh_song(_song,self.start_time)
+					self.sleep_duration += math.floor((_song['duration']/1000)+2)
+					self.songQ.update_pos(1,(1,current_song))
+					print("*****queue init emit****")
+					self.socket.emit(self.SLU_TAG,self.songQ.to_list())
+					print(json.dumps(self.songQ.to_list(),indent=4))
+					print("removing top two songs")
+					_,s = self.songQ.get()
+					self.songQ.add_to_end(s)
+					print(s)
+					_,s = self.songQ.get()
+					self.songQ.add_to_end(s)
+					print(s)
+					position +=1
 				else:
 					time.sleep(self.sleep_duration)
-					if not self.stopper.is_set():
-						self.sleep_duration = (self.songlist[position]['duration']/1000)-1.0
-						self.songlist[self.current_song_position] = ds.refresh_song(self.songlist[self.current_song_position],self.start_time)
-						self.start_time = math.floor(self.start_time + self.sleep_duration)
-						print("***************update emit***********")
-						print("emit time:",self.start_time) 
-						print("song",json.dumps(self.songlist[self.current_song_position],indent=4))
-						self.socket.emit(self.SLU_TAG, self.songlist,room=self.floor_id)
-						self.current_song_position+=1
+					_song = self.songQ.peek()
+					self.sleep_duration = (_song['duration']/1000)
+					self.songQ.update_pos(0,(0,ds.refresh_song(_song,self.start_time)))
+					self.start_time = math.floor(self.start_time + self.sleep_duration)
+					print("***************update emit***********")
+					print("emit time:",self.start_time)
+					print("song",json.dumps(self.songQ.peek(),indent=4))
+					print("*****updated list*****")
+					sl = self.songQ.to_list()
+					print(sl)
+					self.socket.emit(self.SLU_TAG,sl,room=self.floor_id)
+					self.songQ.get()
+
+
+
+	# def send_updates(self):
+	# 	position = 0
+	# 	while(not self.stopper.is_set()):
+	# 		for t in self.songlist:
+	# 			if self.current_song_position == 0:
+	# 				self.start_time = math.floor(time.time() + 2.0)
+	# 				self.songlist[0] = ds.refresh_song(self.songlist[0],self.start_time)
+	# 				self.songlist[0]['start_time'] = self.start_time
+	# 				del self.songlist[1]
+
+	# 				st = math.floor(self.start_time+(self.songlist[position]['duration']/1000)+2)
+	# 				self.songlist[1] = ds.refresh_song(self.songlist[1],st)
+	# 				del self.songlist[2]
+	# 				self.socket.emit(self.SLU_TAG, self.songlist,room=self.floor_id)
+	# 				print("***********init emit*******")
+	# 				print(json.dumps(self.songlist,indent=4))
+	# 				self.current_song_position +=1
+	# 				self.sleep_duration = (self.songlist[0]['duration']/1000)-1.0
+	# 				self.start_time = math.floor(self.start_time + self.sleep_duration)
+	# 				# sleep(duration)
+	# 			else:
+	# 				time.sleep(self.sleep_duration)
+	# 				if not self.stopper.is_set():
+	# 					self.sleep_duration = (self.songlist[position]['duration']/1000)-1.0
+	# 					self.songlist[self.current_song_position] = ds.refresh_song(self.songlist[self.current_song_position],self.start_time)
+	# 					self.start_time = math.floor(self.start_time + self.sleep_duration)
+	# 					print("***************update emit***********")
+	# 					print("emit time:",self.start_time) 
+	# 					print("song",json.dumps(self.songlist[self.current_song_position],indent=4))
+	# 					self.socket.emit(self.SLU_TAG, self.songlist,room=self.floor_id)
+	# 					self.current_song_position+=1
+
 
 	def update_list(self, song_id):
 		print("*************UPDATE LIST***********")
@@ -98,11 +191,18 @@ class songUpdateThread(threading.Thread):
 			loc+=1
 			print("loc",str(loc))
 		
+	def print_queue(self):
+		print(json.dumps(list(self.songQ.queue),indent=4))
 
 	def stop(self):
 		self.stopper.set()
 
 
+
+
+
+"""**************************************************************************************************************************************"""
+"""**************************************************************************************************************************************"""
 #wrapper to manage multiple songlist update threads
 class SongThreadHolder:
 	def __init__(self, socket):
@@ -132,6 +232,7 @@ class SongThreadHolder:
 		else:
 			print(floor_id, " thread still active..")
 
+	
 		
 
 
