@@ -124,7 +124,7 @@ public class ChatFragment extends FloorFragment implements View.OnClickListener
         public ChatFragment.ChatAdapter.ChatViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
         {
             View v = LayoutInflater.from(viewGroup.getContext())
-                                   .inflate(R.layout.activity_chat_list, viewGroup, false);
+                                   .inflate(R.layout.list_chat, viewGroup, false);
             ChatFragment.ChatAdapter.ChatViewHolder svh = new ChatFragment.ChatAdapter.ChatViewHolder(v);
             return svh;
         }
