@@ -80,42 +80,62 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
 		next = t;
 	}
 
-	private void checkSongs()
-	{
-		if(lock)
-		{
-			Log.d(TAG, "couldnt checkSongs because lock");
-			return;
-		}
-		if(songs.size() > 0 && s[current] != songs.get(0))
-		{
-			lock = true;
-			s[current] = songs.get(0);
-			// The currently playing song has been invalidated, stop and restart player[current]
-			if(m[current] != null && m[current].isPlaying())m[current].stop();
-			reset(current);
-			// TODO: Seek to start time
-			// m[current].seekTo();
-			Log.d(TAG, "checkSongs: start");
-			m[current].start();
-			m[current].setOnCompletionListener(this);
-			m[current].setOnErrorListener(this);
-			Intent k = new Intent(EVENT_SONG_STARTED);
-			k.putExtra(EVENT_SONG_STARTED, s[current]);
-			LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(k);
+    private void checkSongs()
+    {
+        if(lock)
+        {
+            Log.d(TAG, "couldnt checkSongs because lock");
+            return;
+        }
+        if(songs.size() > 0 && s[current] != songs.get(0))
+        {
+            lock = true;
+            s[current] = songs.get(0);
+            // The currently playing song has been invalidated, stop and restart player[current]
+            if(m[current] != null && m[current].isPlaying())m[current].stop();
+            reset(current);
 
-			Log.d(TAG, "started playback");
-			lock = false;
-		}
-		if(songs.size() > 1 && s[next] != songs.get(1))
-		{
-			lock=true;
-			s[next] = songs.get(1);
-			// The next song has been invalidated, reset the player[next]
-			reset(next);
-			lock=false;
-		}
-	}
+            long localtime = System.currentTimeMillis() / 1000;
+            long songtime =s[current].getStartTime();
+
+            Log.d(TAG, "CURRENT TIME: " + String.valueOf(localtime));
+            Log.d(TAG, "SONG START TIME: " + String.valueOf(songtime));
+            if(localtime >= songtime)
+            {
+                m[current].start();
+                m[current].seekTo(1000*(int)(localtime - songtime));
+            }
+            else //(localtime < songtime)
+            {
+                try
+                {
+                    Thread.sleep(1000*(songtime-localtime));
+                }
+                catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                    return;
+                }
+                m[current].start();
+            }
+            m[current].setOnCompletionListener(this);
+            m[current].setOnErrorListener(this);
+            Intent k = new Intent(EVENT_SONG_STARTED);
+            k.putExtra(EVENT_SONG_STARTED, s[current]);
+            LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(k);
+
+            Log.d(TAG, "started playback");
+            lock = false;
+        }
+        if(songs.size() > 1 && s[next] != songs.get(1))
+        {
+            lock=true;
+            s[next] = songs.get(1);
+            // The next song has been invalidated, reset the player[next]
+            reset(next);
+            lock=false;
+        }
+    }
 
 	@Override
 	public void onReceive(Context context, Intent intent)
