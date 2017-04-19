@@ -135,7 +135,7 @@ class songUpdateThread(threading.Thread):
 					print("song",json.dumps(self.songQ.peek(),indent=4))
 					print("*****updated list*****")
 					sl = self.songQ.to_list()
-					print(sl)
+					print(json.dumps(sl,indent=4))
 					self.socket.emit(self.SLU_TAG,sl,room=self.floor_id)
 					self.songQ.get()
 
