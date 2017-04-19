@@ -66,6 +66,6 @@
     <string name="song_fragment_title">Songs</string>
     <string name="user_fragment_title">Users</string>
     <string name="action_leave_floor">Leave floor</string>
-
+    <string name="action_signout">Signout</string>
 
 </resources>
