@@ -6,8 +6,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +22,7 @@ public class ViewProfileActivity extends AppCompatActivity implements View.OnCli
 
 
 	private TextView editBio;
+	private ImageView image;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -29,21 +34,19 @@ public class ViewProfileActivity extends AppCompatActivity implements View.OnCli
 		editBio = (TextView) findViewById(R.id.bio);
 
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+		//image = (ImageView) findViewById(R.id.profile_picture);
 		fab.setOnClickListener(this);
 		//pass object from previous activity
 		Intent in = getIntent();
 		User user = (User) in.getParcelableExtra("user");
-		//TODO: TOMMY, YOU ONLY GET EMAIL FOR LOCALUSER
-
 		if(user != null) {
-//			if(!LocalUser.getCurrentUser().equals(user)){
-//				editFirstName.setEnabled(false);
-//				editLastName.setEnabled(false);
-//				editDescription.setEnabled(false);
-//				editGenres.setEnabled(false);
+			//if not current user, info is not edible
+			//TODO:hide button if not local user
+//			if(){
 //				fab.setVisibility(View.GONE);
 //			}
 			getSupportActionBar().setTitle(user.getFirstName() + " " + user.getLastName());
+			//Picasso.with(this).load(user.getPhoto()).into(image);
 			if(user.getBio() != null){
 				editBio.setText(user.getBio());
 			}
@@ -79,9 +82,10 @@ public class ViewProfileActivity extends AppCompatActivity implements View.OnCli
 //				}
 
 //				Sockets.getSocket().emit("update user", jsonObject);
-//
-//				Snackbar.make(view, "Profile info saved", Snackbar.LENGTH_LONG)
-//						.setAction("Action", null).show();
+				Intent intent = new Intent(ViewProfileActivity.this, UpdateProfileActivity.class);
+				startActivity(intent);
+				Snackbar.make(view, "Profile info saved", Snackbar.LENGTH_LONG)
+						.setAction("Action", null).show();
 				break;
 
 			//case R.id.friends:
