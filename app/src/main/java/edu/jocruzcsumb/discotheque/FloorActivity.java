@@ -173,7 +173,6 @@ public class FloorActivity extends AppCompatActivity
 		// Set the activity to listen for app broadcasts with the above filter
 		LocalBroadcastManager.getInstance(getApplicationContext())
 				.registerReceiver(r, f);
-        broadcast(EVENT_GET_FLOOR);
 
 		// Start the floor service
 		Intent i = getIntent();
@@ -206,6 +205,16 @@ public class FloorActivity extends AppCompatActivity
 
 	}
 
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        floor = (Floor) savedInstanceState.getParcelable(Floor.TAG);
+    }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
+        savedInstanceState.putParcelable(Floor.TAG, floor);
+    }
     @Override
     public void onBackPressed()
     {
