@@ -1,0 +1,19 @@
+songlist update service improvements
+1. emit list from current_song_position in order to get playback working 100% on client 
+	so the next song should be at index 0.
+2. if song has already been played, the song should be sent to the end of the list (added to end) 
+3. create que from songlist 
+4. create loop while que is not empty to run same code as before
+5. update the songs within the songlist object as queue is processed (send first song to the end, move list up, etc)
+6. emit songlist representation of queue
+
+
+floor service update service:
+ service to listen to state of floors created and emit new list of floor  
+
+
+profile information:
+	1. function to send user information on request
+	2. function to send local user information. 
+	3. update functions to profile information.
+   '/ll/;/;l/l'

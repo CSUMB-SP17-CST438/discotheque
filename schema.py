@@ -17,10 +17,11 @@ import jsonpickle
 # serv.app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
 
 db = flask_sqlalchemy.SQLAlchemy()
+
 ma = Marshmallow()
 pickl = jsonpickle.pickler.Pickler()
 unpickl = jsonpickle.unpickler.Unpickler()
-
+  
 floor_members = db.Table('floor_members',
 	db.Column('floor_id', db.Integer, db.ForeignKey('floor.floor_id')),
 	db.Column('member_id', db.Integer, db.ForeignKey('member.member_id'))
@@ -350,6 +351,8 @@ def getPublicFloors():
 		fl_list.append(simple_schema.dump(f).data)
 	return fl_list
 
+def getUserProfiles(floor_id):
+	return None
 
 """*************************************************************************************************************************************
 ****************************************************************************************************************************************

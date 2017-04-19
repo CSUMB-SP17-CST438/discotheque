@@ -9,18 +9,19 @@ import datetime
 import requests
 import facebook
 import time
+from song_update_service import *
 
 public_room = 912837
 app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL','postgresql://jcrzr:anchor99@localhost/postgres')
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= 1
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= 0
 
 from schema import *
 db.init_app(app)
 
 socket = flask_socketio.SocketIO(app)
 # default route
-
+thread_holder = SongThreadHolder(socket)
 
 @app.route('/')
 def start():
@@ -52,12 +53,15 @@ def on_get_songs(data):
     socket.emit('song list', songs, room=public_room)
 
 
+
+#expects floor_id, and song_id as arguments.
+#updates songlist with song_picked added as the next song in the playlist to be played.
 @socket.on('song picked')
 def on_song_picked(data):
     current_song = data['song']
-    stream_url_loc = ds.getSongURLLocation(current_song['id'])
+    thread_holder.find_thread(data['floor_id']).update_list(current_song['id'])
     current_song['stream_url'] = stream_url_loc
-    socket.emit('song to play', current_song, room=public_room)
+    socket.emit('song to play', current_song, room=floor_id)
 
 
 """this listener is expecting key:pair list (i.e json) with either fb_t for facebook token, or google_t for google token
@@ -130,6 +134,8 @@ def on_get_floors(data):
 
 
 
+
+#function assumes that the client sends floor_name,member_id,is_public, and floor_genre
 @socket.on('create floor')
 def on_create(data):
     if data['is_public'] == 1:
@@ -142,7 +148,8 @@ def on_create(data):
     join_room(new_floor.floor_id)
     genre = data['floor_genre']
     songs = ds.getSongList(genre)
-    new_floor.set_songlist(songs)
+    thread_holder.add_thread(new_floor.floor_name,new_floor.floor_id,songs)
+    new_floor.set_songlist(thread_holder.find_thread(new_floor.floor_id).songlist)
     updated_floor = getFloor(new_floor.floor_id)
     socket.emit('floor created', {'floor':updated_floor.to_list()},room=new_floor.floor_id)
 
@@ -151,32 +158,46 @@ def on_create(data):
 #join room, function expects data to be json array/objects
 # expects keys 'floor_id', 'member_id, returns jsonarray to parse
 def on_join_floor(data):
-	print("******************TRIGGERED JOIN FLOOR ***********************")
-	print("floor_id:" )
-	print(data['floor_id'])
-	print("member_id:")
-	print(data['member_id'])
-	floor_id = data['floor_id']
-	join_room(floor_id)
-	floor_to_join = getFloor(floor_id)
-	floor_to_join.add_member(data['member_id'])
-	# print(floor_to_join.to_list())
-	floor_list = floor_to_join.to_list()
-	
-	socket.emit('floor joined', {'floor':floor_to_join.to_list()}, room=request.sid)
-	print("***memlist update***")
-	print(floor_list['floor_members'])
-	socket.emit('member list update', {'floor members': floor_list['floor_members']},room=floor_to_join.floor_id)
-    
+    print("******************TRIGGERED JOIN FLOOR ***********************")
+    print("floor_id:" )
+    print(data['floor_id'])
+    print("member_id:")
+    print(data['member_id'])
+    floor_id = data['floor_id']
+    join_room(floor_id)
+    floor_to_join = getFloor(floor_id)
+    floor_to_join.add_member(data['member_id'])
+    # print(floor_to_join.to_list())
+    #need to check if floor exists before creating thread.
+    if thread_holder.find_thread(floor_id) is None:
+    	#create a new songlist update thread
+        print("thread is none")
+        floor_list = floor_to_join.to_list()
+        thread_holder.add_thread(floor_to_join.floor_name,floor_to_join.floor_id,floor_list['songlist'])
+
+    else:
+        print("thread is active")
+        floor_to_join.set_songlist(thread_holder.find_thread(floor_to_join.floor_id).songlist)
+        #refresh floor object after new songlist has been updated
+        floor_to_join = getFloor(floor_id)
+        print("****floor songlist***")
+        floor_list = floor_to_join.to_list()
+        print(json.dumps(floor_list['songlist'],indent=4))
+        socket.emit('floor joined', {'floor':floor_to_join.to_list()}, room=request.sid)
+        print("***memlist update***")
+        print(floor_list['floor_members'])
+        socket.emit('member list update', {'floor members': floor_list['floor_members']},room=floor_to_join.floor_id)
+
 @socket.on('leave floor')
 def on_leave_floor(data):
-    current_floor = getFloor(data['floor_id'])
-    current_floor.rm_member(data['member_id'])
-    current_floor = getFloor(data['floor_id'])
-    leave_room(data['floor_id'])
-    socket.emit('member left', {'floor':current_floor.to_list()}, room=data['floor_id'])
-
-    
+	print("************leave floor triggered************")
+	current_floor = getFloor(data['floor_id'])
+	current_floor.rm_member(data['member_id'])
+	current_floor = getFloor(data['floor_id'])
+	leave_room(data['floor_id'])
+	socket.emit('member left', {'floor':current_floor.to_list()}, room=data['floor_id'])
+	if not current_floor.isActive():
+		thread_holder.update_thead_status(current_floor.floor_id,current_floor.isActive())
 
 def userEmit(member):
  	return {'authorized': 1,'email': member.member_email,'member_id':member.member_id, 'user':member.to_simple_list()}
@@ -193,7 +214,6 @@ def privacy():
 
 # def get_dt_ms():
 # 	epoch = datetime.datetime.utcfromtimestamp(0)
-
 #     return (dt - epoch).total_seconds() * 1000.0
 
 if __name__ == '__main__':

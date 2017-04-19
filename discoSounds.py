@@ -1,7 +1,6 @@
 import soundcloud as sc
 import json
 # client_secret='67422b6c159a389c9cfed1a9607227ef'
-
 client = sc.Client(client_id="8c1cf28d0d2834808a2eda6645da717b",client_secret='67422b6c159a389c9cfed1a9607227ef')
 def getSongList(g):
 	##number of results per page
@@ -12,11 +11,10 @@ def getSongList(g):
 		#parse track information to what is relevant to us
 		#returns duration in milliseconds to sync songs. 
 		username = t.user['username']
-		new_track = {'id':t.id,'title':t.title, 'creator_user':username,'track_permalink':t.permalink_url,'stream_url':"",'artwork':t.artwork_url, 'duration':t.duration,'start_time':'0'}
+		new_track = {'id':t.id,'title':t.title, 'creator_user':username,'track_permalink':t.permalink_url,'stream_url':"",'artwork':t.artwork_url, 'duration':t.duration,'start_time':''}
 		trackList.append(new_track)
-
-	for x in range(0,4):
-		trackList[x]['stream_url'] = getSongURLLocation(trackList[x]['id'])
+	# for x in range(0,4):
+	# 	trackList[x]['stream_url'] = getSongURLLocation(trackList[x]['id'])
 	return trackList
 
 
@@ -31,6 +29,13 @@ def refresh_streams(songList):
 	for x in range(0,4):
 		songList[x]['stream_url'] = getSongURLLocation(songList[x]['id'])
 	return songList
+
+def refresh_song(song,start_time):
+	# print("****INSIDE REFRESH SONG****",song)
+	song['stream_url'] = getSongURLLocation(song['id'])
+	song['start_time'] = start_time
+	return song
+
 
 # print("********songlist*******")
 # songs = getSongList("rock")
