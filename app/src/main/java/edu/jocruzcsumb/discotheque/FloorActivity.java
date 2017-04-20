@@ -44,8 +44,10 @@ public class FloorActivity extends AppCompatActivity
 {
 
 	private static final String TAG = "FloorActivity";
+    private static final String CURRENT_TAB_TAG = "current_tab";
 
-	public Floor floor = null;
+    public Floor floor = null;
+    private int savedTab = 0;
     private ImageView albumCoverView;
     private TextView songInfoView;
 
@@ -197,6 +199,12 @@ public class FloorActivity extends AppCompatActivity
 		mViewPager = (ViewPager) findViewById(R.id.container);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        int t = 1;
+        if(savedInstanceState != null)
+            t = savedInstanceState.getInt(CURRENT_TAB_TAG, 1);
+
+        mViewPager.setCurrentItem(t, true);
+
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 		tabLayout.setupWithViewPager(mViewPager);
 
@@ -214,6 +222,7 @@ public class FloorActivity extends AppCompatActivity
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
         savedInstanceState.putParcelable(Floor.TAG, floor);
+        savedInstanceState.putInt(CURRENT_TAB_TAG, mViewPager.getCurrentItem());
     }
     @Override
     public void onBackPressed()
