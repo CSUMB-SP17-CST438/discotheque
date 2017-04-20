@@ -90,9 +90,6 @@ public class FloorService extends IntentService
                     if (floor != null)
                     {
                         broadcast(EVENT_FLOOR_JOINED, floor);
-                        broadcast(EVENT_MESSAGE_LIST_UPDATE, floor.getMessages());
-                        broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
-                        broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
                     }
                     else
                     {
