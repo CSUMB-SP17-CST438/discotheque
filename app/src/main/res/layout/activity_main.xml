@@ -12,18 +12,20 @@
     android:weightSum="1"
     android:orientation="vertical"
     android:background="@drawable/all_background">
+
     <RelativeLayout
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center" >
+        android:gravity="center">
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentTop="true"
+            android:indeterminate="true" />
     </RelativeLayout>
+
     <Space
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,34 +35,26 @@
     <ImageView
         android:id="@+id/splash_Logo_ImageView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="46dp"
         android:src="@drawable/all_logo"
         android:ems="10"
         android:gravity="center"
-        android:layout_weight="0.31" />
-
-    <TextView
-        android:id="@+id/login_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.30"
-        android:ems="10"
-        android:fontFamily="cursive"
-        android:gravity="center"
-        android:inputType="textPersonName"
-        android:text="Discoeque"
-        android:textColor="#ffffff"
-        android:textSize="25pt" />
-
+        android:layout_weight="0.35"
+        android:elevation="4dp"/>
 
     <ImageView
-        android:id="@+id/splash_soundcloud_ImageView"
+        android:id="@+id/slaph_title_font_ImageView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/splash_soundcloud"
+        android:layout_height="138dp"
+        android:src="@drawable/all_titlefont"
         android:ems="10"
         android:gravity="center"
+        android:elevation="4dp"
         android:paddingBottom="20dp" />
+
+
+
+
 
     <!-- google signin -->
     <com.google.android.gms.common.SignInButton
