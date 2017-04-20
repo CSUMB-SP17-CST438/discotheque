@@ -100,12 +100,6 @@ public class SongFragment extends FloorFragment
     {
     }
 
-    @Override
-    public void onFloorJoined(Floor floor)
-    {
-        updateListUI(floor.getSongs());
-    }
-
     public class SongAdapter extends RecyclerView.Adapter<SongFragment.SongAdapter.SongViewHolder>
     {
         Context mContext;

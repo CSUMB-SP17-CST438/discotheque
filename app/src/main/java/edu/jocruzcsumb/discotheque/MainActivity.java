@@ -150,14 +150,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 		// Insert a button ID into this array to give it a click listener and add it to the buttons ArrayList
-		int[] ids = new int[]{R.id.guest_login_btn};
-
-		for(int id : ids)
-		{
-			Button b = (Button) findViewById(id);
-			buttons.add(b);
-			b.setOnClickListener(this);
-		}
+//		int[] ids = new int[]{R.id.guest_login_btn};
+//
+//		for(int id : ids)
+//		{
+//			Button b = (Button) findViewById(id);
+//			buttons.add(b);
+//			b.setOnClickListener(this);
+//		}
 
 	}
 
@@ -166,12 +166,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	{
 		switch(v.getId())
 		{
-			case R.id.guest_login_btn:
-				//go to activity
-				Intent guestLogin = new Intent(MainActivity.this, PickFloorActivity.class);
-				startActivity(guestLogin);
-
-				break;
+//			case R.id.guest_login_btn:
+//				//go to activity
+//				Intent guestLogin = new Intent(MainActivity.this, PickFloorActivity.class);
+//				startActivity(guestLogin);
+//				break;
 			case R.id.google_login_btn:
 				googleSignIn();
 				break;
