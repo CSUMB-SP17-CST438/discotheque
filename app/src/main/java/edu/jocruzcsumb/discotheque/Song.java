@@ -76,7 +76,7 @@ public class Song implements Comparable<Song>, Parcelable
 	public static Song parse(JSONObject jsonSong) throws JSONException
 	{
 		Log.d(TAG, jsonSong.toString());
-		long s = (jsonSong.has(JSON_START_TIME_TAG)? jsonSong.getLong(JSON_START_TIME_TAG) : 0);
+		long s = 0;//(jsonSong.has(JSON_START_TIME_TAG)? jsonSong.getLong(JSON_START_TIME_TAG) : 0);
         String c = (jsonSong.has(JSON_CHOSEN_BY_TAG)?jsonSong.getString(JSON_CHOSEN_BY_TAG):"server");
 		return new Song(
 				jsonSong.getString(JSON_TITLE_TAG),
