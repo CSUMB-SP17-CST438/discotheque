@@ -101,7 +101,7 @@ public class FacebookFragment extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
-		View v = inflater.inflate(R.layout.facebook_fragment, parent, false);
+		View v = inflater.inflate(R.layout.fragment_facebook, parent, false);
 		loginButton = (LoginButton) v.findViewById(R.id.loginButton);
 		List<String> permissions = new ArrayList<String>();
 		permissions.add("public_profile");
