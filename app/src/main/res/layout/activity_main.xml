@@ -12,6 +12,10 @@
     android:weightSum="1"
     android:orientation="vertical"
     android:background="@drawable/all_background">
+
+
+
+
     <RelativeLayout
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
@@ -24,53 +28,82 @@
             android:indeterminate="true"
             android:layout_alignParentTop="true" />
     </RelativeLayout>
+
+
+
+
     <Space
+        android:id="@+id/splash_spacer1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.50"
+        android:layout_weight="0.4"
         android:orientation="vertical" />
 
     <ImageView
         android:id="@+id/splash_Logo_ImageView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/all_logo"
+        android:layout_height="135dp"
         android:ems="10"
         android:gravity="center"
-        android:layout_weight="0.31" />
+        android:src="@drawable/all_logo" />
 
-    <TextView
-        android:id="@+id/login_title"
+
+    <Space
+        android:id="@+id/splash_spacer2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.30"
-        android:ems="10"
-        android:fontFamily="cursive"
-        android:gravity="center"
-        android:inputType="textPersonName"
-        android:text="Discotheque"
-        android:textColor="#ffffff"
-        android:textSize="25pt" />
+        android:layout_weight="0.09"
+        android:orientation="vertical" />
 
+    <ImageView
+        android:id="@+id/splash_titlefont_ImageView"
+        android:layout_width="225dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.25"
+        android:ems="10"
+        android:src="@drawable/all_titlefont" />
+
+
+    <Space
+        android:id="@+id/splash_spacer3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.02"
+        android:orientation="vertical" />
 
     <ImageView
         android:id="@+id/splash_soundcloud_ImageView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:src="@drawable/splash_soundcloud"
         android:ems="10"
         android:gravity="center"
-        android:paddingBottom="20dp" />
+        android:layout_weight="0.23"
+        android:paddingBottom="20dp"
+
+
+        />
+
+
+
 
     <!-- google signin -->
+
+
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_login_btn"
-        android:layout_width="match_parent"
+        android:layout_width="225dp"
         android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:padding="0dp" />
+        android:layout_marginTop="25dp"
+        android:padding="0dp"
 
+        >
+
+    </com.google.android.gms.common.SignInButton>
 
     <FrameLayout
         android:id="@+id/fragment_container"
