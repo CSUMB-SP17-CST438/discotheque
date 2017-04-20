@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -102,12 +103,16 @@ public class FacebookFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
 		View v = inflater.inflate(R.layout.fragment_facebook, parent, false);
-		loginButton = (LoginButton) v.findViewById(R.id.loginButton);
-		List<String> permissions = new ArrayList<String>();
+		final List<String> permissions = new ArrayList<String>();
 		permissions.add("public_profile");
 		permissions.add("email");
-		loginButton.setReadPermissions(permissions);
-		loginButton.setFragment(this);
+        Button facebookButton = (Button)v.findViewById(R.id.button_facebook);
+        facebookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                  LoginManager.getInstance().logInWithReadPermissions(FacebookFragment.this, permissions);
+            }
+        });
 		return v;
 	}
 

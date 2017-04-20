@@ -89,28 +89,18 @@
 
 
     <!-- google signin -->
-
-
-    <com.google.android.gms.common.SignInButton
+    <Button
         android:id="@+id/google_login_btn"
-        android:layout_width="225dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="25dp"
-        android:padding="0dp"
-
-        >
-
-    </com.google.android.gms.common.SignInButton>
+        android:layout_centerHorizontal="true"
+        android:text="@string/common_signin_button_text_long" />
 
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp" >
+        android:layout_height="wrap_content" >
     </FrameLayout>
 
 </LinearLayout>

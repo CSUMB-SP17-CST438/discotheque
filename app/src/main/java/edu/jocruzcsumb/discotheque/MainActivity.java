@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	//setting listeners
 	//google sign in vars
 	private GoogleApiClient googleApiClient;
-	private SignInButton SignIn;
+	private Button SignIn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 		//google sign in button
-		SignIn = (SignInButton) findViewById(R.id.google_login_btn);
+		SignIn = (Button) findViewById(R.id.google_login_btn);
 		SignIn.setOnClickListener(this);
 
 
