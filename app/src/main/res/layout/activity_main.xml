@@ -48,7 +48,7 @@
         android:fontFamily="cursive"
         android:gravity="center"
         android:inputType="textPersonName"
-        android:text="Discoeque"
+        android:text="Discotheque"
         android:textColor="#ffffff"
         android:textSize="25pt" />
 
@@ -66,15 +66,18 @@
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_login_btn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="2dp"
-        android:paddingBottom="5dp" />
+        android:layout_height="50dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:padding="0dp" />
 
 
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="58dp" >
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp" >
     </FrameLayout>
 
 </LinearLayout>
