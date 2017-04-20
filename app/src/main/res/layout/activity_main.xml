@@ -85,9 +85,6 @@
 
         />
 
-
-
-
     <!-- google signin -->
     <Button
         android:id="@+id/google_login_btn"
@@ -95,7 +92,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_centerHorizontal="true"
-        android:text="@string/common_signin_button_text_long" />
+        android:text="@string/common_signin_button_text_long"
+        android:background="@color/colorPrimary"/>
 
     <FrameLayout
         android:id="@+id/fragment_container"

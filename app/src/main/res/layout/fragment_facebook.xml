@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_centerHorizontal="true"
-        android:text="@string/action_facebook_login"/>
+        android:text="@string/action_facebook_login"
+        android:background="@color/colorPrimary"/>
 
 </LinearLayout>
