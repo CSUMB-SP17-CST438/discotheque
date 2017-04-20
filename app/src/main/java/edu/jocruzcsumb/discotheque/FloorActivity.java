@@ -47,7 +47,6 @@ public class FloorActivity extends AppCompatActivity
     private static final String CURRENT_TAB_TAG = "current_tab";
 
     public Floor floor = null;
-    private int savedTab = 0;
     private ImageView albumCoverView;
     private TextView songInfoView;
 
