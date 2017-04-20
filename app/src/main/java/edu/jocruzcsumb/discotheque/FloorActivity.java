@@ -85,6 +85,14 @@ public class FloorActivity extends AppCompatActivity
                     break;
                 case EVENT_FLOOR_JOINED:
                     floor = intent.getParcelableExtra(EVENT_FLOOR_JOINED);
+                    FloorActivity.this.runOnUiThread(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                        }
+                    });
                     //TODO: Update the UI
 
 
