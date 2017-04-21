@@ -69,4 +69,11 @@
     <string name="action_signout">Signout</string>
     <string name="action_facebook_login">Login with Facebook</string>
 
+
+    <!--Strings related to create floor activity  -->
+    <string name="floorname">Enter Floor</string>
+    <string name="editFloor">Enter floor name</string>
+    <string name="genrename">Enter Genre</string>
+    <string name="editGenre">Enter genre name</string>
+
 </resources>
