@@ -136,13 +136,18 @@ class sc_test(unittest.TestCase):
 	# 	print("removed index 0",s)
 
 	# 	self.assertIsNone(None)
-
-
-
-
-
-
-
+	def test_leave_floor(self):
+		floor_new = add_floor("leave_floor",1,True,"punk")
+		floor_new.add_member(1)
+		fl_id = floor_new.floor_id
+		floor_new =getFloor(fl_id)
+		print("current members:")
+		print(floor_new.floor_members)
+		print("removing member...")
+		floor_new.rm_member(1)
+		floor_new = getFloor(fl_id)
+		print("removed members",floor_new.floor_members)
+		self.assertIsInstance(floor_new.floor_members,list)
 	# def test_refresh_streams(self):
 	# 	songs = ds.getSongList("rock")
 	# 	print(json.dumps(songs[0],indent=4))

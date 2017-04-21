@@ -58,8 +58,13 @@ class floor(db.Model):
 			self.floor_genre=genre
 			
 	def add_member(self,member_id):
-		self.floor_members.append(getMemberObject(member_id))
-		db.session.commit()
+		joining_member = getMemberObject(member_id)
+		if joining_member not in self.floor_members:
+			print("member: ",member_id," joined")
+			self.floor_members.append(getMemberObject(member_id))
+			db.session.commit()
+		else:
+			print("member: ", member_id," already joined...")
 		
 	def rm_member(self,member_id):
 		self.floor_members.remove(getMemberObject(member_id))
@@ -249,10 +254,11 @@ def memberExists(mem_id):
 # ******************************************************************************************************
 # ************************************START INSERT MESSAGES*********************************************
 # ******************************************************************************************************
-def registerMember(username,fname,lname,email,imgLink):
+def registerMember(fname,lname,email,imgLink):
 	if not memberExists_by_email(email):
 		#fname,lname,email,imgLink,desc, genres
-		new_member = member(username,fname,lname,email,imgLink,None,None)
+		generated_usrnm = email.split("@")[0]
+		new_member = member(generated_usrnm,fname,lname,email,imgLink,None,None)
 		db.session.add(new_member)
 		db.session.commit()
 		return new_member

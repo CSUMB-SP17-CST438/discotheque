@@ -42,6 +42,7 @@ class SongQueue(PriorityQueue):
 
 	def add_to_end(self,song):
 		self.put((self.least_priority,song))
+		self.least_priority+=1
 
 
 	def promote_priority(self,song):
@@ -118,13 +119,13 @@ class songUpdateThread(threading.Thread):
 					self.songlist = sl
 					self.socket.emit(self.SLU_TAG,sl)
 					print(json.dumps(sl,indent=4))
-					print("removing top two songs")
+					# print("removing top two songs")
 					_,s = self.songQ.get()
 					self.songQ.add_to_end(s)
-					print(s)
+					# print(s)
 					_,s = self.songQ.get()
 					self.songQ.add_to_end(s)
-					print(s)
+					# print(s)
 					position +=1
 				else:
 					time.sleep(self.sleep_duration)

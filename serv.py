@@ -87,7 +87,7 @@ def on_login(data):
             mem = getMemberObject_by_email(email)
             socket.emit("login status", userEmit(mem), room=request.sid)
         else:
-            new_mem = registerMember("",fname,lname,email,link)
+            new_mem = registerMember(fname,lname,email,link)
             # print(new_mem.to_list())
             socket.emit("login status", userEmit(new_mem), room=request.sid)
 
@@ -107,7 +107,7 @@ def on_login(data):
             mem = getMemberObject_by_email(email)
             socket.emit("login status", userEmit(mem), room=request.sid)
         else:
-            new_mem = registerMember("",fname,lname,email,link)
+            new_mem = registerMember(fname,lname,email,link)
             print(new_mem.to_list())
             socket.emit("login status", userEmit(new_mem), room=request.sid)
 
@@ -172,8 +172,15 @@ def on_join_floor(data):
     if thread_holder.find_thread(floor_id) is None:
     	#create a new songlist update thread
         print("thread is none")
+        floor_to_join = getFloor(floor_id)
         floor_list = floor_to_join.to_list()
         thread_holder.add_thread(floor_to_join.floor_name,floor_to_join.floor_id,floor_list['songlist'])
+        #refresh floor object
+        floor_to_join = getFloor(floor_id)
+        socket.emit('floor joined', {'floor':floor_to_join.to_list()}, room=request.sid)
+        print("***memlist update***")
+        print(floor_to_join.to_list()['floor_members'])
+        socket.emit('member list update', {'floor members': floor_list['floor_members']},room=floor_to_join.floor_id)
 
     else:
         print("thread is active")
@@ -197,7 +204,7 @@ def on_leave_floor(data):
 	leave_room(data['floor_id'])
 	socket.emit('member left', {'floor':current_floor.to_list()}, room=data['floor_id'])
 	if not current_floor.isActive():
-		thread_holder.update_thead_status(current_floor.floor_id,current_floor.isActive())
+		thread_holder.update_thread_status(current_floor.floor_id,current_floor.isActive())
 
 def userEmit(member):
  	return {'authorized': 1,'email': member.member_email,'member_id':member.member_id, 'user':member.to_simple_list()}
