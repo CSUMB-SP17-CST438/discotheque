@@ -18,7 +18,11 @@ def fillDB():
 	db.session.add(member)
 	db.session.add(member1)
 	db.session.add(member2)
+	db.session.commit()
+	room2.add_member(member.member_id)
 	db.session.add(room2)
 	db.session.add(room3)
 	db.session.commit()
+	#simple test to make sure member can't join twice
+	room2.add_member(member.member_id)
 fillDB()

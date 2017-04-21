@@ -2,6 +2,7 @@ import serv, unittest
 import random
 import json
 from schema import *
+import time
 
 class SocketioTestCases(unittest.TestCase):
     db.app = serv.app
@@ -26,11 +27,11 @@ class SocketioTestCases(unittest.TestCase):
         
     # def test_join_floor(self):
     #     client = serv.socket.test_client(serv.app)
-    #     client2 = serv.socket.test_client(serv.app)
+    #     # client2 = serv.socket.test_client(serv.app)
     #     client.emit('join floor',{'floor_id':1, 'member_id':1})
 
-    #     r = client.get_received()
-    #     client2.emit('join floor',{'floor_id':1, 'member_id':2})
+    #     # r = client.get_received()
+    #     # client2.emit('join floor',{'floor_id':1, 'member_id':2})
     #     print("**************************test_join_floor***********")
     #     # print(r)
     #     # song = r[0]['args'][0]['floor']['songlist'][0]['stream_url']
@@ -44,18 +45,19 @@ class SocketioTestCases(unittest.TestCase):
         db.app = serv.app 
         client = serv.socket.test_client(serv.app)
         client2 = serv.socket.test_client(serv.app)
-        new_mem = registerMember("us","fname","lname","email22222","img")
-        client.emit('join floor',{'floor_id':1, 'member_id':new_mem.member_id})
-
-        r = client.get_received()
+        ran = random.randint(1,2333)
         print("**************************test_join_floor***********")
-        # print(r)
+        new_mem = registerMember("fname","lname",("email" + str(ran)+"@.com"),"img")
+        
+        client.emit('join floor',{'floor_id':1, 'member_id':new_mem.member_id})
+        r = client.get_received()
+        print("r:",json.dumps(r,indent=4))
+        time.sleep(60)
         # song = r[0]['args'][0]['floor']['songlist'][0]['stream_url']
-        client.get_received()
         print("***************leave floor*****************")
         client.emit('leave floor',{'floor_id':1,'member_id':new_mem.member_id})
         rep2 = client.get_received()
-        print(r)
+        print(json.dumps(rep2,indent=4))
         # print(song)
         self.assertIsNone(None)
 
