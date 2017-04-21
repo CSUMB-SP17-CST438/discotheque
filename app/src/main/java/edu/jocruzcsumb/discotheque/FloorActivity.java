@@ -21,6 +21,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_FLOOR_JOINED;
@@ -103,6 +108,7 @@ public class FloorActivity extends AppCompatActivity
                     public void run()
                     {
                         songInfoView.setText((s.getName() + " - " + s.getArtist()));
+                        Picasso.with(FloorActivity.this).load(s.getArtworkUrl()).into(albumCoverView);
                     }
                 });
             }
