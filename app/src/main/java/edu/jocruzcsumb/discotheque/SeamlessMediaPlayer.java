@@ -29,9 +29,6 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
     private int current = 0;
     private int next = 1;
     private boolean lock = false;
-
-    //TODO when player object is started, we seek to utc.now - utc start time
-    private long timeStarted = 0;
     private Context context;
     private ArrayList<Song> songs = null;
 
@@ -47,28 +44,6 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
                              .registerReceiver(this, f);
         LocalBroadcastManager b = LocalBroadcastManager.getInstance(context.getApplicationContext());
         b.registerReceiver(this, f);
-
-        // Request the song list
-        Intent k = new Intent(EVENT_GET_SONG_LIST);
-        b.sendBroadcast(k);
-        //lock = true;
-    }
-
-    private void reset(int i)
-    {
-        m[i] = new MediaPlayer();
-        m[i].setAudioStreamType(AudioManager.STREAM_MUSIC);
-        try
-        {
-            m[i].setDataSource(s[i].getUrl());
-            m[i].setLooping(false);
-            m[i].prepare();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            Log.w(TAG, "Could not prepare song");
-        }
     }
 
     private void swap()
@@ -82,7 +57,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
     {
         if (lock)
         {
-            Log.d(TAG, "couldnt checkSongs because lock");
+            Log.w(TAG, "couldnt checkSongs because lock");
             return;
         }
         lock = true;
@@ -98,6 +73,13 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
             lock = false;
             return;
         }
+
+        //print current song
+        Log.i(TAG, "checkSongs: Current song");
+        Log.i(TAG, "Title: " + cur.getName());
+        Log.i(TAG, "Artist: " + cur.getArtist());
+        Log.i(TAG, "Start time: " + cur.getStartTime());
+        Log.i(TAG, "URL: " + cur.getUrl());
 
         // Check to see that the start time is valid
         if (cur.getStartTime() == 0)
@@ -165,8 +147,8 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
                 }
                 if (needSeek)
                 {
-                    localtime = System.currentTimeMillis() / 1000;
-                    m[current].seekTo(1000 * (int) (localtime - s[current].getStartTime()));
+                    Log.d(TAG, "seek to song");
+                    m[current].seekTo(1000 * (int) ((System.currentTimeMillis() / 1000) - s[current].getStartTime()));
                     if(!startCurrent())
                     {
                         lock = false;
@@ -175,6 +157,7 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
                 }
                 else // NOT need seek
                 {
+                    Log.d(TAG, "wait for song to start");
                     //FIRST try to wait for the time the song is supposed to start
                     try
                     {
@@ -212,6 +195,9 @@ public class SeamlessMediaPlayer extends BroadcastReceiver implements MediaPlaye
             m[current].start();
             m[current].setOnCompletionListener(this);
             m[current].setOnErrorListener(this);
+            Intent k = new Intent(EVENT_SONG_STARTED);
+            k.putExtra(EVENT_SONG_STARTED, s[current]);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(k);
         }
         catch (Exception e)
         {
