@@ -99,9 +99,11 @@ public class UserFragment extends FloorFragment
             return;
         }
 
-        userAdapter = new UserFragment.UserAdapter(a, users, new RecyclerViewListener() {
+        userAdapter = new UserFragment.UserAdapter(a, users, new RecyclerViewListener()
+        {
             @Override
-            public void onItemClick(View v, int position) {
+            public void onItemClick(View v, int position)
+            {
                 User user = users.get(position);
                 Log.d(TAG, user.toString());
                 //TODO: pass user to profile activity
@@ -146,15 +148,16 @@ public class UserFragment extends FloorFragment
             View v = LayoutInflater.from(viewGroup.getContext())
                                    .inflate(R.layout.list_user, viewGroup, false);
             final UserFragment.UserAdapter.UserViewHolder svh = new UserFragment.UserAdapter.UserViewHolder(v);
-            v.setOnClickListener(new View.OnClickListener(){
+            v.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View v){
+                public void onClick(View v)
+                {
 
                     listener.onItemClick(v, svh.getAdapterPosition());
 
                 }
             });
-
 
 
             return svh;
@@ -166,9 +169,9 @@ public class UserFragment extends FloorFragment
         {
             //TODO set profile picture
             Picasso.with(mContext)
-                    .load(users.get(i)
-                            .getPhoto())
-                    .into(userViewHolder.userPhoto);
+                   .load(users.get(i)
+                              .getPhoto())
+                   .into(userViewHolder.userPhoto);
 
             userViewHolder.username.setText(users.get(i)
                                                  .getFirstName() + " " + users.get(i)

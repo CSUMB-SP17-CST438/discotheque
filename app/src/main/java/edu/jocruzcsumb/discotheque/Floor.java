@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class Floor implements Parcelable
 {
-	public static final String TAG = "Floor";
+    public static final String TAG = "Floor";
 
     //regular parse
     public static final String JSON_NAME_TAG = "floor_name";
@@ -28,8 +28,20 @@ public class Floor implements Parcelable
     public static final String JSON_USERS_TAG = "floor_members";
     public static final String JSON_MESSAGES_TAG = "floor_messages";
     public static final String JSON_THEME_TAG = "theme";
+    public static final Creator<Floor> CREATOR = new Creator<Floor>()
+    {
+        @Override
+        public Floor createFromParcel(Parcel in)
+        {
+            return new Floor(in);
+        }
 
-
+        @Override
+        public Floor[] newArray(int size)
+        {
+            return new Floor[size];
+        }
+    };
     private User creator;
     private int id;
     private String name;
@@ -56,51 +68,42 @@ public class Floor implements Parcelable
         theme = in.readParcelable(Theme.class.getClassLoader());
     }
 
-    public static final Creator<Floor> CREATOR = new Creator<Floor>()
+    public static Floor parse(JSONObject jsonFloor) throws JSONException
     {
-        @Override
-        public Floor createFromParcel(Parcel in)
+        Log.d(TAG, "Parse Floor: " + jsonFloor.toString());
+        boolean sub = (jsonFloor.has("floor"));
+        Log.d(TAG, "Parse Floor: has tag floor: " + (sub ? "true" : "false"));
+        if (sub)
         {
-            return new Floor(in);
+            jsonFloor = jsonFloor.getJSONObject("floor");
         }
+        Log.d(TAG, "Parse Floor: has tag floor_id: " + (jsonFloor.has("floor_id") ? "true" : "false"));
 
-        @Override
-        public Floor[] newArray(int size)
+        return new Floor(
+                jsonFloor.getInt(JSON_ID_TAG),
+                jsonFloor.getString(JSON_NAME_TAG),
+                null//User.parse(jsonFloor.getJSONObject(JSON_CREATOR_TAG))
+        );
+    }
+
+    public static ArrayList<Floor> parse(JSONArray a) throws JSONException
+    {
+        int arrayLength = a.length();
+        ArrayList<Floor> floorList = new ArrayList<Floor>();
+        for (int i = 0; i < arrayLength; i++)
         {
-            return new Floor[size];
+            floorList.add(parse(a.getJSONObject(i)));
         }
-    };
-
-	public static Floor parse(JSONObject jsonFloor) throws JSONException
-	{
-		Log.d(TAG, "Parse Floor: " + jsonFloor.toString());
-		boolean sub = (jsonFloor.has("floor"));
-		Log.d(TAG, "Parse Floor: has tag floor: " + (sub?"true":"false"));
-		if(sub) jsonFloor = jsonFloor.getJSONObject("floor");
-		Log.d(TAG, "Parse Floor: has tag floor_id: " + (jsonFloor.has("floor_id")?"true":"false"));
-
-		return new Floor(
-				jsonFloor.getInt(JSON_ID_TAG),
-				jsonFloor.getString(JSON_NAME_TAG),
-				null//User.parse(jsonFloor.getJSONObject(JSON_CREATOR_TAG))
-		);
-	}
-
-	public static ArrayList<Floor> parse(JSONArray a) throws JSONException
-	{
-		int arrayLength = a.length();
-		ArrayList<Floor> floorList = new ArrayList<Floor>();
-		for(int i = 0; i < arrayLength; i++)
-		{
-			floorList.add(parse(a.getJSONObject(i)));
-		}
-		return floorList;
-	}
+        return floorList;
+    }
 
     public static Floor parseAdvanced(JSONObject jsonFloor) throws JSONException
     {
-		boolean sub = (jsonFloor.has("floor"));
-	    if(sub) jsonFloor = jsonFloor.getJSONObject("floor");
+        boolean sub = (jsonFloor.has("floor"));
+        if (sub)
+        {
+            jsonFloor = jsonFloor.getJSONObject("floor");
+        }
         Floor f = parse(jsonFloor);
         f.setUsers(User.parse(jsonFloor.getJSONArray(JSON_USERS_TAG)));
         f.setSongs(Song.parse(jsonFloor.getJSONArray(JSON_SONGS_TAG)));
@@ -139,14 +142,14 @@ public class Floor implements Parcelable
         this.users = users;
     }
 
-    public void setTheme(Theme theme)
-    {
-        this.theme = theme;
-    }
-
     public Theme getTheme()
     {
         return theme;
+    }
+
+    public void setTheme(Theme theme)
+    {
+        this.theme = theme;
     }
 
     public String getName()

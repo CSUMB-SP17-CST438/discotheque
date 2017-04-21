@@ -1,26 +1,11 @@
 package edu.jocruzcsumb.discotheque;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import java.util.ArrayList;
-
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_FLOOR_JOINED;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_FLOOR;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_MESSAGE_ADD;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_MESSAGE_LIST_UPDATE;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_SONG_LIST_UPDATE;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_ADD;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_LIST_UPDATE;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_REMOVE;
-import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STARTED;
-import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STOPPED;
 
 /**
  * Created by carsen on 4/11/17.
@@ -81,6 +66,7 @@ public abstract class FloorFragment extends Fragment
             }
         };
     }
+
     // EVENTS are broadcasted here
     protected void broadcast(String event)
     {
