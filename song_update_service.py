@@ -42,6 +42,7 @@ class SongQueue(PriorityQueue):
 
 	def add_to_end(self,song):
 		self.put((self.least_priority,song))
+		self.least_priority+=1
 
 
 	def promote_priority(self,song):
@@ -113,18 +114,18 @@ class songUpdateThread(threading.Thread):
 					current_song = ds.refresh_song(_song,self.start_time)
 					self.sleep_duration += math.floor((_song['duration']/1000)+2)
 					self.songQ.update_pos(1,(1,current_song))
-					print("*****queue init emit****")
+					# print("*****queue init emit****")
 					sl = self.songQ.to_list()
 					self.songlist = sl
-					self.socket.emit(self.SLU_TAG,sl)
-					print(json.dumps(sl,indent=4))
-					print("removing top two songs")
+					# self.socket.emit(self.SLU_TAG,sl,room=self.floor_id)
+					# print(json.dumps(sl,indent=4))
+					# print("removing top two songs")
 					_,s = self.songQ.get()
 					self.songQ.add_to_end(s)
-					print(s)
+					# print(s)
 					_,s = self.songQ.get()
 					self.songQ.add_to_end(s)
-					print(s)
+					# print(s)
 					position +=1
 				else:
 					time.sleep(self.sleep_duration)
@@ -220,6 +221,7 @@ class SongThreadHolder:
 		new_thread = songUpdateThread(thread_name,floor_id,songlist,self.socket)
 		new_thread.start()
 		self.threads.append(new_thread)
+		return new_thread
 
 	def find_thread(self,floor_id):
 		print("print inside find thread")
