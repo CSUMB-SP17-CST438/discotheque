@@ -174,10 +174,14 @@ def on_join_floor(data):
         print("thread is none")
         floor_to_join = getFloor(floor_id)
         floor_list = floor_to_join.to_list()
-        thread_holder.add_thread(floor_to_join.floor_name,floor_to_join.floor_id,floor_list['songlist'])
+        new_thread = thread_holder.add_thread(floor_to_join.floor_name,floor_to_join.floor_id,floor_list['songlist'])
         #refresh floor object
+        time.sleep(2)
+        floor_to_join.set_songlist(new_thread.songlist)
         floor_to_join = getFloor(floor_id)
-        socket.emit('floor joined', {'floor':floor_to_join.to_list()}, room=request.sid)
+        floor_list = floor_to_join.to_list()
+        socket.emit('floor joined', {'floor':floor_list}, room=request.sid)
+        print("floor",json.dumps(floor_list,indent=4))
         print("***memlist update***")
         print(floor_to_join.to_list()['floor_members'])
         socket.emit('member list update', {'floor members': floor_list['floor_members']},room=floor_to_join.floor_id)
@@ -210,9 +214,13 @@ def userEmit(member):
  	return {'authorized': 1,'email': member.member_email,'member_id':member.member_id, 'user':member.to_simple_list()}
 
 
+###################################################################################################################################
+###################################################################################################################################
+#############################PROFILE UPDATE HANDLERS###############################################################################
 
-def create_thread(songlist):
-	thread = threading.thread
+@socket.on('update profile')
+def update_profile(data):
+    return None
 
 #This event is for the privacy policy page
 @app.route('/privacy')
