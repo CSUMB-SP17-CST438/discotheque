@@ -168,9 +168,9 @@ public class FloorActivity extends AppCompatActivity
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
-        savedInstanceState.putParcelable(Floor.TAG, floor);
-        savedInstanceState.putParcelable(Song.TAG, currentSong);
-        savedInstanceState.putInt(CURRENT_TAB_TAG, mViewPager.getCurrentItem());
+        if(floor != null) savedInstanceState.putParcelable(Floor.TAG, floor);
+        if(currentSong != null) savedInstanceState.putParcelable(Song.TAG, currentSong);
+        if(floor != null) savedInstanceState.putInt(CURRENT_TAB_TAG, mViewPager.getCurrentItem());
     }
 
     @Override
