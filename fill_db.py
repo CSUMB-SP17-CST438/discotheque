@@ -4,6 +4,7 @@ import discoSounds as ds
 import serv
 
 def fillDB():
+	genres = ['alternative','ambient','classical','country','dance','edm','dancehall','deep house','disco','drum']
 	db.app = serv.app
 	db.drop_all()
 	db.create_all()
@@ -19,7 +20,9 @@ def fillDB():
 	db.session.add(member1)
 	db.session.add(member2)
 	db.session.commit()
+
 	room2.add_member(member.member_id)
+	s.update_prof(**{'member_id':member.member_id,'bio':"My favoreite music is music that bangs! I like tons of genres from hard rock to indie"})
 	db.session.add(room2)
 	db.session.add(room3)
 	db.session.commit()

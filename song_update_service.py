@@ -103,16 +103,16 @@ class songUpdateThread(threading.Thread):
 		while not self.stopper.is_set():
 			while not self.songQ.empty():
 				if position == 0:
-					self.start_time = math.floor(time.time() + 2)
+					self.start_time = math.floor(time.time() + 1)
 					_song = self.songQ.peek()
 					current_song = ds.refresh_song(_song,self.start_time)
 					self.songQ.update_pos(0,(0,current_song))
 					#update information for seconf song in list
 					_song = self.songQ.peek_pos(1)
-					self.sleep_duration = math.floor((_song['duration']/1000)+2)
+					self.sleep_duration = math.floor((_song['duration']/1000))
 					self.start_time += math.floor(self.start_time+self.sleep_duration)
 					current_song = ds.refresh_song(_song,self.start_time)
-					self.sleep_duration += math.floor((_song['duration']/1000)+2)
+					self.sleep_duration += math.floor((_song['duration']/1000)+1)
 					self.songQ.update_pos(1,(1,current_song))
 					# print("*****queue init emit****")
 					sl = self.songQ.to_list()
@@ -144,38 +144,6 @@ class songUpdateThread(threading.Thread):
 					self.songQ.get()
 
 
-
-	# def send_updates(self):
-	# 	position = 0
-	# 	while(not self.stopper.is_set()):
-	# 		for t in self.songlist:
-	# 			if self.current_song_position == 0:
-	# 				self.start_time = math.floor(time.time() + 2.0)
-	# 				self.songlist[0] = ds.refresh_song(self.songlist[0],self.start_time)
-	# 				self.songlist[0]['start_time'] = self.start_time
-	# 				del self.songlist[1]
-
-	# 				st = math.floor(self.start_time+(self.songlist[position]['duration']/1000)+2)
-	# 				self.songlist[1] = ds.refresh_song(self.songlist[1],st)
-	# 				del self.songlist[2]
-	# 				self.socket.emit(self.SLU_TAG, self.songlist,room=self.floor_id)
-	# 				print("***********init emit*******")
-	# 				print(json.dumps(self.songlist,indent=4))
-	# 				self.current_song_position +=1
-	# 				self.sleep_duration = (self.songlist[0]['duration']/1000)-1.0
-	# 				self.start_time = math.floor(self.start_time + self.sleep_duration)
-	# 				# sleep(duration)
-	# 			else:
-	# 				time.sleep(self.sleep_duration)
-	# 				if not self.stopper.is_set():
-	# 					self.sleep_duration = (self.songlist[position]['duration']/1000)-1.0
-	# 					self.songlist[self.current_song_position] = ds.refresh_song(self.songlist[self.current_song_position],self.start_time)
-	# 					self.start_time = math.floor(self.start_time + self.sleep_duration)
-	# 					print("***************update emit***********")
-	# 					print("emit time:",self.start_time) 
-	# 					print("song",json.dumps(self.songlist[self.current_song_position],indent=4))
-	# 					self.socket.emit(self.SLU_TAG, self.songlist,room=self.floor_id)
-	# 					self.current_song_position+=1
 
 
 	def update_list(self, song_id):

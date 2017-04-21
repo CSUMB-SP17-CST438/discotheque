@@ -31,8 +31,6 @@ floor_members = db.Table('floor_members',
 # 		db.Column('floor_id', db.Integer, db.ForeignKey('floor.floor_id'))
 # 		)
 
-
-
 class floor(db.Model):
 	floor_id = db.Column(db.Integer,primary_key = True)
 	floor_name = db.Column(db.String(120),unique=True)
@@ -102,6 +100,12 @@ class floor(db.Model):
 		else:
 			return True
 
+	def get_member_profiles(self):
+		profiles = []
+		for m in self.floor_members:
+			profiles.append(memb_schem.dump(m).data)
+		return profiles
+
 	def __repr__(self):
 		return '<Floor: {floor_id: %r, floor_name: %r, floor_is_public: %r>' %(self.floor_id,self.floor_name,self.public)
 
@@ -152,10 +156,6 @@ class member(db.Model):
 		f_mem = mem_sc.dump(self)
 		return f_mem[0]
 
-
-		
-		
-
 	def __repr__(self):
 		return '<Member: f_name: %r, l_name: %r, username: %r >' %(self.member_FName, self.member_LName, self.username)
 
@@ -182,6 +182,18 @@ class message(db.Model):
     	return '<Message: {Text: %r, Member: %r} >' %(self.text, thisMember)
 
 
+class genre(db.Model):
+	genre_id = db.Column(db.Integer,primary_key=True)
+	genre_name = db.Column(db.String('120'))
+
+	def __init__(self,name):
+		self.genre_name = name
+
+	def __repr__(self):
+		return '<Genre: {id: %r, Name: %r>' %(self.genre_id,self.genre_name)
+
+
+
 """*************************************************************************************************************************************
 ****************************************************************************************************************************************
 ***********************************************START MARSHMALLOW SCHEMA*****************************************************************
@@ -193,7 +205,7 @@ class f_Schema(ma.ModelSchema):
 
 class member_Schema(ma.Schema):
 	class Meta:
-		fields = ('username','member_FName','member_LName','member_img_url','created_floors'
+		fields = ('username','member_FName','member_LName','member_img_url','member_desc','member_fgenres','created_floors'
 			)
 	created_floors = f.Nested(f_Schema,many=True, exclude=('floor_members'))
 
@@ -252,7 +264,7 @@ def memberExists(mem_id):
 	return False
 
 # ******************************************************************************************************
-# ************************************START INSERT MESSAGES*********************************************
+# ************************************START INSERT FUNCTIONS********************************************
 # ******************************************************************************************************
 def registerMember(fname,lname,email,imgLink):
 	if not memberExists_by_email(email):
@@ -279,28 +291,27 @@ def add_floor(floor_name,creator_id,public,genre):
 	print("*********************floor added*********************")
 	return new_floor
 
+#  username','member_FName','member_LName','member_img_url','member_desc','member_','created_floors'
+def update_prof(**kwargs):
+	if kwargs is not None and 'member_id' in kwargs:
+		me = getMemberObject(kwargs['member_id'])
+		for key, value in kwargs.items():
+			if key == 'username':
+				me.username = value
+			if key == 'f_name':
+				me.member_FName = value
+			if key == 'l_name':
+				me.member_LName = value
+			if key == 'bio':
+				me.member_desc = value
+			if key == 'genres':
+				for g in value:
+					me.add_genre(g)
 
+	return None
 # ******************************************************************************************************
 # **************************************END INSERT MESSAGES*********************************************
 # ******************************************************************************************************
-
-
-
-# def login_attempt(username,password):
-# 	this_member = memberExists_by_username(username)
-# 	if this_member is not None and this_member.member_password == password:
-# 		return True
-# 	else:
-# 		return False;
-
-# def login_attemp_email(email,password):
-# 	this_member = memberExists_by_email(email)
-# 	if this_member is not None and this_member.member_password == password:
-# 		return True
-# 	else:
-# 		return False;
-		
-
 
 
 """*************************************************************************************************************************************
@@ -308,7 +319,6 @@ def add_floor(floor_name,creator_id,public,genre):
 ***********************************************END INSERT/UPDATE FUNCTIONS**************************************************************
 ****************************************************************************************************************************************
 ****************************************************************************************************************************************"""
-
 """*************************************************************************************************************************************
 ****************************************************************************************************************************************
 **************************************************START GET FUNCTIONS*******************************************************************
@@ -357,8 +367,8 @@ def getPublicFloors():
 		fl_list.append(simple_schema.dump(f).data)
 	return fl_list
 
-def getUserProfiles(floor_id):
-	return None
+
+
 
 """*************************************************************************************************************************************
 ****************************************************************************************************************************************
