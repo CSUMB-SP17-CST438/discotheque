@@ -49,6 +49,7 @@ public class FloorActivity extends AppCompatActivity
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private Song currentSong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -94,10 +95,7 @@ public class FloorActivity extends AppCompatActivity
                     @Override
                     public void run()
                     {
-                        songInfoView.setText((s.getName() + " - " + s.getArtist()));
-                        Picasso.with(FloorActivity.this)
-                               .load(s.getArtworkUrl())
-                               .into(albumCoverView);
+                        setCurrentSong(s);
                     }
                 });
             }
@@ -146,6 +144,16 @@ public class FloorActivity extends AppCompatActivity
 
     }
 
+    private void setCurrentSong(Song s)
+    {
+        currentSong = s;
+        songInfoView.setText((s.getName() + " - " + s.getArtist()));
+        Picasso.with(FloorActivity.this)
+               .load(s.getArtworkUrl())
+               .into(albumCoverView);
+        //TODO progressbar
+    }
+
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState)
     {
@@ -154,12 +162,14 @@ public class FloorActivity extends AppCompatActivity
         {
             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         }
+        setCurrentSong((Song)savedInstanceState.getParcelable(Song.TAG));
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
         savedInstanceState.putParcelable(Floor.TAG, floor);
+        savedInstanceState.putParcelable(Song.TAG, currentSong);
         savedInstanceState.putInt(CURRENT_TAB_TAG, mViewPager.getCurrentItem());
     }
 
