@@ -22,13 +22,13 @@
 
             <ImageView
                 android:id="@+id/chatPhoto"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
 
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/all_logo" />
 
             <TextView
                 android:id="@+id/pubTime"
@@ -39,7 +39,8 @@
                 android:layout_alignParentTop="true"
                 android:background="#07000000"
                 android:text="12:57 p.m"
-                android:textColor="#CECBCB" />
+                android:textColor="#CECBCB"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/chat"
