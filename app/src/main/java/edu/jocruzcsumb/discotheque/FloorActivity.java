@@ -1,7 +1,5 @@
 package edu.jocruzcsumb.discotheque;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -23,19 +21,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_FLOOR_JOINED;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_LEAVE_FLOOR;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_MESSAGE_ADD;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_MESSAGE_LIST_UPDATE;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_SONG_LIST_UPDATE;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_ADD;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_LIST_UPDATE;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_REMOVE;
 import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STARTED;
 import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STOPPED;
 
@@ -108,7 +95,9 @@ public class FloorActivity extends AppCompatActivity
                     public void run()
                     {
                         songInfoView.setText((s.getName() + " - " + s.getArtist()));
-                        Picasso.with(FloorActivity.this).load(s.getArtworkUrl()).into(albumCoverView);
+                        Picasso.with(FloorActivity.this)
+                               .load(s.getArtworkUrl())
+                               .into(albumCoverView);
                     }
                 });
             }
@@ -161,7 +150,10 @@ public class FloorActivity extends AppCompatActivity
     public void onRestoreInstanceState(Bundle savedInstanceState)
     {
         floor = (Floor) savedInstanceState.getParcelable(Floor.TAG);
-        if(floor != null) findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        if (floor != null)
+        {
+            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        }
     }
 
     @Override

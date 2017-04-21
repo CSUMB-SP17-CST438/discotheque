@@ -79,18 +79,21 @@ public class ChatFragment extends FloorFragment implements View.OnClickListener
     private void updateListUI(final ArrayList<Message> messages)
     {
         Activity a = getActivity();
-        if(a == null) return;
+        if (a == null)
+        {
+            return;
+        }
         Log.d(TAG, "updateListUI");
         chatAdapter = new ChatAdapter(a, messages);
         Log.d(TAG, messages.toString());
         a.runOnUiThread(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        recyclerView.setAdapter(chatAdapter);
-                    }
-                });
+        {
+            @Override
+            public void run()
+            {
+                recyclerView.setAdapter(chatAdapter);
+            }
+        });
     }
 
     @Override
@@ -146,7 +149,11 @@ public class ChatFragment extends FloorFragment implements View.OnClickListener
             // chatViewHolder.time.setText(userChatList.get(i).getPub_time());
             //if (!userChatList.get(i).getPhoto().equals("null"))
             // {
-            Picasso.with(mContext).load(messages.get(i).getAuthor().getPhoto()).into(chatViewHolder.image);
+            Picasso.with(mContext)
+                   .load(messages.get(i)
+                                 .getAuthor()
+                                 .getPhoto())
+                   .into(chatViewHolder.image);
             //}
             //else
             //{
