@@ -155,6 +155,7 @@ public class FloorActivity extends AppCompatActivity
     public void onRestoreInstanceState(Bundle savedInstanceState)
     {
         floor = (Floor) savedInstanceState.getParcelable(Floor.TAG);
+        if(floor != null) findViewById(R.id.loadingPanel).setVisibility(View.GONE);
     }
 
     @Override
