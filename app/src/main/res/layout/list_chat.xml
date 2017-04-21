@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:padding="3dp"
     >
 
     <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/chatCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/selector_row"
-        card_view:cardElevation="2dp"
-        >
+        card_view:cardElevation="2dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="79dp"
             android:padding="16dp"
 
             >
@@ -25,39 +24,46 @@
                 android:id="@+id/chatPhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:src="@drawable/ic_launcher"/>
-
-            <TextView
-                android:id="@+id/chat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="11dp"
-                android:layout_marginStart="11dp"
-                android:layout_toEndOf="@+id/chatPhoto"
-                android:layout_toRightOf="@+id/chatPhoto"
-                android:text="Dear Mama"
-                android:textSize="20sp"/>
-
-            <TextView
-                android:id="@+id/sender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/chatPhoto"
-                android:text="BY TUPAC"/>
+                android:src="@drawable/ic_launcher" />
 
             <TextView
                 android:id="@+id/pubTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/chat"
-                android:layout_alignBottom="@+id/chat"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:text="12:57 p.m"/>
+                android:layout_alignParentTop="true"
+                android:background="#07000000"
+                android:text="12:57 p.m"
+                android:textColor="#CECBCB" />
+
+            <TextView
+                android:id="@+id/chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="11dp"
+                android:layout_marginStart="11dp"
+                android:layout_toEndOf="@+id/chatPhoto"
+                android:layout_toRightOf="@+id/chatPhoto"
+                android:text="Dear Mama"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/sender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/chat"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/chat"
+                android:text="BY TUPAC"
+                android:textColor="#CECBCB"
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
