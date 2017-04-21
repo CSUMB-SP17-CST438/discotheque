@@ -221,6 +221,7 @@ class SongThreadHolder:
 		new_thread = songUpdateThread(thread_name,floor_id,songlist,self.socket)
 		new_thread.start()
 		self.threads.append(new_thread)
+		return new_thread
 
 	def find_thread(self,floor_id):
 		print("print inside find thread")
