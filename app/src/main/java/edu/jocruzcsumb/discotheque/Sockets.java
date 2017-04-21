@@ -42,6 +42,8 @@ public class Sockets
         {
             if (!socket.connected())
             {
+                Log.w(TAG, "the main socket was disconnected, getting a new socket");
+                socket.close();
                 socket = null;
                 return getSocket();
             }
