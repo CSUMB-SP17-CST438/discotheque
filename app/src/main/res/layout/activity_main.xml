@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.jocruzcsumb.discotheque.MainActivity"
-    android:weightSum="1"
-    android:orientation="vertical"
-    android:background="@drawable/all_background">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/activity_main"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/all_background"
+              android:orientation="vertical"
+              android:paddingBottom="@dimen/activity_vertical_margin"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              android:weightSum="1"
+              tools:context="edu.jocruzcsumb.discotheque.MainActivity">
 
     <RelativeLayout
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center" >
+        android:gravity="center">
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentTop="true"
+            android:indeterminate="true"/>
     </RelativeLayout>
-
-
 
 
     <Space
@@ -34,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.4"
-        android:orientation="vertical" />
+        android:orientation="vertical"/>
 
     <ImageView
         android:id="@+id/splash_Logo_ImageView"
@@ -42,7 +40,7 @@
         android:layout_height="135dp"
         android:ems="10"
         android:gravity="center"
-        android:src="@drawable/all_logo" />
+        android:src="@drawable/all_logo"/>
 
 
     <Space
@@ -50,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.09"
-        android:orientation="vertical" />
+        android:orientation="vertical"/>
 
     <ImageView
         android:id="@+id/splash_titlefont_ImageView"
@@ -59,7 +57,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.25"
         android:ems="10"
-        android:src="@drawable/all_titlefont" />
+        android:src="@drawable/all_titlefont"/>
 
 
     <Space
@@ -67,17 +65,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.02"
-        android:orientation="vertical" />
+        android:orientation="vertical"/>
 
     <ImageView
         android:id="@+id/splash_soundcloud_ImageView"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:src="@drawable/splash_soundcloud"
+        android:layout_weight="0.23"
         android:ems="10"
         android:gravity="center"
-        android:layout_weight="0.23"
         android:paddingBottom="20dp"
+        android:src="@drawable/splash_soundcloud"
 
 
         />
@@ -87,15 +85,15 @@
         android:id="@+id/google_login_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_centerHorizontal="true"
-        android:text="@string/common_signin_button_text_long"
-        android:background="@color/colorPrimary"/>
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorPrimary"
+        android:text="@string/common_signin_button_text_long"/>
 
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
     </FrameLayout>
 
 </LinearLayout>

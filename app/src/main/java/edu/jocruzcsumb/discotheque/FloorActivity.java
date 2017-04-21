@@ -162,7 +162,7 @@ public class FloorActivity extends AppCompatActivity
         {
             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         }
-        setCurrentSong((Song)savedInstanceState.getParcelable(Song.TAG));
+        setCurrentSong((Song) savedInstanceState.getParcelable(Song.TAG));
     }
 
     @Override

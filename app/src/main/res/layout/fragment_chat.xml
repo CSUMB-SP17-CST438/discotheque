@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-    tools:context="edu.jocruzcsumb.discotheque.FloorActivity"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="edu.jocruzcsumb.discotheque.FloorActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/chat_edit_text"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/chat_edit_text" />
+        android:layout_alignParentTop="true"/>
 
 
     <Button
@@ -25,7 +24,7 @@ xmlns:tools="http://schemas.android.com/tools"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
 
-        android:text="@string/chat_room_activity_send" />
+        android:text="@string/chat_room_activity_send"/>
 
     <EditText
         android:id="@+id/chat_edit_text"
@@ -37,7 +36,7 @@ xmlns:tools="http://schemas.android.com/tools"
         android:layout_toLeftOf="@+id/send_button"
         android:layout_toStartOf="@+id/send_button"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/chat_room_activity_chat" />
+        android:hint="@string/chat_room_activity_chat"
+        android:inputType="textPersonName"/>
 
 </RelativeLayout>

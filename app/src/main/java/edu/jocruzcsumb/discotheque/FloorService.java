@@ -165,7 +165,8 @@ public class FloorService extends IntentService
         ActivityManager manager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
         {
-            if (FloorService.class.getName().equals(service.service.getClassName()))
+            if (FloorService.class.getName()
+                                  .equals(service.service.getClassName()))
             {
                 Log.i(TAG, "Avoided starting a new service, the service is already running");
                 return;
