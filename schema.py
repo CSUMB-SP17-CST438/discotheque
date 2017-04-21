@@ -160,12 +160,25 @@ class member(db.Model):
 		return '<Member: f_name: %r, l_name: %r, username: %r >' %(self.member_FName, self.member_LName, self.username)
 
 
+class genre(db.Model):
+	genre_id = db.Column(db.Integer,primary_key=True)
+	genre_name = db.Column(db.String(120))
+
+	def __init__(self, genre_name):
+		self.genre_name = genre_name
+
+	def __repr__(self):
+		return '<Genre: {id: %r, name: %r>' %(self.genre_id,self.genre_name)
+
+
+
 class message(db.Model):
     mess_id = db.Column(db.Integer, primary_key = True)
     floor_id = db.Column(db.Integer,db.ForeignKey('floor.floor_id'))
     member_id = db.Column(db.Integer, db.ForeignKey('member.member_id'))
     text = db.Column(db.Text)
     pubTime = db.Column(db.DateTime)
+
     def __init__(self, floor_id, member_id, text, pubTime=None):
         self.text = text
         self.member_id = member_id
@@ -180,17 +193,6 @@ class message(db.Model):
     	else:
     		thisMember = member.query.get(self.member_id)
     	return '<Message: {Text: %r, Member: %r} >' %(self.text, thisMember)
-
-
-class genre(db.Model):
-	genre_id = db.Column(db.Integer,primary_key=True)
-	genre_name = db.Column(db.String('120'))
-
-	def __init__(self,name):
-		self.genre_name = name
-
-	def __repr__(self):
-		return '<Genre: {id: %r, Name: %r>' %(self.genre_id,self.genre_name)
 
 
 

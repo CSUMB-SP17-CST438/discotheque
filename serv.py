@@ -135,7 +135,7 @@ def on_get_floors(data):
 
 
 
-#function assumes that the client sends floor_name,member_id,is_public, and floor_genre
+#function assumes that the client sends
 @socket.on('create floor')
 def on_create(data):
     if data['is_public'] == 1:
@@ -217,7 +217,9 @@ def userEmit(member):
 ###################################################################################################################################
 ###################################################################################################################################
 #############################PROFILE UPDATE HANDLERS###############################################################################
-
+@socket.on('get floor profiles')
+def get_floor_profiles(data):
+    floor = data['floor_id']
 @socket.on('update profile')
 def update_profile(data):
     return None

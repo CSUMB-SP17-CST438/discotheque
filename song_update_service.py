@@ -80,7 +80,7 @@ class songUpdateThread(threading.Thread):
 	def __init__(self,thread_name,floor_id,songlist,socket):
 		super(songUpdateThread,self).__init__()
 		self.songlist = songlist
-		self.start_time = time.time()
+		self.start_time = 0
 		self.floor_id = floor_id
 		self.thread_name = thread_name
 		self.current_song_position = 0
@@ -103,16 +103,21 @@ class songUpdateThread(threading.Thread):
 		while not self.stopper.is_set():
 			while not self.songQ.empty():
 				if position == 0:
+					##start time 
 					self.start_time = math.floor(time.time() + 1)
+					print("init time: ",self.start_time)
+					#update initial song info
 					_song = self.songQ.peek()
 					current_song = ds.refresh_song(_song,self.start_time)
 					self.songQ.update_pos(0,(0,current_song))
 					#update information for seconf song in list
 					_song = self.songQ.peek_pos(1)
-					self.sleep_duration = math.floor((_song['duration']/1000))
-					self.start_time += math.floor(self.start_time+self.sleep_duration)
+					self.sleep_duration = math.floor((_song['duration']/1000.00))
+					print("sleep duration:",self.sleep_duration)
+					self.start_time = math.floor(self.start_time+self.sleep_duration)
+					print("2nd song time:",self.start_time)
 					current_song = ds.refresh_song(_song,self.start_time)
-					self.sleep_duration += math.floor((_song['duration']/1000)+1)
+					self.sleep_duration += math.floor((_song['duration']/1000.00)+1)
 					self.songQ.update_pos(1,(1,current_song))
 					# print("*****queue init emit****")
 					sl = self.songQ.to_list()
