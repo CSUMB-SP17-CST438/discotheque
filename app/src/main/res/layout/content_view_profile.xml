@@ -27,7 +27,7 @@
             android:clickable="true"
             android:elevation="4dp"
             android:padding="20dp"
-            android:text="Bio" />
+            android:text="Bio"/>
 
         <TextView
             android:id="@+id/genres"
@@ -37,7 +37,7 @@
             android:clickable="true"
             android:elevation="4dp"
             android:padding="20dp"
-            android:text="genres" />
+            android:text="genres"/>
 
 
     </LinearLayout>

@@ -9,9 +9,9 @@
         android:id="@+id/button_facebook"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_centerHorizontal="true"
-        android:text="@string/action_facebook_login"
-        android:background="@color/colorPrimary"/>
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorPrimary"
+        android:text="@string/action_facebook_login"/>
 
 </LinearLayout>
