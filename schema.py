@@ -58,7 +58,7 @@ class floor(db.Model):
 	songlist = db.Column(db.PickleType)
 
 	def __init__(self,floorName,creator_id,public,genre):
-		self.floorName=floorName
+		self.floor_name=floorName
 		self.creator_id = creator_id
 		if public is not None:
 			self.public=public
@@ -307,15 +307,21 @@ def add_message(floor_id, member_id, text):
 	return True
 	
 def add_floor(floor_name,creator_id,public,genre):
-	print(floor_name)
-	new_floor = floor(floor_name,creator_id,public,genre)
-	try:
+	if floor_name_taken(floor_name):
+		return (False, "Floor name is already taken")
+	else:
+		new_floor = floor(floor_name,creator_id,public,genre)
 		db.session.add(new_floor)
 		db.session.commit()
 		print("*********************floor added*********************")
-		return (True, new_floor)
-	except IntegrityError:
-		return (False, "Floor name is already taken")
+		return (True, new_floor)	
+
+def floor_name_taken(name):
+	fl = floor.query.filter_by(floor_name=name).first()
+	print("fl",fl)
+	if fl is not None:
+		return True
+	return False
 
 #  username','member_FName','member_LName','member_img_url','member_desc','member_','created_floors'
 def update_prof(**kwargs):

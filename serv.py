@@ -143,15 +143,18 @@ def on_create(data):
     else:
         public = False
     print("******************join songlist message")
-    new_floor = add_floor(data['floor_name'],data['member_id'],public,data['floor_genre'])
-    new_floor.add_member(data['member_id'])
-    join_room(new_floor.floor_id)
-    genre = data['floor_genre']
-    songs = ds.getSongList(genre)
-    thread_holder.add_thread(new_floor.floor_name,new_floor.floor_id,songs)
-    new_floor.set_songlist(thread_holder.find_thread(new_floor.floor_id).songlist)
-    updated_floor = getFloor(new_floor.floor_id)
-    socket.emit('floor created', {'floor':updated_floor.to_list()},room=new_floor.floor_id)
+    flag, new_floor = add_floor(data['floor_name'],data['member_id'],public,data['floor_genre'])
+    if flag == True:
+        new_floor.add_member(data['member_id'])
+        join_room(new_floor.floor_id)
+        genre = data['floor_genre']
+        songs = ds.getSongList(genre)
+        thread_holder.add_thread(new_floor.floor_name,new_floor.floor_id,songs)
+        new_floor.set_songlist(thread_holder.find_thread(new_floor.floor_id).songlist)
+        updated_floor = getFloor(new_floor.floor_id)
+        socket.emit('floor created', {'floor':updated_floor.to_list()},room=new_floor.floor_id)
+    else:
+        socket.emit('')
 
 
 @socket.on('join floor')

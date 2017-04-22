@@ -77,18 +77,18 @@ class sc_test(unittest.TestCase):
 	# 	boole = getFloor(new_floor.floor_id).isActive()
 	# 	self.assertEqual(boole,True,"THE FLOOR IS CURRENTLY ACTIVE.")
  
-	def test_songlist_service(self):
-		_, new_floor = add_floor("service test floor",1,True,"punk")
-		sl = ds.getSongList("punk")
-		# print(sl)
-		new_floor.set_songlist(sl)
-		new_floor.add_member(1)
-		songThread_list = SongThreadHolder(socket)
-		songThread_list.add_thread(new_floor.floor_name,new_floor.floor_id,sl)
-		time.sleep(500)
-		songThread_list.update_thread_status(new_floor.floor_id,False)
-		print("*********UPDATE THREAD STOPPED********")
-		self.assertIsNotNone(sl)
+	# def test_songlist_service(self):
+	# 	abb, new_floor = add_floor("service test floor",1,True,"punk")
+	# 	sl = ds.getSongList("punk")
+	# 	# print(sl)
+	# 	new_floor.set_songlist(sl)
+	# 	new_floor.add_member(1)
+	# 	songThread_list = SongThreadHolder(socket)
+	# 	songThread_list.add_thread(new_floor.floor_name,new_floor.floor_id,sl)
+	# 	time.sleep(500)
+	# 	songThread_list.update_thread_status(new_floor.floor_id,False)
+	# 	print("*********UPDATE THREAD STOPPED********")
+	# 	self.assertIsNotNone(sl)
 
 	# def test_songlist_update(self):
 	# 	print("***********start songlist update******************")
@@ -171,8 +171,8 @@ class sc_test(unittest.TestCase):
 	def test_add_floor(self):
 		flag,new_f = add_floor("name1",1,True,"punk")
 		flag2, sec_floor = add_floor("name1",1,True,"punk")
-
-		self.assertEqual(flag2,True)
+		print("result: ",flag2,sec_floor)
+		self.assertEqual(flag2,False)
 
 if __name__ == '__main__':
     unittest.main()
