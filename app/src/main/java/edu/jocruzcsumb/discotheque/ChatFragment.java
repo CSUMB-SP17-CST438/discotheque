@@ -53,14 +53,7 @@ public class ChatFragment extends FloorFragment implements View.OnClickListener
         LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
         llm.setStackFromEnd(true); //scrolls to the bottom
         recyclerView.setLayoutManager(llm);
-        if (floor == null)
-        {
-            Log.w(TAG, "floor was null");
-        }
-        else
-        {
-            updateListUI(floor.getMessages());
-        }
+        if(findFloor()) updateListUI(floor.getMessages());
         return rootView;
     }
 
@@ -101,6 +94,11 @@ public class ChatFragment extends FloorFragment implements View.OnClickListener
     {
         String text = chatField.getText()
                                .toString();
+		if(!findFloor())
+		{
+			Log.w(TAG, "NO FLOOR ON CLICK");
+			return;
+		}
         Message m = new Message(0, LocalUser.getCurrentUser(), text, floor.getId(), 0);
         Intent k = new Intent(EVENT_MESSAGE_SEND);
         k.putExtra(EVENT_MESSAGE_SEND, m);
