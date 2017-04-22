@@ -23,7 +23,7 @@ public class Sockets
     // Append to this list if you want to run a different server :D
     private static final String[] SERVERS = {
             "https://disco-theque.herokuapp.com",
-            "http://carsen.ml",
+            "http://carsen.ml:8080",
             "http://devev-jcrzry.c9users.io:8080",
             "http://10.11.160.32",
             "https://tha01-tvanha01.c9users.io"
