@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,9 +44,11 @@ public class UserFragment extends FloorFragment
         return fragment;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+
+	@Nullable
+	@Override
+	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+	{
         View rootView = inflater.inflate(R.layout.fragment_user, container, false);
         userPhoto = (ImageView) rootView.findViewById(R.id.userPhoto);
         username = (TextView) rootView.findViewById(R.id.username);
@@ -54,14 +57,7 @@ public class UserFragment extends FloorFragment
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv3);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(llm);
-        if (floor == null)
-        {
-            Log.w(TAG, "floor was null");
-        }
-        else
-        {
-            updateListUI(floor.getUsers());
-        }
+		if(findFloor()) updateListUI(floor.getUsers());
         return rootView;
     }
 
@@ -69,12 +65,6 @@ public class UserFragment extends FloorFragment
     public void onUserListUpdate(ArrayList<User> users)
     {
         updateListUI(users);
-    }
-
-    @Override
-    public void onFloorJoined(Floor floor)
-    {
-        updateListUI(floor.getUsers());
     }
 
     @Override

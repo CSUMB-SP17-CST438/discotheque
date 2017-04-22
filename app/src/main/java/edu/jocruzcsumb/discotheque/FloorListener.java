@@ -27,150 +27,150 @@ import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STOPPED
 
 public abstract class FloorListener extends BroadcastReceiver
 {
-    Floor floor = null;
-    private Context context;
+	Floor floor = null;
+	private Context context;
 
-    public FloorListener(IntentFilter intentFilter, Context context)
-    {
-        this.context = context;
-        LocalBroadcastManager.getInstance(context)
-                             .registerReceiver(this, intentFilter);
-    }
+	public FloorListener(IntentFilter intentFilter, Context context)
+	{
+		this.context = context;
+		LocalBroadcastManager.getInstance(context)
+							 .registerReceiver(this, intentFilter);
+	}
 
-    public FloorListener(Context context)
-    {
-        this(getDefaultFilter(), context);
-    }
+	public FloorListener(Context context)
+	{
+		this(getDefaultFilter(), context);
+	}
 
-    public static IntentFilter getDefaultFilter()
-    {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(EVENT_FLOOR_JOINED);
-        filter.addAction(EVENT_SONG_STARTED);
-        filter.addAction(EVENT_SONG_STOPPED);
-        filter.addAction(EVENT_SONG_LIST_UPDATE);
-        filter.addAction(EVENT_USER_LIST_UPDATE);
-        filter.addAction(EVENT_MESSAGE_LIST_UPDATE);
-        filter.addAction(EVENT_MESSAGE_ADD);
-        filter.addAction(EVENT_USER_ADD);
-        filter.addAction(EVENT_USER_REMOVE);
-        return filter;
-    }
+	public static IntentFilter getDefaultFilter()
+	{
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(EVENT_FLOOR_JOINED);
+		filter.addAction(EVENT_SONG_STARTED);
+		filter.addAction(EVENT_SONG_STOPPED);
+		filter.addAction(EVENT_SONG_LIST_UPDATE);
+		filter.addAction(EVENT_USER_LIST_UPDATE);
+		filter.addAction(EVENT_MESSAGE_LIST_UPDATE);
+		filter.addAction(EVENT_MESSAGE_ADD);
+		filter.addAction(EVENT_USER_ADD);
+		filter.addAction(EVENT_USER_REMOVE);
+		return filter;
+	}
 
-    @Override
-    public void onReceive(Context context, Intent intent)
-    {
-        Log.d(TAG, "onRecieve: " + intent.getAction());
+	@Override
+	public void onReceive(Context context, Intent intent)
+	{
+		Log.d(TAG, "onRecieve: " + intent.getAction());
 
-        if (intent.getAction()
-                  .equals(EVENT_FLOOR_JOINED))
-        {
-            floor = intent.getParcelableExtra(EVENT_FLOOR_JOINED);
-            onFloorJoined(floor);
-            onSongListUpdate(floor.getSongs());
-            onMessageListUpdate(floor.getMessages());
-            onUserListUpdate(floor.getUsers());
-        }
-        else if (floor != null)
-        {
-            switch (intent.getAction())
-            {
-                case EVENT_SONG_STARTED:
-                    Song s = intent.getParcelableExtra(EVENT_SONG_STARTED);
-                    onSongStarted(s);
-                    break;
-                case EVENT_SONG_STOPPED:
-                    Song x = intent.getParcelableExtra(EVENT_SONG_STOPPED);
-                    onSongStopped(x);
-                    break;
-                case EVENT_SONG_LIST_UPDATE:
-                    ArrayList<Song> songs = intent.getParcelableArrayListExtra(EVENT_SONG_LIST_UPDATE);
-                    floor.setSongs(songs);
-                    onSongListUpdate(songs);
-                    break;
-                case EVENT_USER_LIST_UPDATE:
-                    ArrayList<User> users = intent.getParcelableArrayListExtra(EVENT_USER_LIST_UPDATE);
-                    floor.setUsers(users);
-                    onUserListUpdate(users);
-                    break;
-                case EVENT_MESSAGE_LIST_UPDATE:
-                    ArrayList<Message> messages = intent.getParcelableArrayListExtra(EVENT_MESSAGE_LIST_UPDATE);
-                    floor.setMessages(messages);
-                    onMessageListUpdate(messages);
-                    break;
-                case EVENT_MESSAGE_ADD:
-                    Message m = intent.getParcelableExtra(EVENT_MESSAGE_ADD);
-                    floor.getMessages()
-                         .add(m);
-                    onMessageAdded(m);
-                    break;
-                case EVENT_USER_ADD:
-                    User u = intent.getParcelableExtra(EVENT_USER_ADD);
-                    floor.getUsers()
-                         .add(u);
-                    onUserAdded(u);
-                    break;
-                case EVENT_USER_REMOVE:
-                    User r = intent.getParcelableExtra(EVENT_USER_REMOVE);
-                    floor.getUsers()
-                         .remove(r);
-                    onUserRemoved(r);
-                    break;
-            }
-        }
-        else
-        {
-            broadcast(EVENT_GET_FLOOR);
-        }
-    }
+		if (intent.getAction()
+				  .equals(EVENT_FLOOR_JOINED))
+		{
+			floor = intent.getParcelableExtra(EVENT_FLOOR_JOINED);
+			onFloorJoined(floor);
+			onSongListUpdate(floor.getSongs());
+			onMessageListUpdate(floor.getMessages());
+			onUserListUpdate(floor.getUsers());
+		}
+		else if (floor != null)
+		{
+			switch (intent.getAction())
+			{
+				case EVENT_SONG_STARTED:
+					Song s = intent.getParcelableExtra(EVENT_SONG_STARTED);
+					onSongStarted(s);
+					break;
+				case EVENT_SONG_STOPPED:
+					Song x = intent.getParcelableExtra(EVENT_SONG_STOPPED);
+					onSongStopped(x);
+					break;
+				case EVENT_SONG_LIST_UPDATE:
+					ArrayList<Song> songs = intent.getParcelableArrayListExtra(EVENT_SONG_LIST_UPDATE);
+					floor.setSongs(songs);
+					onSongListUpdate(songs);
+					break;
+				case EVENT_USER_LIST_UPDATE:
+					ArrayList<User> users = intent.getParcelableArrayListExtra(EVENT_USER_LIST_UPDATE);
+					floor.setUsers(users);
+					onUserListUpdate(users);
+					break;
+				case EVENT_MESSAGE_LIST_UPDATE:
+					ArrayList<Message> messages = intent.getParcelableArrayListExtra(EVENT_MESSAGE_LIST_UPDATE);
+					floor.setMessages(messages);
+					onMessageListUpdate(messages);
+					break;
+				case EVENT_MESSAGE_ADD:
+					Message m = intent.getParcelableExtra(EVENT_MESSAGE_ADD);
+					floor.getMessages()
+						 .add(m);
+					onMessageAdded(m);
+					break;
+				case EVENT_USER_ADD:
+					User u = intent.getParcelableExtra(EVENT_USER_ADD);
+					floor.getUsers()
+						 .add(u);
+					onUserAdded(u);
+					break;
+				case EVENT_USER_REMOVE:
+					User r = intent.getParcelableExtra(EVENT_USER_REMOVE);
+					floor.getUsers()
+						 .remove(r);
+					onUserRemoved(r);
+					break;
+			}
+		}
+		else
+		{
+			broadcast(EVENT_GET_FLOOR);
+		}
+	}
 
-    // EVENTS are broadcasted here
-    protected void broadcast(String event)
-    {
-        Intent k = new Intent(event);
-        broadcast(k);
-    }
+	// EVENTS are broadcasted here
+	protected void broadcast(String event)
+	{
+		Intent k = new Intent(event);
+		broadcast(k);
+	}
 
-    private void broadcast(Intent k)
-    {
-        LocalBroadcastManager.getInstance(context)
-                             .sendBroadcast(k);
-    }
+	private void broadcast(Intent k)
+	{
+		LocalBroadcastManager.getInstance(context)
+							 .sendBroadcast(k);
+	}
 
-    public void onSongStarted(Song s)
-    {
-    }
+	public void onSongStarted(Song s)
+	{
+	}
 
-    public void onSongStopped(Song s)
-    {
-    }
+	public void onSongStopped(Song s)
+	{
+	}
 
-    public void onFloorJoined(Floor floor)
-    {
-    }
+	public void onFloorJoined(Floor floor)
+	{
+	}
 
-    public void onSongListUpdate(ArrayList<Song> songs)
-    {
-    }
+	public void onSongListUpdate(ArrayList<Song> songs)
+	{
+	}
 
-    public void onUserListUpdate(ArrayList<User> users)
-    {
-    }
+	public void onUserListUpdate(ArrayList<User> users)
+	{
+	}
 
-    public void onUserAdded(User u)
-    {
-    }
+	public void onUserAdded(User u)
+	{
+	}
 
-    public void onUserRemoved(User u)
-    {
-    }
+	public void onUserRemoved(User u)
+	{
+	}
 
-    public void onMessageListUpdate(ArrayList<Message> messages)
-    {
-    }
+	public void onMessageListUpdate(ArrayList<Message> messages)
+	{
+	}
 
-    public void onMessageAdded(Message m)
-    {
+	public void onMessageAdded(Message m)
+	{
 
-    }
+	}
 }
