@@ -41,7 +41,6 @@ class floor(db.Model):
 
 	creator_id = db.Column(db.Integer,db.ForeignKey('member.member_id'))
 
-
 	floor_messages = db.relationship('message',backref=db.backref('floor',lazy='joined'),lazy='dynamic')
 	public = db.Column(db.Boolean,default=True)
 
