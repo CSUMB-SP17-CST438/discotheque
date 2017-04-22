@@ -140,7 +140,7 @@ class songUpdateThread(threading.Thread):
 					self.start_time = math.floor(self.start_time + self.sleep_duration)
 
 					#update song on the next update
-					_song = self.SongQ.peek_pos(1)
+					_song = self.songQ.peek_pos(1)
 					duration_to_add = (_song['duration']/1000.0)
 					self.songQ.update_pos(1,(1,ds.refresh_song(_song,(self.start_time+duration_to_add))))
 

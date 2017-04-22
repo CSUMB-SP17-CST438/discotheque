@@ -154,7 +154,7 @@ def on_create(data):
         updated_floor = getFloor(new_floor.floor_id)
         socket.emit('floor created', {'floor':updated_floor.to_list()},room=new_floor.floor_id)
     else:
-        socket.emit('')
+        socket.emit('Error',{'message':new_floor})
 
 
 @socket.on('join floor')
