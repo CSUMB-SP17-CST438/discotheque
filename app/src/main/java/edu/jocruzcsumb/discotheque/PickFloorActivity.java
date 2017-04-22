@@ -1,8 +1,15 @@
 package edu.jocruzcsumb.discotheque;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,15 +40,18 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
     private FloorAdapter floorAdapter;
     private RecyclerView recyclerView;
     private Button logout;
+    private FloatingActionButton actionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_room);
+        actionButton = (FloatingActionButton) findViewById(R.id.fab2);
         recyclerView = (RecyclerView) findViewById(R.id.room_listview);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
+        actionButton.setOnClickListener(this);
         recyclerView.setLayoutManager(llm);
 
         new Thread(new Runnable()
@@ -148,6 +158,15 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
             case R.id.signout:
                 LocalUser.logout(PickFloorActivity.this);
                 break;
+
+            case R.id.fab2:
+                Log.d(TAG, "fab button was pressed");
+                CreateFloorDialogFragment dialogFragment = new CreateFloorDialogFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.add(R.id.fragment_container2, dialogFragment);
+//                fragmentTransaction.commit();
+                dialogFragment.show(fragmentManager, "sample fragment");
 
         }
     }

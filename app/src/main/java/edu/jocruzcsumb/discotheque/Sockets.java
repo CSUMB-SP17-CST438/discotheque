@@ -24,7 +24,7 @@ public class Sockets
     private static final String[] SERVERS = {
             "https://disco-theque.herokuapp.com",
             "http://carsen.ml",
-            "http://devev-jcrzry.c9users.io:8080",
+            "http://devev-jcrzry.c9users.io:8080/",
             "http://10.11.160.32",
             "https://tha01-tvanha01.c9users.io"
     };
