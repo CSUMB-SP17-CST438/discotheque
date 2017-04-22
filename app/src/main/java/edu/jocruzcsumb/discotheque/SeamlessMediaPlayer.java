@@ -86,13 +86,6 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 			return;
 		}
 
-		//print current song
-		Log.i(TAG, "checkSongs: Current song");
-		Log.i(TAG, "Title: " + cur.getName());
-		Log.i(TAG, "Artist: " + cur.getArtist());
-		Log.i(TAG, "Start time: " + cur.getStartTime());
-		Log.i(TAG, "URL: " + cur.getUrl());
-
 		// Check to see that the start time is valid
 		if (cur.getStartTime() == 0)
 		{
@@ -200,8 +193,19 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 		lock = false;
 	}
 
+	private void printSong(int i)
+    {
+        //print current song
+        Log.i(TAG, "Title: " + s[i].getName());
+        Log.i(TAG, "Artist: " + s[i].getArtist());
+        Log.i(TAG, "Start time: " + s[i].getStartTime());
+        Log.i(TAG, "URL: " + s[i].getUrl());
+    }
+
+
 	private boolean startCurrent()
 	{
+        printSong(current);
 		try
 		{
 			m[current].start();
@@ -233,6 +237,7 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 
 	private boolean prep(int i)
 	{
+        printSong(i);
 		try
 		{
 			m[i] = new MediaPlayer();
