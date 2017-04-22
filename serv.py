@@ -135,7 +135,7 @@ def on_get_floors(data):
 
 
 
-#function assumes that the client sends floor_name,member_id,is_public, and floor_genre
+#function assumes that the client sends
 @socket.on('create floor')
 def on_create(data):
     if data['is_public'] == 1:
@@ -143,15 +143,18 @@ def on_create(data):
     else:
         public = False
     print("******************join songlist message")
-    new_floor = add_floor(data['floor_name'],data['member_id'],public,data['floor_genre'])
-    new_floor.add_member(data['member_id'])
-    join_room(new_floor.floor_id)
-    genre = data['floor_genre']
-    songs = ds.getSongList(genre)
-    thread_holder.add_thread(new_floor.floor_name,new_floor.floor_id,songs)
-    new_floor.set_songlist(thread_holder.find_thread(new_floor.floor_id).songlist)
-    updated_floor = getFloor(new_floor.floor_id)
-    socket.emit('floor created', {'floor':updated_floor.to_list()},room=new_floor.floor_id)
+    flag, new_floor = add_floor(data['floor_name'],data['member_id'],public,data['floor_genre'])
+    if flag == True:
+        new_floor.add_member(data['member_id'])
+        join_room(new_floor.floor_id)
+        genre = data['floor_genre']
+        songs = ds.getSongList(genre)
+        thread_holder.add_thread(new_floor.floor_name,new_floor.floor_id,songs)
+        new_floor.set_songlist(thread_holder.find_thread(new_floor.floor_id).songlist)
+        updated_floor = getFloor(new_floor.floor_id)
+        socket.emit('floor created', {'floor':updated_floor.to_list()},room=new_floor.floor_id)
+    else:
+        socket.emit('Error',{'message':new_floor})
 
 
 @socket.on('join floor')
@@ -217,7 +220,9 @@ def userEmit(member):
 ###################################################################################################################################
 ###################################################################################################################################
 #############################PROFILE UPDATE HANDLERS###############################################################################
-
+@socket.on('get floor profiles')
+def get_floor_profiles(data):
+    floor = data['floor_id']
 @socket.on('update profile')
 def update_profile(data):
     return None
@@ -234,7 +239,7 @@ def privacy():
 if __name__ == '__main__':
     socket.run(
         app,
-        port=int(os.getenv('PORT', '80')),
+        port=int(os.getenv('PORT', '8080')),
         host=os.getenv('IP', '0.0.0.0'),
         debug=True)
 

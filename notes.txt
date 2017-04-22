@@ -16,4 +16,11 @@ profile information:
 	1. function to send user information on request
 	2. function to send local user information. 
 	3. update functions to profile information.
-   '/ll/;/;l/l'
+   	4. function to update user information (which then needs to rebroadcast the floor to all other users).
+
+
+Themes:
+	1. New table that has theme name as well as other themes
+	2. theme name (unigue)
+	3. colors 
+	4. 
