@@ -40,6 +40,8 @@
             android:text="genres"/>
 
 
+
+
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
