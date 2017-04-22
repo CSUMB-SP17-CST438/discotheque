@@ -94,6 +94,11 @@ public class ChatFragment extends FloorFragment implements View.OnClickListener
     {
         String text = chatField.getText()
                                .toString();
+		if(!findFloor())
+		{
+			Log.w(TAG, "NO FLOOR ON CLICK");
+			return;
+		}
         Message m = new Message(0, LocalUser.getCurrentUser(), text, floor.getId(), 0);
         Intent k = new Intent(EVENT_MESSAGE_SEND);
         k.putExtra(EVENT_MESSAGE_SEND, m);
