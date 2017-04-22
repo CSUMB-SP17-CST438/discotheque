@@ -309,10 +309,13 @@ def add_message(floor_id, member_id, text):
 def add_floor(floor_name,creator_id,public,genre):
 	print(floor_name)
 	new_floor = floor(floor_name,creator_id,public,genre)
-	db.session.add(new_floor)
-	db.session.commit()
-	print("*********************floor added*********************")
-	return new_floor
+	try:
+		db.session.add(new_floor)
+		db.session.commit()
+		print("*********************floor added*********************")
+		return (True, new_floor)
+	except IntegrityError:
+		return (False, "Floor name is already taken")
 
 #  username','member_FName','member_LName','member_img_url','member_desc','member_','created_floors'
 def update_prof(**kwargs):

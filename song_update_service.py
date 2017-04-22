@@ -116,8 +116,8 @@ class songUpdateThread(threading.Thread):
 					print("sleep duration:",self.sleep_duration)
 					self.start_time = math.floor(self.start_time+self.sleep_duration)
 					print("2nd song time:",self.start_time)
-					current_song = ds.refresh_song(_song,self.start_time)
-					self.sleep_duration += math.floor((_song['duration']/1000.00)+1)
+					current_song = ds.refresh_song(_song,(self.start_time+2))
+					self.sleep_duration += math.floor((_song['duration']/1000.00))
 					self.songQ.update_pos(1,(1,current_song))
 					# print("*****queue init emit****")
 					sl = self.songQ.to_list()
@@ -133,10 +133,10 @@ class songUpdateThread(threading.Thread):
 					# print(s)
 					position +=1
 				else:
-					time.sleep(self.sleep_duration)
+					time.sleep(self.sleep_duration-1)
 					_song = self.songQ.peek()
 					self.sleep_duration = (_song['duration']/1000)
-					self.songQ.update_pos(0,(0,ds.refresh_song(_song,self.start_time)))
+					self.songQ.update_pos(0,(0,ds.refresh_song(_song,(self.start_time+2))))
 					self.start_time = math.floor(self.start_time + self.sleep_duration)
 					print("***************update emit***********")
 					print("emit time:",self.start_time)
