@@ -21,6 +21,17 @@ db = flask_sqlalchemy.SQLAlchemy()
 ma = Marshmallow()
 pickl = jsonpickle.pickler.Pickler()
 unpickl = jsonpickle.unpickler.Unpickler()
+
+#############################ASSOCIATION TABLES########################################
+member_genres = db.Table('favorite genres', 
+	db.Column('member_id', db.Integer, db.ForeignKey('member.member_id')),
+	db.Column('genre_id', db.Integer, db.ForeignKey('genre.genre_id'))
+)
+
+floor_theme = db.Table('floor theme', 
+	db.Column('floor_id', db.Integer, db.ForeignKey('floor.floor_id')),
+	db.Column('theme_id', db.Integer, db.ForeignKey('theme.theme_id'))
+	)
   
 floor_members = db.Table('floor_members',
 	db.Column('floor_id', db.Integer, db.ForeignKey('floor.floor_id')),
@@ -122,14 +133,15 @@ class member(db.Model):
 	member_password = db.Column(db.String(140))
 	member_img_url = db.Column(db.String(500))
 	member_desc = db.Column(db.Text)
-	member_fgenres = db.Column(db.Text)
+
+	member_fgenres = db.relationship('genre',secondary=member_genres,
+		backref=db.backref('members',lazy='joined'))
 
 	created_floors = db.relationship('floor',backref=db.backref('member',lazy='joined'),lazy='joined')
 
-
 	messages = db.relationship('message', backref=db.backref('member',lazy='joined'),lazy='dynamic')
 
-	def __init__(self,username,fname,lname,email,imgLink,desc, genres):
+	def __init__(self,username,fname,lname,email,imgLink,desc):
 		self.username = username
 		# self.member_password = password
 		self.member_FName = fname
@@ -139,11 +151,8 @@ class member(db.Model):
 			self.member_img_url = ""
 		if desc is None:
 			self.member_desc = ""
-		if genres is None:
-			self.member_fgenres = ""
 		self.member_img_url = imgLink
 		self.member_desc = desc
-		self.member_fgenres = genres
 	
 	def to_list(self):
 		mem_sc = member_Schema()
@@ -194,6 +203,19 @@ class message(db.Model):
     	return '<Message: {Text: %r, Member: %r} >' %(self.text, thisMember)
 
 
+class theme(db.Model):
+	theme_id = db.Column(db.Integer, primary_key= True)
+	theme_name = db.Column(db.String(120))
+	primary_color = db.Column(db.Text)
+	secondary_color = db.Column(db.Text)
+
+	def __init__(self,theme_name,primary_color,secondary_color):
+		self.theme_name = name
+		self.primary_color = primary_color
+		self.secondary_color = secondary_color
+
+	def __repr__(self):
+		return '<Theme: {name: %r, primary color: %r, secondary color: %r >' %(self.theme_name,self.primary_color,self.secondary_color)
 
 """*************************************************************************************************************************************
 ****************************************************************************************************************************************
@@ -271,7 +293,7 @@ def registerMember(fname,lname,email,imgLink):
 	if not memberExists_by_email(email):
 		#fname,lname,email,imgLink,desc, genres
 		generated_usrnm = email.split("@")[0]
-		new_member = member(generated_usrnm,fname,lname,email,imgLink,None,None)
+		new_member = member(generated_usrnm,fname,lname,email,imgLink,None)
 		db.session.add(new_member)
 		db.session.commit()
 		return new_member
@@ -313,6 +335,7 @@ def update_prof(**kwargs):
 # ******************************************************************************************************
 # **************************************END INSERT MESSAGES*********************************************
 # ******************************************************************************************************
+
 
 
 """*************************************************************************************************************************************

@@ -15,9 +15,9 @@ def fillDB():
 		db.session.add(gen)
 		db.session.commit()
 
-	member = s.member("test_u1","test_1","one","one@test.com","link",None,None)
-	member1 = s.member("test_u2","test_2","two","two@test.com","link",None,None)
-	member2 = s.member("test_u3","test_3","three","three@test.com","link",None,None)
+	member = s.member("test_u1","test_1","one","one@test.com","link",None)
+	member1 = s.member("test_u2","test_2","two","two@test.com","link",None)
+	member2 = s.member("test_u3","test_3","three","three@test.com","link",None)
 	room2 = s.floor("test_floor_1",1,True,"rock")
 	room2.set_songlist(ds.getSongList("rock"))
 	room3 = s.floor("test_floor_2",1,False,"pop")
