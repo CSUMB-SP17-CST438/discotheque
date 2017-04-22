@@ -149,6 +149,7 @@ public class FloorService extends IntentService
 			}
 		}
 	};
+	private SeamlessMediaPlayer seamlessMediaPlayer;
 
 	public FloorService()
 	{
@@ -275,7 +276,7 @@ public class FloorService extends IntentService
 
 		//Set up the mediaplayer
 		Log.i(TAG, "Starting seamless player");
-		SeamlessMediaPlayer seamlessMediaPlayer = new SeamlessMediaPlayer(this.getApplicationContext());
+		seamlessMediaPlayer = new SeamlessMediaPlayer(this.getApplicationContext());
 
 		Log.i(TAG, EVENT_FLOOR_JOINED);
 		broadcast(EVENT_FLOOR_JOINED, floor);

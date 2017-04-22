@@ -10,6 +10,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_FLOOR_JOINED;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_SONG_LIST_UPDATE;
 
 /**
@@ -38,6 +39,7 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 		// Recieve song events
 		IntentFilter f = new IntentFilter();
 		f.addAction(EVENT_SONG_LIST_UPDATE);
+		f.addAction(EVENT_FLOOR_JOINED);
 		l = new FloorListener(f, context)
 		{
 			@Override

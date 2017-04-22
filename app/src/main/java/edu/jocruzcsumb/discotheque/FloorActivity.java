@@ -134,7 +134,7 @@ public class FloorActivity extends AppCompatActivity
             t = savedInstanceState.getInt(CURRENT_TAB_TAG, 1);
         }
 
-        mViewPager.setCurrentItem(t, true);
+        mViewPager.setCurrentItem(t, false);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
