@@ -78,7 +78,7 @@ public class FloorService extends IntentService
 	private Floor floor = null;
 	private CountDownLatch floorLatch = null;
 
-	BroadcastReceiver r = new BroadcastReceiver()
+	private BroadcastReceiver r = new BroadcastReceiver()
 	{
 		@Override
 		public void onReceive(Context context, Intent intent)
@@ -295,6 +295,7 @@ public class FloorService extends IntentService
 			Log.w(TAG, "The floorLatch was interruped, leaving the floor");
 		}
 		seamlessMediaPlayer.stop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(r);
 		unregisterSocketEvents();
 		obj = new JSONObject();
 		try

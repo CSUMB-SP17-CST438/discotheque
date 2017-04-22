@@ -4,6 +4,7 @@
               android:layout_height="wrap_content"
               android:orientation="horizontal"
               android:padding="3dp"
+
     >
 
     <android.support.v7.widget.CardView
