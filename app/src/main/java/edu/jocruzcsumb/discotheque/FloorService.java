@@ -2,7 +2,6 @@ package edu.jocruzcsumb.discotheque;
 
 import android.app.ActivityManager;
 import android.app.IntentService;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -75,77 +74,77 @@ public class FloorService extends IntentService
 	private Floor floor = null;
 	private CountDownLatch floorLatch = null;
 
-	private BroadcastReceiver r = new BroadcastReceiver()
-	{
-		@Override
-		public void onReceive(Context context, Intent intent)
-		{
-			Log.v(TAG, "onRecieve: " + intent.getAction());
-			switch (intent.getAction())
-			{
-				case EVENT_GET_FLOOR:
-					if (floor != null)
-					{
-						broadcast(EVENT_FLOOR_JOINED, floor);
-					}
-					else
-					{
-						Log.w(TAG, EVENT_GET_FLOOR + ": Floor was null");
-					}
-					break;
-				case EVENT_GET_SONG_LIST:
-					if (floor != null)
-					{
-						broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
-					}
-					else
-					{
-						Log.w(TAG, EVENT_GET_SONG_LIST + ": Floor was null");
-					}
-					break;
-				case EVENT_GET_USER_LIST:
-					if (floor != null)
-					{
-						broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
-					}
-					else
-					{
-						Log.w(TAG, EVENT_GET_USER_LIST + ": Floor was null");
-					}
-					break;
-				case EVENT_GET_MESSAGE_LIST:
-					if (floor != null)
-					{
-						broadcast(EVENT_MESSAGE_LIST_UPDATE, floor.getMessages());
-					}
-					else
-					{
-						Log.w(TAG, EVENT_GET_MESSAGE_LIST + ": Floor was null");
-					}
-					break;
-				case EVENT_MESSAGE_SEND:
-					JSONObject jsonObject = new JSONObject();
-					try
-					{
-						jsonObject.put("floor", floor.getId()); //floor_id
-						jsonObject.put("from", LocalUser.getCurrentUser()
-														.getId()); //member_id
-						jsonObject.put("message", ((Message) intent.getParcelableExtra(EVENT_MESSAGE_SEND)).getText());
-					}
-					catch (JSONException e)
-					{
-						e.printStackTrace();
-					}
-					Sockets.getSocket()
-						   .emit(EVENT_MESSAGE_SEND, jsonObject);
-					break;
-				case EVENT_LEAVE_FLOOR:
-					Log.v(TAG, EVENT_LEAVE_FLOOR);
-					floorLatch.countDown();
-					break;
-			}
-		}
-	};
+	//	private BroadcastReceiver r = new BroadcastReceiver()
+//	{
+//		@Override
+//		public void onReceive(Context context, Intent intent)
+//		{
+//			Log.v(TAG, "onRecieve: " + intent.getAction());
+//			switch (intent.getAction())
+//			{
+//				case EVENT_GET_FLOOR:
+//					if (floor != null)
+//					{
+//						broadcast(EVENT_FLOOR_JOINED, floor);
+//					}
+//					else
+//					{
+//						Log.w(TAG, EVENT_GET_FLOOR + ": Floor was null");
+//					}
+//					break;
+//				case EVENT_GET_SONG_LIST:
+//					if (floor != null)
+//					{
+//						broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
+//					}
+//					else
+//					{
+//						Log.w(TAG, EVENT_GET_SONG_LIST + ": Floor was null");
+//					}
+//					break;
+//				case EVENT_GET_USER_LIST:
+//					if (floor != null)
+//					{
+//						broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
+//					}
+//					else
+//					{
+//						Log.w(TAG, EVENT_GET_USER_LIST + ": Floor was null");
+//					}
+//					break;
+//				case EVENT_GET_MESSAGE_LIST:
+//					if (floor != null)
+//					{
+//						broadcast(EVENT_MESSAGE_LIST_UPDATE, floor.getMessages());
+//					}
+//					else
+//					{
+//						Log.w(TAG, EVENT_GET_MESSAGE_LIST + ": Floor was null");
+//					}
+//					break;
+//				case EVENT_MESSAGE_SEND:
+//					JSONObject jsonObject = new JSONObject();
+//					try
+//					{
+//						jsonObject.put("floor", floor.getId()); //floor_id
+//						jsonObject.put("from", LocalUser.getCurrentUser()
+//														.getId()); //member_id
+//						jsonObject.put("message", ((Message) intent.getParcelableExtra(EVENT_MESSAGE_SEND)).getText());
+//					}
+//					catch (JSONException e)
+//					{
+//						e.printStackTrace();
+//					}
+//					Sockets.getSocket()
+//						   .emit(EVENT_MESSAGE_SEND, jsonObject);
+//					break;
+//				case EVENT_LEAVE_FLOOR:
+//					Log.v(TAG, EVENT_LEAVE_FLOOR);
+//					floorLatch.countDown();
+//					break;
+//			}
+//		}
+//	};
 	private SeamlessMediaPlayer seamlessMediaPlayer;
 
 	public FloorService()
@@ -237,7 +236,7 @@ public class FloorService extends IntentService
 			}
 
 			@Override
-			public void sendMessage()
+			public void sendMessage(Message m)
 			{
 				JSONObject jsonObject = new JSONObject();
 				try
@@ -245,7 +244,7 @@ public class FloorService extends IntentService
 					jsonObject.put("floor", floor.getId()); //floor_id
 					jsonObject.put("from", LocalUser.getCurrentUser()
 													.getId()); //member_id
-					jsonObject.put("message", ((Message) intent.getParcelableExtra(EVENT_MESSAGE_SEND)).getText());
+					jsonObject.put("message", m.getText());
 				}
 				catch (JSONException e)
 				{
@@ -298,10 +297,10 @@ public class FloorService extends IntentService
 		seamlessMediaPlayer = new SeamlessMediaPlayer(this.getApplicationContext());
 
 		Log.i(TAG, EVENT_FLOOR_JOINED);
-		broadcast(EVENT_FLOOR_JOINED, floor);
-		broadcast(EVENT_MESSAGE_LIST_UPDATE, floor.getMessages());
-		broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
-		broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
+		l.broadcast(EVENT_FLOOR_JOINED, floor);
+		l.broadcast(EVENT_MESSAGE_LIST_UPDATE, floor.getMessages());
+		l.broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
+		l.broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
 
 		registerSocketEvents();
 		try
@@ -316,7 +315,7 @@ public class FloorService extends IntentService
 		seamlessMediaPlayer.stop();
 
 		//Stop receiving events.
-        l.stop();
+		l.stop();
 
 		unregisterSocketEvents();
 		obj = new JSONObject();
@@ -575,5 +574,32 @@ public class FloorService extends IntentService
 					   broadcast(EVENT_MESSAGE_ADD, m);
 				   }
 			   });
+	}
+
+	// EVENTS are broadcasted here
+	private void broadcast(String event)
+	{
+		Intent k = new Intent(event);
+		broadcast(k);
+	}
+
+	public void broadcast(String event, ArrayList<? extends Parcelable> params)
+	{
+		Intent k = new Intent(event);
+		k.putParcelableArrayListExtra(event, params);
+		broadcast(k);
+	}
+
+	private void broadcast(String event, Parcelable params)
+	{
+		Intent k = new Intent(event);
+		k.putExtra(event, params);
+		broadcast(k);
+	}
+
+	private void broadcast(Intent k)
+	{
+		LocalBroadcastManager.getInstance(getApplicationContext())
+							 .sendBroadcast(k);
 	}
 }

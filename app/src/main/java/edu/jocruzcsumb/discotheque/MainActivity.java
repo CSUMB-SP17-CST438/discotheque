@@ -47,12 +47,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        if(!Sockets.getSocket().connected())
+		{
+			Toast.makeText(this, R.string.error_no_connection_dtk, Toast.LENGTH_LONG).show();
+			finish();
+		}
         setContentView(R.layout.activity_main);
         //facebook login fragment code
         FragmentManager fm = getFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
-        Sockets.getSocket();
         if (fragment == null)
         {
             fragment = new FacebookFragment();
