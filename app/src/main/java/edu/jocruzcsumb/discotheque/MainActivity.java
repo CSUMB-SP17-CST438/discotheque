@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                             .getStatusCode()));
             if (result == null)
             {
-                Log.d(TAG, "result was null you cunt ass bitch");
+                Log.e(TAG, "result was null you cunt ass bitch");
             }
             else
             {

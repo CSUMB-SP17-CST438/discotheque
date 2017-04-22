@@ -26,9 +26,6 @@ public class FloorService extends IntentService
 {
 	public static final String TAG = "FloorService";
 
-	// Requests the Floor object
-	public static final String EVENT_GET_FLOOR = "get floor";
-
 	// When the Song List is updated for the Floor
 	public static final String EVENT_SONG_LIST_UPDATE = "song list";
 
@@ -200,27 +197,6 @@ public class FloorService extends IntentService
 		}
 	}
 
-	// EVENTS are broadcasted here
-	private void broadcast(String event, Parcelable params)
-	{
-		Intent k = new Intent(event);
-		k.putExtra(event, params);
-		broadcast(k);
-	}
-
-	private void broadcast(String event, ArrayList<? extends Parcelable> params)
-	{
-		Intent k = new Intent(event);
-		k.putParcelableArrayListExtra(event, params);
-		broadcast(k);
-	}
-
-	private void broadcast(Intent k)
-	{
-		LocalBroadcastManager.getInstance(getApplicationContext())
-							 .sendBroadcast(k);
-	}
-
 	/**
 	 * Handle action Join floor in the provided background thread with the provided
 	 * parameters.
@@ -237,11 +213,54 @@ public class FloorService extends IntentService
 		f.addAction(EVENT_GET_MESSAGE_LIST);
 		f.addAction(EVENT_LEAVE_FLOOR);
 		f.addAction(EVENT_MESSAGE_SEND);
-		f.addAction(EVENT_GET_FLOOR);
+		f.addAction(EVENT_FLOOR_JOINED);
 
-		// Set the activity to listen for app broadcasts with the above filter
-		LocalBroadcastManager.getInstance(getApplicationContext())
-							 .registerReceiver(r, f);
+
+		FloorListener l = new FloorListener(f, this)
+		{
+			@Override
+			public void getUsers()
+			{
+				broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
+			}
+
+			@Override
+			public void getSongs()
+			{
+				broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
+			}
+
+			@Override
+			public void getMessages()
+			{
+				broadcast(EVENT_MESSAGE_LIST_UPDATE, floor.getMessages());
+			}
+
+			@Override
+			public void sendMessage()
+			{
+				JSONObject jsonObject = new JSONObject();
+				try
+				{
+					jsonObject.put("floor", floor.getId()); //floor_id
+					jsonObject.put("from", LocalUser.getCurrentUser()
+													.getId()); //member_id
+					jsonObject.put("message", ((Message) intent.getParcelableExtra(EVENT_MESSAGE_SEND)).getText());
+				}
+				catch (JSONException e)
+				{
+					e.printStackTrace();
+				}
+				Sockets.getSocket()
+					   .emit(EVENT_MESSAGE_SEND, jsonObject);
+			}
+
+			@Override
+			public void leaveFloor()
+			{
+				floorLatch.countDown();
+			}
+		};
 
 
 		// Finally, ask the server to join the floor and retreive the floor object.
@@ -295,7 +314,10 @@ public class FloorService extends IntentService
 			Log.w(TAG, "The floorLatch was interruped, leaving the floor");
 		}
 		seamlessMediaPlayer.stop();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(r);
+
+		//Stop receiving events.
+        l.stop();
+
 		unregisterSocketEvents();
 		obj = new JSONObject();
 		try

@@ -4,13 +4,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.util.ArrayList;
 
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_FLOOR_JOINED;
+import static edu.jocruzcsumb.discotheque.FloorService.*;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_FLOOR;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_USER_LIST;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_MESSAGE_ADD;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_MESSAGE_LIST_UPDATE;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_SONG_LIST_UPDATE;
@@ -116,16 +118,70 @@ public abstract class FloorListener extends BroadcastReceiver
 						 .remove(r);
 					onUserRemoved(r);
 					break;
+				case EVENT_GET_USER_LIST:
+					getUsers();
+					break;
+				case EVENT_GET_SONG_LIST:
+					getSongs();
+					break;
+				case EVENT_GET_MESSAGE_LIST:
+					getMessages();
+					break;
+				case EVENT_MESSAGE_SEND:
+					sendMessage();
+					break;
+				case EVENT_LEAVE_FLOOR:
+					leaveFloor();
+					break;
 			}
 		}
 		else
 		{
-			broadcast(EVENT_GET_FLOOR);
+			fail();
 		}
 	}
 
+	protected abstract void fail();
+
+	// The floor service uses these
+	public void getFloor()
+	{
+	}
+
+	public void getUsers()
+	{
+	}
+
+	public void getSongs()
+	{
+	}
+
+	public void getMessages()
+	{
+	}
+
+	public void sendMessage(Message m)
+	{
+	}
+
+	public void leaveFloor()
+	{
+	}
+
 	// EVENTS are broadcasted here
-	protected void broadcast(String event)
+	public void broadcast(String event, ArrayList<? extends Parcelable> params)
+	{
+		Intent k = new Intent(event);
+		k.putParcelableArrayListExtra(event, params);
+		broadcast(k);
+	}
+	public void broadcast(String event, Parcelable extra)
+	{
+		Intent k = new Intent(event);
+		k.putExtra(event, extra);
+		broadcast(k);
+	}
+	public void broadcast(String event)
 	{
 		Intent k = new Intent(event);
 		broadcast(k);
@@ -135,6 +191,11 @@ public abstract class FloorListener extends BroadcastReceiver
 	{
 		LocalBroadcastManager.getInstance(context)
 							 .sendBroadcast(k);
+	}
+
+	public void stop()
+	{
+		LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
 	}
 
 	public void onSongStarted(Song s)
@@ -171,6 +232,5 @@ public abstract class FloorListener extends BroadcastReceiver
 
 	public void onMessageAdded(Message m)
 	{
-
 	}
 }
