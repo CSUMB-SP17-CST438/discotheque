@@ -41,14 +41,7 @@ public class SongFragment extends FloorFragment
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
         recyclerView.setLayoutManager(llm);
-        if (floor == null)
-        {
-            Log.w(TAG, "floor was null");
-        }
-        else
-        {
-            updateListUI(floor.getSongs());
-        }
+        if(findFloor()) updateListUI(floor.getSongs());
         return rootView;
     }
 

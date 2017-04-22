@@ -44,9 +44,6 @@
         <service
             android:name=".FloorService"
             android:exported="false"/>
-        <service
-            android:name=".StreamService"
-            android:exported="false"/>
 
         <activity
             android:name=".FloorActivity"
