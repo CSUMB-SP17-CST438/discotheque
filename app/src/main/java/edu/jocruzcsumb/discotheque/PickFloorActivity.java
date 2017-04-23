@@ -99,6 +99,7 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 				{
 					e.printStackTrace();
 				}
+				updateListUI();
 			}
 		});
 	}

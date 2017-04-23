@@ -202,7 +202,6 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
         Log.i(TAG, "URL: " + s[i].getUrl());
     }
 
-
 	private boolean startCurrent()
 	{
         printSong(current);
