@@ -11,6 +11,8 @@ import facebook
 import time
 from song_update_service import *
 
+import events, log
+
 public_room = 912837
 app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL','postgresql://jcrzr:anchor99@localhost/postgres')
@@ -28,9 +30,9 @@ def start():
 	return flask.render_template('index.html')
 
 
-@socket.on('connect')
+@socket.on(events.CONNECT)
 def on_connect():
-	print('**************************************************client-connected**************************************************************')
+	log.sock(events.CONNECT)
 
 # adds a client to the public room
 
@@ -67,9 +69,9 @@ def on_song_picked(data):
 """this listener is expecting key:pair list (i.e json) with either fb_t for facebook token, or google_t for google token
 	if user exists, function will validate and pass back user information and auth status. else, it will add user reference to schema"""
 
-@socket.on('login')
+@socket.on(events.LOGIN)
 def on_login(data):
-	print("**************************************triggered login*****************************************************************")
+	log.sock(events.LOGIN)
 	if 'fb_t' not in data:
 		print('google_t: ')
 		print(data)
@@ -85,11 +87,12 @@ def on_login(data):
 		# print(mem_found)
 		if mem_found:
 			mem = getMemberObject_by_email(email)
-			socket.emit("login status", userEmit(mem), room=request.sid)
+			log.emit(events.LOGIN_STATUS)
+			socket.emit(events.LOGIN_STATUS, userEmit(mem), room=request.sid)
 		else:
 			new_mem = registerMember(fname,lname,email,link)
-			# print(new_mem.to_list())
-			socket.emit("login status", userEmit(new_mem), room=request.sid)
+			log.emit(events.LOGIN_STATUS)
+			socket.emit(events.LOGIN_STATUS, userEmit(new_mem), room=request.sid)
 
 #
 	if 'google_t' not in data:
@@ -105,21 +108,30 @@ def on_login(data):
 		print(mem_found)
 		if mem_found:
 			mem = getMemberObject_by_email(email)
-			socket.emit("login status", userEmit(mem), room=request.sid)
+			log.emit(events.LOGIN_STATUS)
+			socket.emit(events.LOGIN_STATUS, userEmit(mem), room=request.sid)
 		else:
 			new_mem = registerMember(fname,lname,email,link)
-			print(new_mem.to_list())
-			socket.emit("login status", userEmit(new_mem), room=request.sid)
+			log.emit(events.LOGIN_STATUS)
+			socket.emit(events.LOGIN_STATUS, userEmit(new_mem), room=request.sid)
 
 
-@socket.on('new message')
+@socket.on(events.MESSAGE_SEND)
 def on_new_message(data):
-	print('***********************************triggered new message********************************')
 	floor_id = data['floor']
 	member_id = data['from']
 	text = data['message']
+	log.sock(
+		events.MESSAGE_SEND+"\n"+
+		log.get_boxf([
+			['floor','member','text'],
+			[str(floor_id),str(member_id),text]
+		],log.OKGREEN)
+	)
+
 	add_message(floor_id, member_id, text)
-	socket.emit("message list update", {
+	log.emit(events.MESSAGE_LIST_UPDATE)
+	socket.emit(events.MESSAGE_LIST_UPDATE, {
 				'floor_messages': getFloorMessages(floor_id)}, room=floor_id)
 
 
@@ -128,9 +140,11 @@ def on_new_message(data):
 #the function should users associated with it. member_id and floorid 
 #floor_name and a floor_genre
 # @app.route('/floors')
-@socket.on('get floor list')
+@socket.on(events.GET_FLOOR_LIST)
 def on_get_floor_list(data):
-	socket.emit("floor list update", getPublicFloors())
+	log.sock(events.GET_FLOOR_LIST)
+	log.emit(events.FLOOR_LIST_UPDATE)
+	socket.emit(events.FLOOR_LIST_UPDATE, getPublicFloors())
 
 
 
@@ -159,19 +173,21 @@ def on_create(data):
 		socket.emit('error',{'message':new_floor})
 
 
-@socket.on('join floor')
+@socket.on(events.JOIN_FLOOR)
 #join room, function expects data to be json array/objects
 # expects keys 'floor_id', 'member_id, returns jsonarray to parse
 def on_join_floor(data):
-	print("******************TRIGGERED JOIN FLOOR ***********************")
-	print("floor_id:" )
-	print(data['floor_id'])
-	print("member_id:")
-	print(data['member_id'])
 	floor_id = data['floor_id']
+	member_id = data['member_id']
+	log.sock(events.JOIN_FLOOR+'\n'+
+		log.get_box([
+			['floor', 'member'],
+			[str(floor_id), str(member_id)]
+		])
+	)
 	join_room(floor_id)
 	floor_to_join = getFloor(floor_id)
-	floor_to_join.add_member(data['member_id'])
+	floor_to_join.add_member(member_id)
 	# print(floor_to_join.to_list())
 	#need to check if floor exists before creating thread.
 	if thread_holder.find_thread(floor_id) is None:
@@ -204,9 +220,9 @@ def on_join_floor(data):
 		print(floor_list['floor_members'])
 		socket.emit('member list update', {'floor members': floor_list['floor_members']},room=floor_to_join.floor_id)
 
-@socket.on('leave floor')
+@socket.on(events.LEAVE_FLOOR)
 def on_leave_floor(data):
-	print("************leave floor triggered************")
+	log.sock(events.LEAVE_FLOOR)
 	current_floor = getFloor(data['floor_id'])
 	current_floor.rm_member(data['member_id'])
 	current_floor = getFloor(data['floor_id'])

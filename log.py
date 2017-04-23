@@ -174,18 +174,19 @@ def emit(event):
 		
 
 # test area
-i("test info")
-d("test debug message")
-w("test warning")
-e("test error or failure")
-sock("test socket event")
-emit("test socket emit")
-box([
-	['Author', 'Carsen Yates'],
-	['Date created', '04/23/2017'],
-	['Description', 'For making terminal\noutput look pretty']
-])
-box([
-	['IM A BOX\n IMA BOX\n\n\n\n\n\n\n yur mum', 'One fish\ntwo fish\nred fish\nblueeeeeeeeeeeeeeeeeeeeeeeeee fish'],
-	['breh', 'smoke weed all of the days'],
-])
+def test():
+	i("test info")
+	d("test debug message")
+	w("test warning")
+	e("test error or failure")
+	sock("test socket event")
+	emit("test socket emit")
+	box([
+		['Author', 'Carsen Yates'],
+		['Date created', '04/23/2017'],
+		['Description', 'For making terminal\noutput look pretty']
+	])
+	box([
+		['IM A BOX\n IMA BOX\n\n\n\n\n\n\n yur mum', 'One fish\ntwo fish\nred fish\nblueeeeeeeeeeeeeeeeeeeeeeeeee fish'],
+		['breh', 'smoke weed all of the days'],
+	])
