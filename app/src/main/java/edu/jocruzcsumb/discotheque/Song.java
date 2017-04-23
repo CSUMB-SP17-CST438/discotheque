@@ -23,7 +23,8 @@ public class Song implements Comparable<Song>, Parcelable
 	public static final String JSON_ARTIST_TAG = "creator_user";
 	public static final String JSON_STREAM_URL_TAG = "stream_url";
 	public static final String JSON_ARTWORK_TAG = "artwork";
-	public static final String JSON_CHOSEN_BY_TAG = "random";
+	public static final String JSON_CHOSEN_BY_TAG = "chosen_by";
+	public static final String JSON_DURATION_TAG = "duration";
 
 	public static final String JSON_START_TIME_TAG = "start_time";
 
@@ -52,8 +53,9 @@ public class Song implements Comparable<Song>, Parcelable
 	// If a song is picked by a user, it should be moved just above the first chosenBy song in the list
 	private String chosenBy;
 	private long startTime;
+	private int duration;
 
-	public Song(String title, String artist, String streamUrl, String artworkUrl, String chosenBy, long startTime)
+	public Song(String title, String artist, String streamUrl, String artworkUrl, String chosenBy, long startTime, int duration)
 	{
 		this.title = title;
 		this.artist = artist;
@@ -61,6 +63,7 @@ public class Song implements Comparable<Song>, Parcelable
 		this.artworkUrl = artworkUrl;
 		this.chosenBy = chosenBy;
 		this.startTime = startTime;
+		this.duration = duration;
 	}
 
 	private Song(Parcel in)
@@ -71,6 +74,7 @@ public class Song implements Comparable<Song>, Parcelable
 		artworkUrl = in.readString();
 		chosenBy = in.readString();
 		startTime = in.readLong();
+		duration = in.readInt();
 	}
 
 	public static Song parse(JSONObject jsonSong) throws JSONException
@@ -85,6 +89,15 @@ public class Song implements Comparable<Song>, Parcelable
 		{
 			Log.i(TAG, "skipped parsing start time: " + e.getMessage());
 		}
+		int d = 0;
+		try
+		{
+			d = (jsonSong.has(JSON_DURATION_TAG) ? jsonSong.getInt(JSON_DURATION_TAG) : 0);
+		}
+		catch (Exception e)
+		{
+			Log.i(TAG, "skipped parsing duration: " + e.getMessage());
+		}
 		String c = (jsonSong.has(JSON_CHOSEN_BY_TAG) ? jsonSong.getString(JSON_CHOSEN_BY_TAG) : "server");
 		return new Song(
 				jsonSong.getString(JSON_TITLE_TAG),
@@ -92,7 +105,8 @@ public class Song implements Comparable<Song>, Parcelable
 				jsonSong.getString(JSON_STREAM_URL_TAG),
 				jsonSong.getString(JSON_ARTWORK_TAG),
 				c,
-				s
+				s,
+				d
 		);
 	}
 
@@ -138,19 +152,14 @@ public class Song implements Comparable<Song>, Parcelable
 		return artist;
 	}
 
-	public void setArtist(String artist)
-	{
-		this.artist = artist;
-	}
-
 	public String getUrl()
 	{
 		return streamUrl;
 	}
 
-	public void setUrl(String song_uri)
+	public int getDuration()
 	{
-		this.streamUrl = song_uri;
+		return duration;
 	}
 
 	public int compareTo(Song other)
@@ -184,6 +193,7 @@ public class Song implements Comparable<Song>, Parcelable
 		dest.writeString(artworkUrl);
 		dest.writeString(chosenBy);
 		dest.writeLong(startTime);
+		dest.writeInt(duration);
 	}
 
 	public long getStartTime()
