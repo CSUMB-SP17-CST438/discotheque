@@ -2,6 +2,7 @@ package edu.jocruzcsumb.discotheque;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,10 +48,6 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
                 android.R.layout.simple_spinner_item);
         splitSpinner.setAdapter(adapter);
         splitSpinner.setSelection(0);
-        int position = splitSpinner.getSelectedItemPosition();
-        String selectedText = (String) splitSpinner.getSelectedItem();
-        Log.d(TAG, String.valueOf(position));
-        Log.d(TAG, selectedText);
         createFloorButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
         getDialog().setTitle(DIALOG_TITLE);
@@ -65,6 +62,10 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
                 break;
             case R.id.create_floor_button:
                 String floorname = editFloorName.getText().toString();
+                int position = splitSpinner.getSelectedItemPosition();
+                String selectedText = (String) splitSpinner.getSelectedItem();
+                Log.d(TAG, String.valueOf(position));
+                Log.d(TAG, selectedText);
                 if (floorname.isEmpty()) {
                     Toast.makeText(getActivity(), "Please enter a floor name", Toast.LENGTH_SHORT).show();
                 }
@@ -72,7 +73,8 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
                 try {
                     jsonObject.put(FLOOR_NAME, floorname);
                     jsonObject.put(MEMBER_ID, LocalUser.getCurrentUser().getId());
-                    //jsonObject.put(FLOOR_GENRE, );
+                    Log.d(TAG, String.valueOf(LocalUser.getCurrentUser().getId()));
+                    jsonObject.put(FLOOR_GENRE, selectedText);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
