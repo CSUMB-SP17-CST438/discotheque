@@ -27,7 +27,7 @@ public abstract class FloorFragment extends Fragment
 
 	public FloorFragment()
 	{
-		FloorListener listener = new FloorListener(getContext())
+		FloorListener listener = new FloorListener(getContext(), TAG)
 		{
 			public void onSongStarted(Song s)
 			{
