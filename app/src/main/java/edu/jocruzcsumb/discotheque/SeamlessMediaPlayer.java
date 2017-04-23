@@ -291,5 +291,6 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 		{
 			m[current].stop();
 		}
+		l.stop();
 	}
 }
