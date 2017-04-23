@@ -10,8 +10,8 @@
         android:id="@+id/floor_cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/selector_row"
-        card_view:cardBackgroundColor="#737373"
+
+        card_view:cardBackgroundColor="@color/cardview_dark_background"
         card_view:cardElevation="2dp">
 
         <RelativeLayout
