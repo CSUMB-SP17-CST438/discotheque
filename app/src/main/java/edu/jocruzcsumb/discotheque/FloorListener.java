@@ -22,10 +22,8 @@ import static edu.jocruzcsumb.discotheque.FloorService.EVENT_SONG_LIST_UPDATE;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_ADD;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_LIST_UPDATE;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_REMOVE;
-import static edu.jocruzcsumb.discotheque.FloorService.TAG;
 import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STARTED;
 import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STOPPED;
-import static junit.framework.Assert.fail;
 
 /**
  * Created by carsen on 4/20/17.
@@ -33,18 +31,20 @@ import static junit.framework.Assert.fail;
 
 public abstract class FloorListener extends BroadcastReceiver
 {
+	private final String tag;
 	private Context context;
 
-	public FloorListener(IntentFilter intentFilter, Context context)
+	public FloorListener(IntentFilter intentFilter, Context context, String tag)
 	{
+		this.tag = tag;
 		this.context = context;
 		LocalBroadcastManager.getInstance(context)
 							 .registerReceiver(this, intentFilter);
 	}
 
-	public FloorListener(Context context)
+	public FloorListener(Context context, String tag)
 	{
-		this(getDefaultFilter(), context);
+		this(getDefaultFilter(), context, tag);
 	}
 
 	public static IntentFilter getDefaultFilter()
@@ -65,7 +65,7 @@ public abstract class FloorListener extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		Log.d(TAG, "onRecieve: " + intent.getAction());
+		Log.d(tag, "onRecieve: " + intent.getAction());
 
 		if (intent.getAction()
 				  .equals(EVENT_FLOOR_JOINED))

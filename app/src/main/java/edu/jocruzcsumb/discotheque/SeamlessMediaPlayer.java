@@ -40,7 +40,7 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 		IntentFilter f = new IntentFilter();
 		f.addAction(EVENT_SONG_LIST_UPDATE);
 		f.addAction(EVENT_FLOOR_JOINED);
-		l = new FloorListener(f, context)
+		l = new FloorListener(f, context, TAG)
 		{
 			@Override
 			public void onSongListUpdate(ArrayList<Song> songs)

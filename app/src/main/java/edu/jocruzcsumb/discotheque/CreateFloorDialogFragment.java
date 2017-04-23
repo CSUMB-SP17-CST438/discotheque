@@ -27,11 +27,14 @@ import io.socket.emitter.Emitter;
 public class CreateFloorDialogFragment extends DialogFragment implements View.OnClickListener, Emitter.Listener {
 
     private static final String TAG = "FloorDialogFragment";
-    private static final String CREATE_FLOOR = "create floor";
+    private static final String EVENT_CREATE_FLOOR = "create floor";
     private static final String FLOOR_NAME = "floor_name";
     private static final String MEMBER_ID = "member_id";
     private static final String FLOOR_GENRE = "floor_genre";
     private static final String DIALOG_TITLE = "Create Floor";
+    private static final String IS_PUBLIC = "is_public";
+    private static final String EVENT_ERROR_MESSAGE = "error";
+    private static final String EVENT_FLOOR_CREATE = "floor create";
     private EditText editFloorName;
     private Button cancelButton;
     private Button createFloorButton;
@@ -51,6 +54,8 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
         createFloorButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
         getDialog().setTitle(DIALOG_TITLE);
+        Sockets.getSocket().on(EVENT_ERROR_MESSAGE, this);
+        Sockets.getSocket().on(EVENT_FLOOR_CREATE, this);
 
         return rootView;
     }
@@ -75,10 +80,11 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
                     jsonObject.put(MEMBER_ID, LocalUser.getCurrentUser().getId());
                     Log.d(TAG, String.valueOf(LocalUser.getCurrentUser().getId()));
                     jsonObject.put(FLOOR_GENRE, selectedText);
+                    jsonObject.put(IS_PUBLIC, 1);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Sockets.getSocket().emit(CREATE_FLOOR, jsonObject);
+                Sockets.getSocket().emit(EVENT_CREATE_FLOOR, jsonObject);
                 getDialog().dismiss();
                 break;
         }
@@ -87,8 +93,18 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
     @Override
     public void call(Object... args) {
         Log.d(TAG, "Received object: " + args[0]);
-
-    }
+        JSONObject jsonObject = (JSONObject) args[0];
+        try {
+            if (jsonObject.get("Floor name is already taken").equals("Floor name is already taken")) {
+                Toast.makeText(getActivity(), "Error! Floor name already exists.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Floor was created sucessfully!", Toast.LENGTH_SHORT).show();
+            }
+        }
+        catch(JSONException e){
+            e.printStackTrace();
+        }
+        }
 }
 
 
