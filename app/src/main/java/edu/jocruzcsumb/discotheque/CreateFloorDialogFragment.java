@@ -1,10 +1,8 @@
 package edu.jocruzcsumb.discotheque;
 
-import android.app.Activity;
 import android.app.DialogFragment;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.Sampler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -38,12 +37,12 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
     private static final String DIALOG_TITLE = "Create Floor";
     private static final String IS_PUBLIC = "is_public";
     private static final String EVENT_ERROR_MESSAGE = "error";
-    private static final String EVENT_FLOOR_CREATE = "floor create";
+    private static final String EVENT_FLOOR_CREATE = "floor created";
     private EditText editFloorName;
     private Button cancelButton;
     private Button createFloorButton;
     private Spinner splitSpinner;
-    private Context context;
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +58,6 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
         createFloorButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
         getDialog().setTitle(DIALOG_TITLE);
-        context = getActivity().getApplicationContext();
         Sockets.getSocket().on(EVENT_ERROR_MESSAGE, this);
         Sockets.getSocket().on(EVENT_FLOOR_CREATE, this);
 
@@ -84,14 +82,13 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
                 try {
                     jsonObject.put(FLOOR_NAME, floorname);
                     jsonObject.put(MEMBER_ID, LocalUser.getCurrentUser().getId());
-                    Log.d(TAG, String.valueOf(LocalUser.getCurrentUser().getId()));
                     jsonObject.put(FLOOR_GENRE, selectedText);
                     jsonObject.put(IS_PUBLIC, 1);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 Sockets.getSocket().emit(EVENT_CREATE_FLOOR, jsonObject);
-                getDialog().dismiss();
+                getDialog().hide();
                 break;
         }
     }
@@ -101,7 +98,7 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
         pickFloorActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(context, strings[i], Toast.LENGTH_SHORT).show();
+                Toast.makeText(pickFloorActivity, strings[i], Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -110,19 +107,24 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
     @Override
     public void call(Object... args) {
         Log.d(TAG, "Received object: " + args[0]);
-        try {
             JSONObject jsonObject = (JSONObject) args[0];
-            if (jsonObject.get("message").equals("Floor name is already taken")) {
+            if (jsonObject.has("message")) {
                 updateUI(0);
 
             } else {
                 updateUI(1);
-                Log.d(TAG, jsonObject.toString());
+                try {
+                    int floorId = Floor.parse(jsonObject).getId();
+                    Log.d(TAG, String.valueOf(floorId));
+                    Intent k = new Intent(pickFloorActivity, FloorActivity.class);
+                    k.putExtra(Floor.TAG, floorId);
+                    startActivity(k);
+                    getDialog().dismiss();
+                }
+                catch(JSONException e){
+                    e.printStackTrace();
+                }
             }
-        }
-        catch(JSONException e){
-            e.printStackTrace();
-        }
         }
 }
 

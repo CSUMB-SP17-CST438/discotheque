@@ -56,6 +56,23 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 		recyclerView.setHasFixedSize(true);
 		LinearLayoutManager llm = new LinearLayoutManager(this);
 		recyclerView.setLayoutManager(llm);
+		recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+			@Override
+			public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+				if (dy > 0 ||dy<0 && actionButton.isShown())
+					actionButton.hide();
+			}
+
+			@Override
+			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+
+				if (newState == RecyclerView.SCROLL_STATE_IDLE){
+					actionButton.show();
+				}
+				super.onScrollStateChanged(recyclerView, newState);
+			}
+		});
+
 
 		new Thread(new Runnable()
 		{
@@ -177,9 +194,6 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
                 Log.d(TAG, "fab button was pressed");
                 CreateFloorDialogFragment dialogFragment = new CreateFloorDialogFragment();
                 FragmentManager fragmentManager = getFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.add(R.id.fragment_container2, dialogFragment);
-//                fragmentTransaction.commit();
                 dialogFragment.show(fragmentManager, "sample fragment");
 
         }
@@ -231,6 +245,7 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
             FloorViewHolder.floorName.setText(floorList.get(i)
                                                        .getName());
             FloorViewHolder.themeImage.setImageResource(R.drawable.ic_launcher);
+			FloorViewHolder.genre.setText(floorList.get(i).getGenre());
 
         }
 
