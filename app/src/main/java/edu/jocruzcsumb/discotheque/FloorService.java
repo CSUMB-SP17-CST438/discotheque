@@ -145,7 +145,7 @@ public class FloorService extends IntentService
 		f.addAction(EVENT_FLOOR_JOINED);
 
 
-		FloorListener l = new FloorListener(f, this)
+		FloorListener l = new FloorListener(f, this, TAG)
 		{
 			@Override
 			public void getUsers()

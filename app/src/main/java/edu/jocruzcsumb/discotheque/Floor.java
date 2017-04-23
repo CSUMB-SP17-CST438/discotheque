@@ -72,12 +72,12 @@ public class Floor implements Parcelable
     {
         Log.d(TAG, "Parse Floor: " + jsonFloor.toString());
         boolean sub = (jsonFloor.has("floor"));
-        Log.d(TAG, "Parse Floor: has tag floor: " + (sub ? "true" : "false"));
+        //Log.d(TAG, "Parse Floor: has tag floor: " + (sub ? "true" : "false"));
         if (sub)
         {
             jsonFloor = jsonFloor.getJSONObject("floor");
         }
-        Log.d(TAG, "Parse Floor: has tag floor_id: " + (jsonFloor.has("floor_id") ? "true" : "false"));
+        //Log.d(TAG, "Parse Floor: has tag floor_id: " + (jsonFloor.has("floor_id") ? "true" : "false"));
 
         return new Floor(
                 jsonFloor.getInt(JSON_ID_TAG),
