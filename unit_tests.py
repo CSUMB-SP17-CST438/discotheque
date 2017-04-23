@@ -77,17 +77,18 @@ class sc_test(unittest.TestCase):
 	# 	boole = getFloor(new_floor.floor_id).isActive()
 	# 	self.assertEqual(boole,True,"THE FLOOR IS CURRENTLY ACTIVE.")
  
-	def test_songlist_service(self):
-		new_floor = add_floor("service test floor",1,True,"punk")
-		sl = ds.getSongList("punk")
-		new_floor.set_songlist(sl)
-		new_floor.add_member(1)
-		songThread_list = SongThreadHolder(socket)
-		songThread_list.add_thread(new_floor.floor_name,new_floor.floor_id,sl)
-		time.sleep(500)
-		songThread_list.update_thread_status(new_floor.floor_id,False)
-		print("*********UPDATE THREAD STOPPED********")
-		self.assertIsNotNone(sl)
+	# def test_songlist_service(self):
+	# 	abb, new_floor = add_floor("service test floor",1,True,"punk")
+	# 	sl = ds.getSongList("punk")
+	# 	# print(sl)
+	# 	new_floor.set_songlist(sl)
+	# 	new_floor.add_member(1)
+	# 	songThread_list = SongThreadHolder(socket)
+	# 	songThread_list.add_thread(new_floor.floor_name,new_floor.floor_id,sl)
+	# 	time.sleep(500)
+	# 	songThread_list.update_thread_status(new_floor.floor_id,False)
+	# 	print("*********UPDATE THREAD STOPPED********")
+	# 	self.assertIsNotNone(sl)
 
 	# def test_songlist_update(self):
 	# 	print("***********start songlist update******************")
@@ -136,18 +137,18 @@ class sc_test(unittest.TestCase):
 	# 	print("removed index 0",s)
 
 	# 	self.assertIsNone(None)
-	def test_leave_floor(self):
-		floor_new = add_floor("leave_floor",1,True,"punk")
-		floor_new.add_member(1)
-		fl_id = floor_new.floor_id
-		floor_new =getFloor(fl_id)
-		print("current members:")
-		print(floor_new.floor_members)
-		print("removing member...")
-		floor_new.rm_member(1)
-		floor_new = getFloor(fl_id)
-		print("removed members",floor_new.floor_members)
-		self.assertIsInstance(floor_new.floor_members,list)
+	# def test_leave_floor(self):
+	# 	floor_new = add_floor("leave_floor",1,True,"punk")
+	# 	floor_new.add_member(1)
+	# 	fl_id = floor_new.floor_id
+	# 	floor_new =getFloor(fl_id)
+	# 	print("current members:")
+	# 	print(floor_new.floor_members)
+	# 	print("removing member...")
+	# 	floor_new.rm_member(1)
+	# 	floor_new = getFloor(fl_id)
+	# 	print("removed members",floor_new.floor_members)
+	# 	self.assertIsInstance(floor_new.floor_members,list)
 	# def test_refresh_streams(self):
 	# 	songs = ds.getSongList("rock")
 	# 	print(json.dumps(songs[0],indent=4))
@@ -166,6 +167,12 @@ class sc_test(unittest.TestCase):
 
 	# 	print(db.memberExists_by_email('thisanemaillll@'))
 	# 	self.assertIsNotNone(member)
+
+	def test_add_floor(self):
+		flag,new_f = add_floor("name1",1,True,"punk")
+		flag2, sec_floor = add_floor("name1",1,True,"punk")
+		print("result: ",flag2,sec_floor)
+		self.assertEqual(flag2,False)
 
 if __name__ == '__main__':
     unittest.main()

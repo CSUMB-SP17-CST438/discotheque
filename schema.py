@@ -21,6 +21,17 @@ db = flask_sqlalchemy.SQLAlchemy()
 ma = Marshmallow()
 pickl = jsonpickle.pickler.Pickler()
 unpickl = jsonpickle.unpickler.Unpickler()
+
+#############################ASSOCIATION TABLES########################################
+member_genres = db.Table('favorite genres', 
+	db.Column('member_id', db.Integer, db.ForeignKey('member.member_id')),
+	db.Column('genre_id', db.Integer, db.ForeignKey('genre.genre_id'))
+)
+
+floor_theme = db.Table('floor theme', 
+	db.Column('floor_id', db.Integer, db.ForeignKey('floor.floor_id')),
+	db.Column('theme_id', db.Integer, db.ForeignKey('theme.theme_id'))
+	)
   
 floor_members = db.Table('floor_members',
 	db.Column('floor_id', db.Integer, db.ForeignKey('floor.floor_id')),
@@ -30,8 +41,6 @@ floor_members = db.Table('floor_members',
 # 	db.Column('member_id',db.Integer, db.ForeignKey('member.member_id')),
 # 		db.Column('floor_id', db.Integer, db.ForeignKey('floor.floor_id'))
 # 		)
-
-
 
 class floor(db.Model):
 	floor_id = db.Column(db.Integer,primary_key = True)
@@ -43,14 +52,13 @@ class floor(db.Model):
 
 	creator_id = db.Column(db.Integer,db.ForeignKey('member.member_id'))
 
-
 	floor_messages = db.relationship('message',backref=db.backref('floor',lazy='joined'),lazy='dynamic')
 	public = db.Column(db.Boolean,default=True)
 
 	songlist = db.Column(db.PickleType)
 
 	def __init__(self,floorName,creator_id,public,genre):
-		self.floorName=floorName
+		self.floor_name=floorName
 		self.creator_id = creator_id
 		if public is not None:
 			self.public=public
@@ -102,6 +110,12 @@ class floor(db.Model):
 		else:
 			return True
 
+	def get_member_profiles(self):
+		profiles = []
+		for m in self.floor_members:
+			profiles.append(memb_schem.dump(m).data)
+		return profiles
+
 	def __repr__(self):
 		return '<Floor: {floor_id: %r, floor_name: %r, floor_is_public: %r>' %(self.floor_id,self.floor_name,self.public)
 
@@ -119,14 +133,15 @@ class member(db.Model):
 	member_password = db.Column(db.String(140))
 	member_img_url = db.Column(db.String(500))
 	member_desc = db.Column(db.Text)
-	member_fgenres = db.Column(db.Text)
+
+	member_fgenres = db.relationship('genre',secondary=member_genres,
+		backref=db.backref('members',lazy='joined'))
 
 	created_floors = db.relationship('floor',backref=db.backref('member',lazy='joined'),lazy='joined')
 
-
 	messages = db.relationship('message', backref=db.backref('member',lazy='joined'),lazy='dynamic')
 
-	def __init__(self,username,fname,lname,email,imgLink,desc, genres):
+	def __init__(self,username,fname,lname,email,imgLink,desc):
 		self.username = username
 		# self.member_password = password
 		self.member_FName = fname
@@ -136,11 +151,8 @@ class member(db.Model):
 			self.member_img_url = ""
 		if desc is None:
 			self.member_desc = ""
-		if genres is None:
-			self.member_fgenres = ""
 		self.member_img_url = imgLink
 		self.member_desc = desc
-		self.member_fgenres = genres
 	
 	def to_list(self):
 		mem_sc = member_Schema()
@@ -152,12 +164,20 @@ class member(db.Model):
 		f_mem = mem_sc.dump(self)
 		return f_mem[0]
 
-
-		
-		
-
 	def __repr__(self):
 		return '<Member: f_name: %r, l_name: %r, username: %r >' %(self.member_FName, self.member_LName, self.username)
+
+
+class genre(db.Model):
+	genre_id = db.Column(db.Integer,primary_key=True)
+	genre_name = db.Column(db.String(120))
+
+	def __init__(self, genre_name):
+		self.genre_name = genre_name
+
+	def __repr__(self):
+		return '<Genre: {id: %r, name: %r>' %(self.genre_id,self.genre_name)
+
 
 
 class message(db.Model):
@@ -166,6 +186,7 @@ class message(db.Model):
     member_id = db.Column(db.Integer, db.ForeignKey('member.member_id'))
     text = db.Column(db.Text)
     pubTime = db.Column(db.DateTime)
+
     def __init__(self, floor_id, member_id, text, pubTime=None):
         self.text = text
         self.member_id = member_id
@@ -182,6 +203,20 @@ class message(db.Model):
     	return '<Message: {Text: %r, Member: %r} >' %(self.text, thisMember)
 
 
+class theme(db.Model):
+	theme_id = db.Column(db.Integer, primary_key= True)
+	theme_name = db.Column(db.String(120))
+	primary_color = db.Column(db.Text)
+	secondary_color = db.Column(db.Text)
+
+	def __init__(self,theme_name,primary_color,secondary_color):
+		self.theme_name = name
+		self.primary_color = primary_color
+		self.secondary_color = secondary_color
+
+	def __repr__(self):
+		return '<Theme: {name: %r, primary color: %r, secondary color: %r >' %(self.theme_name,self.primary_color,self.secondary_color)
+
 """*************************************************************************************************************************************
 ****************************************************************************************************************************************
 ***********************************************START MARSHMALLOW SCHEMA*****************************************************************
@@ -193,7 +228,7 @@ class f_Schema(ma.ModelSchema):
 
 class member_Schema(ma.Schema):
 	class Meta:
-		fields = ('username','member_FName','member_LName','member_img_url','created_floors'
+		fields = ('username','member_FName','member_LName','member_img_url','member_desc','member_fgenres','created_floors'
 			)
 	created_floors = f.Nested(f_Schema,many=True, exclude=('floor_members'))
 
@@ -252,13 +287,13 @@ def memberExists(mem_id):
 	return False
 
 # ******************************************************************************************************
-# ************************************START INSERT MESSAGES*********************************************
+# ************************************START INSERT FUNCTIONS********************************************
 # ******************************************************************************************************
 def registerMember(fname,lname,email,imgLink):
 	if not memberExists_by_email(email):
 		#fname,lname,email,imgLink,desc, genres
 		generated_usrnm = email.split("@")[0]
-		new_member = member(generated_usrnm,fname,lname,email,imgLink,None,None)
+		new_member = member(generated_usrnm,fname,lname,email,imgLink,None)
 		db.session.add(new_member)
 		db.session.commit()
 		return new_member
@@ -272,34 +307,43 @@ def add_message(floor_id, member_id, text):
 	return True
 	
 def add_floor(floor_name,creator_id,public,genre):
-	print(floor_name)
-	new_floor = floor(floor_name,creator_id,public,genre)
-	db.session.add(new_floor)
-	db.session.commit()
-	print("*********************floor added*********************")
-	return new_floor
+	if floor_name_taken(floor_name):
+		return (False, "Floor name is already taken")
+	else:
+		new_floor = floor(floor_name,creator_id,public,genre)
+		db.session.add(new_floor)
+		db.session.commit()
+		print("*********************floor added*********************")
+		return (True, new_floor)	
 
+def floor_name_taken(name):
+	fl = floor.query.filter_by(floor_name=name).first()
+	print("fl",fl)
+	if fl is not None:
+		return True
+	return False
 
+#  username','member_FName','member_LName','member_img_url','member_desc','member_','created_floors'
+def update_prof(**kwargs):
+	if kwargs is not None and 'member_id' in kwargs:
+		me = getMemberObject(kwargs['member_id'])
+		for key, value in kwargs.items():
+			if key == 'username':
+				me.username = value
+			if key == 'f_name':
+				me.member_FName = value
+			if key == 'l_name':
+				me.member_LName = value
+			if key == 'bio':
+				me.member_desc = value
+			if key == 'genres':
+				for g in value:
+					me.add_genre(g)
+
+	return None
 # ******************************************************************************************************
 # **************************************END INSERT MESSAGES*********************************************
 # ******************************************************************************************************
-
-
-
-# def login_attempt(username,password):
-# 	this_member = memberExists_by_username(username)
-# 	if this_member is not None and this_member.member_password == password:
-# 		return True
-# 	else:
-# 		return False;
-
-# def login_attemp_email(email,password):
-# 	this_member = memberExists_by_email(email)
-# 	if this_member is not None and this_member.member_password == password:
-# 		return True
-# 	else:
-# 		return False;
-		
 
 
 
@@ -308,7 +352,6 @@ def add_floor(floor_name,creator_id,public,genre):
 ***********************************************END INSERT/UPDATE FUNCTIONS**************************************************************
 ****************************************************************************************************************************************
 ****************************************************************************************************************************************"""
-
 """*************************************************************************************************************************************
 ****************************************************************************************************************************************
 **************************************************START GET FUNCTIONS*******************************************************************
@@ -357,8 +400,8 @@ def getPublicFloors():
 		fl_list.append(simple_schema.dump(f).data)
 	return fl_list
 
-def getUserProfiles(floor_id):
-	return None
+
+
 
 """*************************************************************************************************************************************
 ****************************************************************************************************************************************
