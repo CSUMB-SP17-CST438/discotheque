@@ -135,13 +135,13 @@ class songUpdateThread(threading.Thread):
 				else:
 					time.sleep(self.sleep_duration-1)
 					_song = self.songQ.peek()
-					self.sleep_duration = (_song['duration']/1000.0)
+					self.sleep_duration = math.floor((_song['duration']/1000.0))
 					self.songQ.update_pos(0,(0,ds.refresh_song(_song,(self.start_time+2))))
 					self.start_time = math.floor(self.start_time + self.sleep_duration)
 
 					#update song on the next update
 					_song = self.songQ.peek_pos(1)
-					duration_to_add = (_song['duration']/1000.0)
+					duration_to_add = math.floor((_song['duration']/1000.0))
 					self.songQ.update_pos(1,(1,ds.refresh_song(_song,(self.start_time+duration_to_add))))
 
 					print("***************update emit***********")

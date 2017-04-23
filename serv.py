@@ -119,7 +119,7 @@ def on_new_message(data):
     member_id = data['from']
     text = data['message']
     add_message(floor_id, member_id, text)
-    socket.emit("message list", {
+    socket.emit("message list update", {
                 'floor_messages': getFloorMessages(floor_id)}, room=floor_id)
 
 
@@ -128,9 +128,9 @@ def on_new_message(data):
 #the function should users associated with it. member_id and floorid 
 #floor_name and a floor_genre
 # @app.route('/floors')
-@socket.on('get floors')
-def on_get_floors(data):
-	socket.emit("floor list", getPublicFloors())
+@socket.on('get floor list')
+def on_get_floor_list(data):
+	socket.emit("floor list update", getPublicFloors())
 
 
 
