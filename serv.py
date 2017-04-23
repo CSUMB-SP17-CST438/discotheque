@@ -119,7 +119,7 @@ def on_new_message(data):
     member_id = data['from']
     text = data['message']
     add_message(floor_id, member_id, text)
-    socket.emit("message list", {
+    socket.emit("message list update", {
                 'floor_messages': getFloorMessages(floor_id)}, room=floor_id)
 
 
@@ -128,9 +128,9 @@ def on_new_message(data):
 #the function should users associated with it. member_id and floorid 
 #floor_name and a floor_genre
 # @app.route('/floors')
-@socket.on('get floors')
-def on_get_floors(data):
-	socket.emit("floor list", getPublicFloors())
+@socket.on('get floor list')
+def on_get_floor_list(data):
+	socket.emit("floor list update", getPublicFloors())
 
 
 
@@ -138,6 +138,7 @@ def on_get_floors(data):
 #function assumes that the client sends
 @socket.on('create floor')
 def on_create(data):
+    print("data: ",json.dumps(data,indent=4))
     if data['is_public'] == 1:
         public = True
     else:
@@ -150,11 +151,12 @@ def on_create(data):
         genre = data['floor_genre']
         songs = ds.getSongList(genre)
         thread_holder.add_thread(new_floor.floor_name,new_floor.floor_id,songs)
+        time.sleep(2)
         new_floor.set_songlist(thread_holder.find_thread(new_floor.floor_id).songlist)
         updated_floor = getFloor(new_floor.floor_id)
         socket.emit('floor created', {'floor':updated_floor.to_list()},room=new_floor.floor_id)
     else:
-        socket.emit('Error',{'message':new_floor})
+        socket.emit('error',{'message':new_floor})
 
 
 @socket.on('join floor')
