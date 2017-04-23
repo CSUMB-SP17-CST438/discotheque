@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Discotheque</string>
+    <string name="app_name">Discotek</string>
     <string name="shared_prefs_file">discotheque</string>
     <string name="facebook_app_id">1890904081186809</string>
 
