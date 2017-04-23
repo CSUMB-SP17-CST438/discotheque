@@ -21,7 +21,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,129 +30,138 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import io.socket.emitter.Emitter;
+
 
 public class PickFloorActivity extends AppCompatActivity implements View.OnClickListener
 {
-    private static final String TAG = "PickFloorActivity";
-    private JSONArray jsonObject;
-    private ArrayList<Floor> floorList;
-    private FloorAdapter floorAdapter;
-    private RecyclerView recyclerView;
-    private Button logout;
-    private FloatingActionButton actionButton;
+	private static final String TAG = "PickFloorActivity";
+	private ArrayList<Floor> floorList;
+	private FloorAdapter floorAdapter;
+	private RecyclerView recyclerView;
+	public static final String EVENT_GET_FLOOR_LIST = "get floor list";
+	public static final String EVENT_FLOOR_LIST_UPDATE = "floor list update";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_join_room);
-        actionButton = (FloatingActionButton) findViewById(R.id.fab2);
-        recyclerView = (RecyclerView) findViewById(R.id.room_listview);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        actionButton.setOnClickListener(this);
-        recyclerView.setLayoutManager(llm);
+	@Override
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_join_room);
+		recyclerView = (RecyclerView) findViewById(R.id.room_listview);
+		recyclerView.setHasFixedSize(true);
+		LinearLayoutManager llm = new LinearLayoutManager(this);
+		recyclerView.setLayoutManager(llm);
 
-        new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                floorList = new ArrayList<Floor>();
-                Sockets.SocketWaiter waiter = new Sockets.SocketWaiter("get floors", "floor list");
-                JSONObject jsonObject2 = new JSONObject();
-                try
-                {
-                    jsonObject2.put("pls", "pls");
+		new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				floorList = new ArrayList<Floor>();
+				Sockets.SocketWaiter waiter = new Sockets.SocketWaiter(EVENT_GET_FLOOR_LIST, EVENT_FLOOR_LIST_UPDATE);
+				JSONObject jsonObject2 = new JSONObject();
+				try
+				{
+					jsonObject2.put("pls", "pls");
 
-                }
-                catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
+				}
+				catch (JSONException e)
+				{
+					e.printStackTrace();
+				}
 
-                jsonObject = waiter.getArray(jsonObject2);
-                Log.d(TAG, jsonObject.toString());
-                if (jsonObject != null)
-                {
-                    try
-                    {
-                        floorList = Floor.parse(jsonObject);
-                    }
-                    catch (JSONException e)
-                    {
-                        e.printStackTrace();
-                    }
+				JSONArray a = waiter.getArray(jsonObject2);
+				Log.d(TAG, a.toString());
+				if (a != null)
+				{
+					try
+					{
+						floorList = Floor.parse(a);
+					}
+					catch (JSONException e)
+					{
+						e.printStackTrace();
+					}
+					updateListUI();
 
-                    floorAdapter = new FloorAdapter(PickFloorActivity.this, floorList, new RecyclerViewListener()
-                    {
-                        @Override
-                        public void onItemClick(View v, int position)
-                        {
-                            Floor floor = floorList.get(position);
-                            Log.d(TAG, String.valueOf(floor.getId()));
-                            Intent k = new Intent(PickFloorActivity.this, FloorActivity.class);
-                            k.putExtra(Floor.TAG, floor.getId());
-                            startActivity(k);
-                        }
-                    });
+				}
+				else
+				{
+					Log.d(TAG, "Floor list is empty");
+				}
 
-                    runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            recyclerView.setAdapter(floorAdapter);
-                        }
-                    });
+			}
+		}).start();
+		Sockets.getSocket().on(EVENT_FLOOR_LIST_UPDATE, new Emitter.Listener()
+		{
+			@Override
+			public void call(Object... args)
+			{
+				JSONArray a = (JSONArray) args[0];
+				try
+				{
+					floorList = Floor.parse(a);
+				}
+				catch (JSONException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
-                }
-                else
-                {
-                    Log.d(TAG, "Floor list is empty");
-                }
+	private void updateListUI()
+	{
+		floorAdapter = new FloorAdapter(PickFloorActivity.this, floorList, new RecyclerViewListener()
+		{
+			@Override
+			public void onItemClick(View v, int position)
+			{
+				Floor floor = floorList.get(position);
+				Log.d(TAG, String.valueOf(floor.getId()));
+				Intent k = new Intent(PickFloorActivity.this, FloorActivity.class);
+				k.putExtra(Floor.TAG, floor.getId());
+				startActivity(k);
+			}
+		});
 
-            }
-        }).start();
-    }
+		runOnUiThread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				recyclerView.setAdapter(floorAdapter);
+			}
+		});
+	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_pick_floor, menu);
-        return true;
-    }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_pick_floor, menu);
+		return true;
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle item selection
-        switch (item.getItemId())
-        {
-            case R.id.signout:
-                LocalUser.logout(PickFloorActivity.this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		// Handle item selection
+		switch (item.getItemId())
+		{
+			case R.id.signout:
+				LocalUser.logout(PickFloorActivity.this);
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
 
-    @Override
-    public void onClick(View v)
-    {
-        switch (v.getId())
-        {
-
-//			case R.id.TEMP_go_to_room:
-//				//go to activity
-//				Intent k = new Intent(PickFloorActivity.this, FloorActivity.class);
-//
-//				k.putExtra(Floor.TAG, 2);
-//
-//				startActivity(k);
-//
-//				break;
+	@Override
+	public void onClick(View v)
+	{
+		switch (v.getId())
+		{
 
             case R.id.signout:
                 LocalUser.logout(PickFloorActivity.this);
@@ -244,5 +252,4 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
             }
         }
     }
-
 }
