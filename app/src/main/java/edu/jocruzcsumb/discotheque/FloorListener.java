@@ -33,7 +33,6 @@ import static junit.framework.Assert.fail;
 
 public abstract class FloorListener extends BroadcastReceiver
 {
-	Floor floor = null;
 	private Context context;
 
 	public FloorListener(IntentFilter intentFilter, Context context)
@@ -71,13 +70,13 @@ public abstract class FloorListener extends BroadcastReceiver
 		if (intent.getAction()
 				  .equals(EVENT_FLOOR_JOINED))
 		{
-			floor = intent.getParcelableExtra(EVENT_FLOOR_JOINED);
+			Floor floor = intent.getParcelableExtra(EVENT_FLOOR_JOINED);
 			onFloorJoined(floor);
 			onSongListUpdate(floor.getSongs());
 			onMessageListUpdate(floor.getMessages());
 			onUserListUpdate(floor.getUsers());
 		}
-		else if (floor != null)
+		else
 		{
 			switch (intent.getAction())
 			{
@@ -91,35 +90,26 @@ public abstract class FloorListener extends BroadcastReceiver
 					break;
 				case EVENT_SONG_LIST_UPDATE:
 					ArrayList<Song> songs = intent.getParcelableArrayListExtra(EVENT_SONG_LIST_UPDATE);
-					floor.setSongs(songs);
 					onSongListUpdate(songs);
 					break;
 				case EVENT_USER_LIST_UPDATE:
 					ArrayList<User> users = intent.getParcelableArrayListExtra(EVENT_USER_LIST_UPDATE);
-					floor.setUsers(users);
 					onUserListUpdate(users);
 					break;
 				case EVENT_MESSAGE_LIST_UPDATE:
 					ArrayList<Message> messages = intent.getParcelableArrayListExtra(EVENT_MESSAGE_LIST_UPDATE);
-					floor.setMessages(messages);
 					onMessageListUpdate(messages);
 					break;
 				case EVENT_MESSAGE_ADD:
 					Message m = intent.getParcelableExtra(EVENT_MESSAGE_ADD);
-					floor.getMessages()
-						 .add(m);
 					onMessageAdded(m);
 					break;
 				case EVENT_USER_ADD:
 					User u = intent.getParcelableExtra(EVENT_USER_ADD);
-					floor.getUsers()
-						 .add(u);
 					onUserAdded(u);
 					break;
 				case EVENT_USER_REMOVE:
 					User r = intent.getParcelableExtra(EVENT_USER_REMOVE);
-					floor.getUsers()
-						 .remove(r);
 					onUserRemoved(r);
 					break;
 				case EVENT_GET_USER_LIST:
@@ -138,10 +128,6 @@ public abstract class FloorListener extends BroadcastReceiver
 					leaveFloor();
 					break;
 			}
-		}
-		else
-		{
-			fail();
 		}
 	}
 
