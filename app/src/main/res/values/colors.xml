@@ -7,4 +7,9 @@
 
     <string name="background"> #a4c639 </string>
     <string name="gray"> #B33f4246 </string>
+
+
+    <string name="colorTitle">#D5D5D5</string>
+    <string name="colorsubTitle">#A8A8A8</string>
+
 </resources>
