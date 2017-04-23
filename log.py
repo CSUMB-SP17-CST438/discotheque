@@ -119,64 +119,73 @@ def get_box(box):
 					result += ('╧')
 	return result
 
+# Turns a 2D array of strings into a string that is formatted into a box matrix like above
+# This is a FUCKING masterpiece.  I wrote it for the pure fun of it
+def get_boxf(box, f):
+	return format(get_box(box), f)
+
 # prints a string without a newline
 def s_print(string):
 	sys.stdout.write(string)
 	sys.stdout.flush()
 	
 # takes a 2D array of strings and prints it in the console magically
-def print_box(box):
+def box(box):
 	s_print(get_box(box))
 
-# Formats a string and prints it inside a box
-def print_rect(string , f):
-	return rect(format(string, f))
+# takes a 2D array of strings and prints it in the console magically
+def boxf(box, f):
+	s_print(get_box(box), f)
 
 # Prints a string inside a box
-def print_rect(string):
-	print_box([[string]])
+def rect(string):
+	box([[string]])
+
+# Formats a string and prints it inside a box
+def rectf(string , f):
+	return rect(format(string, f))
 
 
 # For printing verbose info
-def logbox_i(event):
+def i(event):
 	s_print(format(get_box([[ENDC + format("INFO", HEADER) + OKGREEN],[event]]), OKGREEN))
 
 # For printing debug info
 # I suppose we can define debug info as anything that doesn't need to be logged after it's done being tested
-def logbox_d(event):
+def d(event):
 	s_print(format(get_box([[ENDC + format("DEBUG", HEADER) + OKBLUE],[event]]), OKBLUE))
 
 # For printing warnings
-def logbox_w(event):
+def w(event):
 	s_print(format(get_box([[ENDC + format("WARNING", HEADER) + WARNING],[event]]), WARNING))
 
 # For printing failures/errors
-def logbox_e(event):
+def e(event):
 	s_print(format(get_box([[ENDC + format("FAIL", HEADER) + FAIL],[event]]), FAIL))
 
 # For printing a socket EVENT
-def logbox_sock(event):
+def sock(event):
 	s_print(format(get_box([[ENDC + format("SOCKET EVENT RECIEVED", HEADER) + CYAN],[ENDC + format(event, OKGREEN) + CYAN]]), CYAN))
 
 # For printing a socket EMIT
-def logbox_emit(event):
+def emit(event):
 	s_print(format(get_box([[ENDC + format("SOCKET EMIT", HEADER) + MAGENTA],[ENDC + format(event, OKGREEN) + MAGENTA]]), MAGENTA))
 
 		
 
 # test area
-logbox_i("test info")
-logbox_d("test debug message")
-logbox_w("test warning")
-logbox_e("test error or failure")
-logbox_sock("test socket event")
-logbox_emit("test socket emit")
-print_box([
+i("test info")
+d("test debug message")
+w("test warning")
+e("test error or failure")
+sock("test socket event")
+emit("test socket emit")
+box([
 	['Author', 'Carsen Yates'],
 	['Date created', '04/23/2017'],
 	['Description', 'For making terminal\noutput look pretty']
 ])
-print_box([
+box([
 	['IM A BOX\n IMA BOX\n\n\n\n\n\n\n yur mum', 'One fish\ntwo fish\nred fish\nblueeeeeeeeeeeeeeeeeeeeeeeeee fish'],
 	['breh', 'smoke weed all of the days'],
 ])
