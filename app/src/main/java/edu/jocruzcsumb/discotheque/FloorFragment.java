@@ -27,9 +27,9 @@ public abstract class FloorFragment extends Fragment
 	protected static Floor floor = null;
 	private final FloorListener listener;
 
-	public FloorFragment()
+	public FloorFragment(String tag)
 	{
-		listener = new FloorListener(getFilter(), getContext(), TAG)
+		listener = new FloorListener(getFilter(), getContext(), tag)
 		{
 			public void onSongStarted(Song s)
 			{
@@ -87,6 +87,7 @@ public abstract class FloorFragment extends Fragment
 	public void onDestroyView()
 	{
 		super.onDestroyView();
+		listener.stop();
 
 	}
 

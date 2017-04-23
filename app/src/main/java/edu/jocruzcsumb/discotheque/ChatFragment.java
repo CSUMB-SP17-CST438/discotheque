@@ -43,6 +43,10 @@ public class ChatFragment extends FloorFragment implements View.OnClickListener
 		fragment.setArguments(args);
 		return fragment;
 	}
+	public ChatFragment()
+	{
+		super(TAG);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

@@ -36,6 +36,10 @@ public class SongFragment extends FloorFragment
 		fragment.setArguments(args);
 		return fragment;
 	}
+	public SongFragment()
+	{
+		super(TAG);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

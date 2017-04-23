@@ -50,6 +50,10 @@ public class UserFragment extends FloorFragment
 		return fragment;
 	}
 
+	public UserFragment()
+	{
+		super(TAG);
+	}
 
 	@Nullable
 	@Override
