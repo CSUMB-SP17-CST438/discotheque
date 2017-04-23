@@ -69,7 +69,7 @@ public class FloorActivity extends AppCompatActivity
         f.addAction(EVENT_SONG_STARTED);
         f.addAction(EVENT_SONG_STOPPED);
 
-        FloorListener listener = new FloorListener(f, this)
+        FloorListener listener = new FloorListener(f, this, TAG)
         {
             @Override
             public void onFloorJoined(Floor floor)

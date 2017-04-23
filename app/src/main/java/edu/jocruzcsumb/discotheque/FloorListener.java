@@ -4,20 +4,24 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.util.ArrayList;
 
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_FLOOR_JOINED;
-import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_FLOOR;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_MESSAGE_LIST;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_SONG_LIST;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_USER_LIST;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_LEAVE_FLOOR;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_MESSAGE_ADD;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_MESSAGE_LIST_UPDATE;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_MESSAGE_SEND;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_SONG_LIST_UPDATE;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_ADD;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_LIST_UPDATE;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_USER_REMOVE;
-import static edu.jocruzcsumb.discotheque.FloorService.TAG;
 import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STARTED;
 import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STOPPED;
 
@@ -27,19 +31,20 @@ import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STOPPED
 
 public abstract class FloorListener extends BroadcastReceiver
 {
-	Floor floor = null;
+	private final String tag;
 	private Context context;
 
-	public FloorListener(IntentFilter intentFilter, Context context)
+	public FloorListener(IntentFilter intentFilter, Context context, String tag)
 	{
+		this.tag = tag;
 		this.context = context;
 		LocalBroadcastManager.getInstance(context)
 							 .registerReceiver(this, intentFilter);
 	}
 
-	public FloorListener(Context context)
+	public FloorListener(Context context, String tag)
 	{
-		this(getDefaultFilter(), context);
+		this(getDefaultFilter(), context, tag);
 	}
 
 	public static IntentFilter getDefaultFilter()
@@ -60,18 +65,18 @@ public abstract class FloorListener extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		Log.d(TAG, "onRecieve: " + intent.getAction());
+		Log.d(tag, "onRecieve: " + intent.getAction());
 
 		if (intent.getAction()
 				  .equals(EVENT_FLOOR_JOINED))
 		{
-			floor = intent.getParcelableExtra(EVENT_FLOOR_JOINED);
+			Floor floor = intent.getParcelableExtra(EVENT_FLOOR_JOINED);
 			onFloorJoined(floor);
 			onSongListUpdate(floor.getSongs());
 			onMessageListUpdate(floor.getMessages());
 			onUserListUpdate(floor.getUsers());
 		}
-		else if (floor != null)
+		else
 		{
 			switch (intent.getAction())
 			{
@@ -85,47 +90,84 @@ public abstract class FloorListener extends BroadcastReceiver
 					break;
 				case EVENT_SONG_LIST_UPDATE:
 					ArrayList<Song> songs = intent.getParcelableArrayListExtra(EVENT_SONG_LIST_UPDATE);
-					floor.setSongs(songs);
 					onSongListUpdate(songs);
 					break;
 				case EVENT_USER_LIST_UPDATE:
 					ArrayList<User> users = intent.getParcelableArrayListExtra(EVENT_USER_LIST_UPDATE);
-					floor.setUsers(users);
 					onUserListUpdate(users);
 					break;
 				case EVENT_MESSAGE_LIST_UPDATE:
 					ArrayList<Message> messages = intent.getParcelableArrayListExtra(EVENT_MESSAGE_LIST_UPDATE);
-					floor.setMessages(messages);
 					onMessageListUpdate(messages);
 					break;
 				case EVENT_MESSAGE_ADD:
 					Message m = intent.getParcelableExtra(EVENT_MESSAGE_ADD);
-					floor.getMessages()
-						 .add(m);
 					onMessageAdded(m);
 					break;
 				case EVENT_USER_ADD:
 					User u = intent.getParcelableExtra(EVENT_USER_ADD);
-					floor.getUsers()
-						 .add(u);
 					onUserAdded(u);
 					break;
 				case EVENT_USER_REMOVE:
 					User r = intent.getParcelableExtra(EVENT_USER_REMOVE);
-					floor.getUsers()
-						 .remove(r);
 					onUserRemoved(r);
+					break;
+				case EVENT_GET_USER_LIST:
+					getUsers();
+					break;
+				case EVENT_GET_SONG_LIST:
+					getSongs();
+					break;
+				case EVENT_GET_MESSAGE_LIST:
+					getMessages();
+					break;
+				case EVENT_MESSAGE_SEND:
+					sendMessage((Message) intent.getParcelableExtra(EVENT_MESSAGE_SEND));
+					break;
+				case EVENT_LEAVE_FLOOR:
+					leaveFloor();
 					break;
 			}
 		}
-		else
-		{
-			broadcast(EVENT_GET_FLOOR);
-		}
+	}
+
+	// The floor service uses these
+	public void getUsers()
+	{
+	}
+
+	public void getSongs()
+	{
+	}
+
+	public void getMessages()
+	{
+	}
+
+	public void sendMessage(Message m)
+	{
+	}
+
+	public void leaveFloor()
+	{
 	}
 
 	// EVENTS are broadcasted here
-	protected void broadcast(String event)
+	public void broadcast(String event, ArrayList<? extends Parcelable> params)
+	{
+		Intent k = new Intent(event);
+		k.putParcelableArrayListExtra(event, params);
+		broadcast(k);
+	}
+
+	public void broadcast(String event, Parcelable extra)
+	{
+		Intent k = new Intent(event);
+		k.putExtra(event, extra);
+		broadcast(k);
+	}
+
+	public void broadcast(String event)
 	{
 		Intent k = new Intent(event);
 		broadcast(k);
@@ -135,6 +177,12 @@ public abstract class FloorListener extends BroadcastReceiver
 	{
 		LocalBroadcastManager.getInstance(context)
 							 .sendBroadcast(k);
+	}
+
+	public void stop()
+	{
+		LocalBroadcastManager.getInstance(context)
+							 .unregisterReceiver(this);
 	}
 
 	public void onSongStarted(Song s)
@@ -171,6 +219,5 @@ public abstract class FloorListener extends BroadcastReceiver
 
 	public void onMessageAdded(Message m)
 	{
-
 	}
 }
