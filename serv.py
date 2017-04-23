@@ -138,6 +138,7 @@ def on_get_floor_list(data):
 #function assumes that the client sends
 @socket.on('create floor')
 def on_create(data):
+    print("data: ",json.dumps(data,indent=4))
     if data['is_public'] == 1:
         public = True
     else:
