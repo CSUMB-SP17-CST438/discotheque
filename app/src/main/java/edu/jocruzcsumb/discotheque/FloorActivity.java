@@ -48,7 +48,9 @@ public class FloorActivity extends AppCompatActivity
 	private SeekBar songBar;
 	private Timer songTimer;
 
-	private static final int SONG_UPDATE_INTERVAL = 100;
+	// this means we update 20 times a second
+	// it looks pretty smoothe like this
+	private static final int SONG_UPDATE_INTERVAL = 50;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
