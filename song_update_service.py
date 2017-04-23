@@ -110,14 +110,15 @@ class songUpdateThread(threading.Thread):
 					_song = self.songQ.peek()
 					current_song = ds.refresh_song(_song,self.start_time)
 					self.songQ.update_pos(0,(0,current_song))
+					self.sleep_duration = math.floor((_song['duration']/1000.00))
 					#update information for seconf song in list
 					_song = self.songQ.peek_pos(1)
-					self.sleep_duration = math.floor((_song['duration']/1000.00))
 					print("sleep duration:",self.sleep_duration)
 					self.start_time = math.floor(self.start_time+self.sleep_duration)
 					print("2nd song time:",self.start_time)
+
 					current_song = ds.refresh_song(_song,(self.start_time+2))
-					self.sleep_duration += math.floor((_song['duration']/1000.00))
+					# self.sleep_duration += math.floor((_song['duration']/1000.00))
 					self.songQ.update_pos(1,(1,current_song))
 					# print("*****queue init emit****")
 					sl = self.songQ.to_list()
@@ -128,8 +129,8 @@ class songUpdateThread(threading.Thread):
 					_,s = self.songQ.get()
 					self.songQ.add_to_end(s)
 					# print(s)
-					_,s = self.songQ.get()
-					self.songQ.add_to_end(s)
+					# _,s = self.songQ.get()
+					# self.songQ.add_to_end(s)
 					# print(s)
 					position +=1
 				else:
@@ -143,8 +144,8 @@ class songUpdateThread(threading.Thread):
 					_song = self.songQ.peek_pos(1)
 					duration_to_add = math.floor((_song['duration']/1000.0))
 					self.songQ.update_pos(1,(1,ds.refresh_song(_song,(self.start_time+duration_to_add))))
-
-					print("***************update emit***********")
+					print("************************************************************************************************************")
+					print("*************************************************update emit****************************************************")
 					print("emit time:",self.start_time)
 					print("song",json.dumps(self.songQ.peek(),indent=4))
 					print("*****updated list*****")
@@ -153,26 +154,6 @@ class songUpdateThread(threading.Thread):
 					print(json.dumps(sl,indent=4))
 					self.socket.emit(self.SLU_TAG,sl,room=self.floor_id)
 					self.songQ.get()
-
-
-
-
-	def update_list(self, song_id):
-		print("*************UPDATE LIST***********")
-		loc = 0
-		for t in self.songlist:
-			if t['id'] == song_id:
-				self.last_picked_song+=1
-				print("****SONG TO BE INSERTED*****")
-				print(t['id'])
-				self.songlist.insert(self.current_song_position, t)
-				print("length",str(len(self.songlist)))
-				print("****SONG TO BE DELETED****")
-				print(json.dumps(self.songlist[loc+self.last_picked_song]['id'],indent=4))
-				del self.songlist[loc+1]
-				break
-			loc+=1
-			print("loc",str(loc))
 		
 	def print_queue(self):
 		print(json.dumps(list(self.songQ.queue),indent=4))

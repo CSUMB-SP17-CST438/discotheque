@@ -222,6 +222,10 @@ class theme(db.Model):
 ***********************************************START MARSHMALLOW SCHEMA*****************************************************************
 ****************************************************************************************************************************************
 ****************************************************************************************************************************************"""
+class simple_floor_Schema(ma.Schema):
+	class Meta:
+		fields = ('floor_id','floor_name','floor_genre','creator_id')
+
 class f_Schema(ma.ModelSchema):
 	class Meta:
 		model = floor
@@ -252,11 +256,7 @@ class emailless_member(ma.Schema):
 	class Meta:
 		fields = ('username','member_FName','member_LName','member_img_url','created_floors'
 			)
-		created_floors = f.Nested(f_Schema,many=True, exclude=('floor_members'))
-
-class simple_floor_Schema(ma.Schema):
-	class Meta:
-		fields = ('floor_id','floor_name','floor_genre','creator_id')
+	created_floors = f.Nested(simple_floor_Schema,many=True, exclude=('floor_members'))
 
 
 """*************************************************************************************************************************************

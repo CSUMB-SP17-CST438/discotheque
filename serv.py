@@ -151,11 +151,12 @@ def on_create(data):
         genre = data['floor_genre']
         songs = ds.getSongList(genre)
         thread_holder.add_thread(new_floor.floor_name,new_floor.floor_id,songs)
+        time.sleep(2)
         new_floor.set_songlist(thread_holder.find_thread(new_floor.floor_id).songlist)
         updated_floor = getFloor(new_floor.floor_id)
         socket.emit('floor created', {'floor':updated_floor.to_list()},room=new_floor.floor_id)
     else:
-        socket.emit('Error',{'message':new_floor})
+        socket.emit('error',{'message':new_floor})
 
 
 @socket.on('join floor')
