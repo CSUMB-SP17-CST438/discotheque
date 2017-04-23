@@ -3,6 +3,7 @@ package edu.jocruzcsumb.discotheque;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,10 +25,11 @@ public abstract class FloorFragment extends Fragment
 {
 	private static final String TAG = "FloorFragment";
 	protected static Floor floor = null;
+	private final FloorListener listener;
 
 	public FloorFragment()
 	{
-		FloorListener listener = new FloorListener(getContext(), TAG)
+		listener = new FloorListener(getFilter(), getContext(), TAG)
 		{
 			public void onSongStarted(Song s)
 			{
@@ -74,6 +76,18 @@ public abstract class FloorFragment extends Fragment
 				FloorFragment.this.onMessageAdded(m);
 			}
 		};
+	}
+
+	protected IntentFilter getFilter()
+	{
+		return FloorListener.getDefaultFilter();
+	}
+
+	@Override
+	public void onDestroyView()
+	{
+		super.onDestroyView();
+
 	}
 
 	// EVENTS are broadcasted here
