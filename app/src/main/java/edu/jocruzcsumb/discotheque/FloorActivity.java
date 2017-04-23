@@ -1,5 +1,6 @@
 package edu.jocruzcsumb.discotheque;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
@@ -11,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -205,7 +207,21 @@ public class FloorActivity extends AppCompatActivity
     public void onBackPressed()
     {
         broadcast(EVENT_LEAVE_FLOOR);
-        super.onBackPressed();
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(R.string.confirm_leave_floor)
+			   .setCancelable(false)
+			   .setPositiveButton(R.string.action_yes, new DialogInterface.OnClickListener() {
+				   public void onClick(DialogInterface dialog, int id) {
+					   FloorActivity.this.finish();
+				   }
+			   })
+			   .setNegativeButton(R.string.action_no, new DialogInterface.OnClickListener() {
+				   public void onClick(DialogInterface dialog, int id) {
+					   dialog.cancel();
+				   }
+			   });
+		AlertDialog alert = builder.create();
+		alert.show();
     }
 
     // EVENTS are broadcasted here
