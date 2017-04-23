@@ -26,13 +26,13 @@ public class FloorService extends IntentService
 	public static final String TAG = "FloorService";
 
 	// When the Song List is updated for the Floor
-	public static final String EVENT_SONG_LIST_UPDATE = "song list";
+	public static final String EVENT_SONG_LIST_UPDATE = "song list update";
 
 	// When the Message List is updated for the Floor
 	public static final String EVENT_USER_LIST_UPDATE = "member list update";
 
 	// When the Message List is updated for the Floor
-	public static final String EVENT_MESSAGE_LIST_UPDATE = "message list";
+	public static final String EVENT_MESSAGE_LIST_UPDATE = "message list update";
 
 	// When the UI requests the most recent Song List
 	public static final String EVENT_GET_SONG_LIST = "get song list";
@@ -41,7 +41,7 @@ public class FloorService extends IntentService
 	public static final String EVENT_GET_MESSAGE_LIST = "get message list";
 
 	// When the UI requests the most recent User List
-	public static final String EVENT_GET_USER_LIST = "get user list";
+	public static final String EVENT_GET_USER_LIST = "get member list";
 
 	// When a member leaves the Floor that LocalUser is in
 	public static final String EVENT_USER_REMOVE = "remove member";
@@ -74,77 +74,7 @@ public class FloorService extends IntentService
 	private Floor floor = null;
 	private CountDownLatch floorLatch = null;
 
-	//	private BroadcastReceiver r = new BroadcastReceiver()
-//	{
-//		@Override
-//		public void onReceive(Context context, Intent intent)
-//		{
-//			Log.v(TAG, "onRecieve: " + intent.getAction());
-//			switch (intent.getAction())
-//			{
-//				case EVENT_GET_FLOOR:
-//					if (floor != null)
-//					{
-//						broadcast(EVENT_FLOOR_JOINED, floor);
-//					}
-//					else
-//					{
-//						Log.w(TAG, EVENT_GET_FLOOR + ": Floor was null");
-//					}
-//					break;
-//				case EVENT_GET_SONG_LIST:
-//					if (floor != null)
-//					{
-//						broadcast(EVENT_SONG_LIST_UPDATE, floor.getSongs());
-//					}
-//					else
-//					{
-//						Log.w(TAG, EVENT_GET_SONG_LIST + ": Floor was null");
-//					}
-//					break;
-//				case EVENT_GET_USER_LIST:
-//					if (floor != null)
-//					{
-//						broadcast(EVENT_USER_LIST_UPDATE, floor.getUsers());
-//					}
-//					else
-//					{
-//						Log.w(TAG, EVENT_GET_USER_LIST + ": Floor was null");
-//					}
-//					break;
-//				case EVENT_GET_MESSAGE_LIST:
-//					if (floor != null)
-//					{
-//						broadcast(EVENT_MESSAGE_LIST_UPDATE, floor.getMessages());
-//					}
-//					else
-//					{
-//						Log.w(TAG, EVENT_GET_MESSAGE_LIST + ": Floor was null");
-//					}
-//					break;
-//				case EVENT_MESSAGE_SEND:
-//					JSONObject jsonObject = new JSONObject();
-//					try
-//					{
-//						jsonObject.put("floor", floor.getId()); //floor_id
-//						jsonObject.put("from", LocalUser.getCurrentUser()
-//														.getId()); //member_id
-//						jsonObject.put("message", ((Message) intent.getParcelableExtra(EVENT_MESSAGE_SEND)).getText());
-//					}
-//					catch (JSONException e)
-//					{
-//						e.printStackTrace();
-//					}
-//					Sockets.getSocket()
-//						   .emit(EVENT_MESSAGE_SEND, jsonObject);
-//					break;
-//				case EVENT_LEAVE_FLOOR:
-//					Log.v(TAG, EVENT_LEAVE_FLOOR);
-//					floorLatch.countDown();
-//					break;
-//			}
-//		}
-//	};
+
 	private SeamlessMediaPlayer seamlessMediaPlayer;
 
 	public FloorService()
