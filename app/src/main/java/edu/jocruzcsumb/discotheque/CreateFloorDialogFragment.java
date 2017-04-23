@@ -1,6 +1,8 @@
 package edu.jocruzcsumb.discotheque;
 
+import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.renderscript.Sampler;
 import android.util.Log;
@@ -18,6 +20,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import io.socket.emitter.Emitter;
+
+import static edu.jocruzcsumb.discotheque.PickFloorActivity.pickFloorActivity;
 
 /**
  * Created by Admin on 4/20/2017.
@@ -39,6 +43,7 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
     private Button cancelButton;
     private Button createFloorButton;
     private Spinner splitSpinner;
+    private Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,6 +59,7 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
         createFloorButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
         getDialog().setTitle(DIALOG_TITLE);
+        context = getActivity().getApplicationContext();
         Sockets.getSocket().on(EVENT_ERROR_MESSAGE, this);
         Sockets.getSocket().on(EVENT_FLOOR_CREATE, this);
 
@@ -90,15 +96,28 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
         }
     }
 
+    private void updateUI(final int i){
+        final String[] strings = new String[]{"Error! Floor name already exists.", "Floor was created successfully"};
+        pickFloorActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context, strings[i], Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
     @Override
     public void call(Object... args) {
         Log.d(TAG, "Received object: " + args[0]);
-        JSONObject jsonObject = (JSONObject) args[0];
         try {
-            if (jsonObject.get("Floor name is already taken").equals("Floor name is already taken")) {
-                Toast.makeText(getActivity(), "Error! Floor name already exists.", Toast.LENGTH_SHORT).show();
+            JSONObject jsonObject = (JSONObject) args[0];
+            if (jsonObject.get("message").equals("Floor name is already taken")) {
+                updateUI(0);
+
             } else {
-                Toast.makeText(getActivity(), "Floor was created sucessfully!", Toast.LENGTH_SHORT).show();
+                updateUI(1);
+                Log.d(TAG, jsonObject.toString());
             }
         }
         catch(JSONException e){

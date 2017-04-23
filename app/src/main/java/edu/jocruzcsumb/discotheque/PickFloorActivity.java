@@ -42,11 +42,13 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 	public static final String EVENT_GET_FLOOR_LIST = "get floor list";
 	public static final String EVENT_FLOOR_LIST_UPDATE = "floor list update";
 	private FloatingActionButton actionButton;
+	public static PickFloorActivity pickFloorActivity;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		pickFloorActivity = this;
 		setContentView(R.layout.activity_join_room);
 		recyclerView = (RecyclerView) findViewById(R.id.room_listview);
 		actionButton = (FloatingActionButton) findViewById(R.id.fab2);
