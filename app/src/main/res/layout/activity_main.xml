@@ -94,7 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/button_bg_stroke"
         android:text="@string/common_signin_button_text_long"/>
 
     <FrameLayout
