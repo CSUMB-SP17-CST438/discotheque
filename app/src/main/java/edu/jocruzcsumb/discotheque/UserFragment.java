@@ -114,6 +114,11 @@ public class UserFragment extends FloorFragment
 				intent.putExtra("user", user);
 				startActivity(intent);
 			}
+
+			@Override
+			public void onLongItemClick(View v, int position){
+
+			}
 		});
 		a.runOnUiThread(new Runnable()
 		{

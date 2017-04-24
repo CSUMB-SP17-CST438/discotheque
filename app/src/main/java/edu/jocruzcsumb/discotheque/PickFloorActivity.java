@@ -146,6 +146,11 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 				k.putExtra(Floor.TAG, floor.getId());
 				startActivity(k);
 			}
+
+			@Override
+			public void onLongItemClick(View v, int position){
+
+			}
 		});
 
 		runOnUiThread(new Runnable()

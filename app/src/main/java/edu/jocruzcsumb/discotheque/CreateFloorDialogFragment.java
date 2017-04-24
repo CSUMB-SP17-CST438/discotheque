@@ -18,7 +18,10 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 import io.socket.emitter.Emitter;
+import io.socket.engineio.client.EngineIOException;
 
 import static edu.jocruzcsumb.discotheque.PickFloorActivity.pickFloorActivity;
 
@@ -107,6 +110,7 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
     @Override
     public void call(Object... args) {
         Log.d(TAG, "Received object: " + args[0]);
+        if (args[0] instanceof JSONObject) {
             JSONObject jsonObject = (JSONObject) args[0];
             if (jsonObject.has("message")) {
                 updateUI(0);
@@ -120,12 +124,12 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
                     k.putExtra(Floor.TAG, floorId);
                     startActivity(k);
                     getDialog().dismiss();
-                }
-                catch(JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         }
+    }
 }
 
 
