@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,21 @@ public abstract class FloorFragment extends Fragment
 	private static final String TAG = "FloorFragment";
 	protected static Floor floor = null;
 	private FloorListener listener;
+
+	public void hideKeyboard()
+	{
+		Activity a = getActivity();
+		if(a == null)
+		{
+			Log.d(TAG, "getActivity returned null");
+			return;
+		}
+		View view = a.getCurrentFocus();
+		if (view != null) {
+			InputMethodManager imm = (InputMethodManager)a.getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+		}
+	}
 
 	public void start(String tag)
 	{
@@ -76,6 +92,7 @@ public abstract class FloorFragment extends Fragment
 				FloorFragment.this.onMessageAdded(m);
 			}
 		};
+		hideKeyboard();
 	}
 
 	protected IntentFilter getFilter()
