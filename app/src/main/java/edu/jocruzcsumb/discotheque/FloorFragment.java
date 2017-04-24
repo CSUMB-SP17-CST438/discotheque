@@ -25,9 +25,9 @@ public abstract class FloorFragment extends Fragment
 {
 	private static final String TAG = "FloorFragment";
 	protected static Floor floor = null;
-	private final FloorListener listener;
+	private FloorListener listener;
 
-	public FloorFragment(String tag)
+	public void start(String tag)
 	{
 		listener = new FloorListener(getFilter(), getContext(), tag)
 		{

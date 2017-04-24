@@ -36,14 +36,11 @@ public class SongFragment extends FloorFragment
 		fragment.setArguments(args);
 		return fragment;
 	}
-	public SongFragment()
-	{
-		super(TAG);
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
+		start(TAG);
 		View rootView = inflater.inflate(R.layout.fragment_song, container, false);
 		recyclerView = (RecyclerView) rootView.findViewById(R.id.rv);
 		recyclerView.setHasFixedSize(true);
