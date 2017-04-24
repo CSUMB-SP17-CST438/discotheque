@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(!Sockets.getSocket().connected())
 		{
 			Toast.makeText(this, R.string.error_no_connection_dtk, Toast.LENGTH_LONG).show();
+			Log.w(TAG, getString(R.string.error_no_connection_dtk));
 			finish();
 		}
         setContentView(R.layout.activity_main);
