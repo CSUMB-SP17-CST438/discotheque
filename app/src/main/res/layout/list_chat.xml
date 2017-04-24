@@ -44,6 +44,25 @@
                 android:textColor="#CECBCB"
                 android:textSize="12sp" />
 
+
+            <TextView
+                android:id="@+id/sender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/chat"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/chat"
+                android:text="BY TUPAC"
+                android:textColor="#CECBCB"
+                android:textSize="16sp"
+                android:layout_toLeftOf="@+id/pubTime"
+                android:layout_toStartOf="@+id/pubTime"
+                android:layout_above="@+id/chat"
+                android:layout_toRightOf="@+id/chatPhoto"
+
+                />
+
+
             <TextView
                 android:id="@+id/chat"
                 android:layout_width="wrap_content"
@@ -57,16 +76,6 @@
                 android:textColor="#FFFFFF"
                 android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/sender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/chat"
-                android:layout_alignParentTop="true"
-                android:layout_alignStart="@+id/chat"
-                android:text="BY TUPAC"
-                android:textColor="#CECBCB"
-                android:textSize="16sp" />
 
         </RelativeLayout>
 
