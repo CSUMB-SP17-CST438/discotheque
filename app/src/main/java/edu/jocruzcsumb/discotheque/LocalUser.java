@@ -7,13 +7,15 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.facebook.AccessToken;
+import com.facebook.LoginStatusCallback;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.ResultCallbacks;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -101,15 +103,14 @@ public class LocalUser extends User
 			return false;
 		}
 
-
 		final CountDownLatch x = new CountDownLatch(1);
+		final SpecialResultCallback cb = new SpecialResultCallback(x);;
 		LoginType type = parseLoginType(t);
 		switch (type)
 		{
 			case GOOGLE:
 				OptionalPendingResult<GoogleSignInResult> pendingResult =
 						Auth.GoogleSignInApi.silentSignIn(googleApiClient);
-				ResultCallback<GoogleSignInResult> cb = null;
 				if (pendingResult.isDone())
 				{
 					Log.d(TAG, "pendingResult.isDone() = true");
@@ -120,9 +121,10 @@ public class LocalUser extends User
 						GoogleSignInAccount gacc = r.getSignInAccount();
 						if (gacc == null)
 						{
-							Log.e(TAG, "google sign in account was null");
+							Log.w(TAG, "SilentSignIn: Google sign in result was null.");
 							return false;
 						}
+						Log.i(TAG, "SilentSignIn Google attempting dtk login");
 						return socketLogin(LoginType.GOOGLE, gacc.getIdToken());
 					}
 					else
@@ -133,27 +135,9 @@ public class LocalUser extends User
 				else
 				{
 					// There's no immediate result ready
-					cb = new ResultCallback<GoogleSignInResult>()
-					{
-						public GoogleSignInResult result = null;
-						@Override
-						public void onResult(@NonNull GoogleSignInResult result)
-						{
-							Log.d(TAG, "Google Silent login onResult");
-							if (result.isSuccess())
-							{
-								Log.d(TAG, "result.isSuccess()");
-								a.handleResult(result);
-							}
-							else
-							{
-								this.result = result;
-								x.countDown();
-							}
-						}
-					};
 					pendingResult.setResultCallback(cb);
 				}
+
 				try
 				{
 					x.await();
@@ -163,33 +147,71 @@ public class LocalUser extends User
 					e.printStackTrace();
 					return false;
 				}
-				if(cb != null && cb.re)
+				GoogleSignInAccount gacc = null;
+				if(cb.result != null)
+				{
+					gacc = cb.result.getSignInAccount();
+					if(gacc != null)
+					{
+						Log.i(TAG, "SilentSignIn Google attempting dtk login");
+						return socketLogin(LoginType.GOOGLE, gacc.getIdToken());
+					}
+					else
+					{
+						Log.w(TAG, "SilentSignIn: Google account was null.");
+						return false;
+					}
+				}
+				else
+				{
+					Log.w(TAG, "SilentSignIn: Google sign in result was null.");
+					return false;
+				}
 			case FACEBOOK:
-				break;
+				a.runOnUiThread(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							LoginManager.getInstance()
+										.retrieveLoginStatus(a, cb);
+						}
+					});
+
+				try
+				{
+					x.await();
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+					return false;
+				}
+				if(cb.facebookToken != null)
+				{
+						Log.i(TAG, "SilentSignIn Facebook attempting dtk login");
+						return socketLogin(LoginType.GOOGLE, cb.facebookToken);
+				}
+				else
+				{
+					Log.w(TAG, "SilentSignIn: Facebook token was null.");
+					return false;
+				}
 			case SOUNDCLOUD:
-				break;
-		}
-
-
-		String token = preferences.getString(AUTH_TOKEN_KEY, null);
-		if (!(type == null || token == null) && socketLogin(type, token))
-		{
-			signIn(a);
-			return true;
+				return false;
 		}
 		return false;
-	}
-
-	//Logs in to discotheque server
-	public static boolean login(Activity context, LoginType loginType, String token)
-	{
-		initPrefs(context);
-		return socketLogin(loginType, token);
 	}
 
 	//Logs out of discotheque server and allows user to choose new login infos at MainActivity
 	public static void logout(Activity context)
 	{
+		SharedPreferences.Editor editor = preferences.edit();
+		editor.putString(AUTH_TYPE_KEY, null);
+		editor.putString(AUTH_TOKEN_KEY, null);
+		editor.apply();
+		editor.commit();
+
 		//TODO: should probably clear entire activity stack
 		Intent k = new Intent(context, MainActivity.class);
 		k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -252,7 +274,7 @@ public class LocalUser extends User
 
 	// This is a long operation
 	// Returns true only if setCurrentUser was called
-	private static boolean socketLogin(LoginType loginType, String token)
+	public static boolean socketLogin(LoginType loginType, String token)
 	{
 		//We will emit 'login' and wait for 'login status'
 		Sockets.SocketWaiter loginWaiter = new Sockets.SocketWaiter("login", "login status");
@@ -342,9 +364,10 @@ public class LocalUser extends User
 		FACEBOOK,
 		SOUNDCLOUD
 	}
-	public class SpecialResultCallback implements ResultCallback<GoogleSignInResult>
+	public static class SpecialResultCallback implements ResultCallback<GoogleSignInResult>, LoginStatusCallback
 	{
 		public GoogleSignInResult result = null;
+		public String facebookToken = null;
 		CountDownLatch latch = null;
 		public SpecialResultCallback(CountDownLatch latch)
 		{
@@ -365,5 +388,25 @@ public class LocalUser extends User
 				latch.countDown();
 			}
 		}
+		@Override
+		public void onCompleted(AccessToken accessToken)
+		{
+			facebookToken = accessToken.getToken();
+			latch.countDown();
+			Log.i(TAG, "SilentSignIn Facebook onCompleted");
+		}
+
+		@Override
+		public void onFailure()
+		{
+			Log.w(TAG, "SilentSignIn Facebook onFailure");
+		}
+
+		@Override
+		public void onError(Exception exception)
+		{
+			Log.w(TAG, "SilentSignIn Facebook onError");
+		}
+
 	}
 }

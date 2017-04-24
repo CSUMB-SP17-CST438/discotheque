@@ -12,8 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.LoginStatusCallback;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -70,52 +68,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			  .commit();
 		}
 
-		// Google API setup
-		GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN.DEFAULT_SIGN_IN)
-				.requestEmail()
-				.requestIdToken("411633551801-iivlfqvn0mpo3iarr71dn25b15lslr5r.apps.googleusercontent.com")
-				.requestServerAuthCode("411633551801-iivlfqvn0mpo3iarr71dn25b15lslr5r.apps.googleusercontent.com")
-				.build();
-
-		// Get the API Client obj
-		googleApiClient = new GoogleApiClient.Builder(this)
-				.enableAutoManage(this, this)
-				.addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)
-				.build();
+		googleApiClient = getGoogleApiClient();
 
 
 		if (!getIntent().getBooleanExtra("signout", false))
 		{
-
-			LoginManager.getInstance()
-						.retrieveLoginStatus(this, new LoginStatusCallback()
-						{
-							@Override
-							public void onCompleted(AccessToken accessToken)
-							{
-								// User was previously logged in, can log them in directly here.
-								// If this callback is called, a notification is shown that says
-								// "Logged in as <User Name>"
-							}
-
-							@Override
-							public void onFailure()
-							{
-								// No access token could be retrieved for the user
-							}
-
-							@Override
-							public void onError(Exception exception)
-							{
-								// An error occurred
-							}
-						});
 			//Thread for dtk silent sign in
 			new Thread(new Runnable()
 			{
 				@Override
 				public void run()
 				{
+					showLoader(true);
 					if (LocalUser.silentLogin(MainActivity.this, googleApiClient))
 					{
 						Intent k = new Intent(MainActivity.this, PickFloorActivity.class);
@@ -123,14 +87,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 						startActivity(k);
 						finish();
 					}
-					MainActivity.this.runOnUiThread(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-						}
-					});
+					Log.w(TAG, "silent sign in failed");
+					showLoader(false);
 				}
 			}).start();
 //			// Attempt silent sign in
@@ -177,29 +135,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		}
 		else
 		{
-			if (LoginManager.getInstance().)
-			{
-				googleSignOut();
-			}
 			LoginManager.getInstance()
 						.logOut();
+			googleSignOut();
+			switch (LocalUser.getCurrentUser()
+							 .getLoginType())
+			{
+				case GOOGLE:
+					break;
+				case FACEBOOK:
+					break;
+				case SOUNDCLOUD:
+			}
 		}
-		findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-		//google sign in button
-		SignIn = (Button) findViewById(R.id.google_login_btn);
-		SignIn.setOnClickListener(this);
 
-
-		// Insert a button ID into this array to give it a click listener and add it to the buttons ArrayList
-//		int[] ids = new int[]{R.id.guest_login_btn};
-//
-//		for(int id : ids)
-//		{
-//			Button b = (Button) findViewById(id);
-//			buttons.add(b);
-//			b.setOnClickListener(this);
-//		}
-
+		//Insert a button ID into this array to give it a click listener and add it to the buttons ArrayList
+		int[] ids = new int[]{R.id.google_login_btn};
+		// Foreach button above
+		for (int id : ids)
+		{
+			Button b = (Button) findViewById(id);
+			buttons.add(b);
+			b.setOnClickListener(this);
+		}
+		showLoader(false);
 	}
 
 	@Override
@@ -228,6 +187,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	private void googleSignOut()
 	{
 		Log.d(GOOGLE_AUTH_TAG, "googleSignOut");
+		if (!googleApiClient.isConnected())
+		{
+			googleApiClient.connect();
+			googleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks()
+			{
+				@Override
+				public void onConnected(@Nullable Bundle bundle)
+				{
+					if (googleApiClient.isConnected())
+					{
+						Auth.GoogleSignInApi.signOut(googleApiClient)
+											.setResultCallback(new ResultCallback<Status>()
+											{
+												@Override
+												public void onResult(@NonNull Status status)
+												{
+													if (status.isSuccess())
+													{
+														Log.i(GOOGLE_AUTH_TAG, "User Logged out");
+													}
+												}
+											});
+					}
+					else
+					{
+						Log.w(GOOGLE_AUTH_TAG, "signout failed, trying again");
+						googleSignOut();
+					}
+				}
+
+				@Override
+				public void onConnectionSuspended(int i)
+				{
+
+				}
+			});
+		}
+		else
+		{
+			doGoogleSignOut();
+		}
+	}
+
+	private void doGoogleSignOut()
+	{
 		Auth.GoogleSignInApi.signOut(googleApiClient)
 							.setResultCallback(new ResultCallback<Status>()
 							{
@@ -237,6 +241,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 									Log.d(GOOGLE_AUTH_TAG, "googleSignOut onResult: " + status.getStatusMessage());
 								}
 							});
+	}
+
+	private GoogleApiClient getGoogleApiClient()
+	{
+
+		// Google API setup
+		GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN.DEFAULT_SIGN_IN)
+				.requestEmail()
+				.requestIdToken("411633551801-iivlfqvn0mpo3iarr71dn25b15lslr5r.apps.googleusercontent.com")
+				.requestServerAuthCode("411633551801-iivlfqvn0mpo3iarr71dn25b15lslr5r.apps.googleusercontent.com")
+				.build();
+
+		// Get the API Client obj
+		GoogleApiClient g = new GoogleApiClient.Builder(this)
+				.enableAutoManage(this, this)
+				.addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)
+				.build();
+		return g;
 	}
 
 	//Below are for google sign in/out
@@ -269,16 +291,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 					String email = account.getEmail();
 					String img_url = account.getPhotoUrl()
 											.toString();
-					if (!LocalUser.login(MainActivity.this, LocalUser.LoginType.GOOGLE, account.getIdToken()))
+					if (LocalUser.socketLogin(LocalUser.LoginType.GOOGLE, account.getIdToken()))
 					{
 						MainActivity.this.runOnUiThread(new Runnable()
 						{
 							public void run()
 							{
-								Toast.makeText(MainActivity.this, R.string.dtk_server_login_error, Toast.LENGTH_SHORT)
-									 .show();
+								Intent k = new Intent(MainActivity.this, PickFloorActivity.class);
+								k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+								startActivity(k);
+								finish();
 							}
 						});
+					}
+					else
+					{
+
+						Log.e(GOOGLE_AUTH_TAG, "User signed in but we could not log them into Discotek");
+						Toast.makeText(MainActivity.this, R.string.error_no_connection_dtk, Toast.LENGTH_LONG)
+							 .show();
+						googleSignOut();
 					}
 				}
 			}).start();
@@ -322,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			@Override
 			public void run()
 			{
-				findViewById(R.id.loadingPanel).setVisibility(show?View.VISIBLE:View.GONE);
+				findViewById(R.id.loadingPanel).setVisibility(show ? View.VISIBLE : View.GONE);
 			}
 		});
 	}
