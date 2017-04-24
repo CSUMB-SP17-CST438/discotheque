@@ -2,7 +2,9 @@ package edu.jocruzcsumb.discotheque;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -79,7 +81,17 @@ public class SongFragment extends FloorFragment
 			public void onItemClick(View v, int position)
 			{
 				Song song = songs.get(position);
+				Log.d(TAG, "song was regular clicked");
 				//TODO: Broadcast song picked.
+			}
+
+			@Override
+			public void onLongItemClick(View v, int position){
+				Log.d(TAG, "song was long clicked");
+				Song song = songs.get(position);
+				Uri uri = Uri.parse(song.getTrack_permalink()); // missing 'http://' will cause crashed
+				Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+				startActivity(intent);
 			}
 		});
 
@@ -144,6 +156,14 @@ public class SongFragment extends FloorFragment
 				public void onClick(View v)
 				{
 					listener.onItemClick(v, svh.getAdapterPosition());
+				}
+			});
+
+			v.setOnLongClickListener(new View.OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					listener.onLongItemClick(v, svh.getAdapterPosition());
+					return true;
 				}
 			});
 

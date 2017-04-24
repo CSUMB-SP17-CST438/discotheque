@@ -25,7 +25,7 @@ public class Song implements Comparable<Song>, Parcelable
 	public static final String JSON_ARTWORK_TAG = "artwork";
 	public static final String JSON_CHOSEN_BY_TAG = "chosen_by";
 	public static final String JSON_DURATION_TAG = "duration";
-
+	public static final String JSON_PERMALINK_TAG = "track_permalink";
 	public static final String JSON_START_TIME_TAG = "start_time";
 
 	public static final Parcelable.Creator<Song> CREATOR = new Parcelable.Creator<Song>()
@@ -49,13 +49,14 @@ public class Song implements Comparable<Song>, Parcelable
 	private String artist = null;
 	private String streamUrl = null;
 	private String artworkUrl = null;
+	private String track_permalink = null;
 	// This tells us whether the song was picked by a user, or chosenBy by the server.
 	// If a song is picked by a user, it should be moved just above the first chosenBy song in the list
 	private String chosenBy;
 	private long startTime;
 	private int duration;
 
-	public Song(String title, String artist, String streamUrl, String artworkUrl, String chosenBy, long startTime, int duration)
+	public Song(String title, String artist, String streamUrl, String artworkUrl, String chosenBy, long startTime, int duration, String track_permalink)
 	{
 		this.title = title;
 		this.artist = artist;
@@ -64,6 +65,7 @@ public class Song implements Comparable<Song>, Parcelable
 		this.chosenBy = chosenBy;
 		this.startTime = startTime;
 		this.duration = duration;
+		this.track_permalink = track_permalink;
 	}
 
 	private Song(Parcel in)
@@ -75,6 +77,7 @@ public class Song implements Comparable<Song>, Parcelable
 		chosenBy = in.readString();
 		startTime = in.readLong();
 		duration = in.readInt();
+		track_permalink = in.readString();
 	}
 
 	public static Song parse(JSONObject jsonSong) throws JSONException
@@ -106,7 +109,8 @@ public class Song implements Comparable<Song>, Parcelable
 				jsonSong.getString(JSON_ARTWORK_TAG),
 				c,
 				s,
-				d
+				d,
+				jsonSong.getString(JSON_PERMALINK_TAG)
 		);
 	}
 
@@ -152,6 +156,8 @@ public class Song implements Comparable<Song>, Parcelable
 		return artist;
 	}
 
+	public String getTrack_permalink(){return track_permalink;}
+
 	public String getUrl()
 	{
 		return streamUrl;
@@ -194,6 +200,7 @@ public class Song implements Comparable<Song>, Parcelable
 		dest.writeString(chosenBy);
 		dest.writeLong(startTime);
 		dest.writeInt(duration);
+		dest.writeString(track_permalink);
 	}
 
 	public long getStartTime()
