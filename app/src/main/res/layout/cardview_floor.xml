@@ -18,7 +18,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="137dp"
-            android:padding="16dp"
+
 
             >
 
@@ -27,31 +27,41 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:src="@drawable/all_logo"/>
+                android:src="@drawable/all_logo"
+                android:layout_toRightOf="@+id/floorname"
+                android:layout_toEndOf="@+id/floorname"
+                android:layout_alignParentBottom="true"
+                android:scaleType="centerCrop"
+
+                />
 
             <TextView
                 android:id="@+id/floorname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/theme"
+                android:text="Carsen's room"
+                android:textSize="20sp"
+                android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginBottom="18dp"
-                android:text="Carsen's room"
-                android:textSize="20sp"/>
+                android:padding="16dp"
+                />
 
             <TextView
                 android:id="@+id/genre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:text="Soft Rock"/>
+                android:text="Soft Rock"
+                android:layout_alignBottom="@+id/theme"
+                android:padding="16dp"
+
+
+                android:layout_toLeftOf="@+id/theme"
+                android:layout_toStartOf="@+id/theme" />
 
 
         </RelativeLayout>
