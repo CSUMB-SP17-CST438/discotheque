@@ -29,39 +29,51 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:src="@drawable/all_logo"
-                android:layout_toRightOf="@+id/floorname"
-                android:layout_toEndOf="@+id/floorname"
+                android:src="@drawable/red_room_temp"
                 android:layout_alignParentBottom="true"
                 android:scaleType="centerCrop"
 
-                />
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <View
+                android:id="@+id/bar"
+
+                android:layout_width="fill_parent"
+                android:layout_height="45dp"
+                android:background="#000000"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/floorname" />
 
             <TextView
                 android:id="@+id/floorname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Carsen's room"
-                android:textSize="20sp"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:padding="16dp"
+                android:layout_centerVertical="true"
+                android:text="Carsen's room"
+                android:textColor="#FFFFFF"
+                android:textSize="30sp"
+                android:textStyle="bold"
+
                 />
 
             <TextView
                 android:id="@+id/genre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
+
+
                 android:layout_alignParentStart="true"
+
+                android:padding="12dp"
                 android:text="Soft Rock"
-                android:layout_alignBottom="@+id/theme"
-                android:padding="16dp"
-
-
-                android:layout_toLeftOf="@+id/theme"
-                android:layout_toStartOf="@+id/theme" />
+                android:textSize="15sp"
+                android:textStyle="italic"
+                />
 
 
         </RelativeLayout>
