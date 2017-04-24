@@ -184,6 +184,7 @@ public class UserFragment extends FloorFragment
 			Picasso.with(mContext)
 					.load(users.get(i)
 							.getPhoto())
+					.transform(new CircleTransform())
 					.into(userViewHolder.userPhoto);
 
 			userViewHolder.username.setText(users.get(i)
