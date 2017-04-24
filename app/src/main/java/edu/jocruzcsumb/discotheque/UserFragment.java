@@ -160,7 +160,7 @@ public class UserFragment extends FloorFragment
 		public UserFragment.UserAdapter.UserViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
 		{
 			View v = LayoutInflater.from(viewGroup.getContext())
-								   .inflate(R.layout.list_user, viewGroup, false);
+					.inflate(R.layout.list_user, viewGroup, false);
 			final UserFragment.UserAdapter.UserViewHolder svh = new UserFragment.UserAdapter.UserViewHolder(v);
 			v.setOnClickListener(new View.OnClickListener()
 			{
@@ -182,13 +182,14 @@ public class UserFragment extends FloorFragment
 		{
 			//TODO set profile picture
 			Picasso.with(mContext)
-				   .load(users.get(i)
-							  .getPhoto())
-				   .into(userViewHolder.userPhoto);
+					.load(users.get(i)
+							.getPhoto())
+					.transform(new CircleTransform())
+					.into(userViewHolder.userPhoto);
 
 			userViewHolder.username.setText(users.get(i)
-												 .getFirstName() + " " + users.get(i)
-																			  .getLastName());
+					.getFirstName() + " " + users.get(i)
+					.getLastName());
 		}
 
 		@Override
