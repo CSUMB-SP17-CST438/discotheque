@@ -69,6 +69,9 @@
     <string name="action_signout">Signout</string>
     <string name="action_facebook_login">Login with Facebook</string>
     <string name="error_no_connection_dtk">Unable to connect to Discotek server</string>
+	<string name="confirm_leave_floor">Are you sure you want exit the Floor?</string>
+	<string name="action_no">No</string>
+	<string name="action_yes">Yes</string>
 
 
     <!--Strings related to create floor activity  -->
