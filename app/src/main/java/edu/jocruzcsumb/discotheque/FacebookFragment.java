@@ -41,6 +41,8 @@ public class FacebookFragment extends Fragment
             Toast.makeText(context, "Login Canceled", TOAST_DURATION)
                  .show();
             Log.d(TAG, "Login Canceled");
+			MainActivity a = (MainActivity) getActivity();
+			a.showLoader(false);
         }
 
         @Override
@@ -49,6 +51,8 @@ public class FacebookFragment extends Fragment
             Toast.makeText(context, "Login Error", TOAST_DURATION)
                  .show();
             Log.d(TAG, "Login Error");
+			MainActivity a = (MainActivity) getActivity();
+			a.showLoader(false);
         }
 
         @Override
@@ -73,6 +77,8 @@ public class FacebookFragment extends Fragment
 				Log.e(TAG, "Facebook user signed in but we could not log them into Discotek");
 				Toast.makeText(FacebookFragment.this.getActivity(), R.string.error_no_connection_dtk, Toast.LENGTH_LONG).show();
 				LoginManager.getInstance().logOut();
+				MainActivity a = (MainActivity) getActivity();
+				a.showLoader(false);
 			}
         }
 
@@ -102,6 +108,8 @@ public class FacebookFragment extends Fragment
             @Override
             public void onClick(View view)
             {
+				MainActivity a = (MainActivity) getActivity();
+				a.showLoader(true);
                 LoginManager.getInstance()
                             .logInWithReadPermissions(FacebookFragment.this, permissions);
             }

@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //				startActivity(guestLogin);
 //				break;
 			case R.id.google_login_btn:
+				showLoader(true);
 				googleSignIn();
 				break;
 		}
@@ -311,6 +312,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 						Toast.makeText(MainActivity.this, R.string.error_no_connection_dtk, Toast.LENGTH_LONG)
 							 .show();
 						googleSignOut();
+						showLoader(false);
 					}
 				}
 			}).start();
