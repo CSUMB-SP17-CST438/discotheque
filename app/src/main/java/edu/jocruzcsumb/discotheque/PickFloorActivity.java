@@ -146,6 +146,11 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 				k.putExtra(Floor.TAG, floor.getId());
 				startActivity(k);
 			}
+
+			@Override
+			public void onLongItemClick(View v, int position){
+
+			}
 		});
 
 		runOnUiThread(new Runnable()
@@ -244,7 +249,7 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
         {
             FloorViewHolder.floorName.setText(floorList.get(i)
                                                        .getName());
-            FloorViewHolder.themeImage.setImageResource(R.drawable.ic_launcher);
+            FloorViewHolder.themeImage.setImageResource(genreTypes(floorList.get(i).getGenre()));
 			FloorViewHolder.genre.setText(floorList.get(i).getGenre());
 
         }
@@ -272,5 +277,17 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
                 themeImage = (ImageView) itemView.findViewById(R.id.theme);
             }
         }
+
+		private int genreTypes(String genre){
+			switch(genre){
+				case "reggae":
+					return R.drawable.red_cardcover_temp;
+				case "soft rock":
+					return R.drawable.teal_cardcover_temp;
+				default:
+					return R.drawable.yellow_cardcover_temp;
+
+			}
+		}
     }
 }

@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 
 public class ViewProfileActivity extends AppCompatActivity implements View.OnClickListener
 {
@@ -26,7 +28,7 @@ public class ViewProfileActivity extends AppCompatActivity implements View.OnCli
         editBio = (TextView) findViewById(R.id.bio);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        //image = (ImageView) findViewById(R.id.profile_picture);
+        image = (ImageView) findViewById(R.id.profile_picture);
         fab.setOnClickListener(this);
         //pass object from previous activity
         Intent in = getIntent();
@@ -40,6 +42,7 @@ public class ViewProfileActivity extends AppCompatActivity implements View.OnCli
 //			}
             getSupportActionBar().setTitle(user.getFirstName() + " " + user.getLastName());
             //Picasso.with(this).load(user.getPhoto()).into(image);
+            Picasso.with(this).load(user.getPhoto()).transform(new CircleTransform()).into(image);
             if (user.getBio() != null)
             {
                 editBio.setText(user.getBio());
