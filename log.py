@@ -52,7 +52,7 @@ def get_box(box):
 		row_heights.append(0)
 	for i in range(0, len(box)):
 		for j in range(0, len(box[i])):
-			rf = remove_formats(box[i][j])
+			rf = remove_formats(str(box[i][j]))
 			lines = rf.split('\n')
 			length = len(lines)
 			if length > row_heights[i]:
@@ -88,15 +88,16 @@ def get_box(box):
 		# NEW
 		y = []
 		for j in range(0, len(x)):
-			y.append(x[j].split('\n'))
+			y.append(str(x[j]).split('\n'))
 		for k in range(0, row_heights[i]): # LINE
 			result += ('║')
 			for j in range(0, len(x)): # COLUMN
 				numlines = len(y[j])
 				c = 0
 				if k < numlines:
-					result += y[j][k]
-					c += len(remove_formats(y[j][k]))
+					z = str(y[j][k])
+					result += z
+					c += len(remove_formats(z))
 				for q in range(c, col_widths[j]):
 					result += ' '
 
@@ -121,8 +122,86 @@ def get_box(box):
 
 # Turns a 2D array of strings into a string that is formatted into a box matrix like above
 # This is a FUCKING masterpiece.  I wrote it for the pure fun of it
-def get_boxf(box, f):
-	return format(get_box(box), f)
+def get_boxf(box, text_format, box_format):
+	result = format('╔',box_format)
+
+	# First we have to get the sizes of each box
+	col_widths = []
+	row_heights = []
+	for i in box[0]:
+		col_widths.append(0)
+	for i in range(0, len(box)):
+		row_heights.append(0)
+	for i in range(0, len(box)):
+		for j in range(0, len(box[i])):
+			rf = remove_formats(str(box[i][j]))
+			lines = rf.split('\n')
+			length = len(lines)
+			if length > row_heights[i]:
+				row_heights[i] = length
+			for line in lines:
+				l = len(line)
+				if l > col_widths[j]:
+					col_widths[j] =  l
+			
+	# now lets print that shit
+	for i in range(0, len(box)):
+		x = box[i]
+		# First we print the edge of the table that is above the current row
+		if i == 0: # The top edge
+			for j in range(0, len(x)):
+				result += box_format
+				for k in range(0, col_widths[j]):
+					result += ('═');
+				if j == (len(x) - 1):
+					result += ('╗'+ENDC+'\n')
+				else:
+					result += ('╤')
+		else: # row separator
+			result += (box_format + '╟')
+			for j in range(0, len(x)):
+				for k in range(0, col_widths[j]):
+					result += ('─');
+				if j == (len(x) - 1):
+					result += ('╢'+ENDC+'\n')
+				else:
+					result += ('┼')
+
+		# now we print the current row
+		# NEW
+		y = []
+		for j in range(0, len(x)):
+			y.append(str(x[j]).split('\n'))
+		for k in range(0, row_heights[i]): # LINE
+			result += format('║', box_format)
+			for j in range(0, len(x)): # COLUMN
+				numlines = len(y[j])
+				c = 0
+				if k < numlines:
+					z = str(y[j][k])
+					result += format(z, text_format)
+					c += len(remove_formats(z))
+				for q in range(c, col_widths[j]):
+					result += ' '
+
+				if j == (len(x) - 1):
+					result += (format('║', box_format)+'\n')
+				else:
+					result += format('│', box_format)			
+			
+				
+
+		# now print the bottom part of the table
+		if i == (len(box) - 1):
+			result += (box_format+'╚')
+			for j in range(0, len(x)):
+				for k in range(0, col_widths[j]):
+					result += ('═');
+				if j == (len(x) - 1):
+					result += ('╝'+ENDC+'\n')
+				else:
+					result += ('╧')
+	return result
 
 # prints a string without a newline
 def s_print(string):
@@ -134,8 +213,8 @@ def box(box):
 	s_print(get_box(box))
 
 # takes a 2D array of strings and prints it in the console magically
-def boxf(box, f):
-	s_print(get_box(box), f)
+def boxf(box, text_format, box_format):
+	s_print(get_boxf(box, text_format, box_format))
 
 # Prints a string inside a box
 def rect(string):
@@ -148,30 +227,61 @@ def rectf(string , f):
 
 # For printing verbose info
 def i(event):
-	s_print(format(get_box([[ENDC + format("INFO", HEADER) + OKGREEN],[event]]), OKGREEN))
+	s_print(get_boxf([["INFO"],[event]], BOLD, OKBLUE))
 
 # For printing debug info
 # I suppose we can define debug info as anything that doesn't need to be logged after it's done being tested
 def d(event):
-	s_print(format(get_box([[ENDC + format("DEBUG", HEADER) + OKBLUE],[event]]), OKBLUE))
+	s_print(get_boxf([["DEBUG"],[event]], BOLD, OKGREEN))
 
 # For printing warnings
 def w(event):
-	s_print(format(get_box([[ENDC + format("WARNING", HEADER) + WARNING],[event]]), WARNING))
+	s_print(get_boxf([["WARNING"],[event]], FAIL + BOLD, WARNING))
 
 # For printing failures/errors
 def e(event):
-	s_print(format(get_box([[ENDC + format("FAIL", HEADER) + FAIL],[event]]), FAIL))
+	s_print(get_boxf([[format("FAIL", MAGENTA)],[event]], FAIL + UNDERLINE + BOLD, FAIL))
 
 # For printing a socket EVENT
 def sock(event):
-	s_print(format(get_box([[ENDC + format("SOCKET EVENT RECIEVED", HEADER) + CYAN],[ENDC + format(event, OKGREEN) + CYAN]]), CYAN))
+	s_print(
+		get_boxf([["SOCKET EVENT RECIEVED"],[event]], BOLD + OKGREEN, CYAN)
+	)
 
 # For printing a socket EMIT
 def emit(event):
-	s_print(format(get_box([[ENDC + format("SOCKET EMIT", HEADER) + MAGENTA],[ENDC + format(event, OKGREEN) + MAGENTA]]), MAGENTA))
+	s_print(
+		get_boxf([["SOCKET EMIT"],[event]], BOLD + OKGREEN, MAGENTA)
+	)
 
-		
+# same as map but with specific formatting
+def get_json(json):
+	return (get_mapf(json, BOLD + OKGREEN, ''))
+
+# same as map but with specific formatting
+def json(json):
+	s_print(get_json(json))
+
+# Takes a dict object(like json) and prints it out in a table
+def get_map(map):
+	box = []
+	for key, value in map.items():
+		box.append([key, value])
+
+# Takes a dict object(like json) and prints it out in a table
+def get_mapf(map, text_format, box_format):
+	b = []
+	for key, value in map.items():
+		b.append([key, value])
+	return get_boxf(b, text_format, box_format)
+
+# prints a dictionary in a table
+def map(map):
+	s_print(get_map(map))
+
+# prints a dictionary in a table
+def mapf(map, text_format, box_format):
+	s_print(get_mapf(map, text_format, box_format))
 
 # test area
 def test():
@@ -186,7 +296,12 @@ def test():
 		['Date created', '04/23/2017'],
 		['Description', 'For making terminal\noutput look pretty']
 	])
-	box([
+	boxf([
 		['IM A BOX\n IMA BOX\n\n\n\n\n\n\n yur mum', 'One fish\ntwo fish\nred fish\nblueeeeeeeeeeeeeeeeeeeeeeeeee fish'],
-		['breh', 'smoke weed all of the days'],
-	])
+		[get_mapf({
+			'poops': 'farts',
+			'dicks': 'buttholes',
+			'boobs': 'vagina',
+		}, UNDERLINE, CYAN), 'smoke weed all of the days'],
+	], BOLD, MAGENTA)
+	

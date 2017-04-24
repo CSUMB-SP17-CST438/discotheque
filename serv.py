@@ -118,16 +118,13 @@ def on_login(data):
 
 @socket.on(events.MESSAGE_SEND)
 def on_new_message(data):
+	log.sock(
+		events.MESSAGE_SEND+"\n"+
+		log.get_json(data)
+	)
 	floor_id = data['floor']
 	member_id = data['from']
 	text = data['message']
-	log.sock(
-		events.MESSAGE_SEND+"\n"+
-		log.get_boxf([
-			['floor','member','text'],
-			[str(floor_id),str(member_id),text]
-		],log.OKGREEN)
-	)
 
 	add_message(floor_id, member_id, text)
 	log.emit(events.MESSAGE_LIST_UPDATE)
@@ -180,10 +177,7 @@ def on_join_floor(data):
 	floor_id = data['floor_id']
 	member_id = data['member_id']
 	log.sock(events.JOIN_FLOOR+'\n'+
-		log.get_box([
-			['floor', 'member'],
-			[str(floor_id), str(member_id)]
-		])
+		log.get_mapf(data, log.BOLD, log.CYAN)
 	)
 	join_room(floor_id)
 	floor_to_join = getFloor(floor_id)
