@@ -17,14 +17,14 @@
 
         <ImageView
             android:id="@+id/profile_picture"
-            android:layout_width="250px"
-            android:layout_height="250px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"/>
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">

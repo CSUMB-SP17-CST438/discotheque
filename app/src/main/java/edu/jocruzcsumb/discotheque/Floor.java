@@ -27,6 +27,7 @@ public class Floor implements Parcelable
     public static final String JSON_SONGS_TAG = "songlist";
     public static final String JSON_USERS_TAG = "floor_members";
     public static final String JSON_MESSAGES_TAG = "floor_messages";
+    public static final String JSON_GENRE_TAG = "floor_genre";
     public static final String JSON_THEME_TAG = "theme";
     public static final Creator<Floor> CREATOR = new Creator<Floor>()
     {
@@ -45,6 +46,7 @@ public class Floor implements Parcelable
     private User creator;
     private int id;
     private String name;
+    private String genre;
     private ArrayList<Message> messages = null;
     private ArrayList<Song> songs = null;
     private ArrayList<User> users = null;
@@ -55,6 +57,11 @@ public class Floor implements Parcelable
         this.id = id;
         this.name = name;
         this.creator = creator;
+    }
+
+    public Floor(int id, String name, String floor_genre, User creator){
+        this(id, name, creator);
+        this.genre = floor_genre;
     }
 
     protected Floor(Parcel in)
@@ -82,6 +89,7 @@ public class Floor implements Parcelable
         return new Floor(
                 jsonFloor.getInt(JSON_ID_TAG),
                 jsonFloor.getString(JSON_NAME_TAG),
+                jsonFloor.getString(JSON_GENRE_TAG),
                 null//User.parse(jsonFloor.getJSONObject(JSON_CREATOR_TAG))
         );
     }
@@ -146,6 +154,8 @@ public class Floor implements Parcelable
     {
         return theme;
     }
+
+    public String getGenre(){return genre;}
 
     public void setTheme(Theme theme)
     {
