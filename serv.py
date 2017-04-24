@@ -228,7 +228,7 @@ def on_leave_floor(data):
 	current_floor = getFloor(data['floor_id'])
 	leave_room(data['floor_id'])
 	# socket.emit('member left', {'floor':current_floor.to_list()}, room=data['floor_id'])
-    socket.emit('member list update', {'floor members': current_floor.to_list()['floor_members']},room=data['floor_id'])
+	socket.emit('member list update', {'floor members': current_floor.to_list()['floor_members']},room=data['floor_id'])
 	if not current_floor.isActive():
 		thread_holder.update_thread_status(current_floor.floor_id,current_floor.isActive())
 
