@@ -1,7 +1,9 @@
 package edu.jocruzcsumb.discotheque;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
@@ -10,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -17,9 +20,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_FLOOR_JOINED;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_LEAVE_FLOOR;
@@ -31,25 +38,21 @@ public class FloorActivity extends AppCompatActivity
 
     private static final String TAG = "FloorActivity";
     private static final String CURRENT_TAB_TAG = "current_tab";
-
+	private FloorListener listener;
     public Floor floor = null;
     private ImageView albumCoverView;
     private TextView songInfoView;
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
+	// For the tabs
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
     private Song currentSong;
+	private SeekBar songBar;
+	private Timer songTimer;
+
+	// this means we update 20 times a second
+	// it looks pretty smoothe like this
+	private static final int SONG_UPDATE_INTERVAL = 50;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -69,7 +72,7 @@ public class FloorActivity extends AppCompatActivity
         f.addAction(EVENT_SONG_STARTED);
         f.addAction(EVENT_SONG_STOPPED);
 
-        FloorListener listener = new FloorListener(f, this, TAG)
+        listener = new FloorListener(f, this, TAG)
         {
             @Override
             public void onFloorJoined(Floor floor)
@@ -98,6 +101,7 @@ public class FloorActivity extends AppCompatActivity
                         setCurrentSong(s);
                     }
                 });
+
             }
 
             public void onSongStopped(Song s)
@@ -128,6 +132,9 @@ public class FloorActivity extends AppCompatActivity
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+		songBar = (SeekBar) findViewById(R.id.song_progress_bar);
+		songBar.setEnabled(false);
+
         int t = 1;
         if (savedInstanceState != null)
         {
@@ -152,6 +159,29 @@ public class FloorActivity extends AppCompatActivity
                .load(s.getArtworkUrl())
                .into(albumCoverView);
         //TODO progressbar
+		songBar.setMax(0);
+		songBar.setMax(s.getDuration());
+		songBar.setProgress((int)(System.currentTimeMillis() - (currentSong.getStartTime()*1000)));
+		if(songTimer!=null)songTimer.cancel();
+		songTimer = new Timer();
+
+
+
+		songTimer.scheduleAtFixedRate(new TimerTask()
+		{
+			@Override
+			public void run()
+			{
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+				{
+					songBar.setProgress(songBar.getProgress()+SONG_UPDATE_INTERVAL,true);
+				}
+				else
+				{
+					songBar.setProgress(songBar.getProgress()+SONG_UPDATE_INTERVAL);
+				}
+			}
+		}, 0, SONG_UPDATE_INTERVAL);
     }
 
     @Override
@@ -177,7 +207,21 @@ public class FloorActivity extends AppCompatActivity
     public void onBackPressed()
     {
         broadcast(EVENT_LEAVE_FLOOR);
-        super.onBackPressed();
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(R.string.confirm_leave_floor)
+			   .setCancelable(false)
+			   .setPositiveButton(R.string.action_yes, new DialogInterface.OnClickListener() {
+				   public void onClick(DialogInterface dialog, int id) {
+					   FloorActivity.this.finish();
+				   }
+			   })
+			   .setNegativeButton(R.string.action_no, new DialogInterface.OnClickListener() {
+				   public void onClick(DialogInterface dialog, int id) {
+					   dialog.cancel();
+				   }
+			   });
+		AlertDialog alert = builder.create();
+		alert.show();
     }
 
     // EVENTS are broadcasted here
@@ -229,7 +273,14 @@ public class FloorActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /**
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		listener.stop();
+	}
+
+	/**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
