@@ -90,5 +90,6 @@
         <item>hip hop</item>
 
     </string-array>
+    <string name="confirm_leave_app">You are being redirected to SoundCloud. Do you want to proceed?</string>
 
 </resources>
