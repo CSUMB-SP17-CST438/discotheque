@@ -55,7 +55,7 @@ public class CreateFloorDialogFragment extends DialogFragment implements View.On
         editFloorName = (EditText) rootView.findViewById(R.id.edit_floor_name);
         splitSpinner = (Spinner) rootView.findViewById(R.id.splitSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.genre_array_list,
-                android.R.layout.simple_spinner_item);
+                android.R.layout.simple_spinner_dropdown_item);
         splitSpinner.setAdapter(adapter);
         splitSpinner.setSelection(0);
         createFloorButton.setOnClickListener(this);
