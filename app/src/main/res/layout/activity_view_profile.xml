@@ -17,14 +17,6 @@
 
 
 
-
-        <ImageView
-            android:id="@+id/profile_picture"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"/>
-
-
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
@@ -37,10 +29,9 @@
             <LinearLayout
                 android:layout_gravity="bottom"
                 android:layout_width="match_parent"
-                android:layout_height="66dp"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:layout_margin="16dp"
-                >
+                android:layout_margin="16dp">
 
                 <ImageView
                     android:id="@+id/profile_picture"
