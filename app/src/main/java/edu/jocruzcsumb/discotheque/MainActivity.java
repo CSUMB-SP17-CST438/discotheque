@@ -47,12 +47,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        if(!Sockets.getSocket().connected())
+		{
+			Toast.makeText(this, R.string.error_no_connection_dtk, Toast.LENGTH_LONG).show();
+			finish();
+		}
         setContentView(R.layout.activity_main);
+		findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
         //facebook login fragment code
         FragmentManager fm = getFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
-        Sockets.getSocket();
         if (fragment == null)
         {
             fragment = new FacebookFragment();
@@ -121,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             else
             {
-                Log.d(TAG, "pendingResult.isDone() = false");
                 // There's no immediate result ready
 
                 // We may want to add a progress indicator right here
@@ -135,7 +139,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         {
                             Log.d(TAG, "result.isSuccess()");
                             MainActivity.this.handleResult(result);
-                            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                         }
                         else
                         {
@@ -259,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                             .getStatusCode()));
             if (result == null)
             {
-                Log.d(TAG, "result was null you cunt ass bitch");
+                Log.e(TAG, "result was null you cunt ass bitch");
             }
             else
             {

@@ -19,11 +19,11 @@ public class Sockets
 {
     private static final String TAG = "DTK Socket";
     // TODO: Set to 0 for live server
-    private static final int SELECTED_SERVER = 1;
+    private static final int SELECTED_SERVER = 2;
     // Append to this list if you want to run a different server :D
     private static final String[] SERVERS = {
             "https://disco-theque.herokuapp.com",
-            "http://carsen.ml",
+            "http://carsen.ml:8080",
             "http://devev-jcrzry.c9users.io:8080",
             "http://10.11.160.32",
             "https://tha01-tvanha01.c9users.io"
@@ -32,7 +32,6 @@ public class Sockets
 
     public static String getServer()
     {
-
         return SERVERS[SELECTED_SERVER];
     }
 
@@ -42,6 +41,8 @@ public class Sockets
         {
             if (!socket.connected())
             {
+                Log.w(TAG, "the main socket was disconnected, getting a new socket");
+                socket.close();
                 socket = null;
                 return getSocket();
             }
