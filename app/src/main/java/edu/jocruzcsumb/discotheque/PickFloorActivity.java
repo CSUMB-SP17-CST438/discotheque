@@ -1,8 +1,15 @@
 package edu.jocruzcsumb.discotheque;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,16 +41,38 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 	private RecyclerView recyclerView;
 	public static final String EVENT_GET_FLOOR_LIST = "get floor list";
 	public static final String EVENT_FLOOR_LIST_UPDATE = "floor list update";
+	private FloatingActionButton actionButton;
+	public static PickFloorActivity pickFloorActivity;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		pickFloorActivity = this;
 		setContentView(R.layout.activity_join_room);
 		recyclerView = (RecyclerView) findViewById(R.id.room_listview);
+		actionButton = (FloatingActionButton) findViewById(R.id.fab2);
+		actionButton.setOnClickListener(this);
 		recyclerView.setHasFixedSize(true);
 		LinearLayoutManager llm = new LinearLayoutManager(this);
 		recyclerView.setLayoutManager(llm);
+		recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+			@Override
+			public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+				if (dy > 0 ||dy<0 && actionButton.isShown())
+					actionButton.hide();
+			}
+
+			@Override
+			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+
+				if (newState == RecyclerView.SCROLL_STATE_IDLE){
+					actionButton.show();
+				}
+				super.onScrollStateChanged(recyclerView, newState);
+			}
+		});
+
 
 		new Thread(new Runnable()
 		{
@@ -157,95 +186,103 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 		switch (v.getId())
 		{
 
-//			case R.id.TEMP_go_to_room:
-//				//go to activity
-//				Intent k = new Intent(PickFloorActivity.this, FloorActivity.class);
-//
-//				k.putExtra(Floor.TAG, 2);
-//
-//				startActivity(k);
-//
-//				break;
+            case R.id.signout:
+                LocalUser.logout(PickFloorActivity.this);
+                break;
 
-			case R.id.signout:
-				LocalUser.logout(PickFloorActivity.this);
-				break;
+            case R.id.fab2:
+                Log.d(TAG, "fab button was pressed");
+                CreateFloorDialogFragment dialogFragment = new CreateFloorDialogFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                dialogFragment.show(fragmentManager, "sample fragment");
 
-		}
-	}
+        }
+    }
 
 
-	public class FloorAdapter extends RecyclerView.Adapter<FloorAdapter.FloorViewHolder>
-	{
+    public class FloorAdapter extends RecyclerView.Adapter<FloorAdapter.FloorViewHolder>
+    {
 
-		ArrayList<Floor> floorList;
-		Context mContext;
-		RecyclerViewListener listener;
+        ArrayList<Floor> floorList;
+        Context mContext;
+        RecyclerViewListener listener;
 
-		FloorAdapter(Context mContext, ArrayList<Floor> floorList, RecyclerViewListener listener)
-		{
-			this.floorList = floorList;
-			this.mContext = mContext;
-			this.listener = listener;
-		}
+        FloorAdapter(Context mContext, ArrayList<Floor> floorList, RecyclerViewListener listener)
+        {
+            this.floorList = floorList;
+            this.mContext = mContext;
+            this.listener = listener;
+        }
 
-		public int getItemCount()
-		{
-			return floorList.size();
-		}
+        public int getItemCount()
+        {
+            return floorList.size();
+        }
 
-		@Override
-		public FloorViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
-		{
-			View v = LayoutInflater.from(viewGroup.getContext())
-								   .inflate(R.layout.cardview_floor, viewGroup, false);
-			final FloorViewHolder svh = new FloorViewHolder(v);
-			v.setOnClickListener(new View.OnClickListener()
-			{
-				@Override
-				public void onClick(View v)
-				{
-					listener.onItemClick(v, svh.getAdapterPosition());
-				}
-			});
+        @Override
+        public FloorViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
+        {
+            View v = LayoutInflater.from(viewGroup.getContext())
+                                   .inflate(R.layout.cardview_floor, viewGroup, false);
+            final FloorViewHolder svh = new FloorViewHolder(v);
+            v.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    listener.onItemClick(v, svh.getAdapterPosition());
+                }
+            });
 
-			return svh;
+            return svh;
 
 
-		}
+        }
 
-		@Override
-		public void onBindViewHolder(FloorViewHolder FloorViewHolder, int i)
-		{
-			FloorViewHolder.floorName.setText(floorList.get(i)
-													   .getName());
-			FloorViewHolder.themeImage.setImageResource(R.drawable.ic_launcher);
+        @Override
+        public void onBindViewHolder(FloorViewHolder FloorViewHolder, int i)
+        {
+            FloorViewHolder.floorName.setText(floorList.get(i)
+                                                       .getName());
+            FloorViewHolder.themeImage.setImageResource(genreTypes(floorList.get(i).getGenre()));
+			FloorViewHolder.genre.setText(floorList.get(i).getGenre());
 
-		}
+        }
 
-		@Override
-		public void onAttachedToRecyclerView(RecyclerView recyclerView)
-		{
-			super.onAttachedToRecyclerView(recyclerView);
+        @Override
+        public void onAttachedToRecyclerView(RecyclerView recyclerView)
+        {
+            super.onAttachedToRecyclerView(recyclerView);
 
-		}
+        }
 
-		public class FloorViewHolder extends RecyclerView.ViewHolder
-		{
-			CardView cv;
-			TextView floorName;
-			TextView genre;
-			ImageView themeImage;
+        public class FloorViewHolder extends RecyclerView.ViewHolder
+        {
+            CardView cv;
+            TextView floorName;
+            TextView genre;
+            ImageView themeImage;
 
-			FloorViewHolder(View itemView)
-			{
-				super(itemView);
-				cv = (CardView) itemView.findViewById(R.id.floor_cardview);
-				floorName = (TextView) itemView.findViewById(R.id.floorname);
-				genre = (TextView) itemView.findViewById(R.id.genre);
-				themeImage = (ImageView) itemView.findViewById(R.id.theme);
+            FloorViewHolder(View itemView)
+            {
+                super(itemView);
+                cv = (CardView) itemView.findViewById(R.id.floor_cardview);
+                floorName = (TextView) itemView.findViewById(R.id.floorname);
+                genre = (TextView) itemView.findViewById(R.id.genre);
+                themeImage = (ImageView) itemView.findViewById(R.id.theme);
+            }
+        }
+
+		private int genreTypes(String genre){
+			switch(genre){
+				case "reggae":
+					return R.drawable.red_cardcover_temp;
+				case "soft rock":
+					return R.drawable.teal_cardcover_temp;
+				default:
+					return R.drawable.yellow_cardcover_temp;
+
 			}
 		}
-	}
-
+    }
 }
