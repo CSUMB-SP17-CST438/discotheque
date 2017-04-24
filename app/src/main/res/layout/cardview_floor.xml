@@ -29,7 +29,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:src="@drawable/red_room_temp"
+                android:src="@drawable/yellow_cardcover_temp"
                 android:layout_alignParentBottom="true"
                 android:scaleType="centerCrop"
 
