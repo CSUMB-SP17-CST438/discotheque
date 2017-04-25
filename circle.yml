@@ -1,6 +1,6 @@
 test:
   override:
-    - python3 -m tests/unit_tests
+    - python3 -m tests/unit_tests.py
     # - python -m tests/socket_tests
 
 deployment:
