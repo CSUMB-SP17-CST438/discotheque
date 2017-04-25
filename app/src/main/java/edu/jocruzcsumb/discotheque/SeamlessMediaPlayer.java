@@ -96,7 +96,8 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 
 		if (!start && cur == s[next])
 		{// The service has told us that the next song is about to play.
-			if (s[current].getStartTime() < localtime && cur.getStartTime() > localtime)
+			swap();
+			if (cur.getStartTime() > localtime)
 			{
 				if (!m[current].isPlaying())
 				{
@@ -184,7 +185,7 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 					}
 				}
 			}
-			if (songs.size() > 1 && songs.get(1) != s[next])
+			if ((m[next] == null || !m[next].isPlaying()) && songs.size() > 1 && songs.get(1) != s[next])
 			{
 				s[next] = songs.get(1);
 				prepareNext();
@@ -261,16 +262,16 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 		Log.i(TAG, "onCompletion");
 
 		// Swap the mediaplayers
-		swap();
-		// Start the new song
-		startCurrent();
-		// Prepare the next song
-		prepareNext();
-
-		// dispose of the player that just finished
-		mediaPlayer.release();
-		songs.remove(s[next]);
-		//checkSongs();
+//		swap();
+//		// Start the new song
+//		startCurrent();
+//		// Prepare the next song
+//		prepareNext();
+//
+//		// dispose of the player that just finished
+//		mediaPlayer.release();
+//		songs.remove(s[next]);
+//		//checkSongs();
 	}
 
 	@Override
