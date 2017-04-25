@@ -1,7 +1,4 @@
-# project3-jocruz-tha-pking-cyates
-Silent disco android app.
-
-# Discotheque #
+# Discotek #
 ### Current State ###
 The app allows login through facebook and google.  After login, user is sent to the floor and may choose a room or create their own.
 From a room there is a chat, song list, and viewable profiles.
