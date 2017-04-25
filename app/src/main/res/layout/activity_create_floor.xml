@@ -1,20 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
+    <ImageView
+        android:id="@+id/Cover_imageView"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/yellow_cardcover_temp"
+
+        />
+
+    <View
+        android:id="@+id/bar"
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:layout_below="@+id/Cover_imageView"
+        android:background="@color/colorPrimary" />
+
+    <ImageView
+        android:id="@+id/flooricon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/splitSpinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="27dp"
+        android:layout_marginStart="27dp"
+        android:layout_below="@+id/bar"
+        app:srcCompat="@android:drawable/ic_lock_idle_lock" />
+
     <TextView
+        android:id="@+id/floorname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/floorname"
-        android:layout_marginLeft="40dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="53dp"
-        android:id="@+id/floorname"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/bar"
+        android:layout_toRightOf="@+id/flooricon"
+         />
+
 
     <EditText
         android:layout_width="wrap_content"
@@ -23,10 +56,12 @@
         android:hint="@string/editFloor"
         android:paddingTop="16dp"
         android:paddingBottom="8dp"
-        android:layout_below="@+id/floorname"
-        android:layout_alignLeft="@+id/floorname"
-        android:layout_alignStart="@+id/floorname"
-        android:layout_marginTop="15dp" />
+        android:layout_alignBaseline="@+id/floorname"
+        android:layout_alignBottom="@+id/floorname"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="76dp"
+        android:layout_marginEnd="76dp" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -54,7 +89,9 @@
             android:text="@string/createFloorButton"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
-            android:background="@color/colorPrimary"/>
+            android:background="@color/colorPrimary"
+            android:layout_marginBottom="4dp"
+            />
 
         <Button
             android:id="@+id/cancel_floor_button"
@@ -64,7 +101,29 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
             android:background="@color/colorPrimary"/>
+
     </LinearLayout>
+
+
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageView2"
+        android:layout_alignStart="@+id/imageView2"
+        android:layout_below="@+id/imageView2"
+        android:layout_marginTop="24dp"
+        app:srcCompat="@android:drawable/ic_btn_speak_now" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView3"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:text="TextView" />
 
 
 </RelativeLayout>
