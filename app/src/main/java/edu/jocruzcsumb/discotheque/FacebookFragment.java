@@ -1,5 +1,6 @@
 package edu.jocruzcsumb.discotheque;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -40,6 +41,8 @@ public class FacebookFragment extends Fragment
             Toast.makeText(context, "Login Canceled", TOAST_DURATION)
                  .show();
             Log.d(TAG, "Login Canceled");
+			MainActivity a = (MainActivity) getActivity();
+			a.showLoader(false);
         }
 
         @Override
@@ -48,6 +51,8 @@ public class FacebookFragment extends Fragment
             Toast.makeText(context, "Login Error", TOAST_DURATION)
                  .show();
             Log.d(TAG, "Login Error");
+			MainActivity a = (MainActivity) getActivity();
+			a.showLoader(false);
         }
 
         @Override
@@ -58,35 +63,26 @@ public class FacebookFragment extends Fragment
             Log.d(TAG, "Login Success");
             AccessToken token = result.getAccessToken();
 
-            if (!LocalUser.login(FacebookFragment.this.getActivity(), LocalUser.LoginType.FACEBOOK, token.getToken()))
+            if (LocalUser.socketLogin(LocalUser.LoginType.FACEBOOK, token.getToken()))
             {
-                Toast.makeText(context, R.string.dtk_server_login_error, Toast.LENGTH_LONG)
-                     .show();
+				Log.i(TAG, "Successful facebook login");
+				Activity a  = FacebookFragment.this.getActivity();
+				Intent k = new Intent(a, PickFloorActivity.class);
+				k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(k);
+				a.finish();
             }
+            else
+			{
+				Log.e(TAG, "Facebook user signed in but we could not log them into Discotek");
+				Toast.makeText(FacebookFragment.this.getActivity(), R.string.error_no_connection_dtk, Toast.LENGTH_LONG).show();
+				LoginManager.getInstance().logOut();
+				MainActivity a = (MainActivity) getActivity();
+				a.showLoader(false);
+			}
         }
 
     };
-
-//    private FacebookCallback<Sharer.Result> shareCallback = new FacebookCallback<Sharer.Result>() {
-//        @Override
-//        public void onCancel() {
-//            Toast.makeText(context, "Share Canceled", TOAST_DURATION).show();
-//            Log.d(TAG, "Share Canceled");
-//        }
-//
-//        @Override
-//        public void onError(FacebookException error) {
-//            Toast.makeText(context,"Share Error",TOAST_DURATION).show();
-//            Log.d(TAG, "Share Error");
-//        }
-//
-//        @Override
-//        public void onSuccess(Sharer.Result result) {
-//            Toast.makeText(context,"Share Success",TOAST_DURATION).show();
-//            Log.d(TAG, "Share Success");
-//        }
-//
-//    };
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -112,6 +108,8 @@ public class FacebookFragment extends Fragment
             @Override
             public void onClick(View view)
             {
+				MainActivity a = (MainActivity) getActivity();
+				a.showLoader(true);
                 LoginManager.getInstance()
                             .logInWithReadPermissions(FacebookFragment.this, permissions);
             }
