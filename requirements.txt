@@ -10,4 +10,3 @@ soundcloud
 facebook-sdk
 jsonpickle
 gevent==1.2a1
-gevent-websocket
