@@ -173,6 +173,8 @@ public class ChatFragment extends FloorFragment implements View.OnClickListener
 				   .load(messages.get(i)
 								 .getAuthor()
 								 .getPhoto())
+					.resize(200, 200)
+					.centerInside(	)
 					.transform(new CircleTransform())
 				   .into(chatViewHolder.image);
 			//}

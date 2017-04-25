@@ -40,6 +40,18 @@
 
 			</android.support.v7.widget.Toolbar>
 
+			<ImageView
+				android:id="@+id/song_artwork"
+				android:layout_width="wrap_content"
+				android:layout_height="30dp"
+				android:layout_alignParentLeft="true"
+				android:layout_marginLeft="8dp"
+				android:layout_marginRight="2dp"
+
+				android:layout_above="@+id/song_progress_bar"
+				android:src="@drawable/ic_launcher"
+				 />
+
 			<TextView
 				android:id="@+id/song_title_text"
 				android:layout_width="wrap_content"
@@ -56,15 +68,7 @@
 				android:textSize="14sp"
 				android:textStyle="bold" />
 
-			<ImageView
-				android:id="@+id/song_artwork"
-				android:layout_width="wrap_content"
-				android:layout_height="match_parent"
-				android:layout_alignParentLeft="true"
-				android:layout_marginLeft="8dp"
-				android:layout_above="@+id/song_progress_bar"
-				android:src="@drawable/ic_launcher"
-				android:layout_alignTop="@+id/song_title_text" />
+
 
 			<SeekBar
 				android:enabled="false"
@@ -75,7 +79,12 @@
 				android:layout_marginLeft="5dp"
 				android:layout_alignParentLeft="true"
 				android:layout_alignParentRight="true"
-				android:layout_alignParentBottom="true"/>
+				android:layout_alignParentBottom="true"
+				android:progressTint="@color/colorAccent"
+				android:thumbTint="@color/colorPrimaryDark"
+				android:progress="@color/colorPrimary"
+
+				/>
 
 		</RelativeLayout>
 

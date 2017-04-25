@@ -26,12 +26,11 @@
             android:indeterminate="true"/>
     </RelativeLayout>
 
-
     <Space
         android:id="@+id/splash_spacer1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.2"
+        android:layout_weight="0.25"
         android:orientation="vertical"/>
 
     <ImageView
@@ -43,16 +42,11 @@
         android:src="@drawable/all_logo"/>
 
 
-    <Space
-        android:id="@+id/splash_spacer2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.09"
-        android:orientation="vertical"/>
+
 
     <ImageView
         android:id="@+id/splash_titlefont_ImageView"
-        android:layout_width="225dp"
+        android:layout_width="235dp"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.25"
@@ -96,7 +90,7 @@
         android:layout_gravity="center_horizontal"
         android:background="@drawable/button_bg_stroke"
         android:text="@string/common_signin_button_text_long"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="10dp"
 
         />
 
