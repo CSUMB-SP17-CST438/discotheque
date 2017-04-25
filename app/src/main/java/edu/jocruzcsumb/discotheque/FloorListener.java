@@ -31,6 +31,7 @@ import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STOPPED
 
 public abstract class FloorListener extends BroadcastReceiver
 {
+	private static final String TAG = "FloorListener";
 	private final String tag;
 	private Context context;
 
@@ -40,6 +41,7 @@ public abstract class FloorListener extends BroadcastReceiver
 		this.context = context;
 		LocalBroadcastManager.getInstance(context)
 							 .registerReceiver(this, intentFilter);
+		Log.i(tag, TAG + ": started listening");
 	}
 
 	public FloorListener(Context context, String tag)
@@ -65,7 +67,7 @@ public abstract class FloorListener extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		Log.d(tag, "onRecieve: " + intent.getAction());
+		Log.i(tag, TAG + ": onRecieve: " + intent.getAction());
 
 		if (intent.getAction()
 				  .equals(EVENT_FLOOR_JOINED))
@@ -181,6 +183,7 @@ public abstract class FloorListener extends BroadcastReceiver
 
 	public void stop()
 	{
+		Log.i(tag, TAG + ": stopped listening");
 		LocalBroadcastManager.getInstance(context)
 							 .unregisterReceiver(this);
 	}

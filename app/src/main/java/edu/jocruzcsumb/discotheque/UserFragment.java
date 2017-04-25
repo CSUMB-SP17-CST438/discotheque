@@ -50,15 +50,11 @@ public class UserFragment extends FloorFragment
 		return fragment;
 	}
 
-	public UserFragment()
-	{
-		super(TAG);
-	}
-
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
 	{
+		start(TAG);
 		View rootView = inflater.inflate(R.layout.fragment_user, container, false);
 		userPhoto = (ImageView) rootView.findViewById(R.id.userPhoto);
 		username = (TextView) rootView.findViewById(R.id.username);
