@@ -197,9 +197,11 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 
             case R.id.fab2:
                 Log.d(TAG, "fab button was pressed");
-                CreateFloorDialogFragment dialogFragment = new CreateFloorDialogFragment();
-                FragmentManager fragmentManager = getFragmentManager();
-                dialogFragment.show(fragmentManager, "sample fragment");
+//                CreateFloorDialogFragment dialogFragment = new CreateFloorDialogFragment();
+//                FragmentManager fragmentManager = getFragmentManager();
+//                dialogFragment.show(fragmentManager, "sample fragment");
+				Intent intent = new Intent(PickFloorActivity.this, CreateFloorActivity.class);
+				startActivity(intent);
 
         }
     }
