@@ -9,5 +9,5 @@ flask-testing
 soundcloud
 facebook-sdk
 jsonpickle
-gevent
+gevent==1.2a1
 gevent-websocket
