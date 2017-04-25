@@ -13,6 +13,7 @@ from marshmallow import fields as f
 from sqlalchemy import orm
 from sqlalchemy import desc
 import jsonpickle
+
 # serv.app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL','postgresql://jcrzr:anchor99@localhost/postgres')
 # serv.app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
 
@@ -37,6 +38,11 @@ floor_members = db.Table('floor_members',
 	db.Column('floor_id', db.Integer, db.ForeignKey('floor.floor_id')),
 	db.Column('member_id', db.Integer, db.ForeignKey('member.member_id'))
 	)
+	
+floor_genre = db.Table('floor_genres',
+	db.Column('floor_id', db.Integer, db.ForeignKey('floor.floor_id')),
+	db.Column('genre_id', db.Integer, db.ForeignKey('genre.genre_id'))
+)
 # created_floors = db.Table('created_floors',
 # 	db.Column('member_id',db.Integer, db.ForeignKey('member.member_id')),
 # 		db.Column('floor_id', db.Integer, db.ForeignKey('floor.floor_id'))
@@ -132,7 +138,7 @@ class member(db.Model):
 	member_email = db.Column(db.String(120))
 	member_password = db.Column(db.String(140))
 	member_img_url = db.Column(db.String(500))
-	member_desc = db.Column(db.Text)
+	member_bio = db.Column(db.Text,default="I like music, and that's all for now (update me)")
 
 	member_fgenres = db.relationship('genre',secondary=member_genres,
 		backref=db.backref('members',lazy='joined'))
@@ -141,7 +147,7 @@ class member(db.Model):
 
 	messages = db.relationship('message', backref=db.backref('member',lazy='joined'),lazy='dynamic')
 
-	def __init__(self,username,fname,lname,email,imgLink,desc):
+	def __init__(self,username,fname,lname,email,imgLink,bio):
 		self.username = username
 		# self.member_password = password
 		self.member_FName = fname
@@ -149,11 +155,20 @@ class member(db.Model):
 		self.member_email = email
 		if imgLink is None:
 			self.member_img_url = ""
-		if desc is None:
-			self.member_desc = ""
+		if bio is None:
+			self.member_bio = ""
 		self.member_img_url = imgLink
-		self.member_desc = desc
+		self.member_bio = bio
 	
+	def add_genre(genre_id):
+		genre_to_add = getGenreObject(genre_id)
+		if genre_to_add not in self.member_fgenres:
+			print("genre: ",g," added")
+			self.floor_members.append(getMemberObject(member_id))
+			db.session.commit()
+		else:
+			print("genre: ", g, " already a favorite")
+		
 	def to_list(self):
 		mem_sc = member_Schema()
 		f_mem = mem_sc.dump(self)
@@ -167,7 +182,6 @@ class member(db.Model):
 	def __repr__(self):
 		return '<Member: f_name: %r, l_name: %r, username: %r >' %(self.member_FName, self.member_LName, self.username)
 
-
 class genre(db.Model):
 	genre_id = db.Column(db.Integer,primary_key=True)
 	genre_name = db.Column(db.String(120))
@@ -177,8 +191,6 @@ class genre(db.Model):
 
 	def __repr__(self):
 		return '<Genre: {id: %r, name: %r>' %(self.genre_id,self.genre_name)
-
-
 
 class message(db.Model):
     mess_id = db.Column(db.Integer, primary_key = True)
@@ -222,6 +234,10 @@ class theme(db.Model):
 ***********************************************START MARSHMALLOW SCHEMA*****************************************************************
 ****************************************************************************************************************************************
 ****************************************************************************************************************************************"""
+class genre_Schema(ma.Schema):
+	class Meta:
+		model = genre
+		
 class simple_floor_Schema(ma.Schema):
 	class Meta:
 		fields = ('floor_id','floor_name','floor_genre','creator_id')
@@ -232,8 +248,9 @@ class f_Schema(ma.ModelSchema):
 
 class member_Schema(ma.Schema):
 	class Meta:
-		fields = ('username','member_FName','member_LName','member_img_url','member_desc','member_fgenres','created_floors'
+		fields = ('username','member_FName','member_LName','member_img_url','member_bio','member_fgenres','created_floors'
 			)
+	member_fgenres = f.Nested(genre_Schema,many=True)
 	created_floors = f.Nested(f_Schema,many=True, exclude=('floor_members'))
 
 class message_Schema(ma.ModelSchema):
@@ -291,7 +308,7 @@ def memberExists(mem_id):
 # ******************************************************************************************************
 def registerMember(fname,lname,email,imgLink):
 	if not memberExists_by_email(email):
-		#fname,lname,email,imgLink,desc, genres
+		#fname,lname,email,imgLink,bio, genres
 		generated_usrnm = email.split("@")[0]
 		new_member = member(generated_usrnm,fname,lname,email,imgLink,None)
 		db.session.add(new_member)
@@ -323,7 +340,7 @@ def floor_name_taken(name):
 		return True
 	return False
 
-#  username','member_FName','member_LName','member_img_url','member_desc','member_','created_floors'
+#  username','member_FName','member_LName','member_img_url','member_bio','member_','created_floors'
 def update_prof(**kwargs):
 	if kwargs is not None and 'member_id' in kwargs:
 		me = getMemberObject(kwargs['member_id'])
@@ -335,10 +352,12 @@ def update_prof(**kwargs):
 			if key == 'l_name':
 				me.member_LName = value
 			if key == 'bio':
-				me.member_desc = value
+				me.member_bio = value
 			if key == 'genres':
 				for g in value:
+					#g should be the id of the genre 
 					me.add_genre(g)
+		return getMemberObject(kwargs['member_id']).to_list()
 
 	return None
 # ******************************************************************************************************

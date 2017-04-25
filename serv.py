@@ -13,14 +13,14 @@ from song_update_service import *
 
 import events, log
 
+from schema import *
+
 public_room = 912837
 app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL','postgresql://jcrzr:anchor99@localhost/postgres')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= 0
 
-from schema import *
 db.init_app(app)
-
 socket = flask_socketio.SocketIO(app)
 # default route
 thread_holder = SongThreadHolder(socket)
@@ -30,9 +30,9 @@ def start():
 	return flask.render_template('index.html')
 
 
-@socket.on(events.CONNECT)
-def on_connect():
-	log.sock(events.CONNECT)
+# @socket.on(events.CONNECT)
+# def on_connect():
+# 	log.sock(events.CONNECT)
 
 # adds a client to the public room
 
@@ -128,6 +128,7 @@ def on_new_message(data):
 
 	add_message(floor_id, member_id, text)
 	log.emit(events.MESSAGE_LIST_UPDATE)
+	print("floor messages", getFloorMessages(floor_id))
 	socket.emit(events.MESSAGE_LIST_UPDATE, {
 				'floor_messages': getFloorMessages(floor_id)}, room=floor_id)
 
@@ -196,9 +197,9 @@ def on_join_floor(data):
 		floor_to_join = getFloor(floor_id)
 		floor_list = floor_to_join.to_list()
 		socket.emit('floor joined', {'floor':floor_list}, room=request.sid)
-		print("floor",json.dumps(floor_list,indent=4))
-		print("***memlist update***")
-		print(floor_to_join.to_list()['floor_members'])
+		# print("floor",json.dumps(floor_list[0:4],indent=4))
+		# print("***memlist update***")
+		# print(floor_to_join.to_list()['floor_members'])
 		socket.emit('member list update', {'floor members': floor_list['floor_members']},room=floor_to_join.floor_id)
 
 	else:
@@ -236,18 +237,17 @@ def userEmit(member):
 @socket.on('get floor profiles')
 def get_floor_profiles(data):
 	floor = data['floor_id']
+	
 @socket.on('update profile')
 def update_profile(data):
-	return None
+	print(data)
+	me = update_profile(data)
+	socket.emit(events.PROFILE_UPDATE,me)
 
 #This event is for the privacy policy page
 @app.route('/privacy')
 def privacy():
 	return flask.render_template('privacy.html')
-
-# def get_dt_ms():
-# 	epoch = datetime.datetime.utcfromtimestamp(0)
-#     return (dt - epoch).total_seconds() * 1000.0
 
 if __name__ == '__main__':
 	socket.run(

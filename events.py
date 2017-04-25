@@ -51,5 +51,9 @@ JOIN_FLOOR = "join floor";
 LEAVE_FLOOR = "leave floor";
 
 # When the server acknowledges that the client has joined the floor
-# This event also contains the entire floor object according to Ryan
+# This event also contains the entire floor object period.
 FLOOR_JOINED = "floor joined";
+
+#When profile has been updated it will emit this message 
+#The event contains the member object with updates
+PROFILE_UPDATE = "profile updated"

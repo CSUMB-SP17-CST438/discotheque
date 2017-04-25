@@ -17,8 +17,9 @@ import json
 import threading
 import discoSounds as ds
 import time
-import math 
+import math
 from queue import PriorityQueue
+
 
 class SongQueue(PriorityQueue):
 	def __init__(self,maxsize):
@@ -90,6 +91,7 @@ class songUpdateThread(threading.Thread):
 		self.stopper = threading.Event()
 		self.socket = socket
 		self.songQ = SongQueue(maxsize=0)
+		
 
 	def run(self):
 		print("Starting thread..")
@@ -121,10 +123,9 @@ class songUpdateThread(threading.Thread):
 					# self.sleep_duration += math.floor((_song['duration']/1000.00))
 					self.songQ.update_pos(1,(1,current_song))
 					# print("*****queue init emit****")
-					sl = self.songQ.to_list()
-					self.songlist = sl
+					self.songlist = self.songQ.to_list()
 					# self.socket.emit(self.SLU_TAG,sl,room=self.floor_id)
-					# print(json.dumps(sl,indent=4))
+					print(json.dumps(self.songlist,indent=4))
 					# print("removing top two songs")
 					_,s = self.songQ.get()
 					self.songQ.add_to_end(s)
@@ -134,7 +135,7 @@ class songUpdateThread(threading.Thread):
 					# print(s)
 					position +=1
 				else:
-					time.sleep(self.sleep_duration-5)
+					time.sleep(self.sleep_duration-3)
 					#gets song at index 0
 					_song = self.songQ.peek()
 					#sets sleep duration to be the length of the song at index 0
@@ -149,12 +150,12 @@ class songUpdateThread(threading.Thread):
 					print("emit time:",self.start_time)
 					print("song",json.dumps(self.songQ.peek(),indent=4))
 					print("*****updated list*****")
-					sl = self.songQ.to_list()
-					self.songlist = sl
-					print(json.dumps(sl[0:4],indent=4))
-					self.socket.emit(self.SLU_TAG,sl,room=self.floor_id)
-					self.songQ.get()
-		
+					self.songlist = self.songQ.to_list()
+					print(json.dumps(self.songlist[0:4],indent=4))
+					self.socket.emit(self.SLU_TAG,self.songlist,room=self.floor_id)
+					_,s = self.songQ.get()
+					self.songQ.add_to_end(s)
+					
 	def print_queue(self):
 		print(json.dumps(list(self.songQ.queue),indent=4))
 
@@ -185,10 +186,13 @@ class SongThreadHolder:
 
 	def find_thread(self,floor_id):
 		print("print inside find thread")
+		print("key to search for:",floor_id)
 		for t in self.threads:
+			ids = t.floor_id
+			print("searching is",ids)
 			if t.floor_id == floor_id:
+				print("thread found")
 				return t
-		return None
 
 	def update_thread_status(self,floor_id,FLAG):
 		if FLAG == False:
@@ -200,23 +204,3 @@ class SongThreadHolder:
 			print(floor_id, " thread still active..")
 
 	
-		
-
-
-	
-
-
-# class songlist(object):
-# 	def __init__(self,songlist,start_time):
-# 		self.songlist = songlist
-# 		self.start_time = start_time
-
-# 	def get_emit_time(self, track_id):
-# 		for t in songlist:
-# 			if t['id'] == track_id:
-# 				emit_time = self.start_time + t['duration']
-# 				self.start_time =  emit_time
-# 		return emit_time
-
-# def create_thread(songlist,sleep_time):
-# 	
