@@ -183,8 +183,10 @@ public class UserFragment extends FloorFragment
 		{
 			//TODO set profile picture
 			Picasso.with(mContext)
-					.load(users.get(i)
-							.getPhoto())
+					.load(users.get(i).getPhoto())
+					.resize(200, 200)
+					.centerInside()
+					.transform(new CircleTransform())
 					.into(userViewHolder.userPhoto);
 
 			userViewHolder.username.setText(users.get(i)

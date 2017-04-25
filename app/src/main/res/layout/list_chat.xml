@@ -44,29 +44,40 @@
                 android:textColor="#CECBCB"
                 android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/chat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="11dp"
-                android:layout_marginStart="11dp"
-                android:layout_toEndOf="@+id/chatPhoto"
-                android:layout_toRightOf="@+id/chatPhoto"
-                android:text="Dear Mama"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/sender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/chat"
                 android:layout_alignParentTop="true"
-                android:layout_alignStart="@+id/chat"
+
+
                 android:text="BY TUPAC"
                 android:textColor="#CECBCB"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+
+                android:layout_alignBottom="@+id/pubTime"
+                android:layout_toRightOf="@+id/chatPhoto"
+                android:layout_marginLeft="8dp"
+                />
+
+
+            <TextView
+                android:id="@+id/chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:text="Dear Mama"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:layout_below="@+id/sender"
+                android:layout_toLeftOf="@+id/pubTime"
+                android:layout_toRightOf="@+id/chatPhoto"
+                android:layout_toEndOf="@+id/chatPhoto"
+                android:layout_marginLeft="8dp"
+
+                />
+
 
         </RelativeLayout>
 

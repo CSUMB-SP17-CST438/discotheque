@@ -164,10 +164,11 @@ public class ChatFragment extends FloorFragment implements View.OnClickListener
 			// chatViewHolder.time.setText(userChatList.get(i).getPub_time());
 			//if (!userChatList.get(i).getPhoto().equals("null"))
 			// {
-			Picasso.with(mContext)
+			Picasso.with(mContext) //TODO check resize
 				   .load(messages.get(i)
 								 .getAuthor()
 								 .getPhoto())
+					.transform(new CircleTransform())
 				   .into(chatViewHolder.image);
 			//}
 			//else
