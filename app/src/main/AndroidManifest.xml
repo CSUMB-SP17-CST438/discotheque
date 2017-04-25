@@ -50,6 +50,11 @@
             android:label="@string/title_activity_floor"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
+        <activity android:name=".CreateFloorActivity"
+            android:label="Create Floor"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>
