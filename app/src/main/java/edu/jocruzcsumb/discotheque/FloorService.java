@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
+import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 /**
@@ -286,6 +287,15 @@ public class FloorService extends IntentService
 
 	private void registerSocketEvents()
 	{
+		// on reconnect, reregister events
+		Sockets.getSocket().on(Socket.EVENT_CONNECT, new Emitter.Listener()
+		{
+			@Override
+			public void call(Object... args)
+			{
+				registerSocketEvents();
+			}
+		});
 		// List Events
 		Sockets.getSocket()
 			   .on(EVENT_SONG_LIST_UPDATE, new Emitter.Listener()

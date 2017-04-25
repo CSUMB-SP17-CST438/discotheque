@@ -127,7 +127,9 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
                     Log.d(TAG, String.valueOf(floorId));
                     Intent k = new Intent(CreateFloorActivity.this, FloorActivity.class);
                     k.putExtra(Floor.TAG, floorId);
+					k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(k);
+					finish();
                     //getDialog().dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
