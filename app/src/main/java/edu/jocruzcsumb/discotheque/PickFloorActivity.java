@@ -135,6 +135,7 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 
 	private void updateListUI()
 	{
+		Log.v(TAG, "updateListUI");
 		floorAdapter = new FloorAdapter(PickFloorActivity.this, floorList, new RecyclerViewListener()
 		{
 			@Override
