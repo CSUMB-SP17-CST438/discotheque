@@ -42,6 +42,8 @@ public class FloorActivity extends AppCompatActivity
     public Floor floor = null;
     private ImageView albumCoverView;
     private TextView songInfoView;
+    private ImageView backgroundView = null;
+
 
 	// For the tabs
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -59,7 +61,7 @@ public class FloorActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_floor);
-
+        setTitle(" ");
         // This tells the activity what LocalBroadcast Events to listen for
         IntentFilter f = new IntentFilter();
         f.addAction(EVENT_FLOOR_JOINED);
@@ -84,6 +86,12 @@ public class FloorActivity extends AppCompatActivity
                     public void run()
                     {
                         findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                        setTitle(FloorActivity.this.floor.getName());
+
+                        //setting background by according to genre
+                        backgroundView.setImageResource(genreTypes(FloorActivity.this.floor.getGenre())); //use this to let users background image later
+
+
                     }
                 });
 
@@ -148,7 +156,27 @@ public class FloorActivity extends AppCompatActivity
 
         albumCoverView = (ImageView) findViewById(R.id.song_artwork);
         songInfoView = (TextView) findViewById(R.id.song_title_text);
+        backgroundView = (ImageView) findViewById(R.id.floor_background_picture);
 
+
+        //setting background by according to genre
+        //backgroundView.setImageResource(genreTypes(floor.getGenre())); //use this to let users background image
+
+
+
+
+    }
+
+    private int genreTypes(String genre){
+        switch(genre){
+            case "reggae":
+                return R.drawable.red_cardcover_temp;
+            case "soft rock":
+                return R.drawable.teal_cardcover_temp;
+            default:
+                return R.drawable.yellow_cardcover_temp;
+
+        }
     }
 
     private void setCurrentSong(Song s)

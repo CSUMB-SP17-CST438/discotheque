@@ -35,6 +35,12 @@
             <!--android:layout_height="wrap_content"-->
             <!--android:layout_gravity="right"-->
             <!--android:text="@string/action_signout"/>-->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/fragment_container2">
+
+            </FrameLayout>
 
 
             <TextView
@@ -58,6 +64,7 @@
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab2"
+                android:tint="#000000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -68,7 +75,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
                 android:clickable="true"
-                app:elevation="3dp"
+                app:elevation="5dp"
                 app:layout_anchorGravity="bottom|end"
                 app:srcCompat="@android:drawable/ic_input_add"/>
 

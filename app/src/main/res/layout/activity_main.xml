@@ -31,7 +31,7 @@
         android:id="@+id/splash_spacer1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.4"
+        android:layout_weight="0.2"
         android:orientation="vertical"/>
 
     <ImageView
@@ -80,6 +80,13 @@
 
         />
 
+    <Space
+        android:id="@+id/splash_spacer4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:orientation="vertical"/>
+
     <!-- google signin -->
     <Button
         android:id="@+id/google_login_btn"
@@ -87,8 +94,11 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:background="@color/colorPrimary"
-        android:text="@string/common_signin_button_text_long"/>
+        android:background="@drawable/button_bg_stroke"
+        android:text="@string/common_signin_button_text_long"
+        android:layout_marginBottom="4dp"
+
+        />
 
     <FrameLayout
         android:id="@+id/fragment_container"

@@ -16,46 +16,56 @@
 		android:paddingTop="@dimen/appbar_padding_top"
 		android:theme="@style/AppTheme.AppBarOverlay">
 
-		<android.support.v7.widget.Toolbar
-			android:id="@+id/toolbar"
-			android:layout_width="match_parent"
-			android:layout_height="?attr/actionBarSize"
-			android:background="?attr/colorPrimary"
-			app:layout_scrollFlags="enterAlways"
-			app:popupTheme="@style/AppTheme.PopupOverlay">
-
-		</android.support.v7.widget.Toolbar>
-
 		<RelativeLayout
 			xmlns:android="http://schemas.android.com/apk/res/android"
 			android:layout_width="match_parent"
-			android:layout_height="50dp">
+			android:layout_height="149dp"
+			>
+
+
+			<ImageView
+				android:id="@+id/floor_background_picture"
+				android:layout_width="match_parent"
+				android:layout_height="81dp"
+				android:layout_alignParentBottom="true"
+				android:layout_alignParentTop="true"
+				android:scaleType="centerCrop"
+				app:srcCompat="@drawable/yellow_cardcover_temp" />
+
+			<android.support.v7.widget.Toolbar
+				android:id="@+id/toolbar"
+				android:layout_width="match_parent"
+				android:layout_height="?attr/actionBarSize"
+				app:layout_scrollFlags="enterAlways"
+				app:popupTheme="@style/AppTheme.PopupOverlay">
+
+			</android.support.v7.widget.Toolbar>
 
 			<TextView
 				android:id="@+id/song_title_text"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_alignParentTop="true"
+				android:layout_above="@+id/song_progress_bar"
 				android:layout_alignParentRight="true"
 				android:layout_toRightOf="@+id/song_artwork"
-				android:layout_above="@+id/song_progress_bar"
 				android:ellipsize="marquee"
 				android:fadingEdge="horizontal"
 				android:marqueeRepeatLimit="marquee_forever"
 				android:scrollHorizontally="true"
 				android:textAppearance="?android:attr/textAppearanceLarge"
 				android:textColor="#fff"
-				android:textStyle="bold"/>
+				android:textSize="14sp"
+				android:textStyle="bold" />
 
 			<ImageView
 				android:id="@+id/song_artwork"
 				android:layout_width="wrap_content"
 				android:layout_height="match_parent"
 				android:layout_alignParentLeft="true"
-				android:layout_centerVertical="true"
 				android:layout_marginLeft="8dp"
 				android:layout_above="@+id/song_progress_bar"
-				android:src="@drawable/ic_launcher"/>
+				android:src="@drawable/ic_launcher"
+				android:layout_alignTop="@+id/song_title_text" />
 
 			<SeekBar
 				android:enabled="false"
@@ -78,6 +88,12 @@
 	</android.support.design.widget.AppBarLayout>
 
 
+	<android.support.v4.view.ViewPager
+		android:id="@+id/container"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
 	<RelativeLayout
 		android:id="@+id/loadingPanel"
 		android:layout_width="match_parent"
@@ -88,14 +104,8 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_alignParentTop="true"
-			android:indeterminate="true"/>
+			android:indeterminate="true" />
 	</RelativeLayout>
-
-	<android.support.v4.view.ViewPager
-		android:id="@+id/container"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 
 </android.support.design.widget.CoordinatorLayout>

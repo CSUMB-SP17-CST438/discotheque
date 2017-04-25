@@ -1,55 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:padding="3dp"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="3dp"
     >
 
     <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/cv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/selector_row"
+        card_view:cardCornerRadius="4dp"
         card_view:cardElevation="2dp"
 
         >
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="156dp"
             android:padding="16dp"
 
             >
-
-            <ImageView
-                android:id="@+id/photo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="16dp"
-                android:src="@drawable/ic_launcher"
-                />
 
             <TextView
                 android:id="@+id/song"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/photo"
+
                 android:text="Dear Mama"
-                android:textSize="20sp"
-                />
+                android:textColor="#D5D5D5"
+                android:textSize="24sp"
+                android:layout_toLeftOf="@+id/photo"
+                android:layout_toStartOf="@+id/photo" />
 
             <TextView
                 android:id="@+id/artist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/song"
-                android:layout_toRightOf="@+id/photo"
-                android:text="BY TUPAC"
-                />
+                android:layout_alignParentBottom="@+id/song"
+
+                android:text="Tupac"
+                android:textColor="#A8A8A8"
+                android:textSize="16sp"
+                android:layout_toLeftOf="@+id/photo"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+
+            <ImageView
+                android:id="@+id/photo"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/all_logo" />
+
 
         </RelativeLayout>
 

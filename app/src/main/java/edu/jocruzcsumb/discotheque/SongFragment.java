@@ -2,8 +2,12 @@ package edu.jocruzcsumb.discotheque;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -79,7 +83,32 @@ public class SongFragment extends FloorFragment
 			public void onItemClick(View v, int position)
 			{
 				Song song = songs.get(position);
+				Log.d(TAG, "song was regular clicked");
 				//TODO: Broadcast song picked.
+			}
+
+			@Override
+			public void onLongItemClick(View v, int position){
+				Log.d(TAG, "song was long clicked");
+				final Song song = songs.get(position);
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				builder.setMessage(R.string.confirm_leave_app)
+						.setCancelable(false)
+						.setPositiveButton(R.string.action_yes, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								Uri uri = Uri.parse(song.getTrack_permalink()); // missing 'http://' will cause crashed
+								Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+								startActivity(intent);
+
+							}
+						})
+						.setNegativeButton(R.string.action_no, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.cancel();
+							}
+						});
+				AlertDialog alert = builder.create();
+				alert.show();
 			}
 		});
 
@@ -144,6 +173,14 @@ public class SongFragment extends FloorFragment
 				public void onClick(View v)
 				{
 					listener.onItemClick(v, svh.getAdapterPosition());
+				}
+			});
+
+			v.setOnLongClickListener(new View.OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					listener.onLongItemClick(v, svh.getAdapterPosition());
+					return true;
 				}
 			});
 
