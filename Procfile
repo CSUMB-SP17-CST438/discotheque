@@ -1,1 +1,1 @@
-web: python3 serv.py
+web: python serv.py
