@@ -80,6 +80,9 @@
 				android:layout_alignParentLeft="true"
 				android:layout_alignParentRight="true"
 				android:layout_alignParentBottom="true"
+				android:progressTint="@color/colorAccent"
+				android:thumbTint="@color/colorPrimaryDark"
+				android:progress="@color/colorPrimary"
 
 				/>
 
