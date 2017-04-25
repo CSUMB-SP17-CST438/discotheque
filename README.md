@@ -8,7 +8,7 @@ _Who worked on what_
 
 * Joshua 'Ryan' Cruz: Flask and Database server.
 * Tommy Ha: User interface/experience; connecting services to interface.
-* Peter King: Logos, icons, design, styling and user-interface .
+* Peter King: Logos, icons, design, styling and user-interface.
 * Kara Spencer: User-interface, landing page.
 * Carsen Yates: Android backend services, seamless media playback and server/client logging.
 
