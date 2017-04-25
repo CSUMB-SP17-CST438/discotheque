@@ -56,6 +56,7 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
         cancelButton = (Button) findViewById(R.id.cancel_floor_button);
         editFloorName = (EditText) findViewById(R.id.edit_floor_name);
         splitSpinner = (Spinner) findViewById(R.id.splitSpinner);
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CreateFloorActivity.this, R.array.genre_array_list,
                 android.R.layout.simple_dropdown_item_1line);
         splitSpinner.setAdapter(adapter);
@@ -65,6 +66,7 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
         //getDialog().setTitle(DIALOG_TITLE);
         Sockets.getSocket().on(EVENT_ERROR_MESSAGE, this);
         Sockets.getSocket().on(EVENT_FLOOR_CREATE, this);
+
 
        // return rootView;
     }
@@ -89,7 +91,6 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
                 startActivity(intent);
                 break;
             case R.id.create_floor_button:
-                showLoader(true);
                 String floorname = editFloorName.getText().toString();
                 int position = splitSpinner.getSelectedItemPosition();
                 String selectedText = (String) splitSpinner.getSelectedItem();
@@ -98,17 +99,21 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
                 if (floorname.isEmpty()) {
                     Toast.makeText(CreateFloorActivity.this, "Please enter a floor name", Toast.LENGTH_SHORT).show();
                 }
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject.put(FLOOR_NAME, floorname);
-                    jsonObject.put(MEMBER_ID, LocalUser.getCurrentUser().getId());
-                    jsonObject.put(FLOOR_GENRE, selectedText);
-                    jsonObject.put(IS_PUBLIC, 1);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                else {
+                    showLoader(true);
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put(FLOOR_NAME, floorname);
+                        jsonObject.put(MEMBER_ID, LocalUser.getCurrentUser().getId());
+                        jsonObject.put(FLOOR_GENRE, selectedText);
+                        jsonObject.put(IS_PUBLIC, 1);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Sockets.getSocket().emit(EVENT_CREATE_FLOOR, jsonObject);
+                    //getDialog().hide();
                 }
-                Sockets.getSocket().emit(EVENT_CREATE_FLOOR, jsonObject);
-                //getDialog().hide();
+
                 break;
         }
     }
@@ -130,10 +135,12 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
         if (args[0] instanceof JSONObject) {
             JSONObject jsonObject = (JSONObject) args[0];
             if (jsonObject.has("message")) {
-                updateUI(0);
                 showLoader(false);
+                updateUI(0);
+
 
             } else {
+                showLoader(false);
                 updateUI(1);
                 try {
                     int floorId = Floor.parse(jsonObject).getId();

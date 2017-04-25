@@ -11,12 +11,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import io.socket.emitter.Emitter;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
 
 /**
  * Created by Admin on 4/18/2017.
  */
 
-public class UpdateProfileActivity extends AppCompatActivity implements View.OnClickListener, Emitter.Listener {
+public class UpdateProfileActivity extends AppCompatActivity implements View.OnClickListener, Emitter.Listener, AdapterView.OnItemSelectedListener {
 
     private static final String TAG = "UpdateProfileActivity";
     public static final String EVENT_UPDATE_PROFILE = "update profile";
@@ -26,7 +31,6 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
 
     private EditText editBio;
     private Button saveButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,10 +71,37 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
 //        }
 
 
+        setContentView(R.layout.activity_create_floor);
+        Spinner spinner1 = (Spinner) findViewById(R.id.profileGenre);
+        Spinner spinner2 = (Spinner) findViewById(R.id.profileGenre2);
+        Spinner spinner3 = (Spinner) findViewById(R.id.profileGenre3);
 
+        spinner1.setOnItemSelectedListener(this);
+        spinner2.setOnItemSelectedListener(this);
+        spinner3.setOnItemSelectedListener(this);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.profileGenre, android.R.layout.simple_spinner_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner1.setAdapter(adapter);
+        spinner2.setAdapter(adapter);
+        spinner3.setAdapter(adapter);
 
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        parent.getItemAtPosition(pos);
+
+        //do something with the selected genre
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+            //Don't think we need to mess with this?
     }
 
 

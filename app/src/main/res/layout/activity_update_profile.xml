@@ -2,8 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
-              android:weightSum="1">
+              android:weightSum="1"
+              tools:context="edu.jocruzcsumb.discotheque.UpdateProfileActivity">
 
     <EditText
         android:id="@+id/updateBio"
@@ -13,7 +15,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.25"
         android:inputType="textMultiLine"/>
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,6 +27,33 @@
     <!--android:layout_width="wrap_content"-->
     <!--android:layout_height="wrap_content"-->
     <!--android:id="@+id/"/>-->
+        <TextView
+            android:id="@+id/textViewSpin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Pick favorite genres: "/>
+
+        <Spinner
+            android:id="@+id/profileGenre"
+            android:layout_below="@+id/textViewSpin"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05"
+            android:spinnerMode="dropdown"/>
+        <Spinner
+            android:id="@+id/profileGenre2"
+            android:layout_below="@+id/profileGenre"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05"
+            android:spinnerMode="dropdown"/>
+        <Spinner
+            android:id="@+id/profileGenre3"
+            android:layout_below="@+id/profileGenre2"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05"
+            android:spinnerMode="dropdown"/>
 
 
 </LinearLayout>
