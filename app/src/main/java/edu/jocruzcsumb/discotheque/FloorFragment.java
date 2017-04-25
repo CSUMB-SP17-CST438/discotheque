@@ -4,14 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.ArrayList;
 
@@ -25,9 +22,25 @@ public abstract class FloorFragment extends Fragment
 {
 	private static final String TAG = "FloorFragment";
 	protected static Floor floor = null;
-	private final FloorListener listener;
+	private FloorListener listener;
 
-	public FloorFragment(String tag)
+	public void hideKeyboard()
+	{
+		Activity a = getActivity();
+		if (a == null)
+		{
+			Log.d(TAG, "getActivity returned null");
+			return;
+		}
+		View view = a.getCurrentFocus();
+		if (view != null)
+		{
+			InputMethodManager imm = (InputMethodManager) a.getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+		}
+	}
+
+	public void start(String tag)
 	{
 		listener = new FloorListener(getFilter(), getContext(), tag)
 		{
@@ -76,6 +89,7 @@ public abstract class FloorFragment extends Fragment
 				FloorFragment.this.onMessageAdded(m);
 			}
 		};
+		hideKeyboard();
 	}
 
 	protected IntentFilter getFilter()
@@ -111,12 +125,12 @@ public abstract class FloorFragment extends Fragment
 
 	protected boolean findFloor(Activity a)
 	{
-		return findFloor((FloorActivity)a);
+		return findFloor((FloorActivity) a);
 	}
 
 	protected boolean findFloor(FloorActivity a)
 	{
-		if(a == null)
+		if (a == null)
 		{
 			Log.e(TAG, "Cant find floor, FloorActivity was null");
 			fail();

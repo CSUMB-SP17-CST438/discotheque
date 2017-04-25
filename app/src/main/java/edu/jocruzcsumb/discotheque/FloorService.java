@@ -242,6 +242,7 @@ public class FloorService extends IntentService
 			e.printStackTrace();
 			Log.w(TAG, "The floorLatch was interruped, leaving the floor");
 		}
+		Log.i(TAG, "Leaving the floor...");
 		seamlessMediaPlayer.stop();
 
 		//Stop receiving events.
@@ -262,6 +263,7 @@ public class FloorService extends IntentService
 			e.printStackTrace();
 			Log.e(TAG, "could not create json to leave floor");
 		}
+		Log.i(TAG, "Exiting FloorService");
 	}
 
 	private void unregisterSocketEvents()
@@ -324,6 +326,7 @@ public class FloorService extends IntentService
 					   // Set songs
 					   FloorService.this.floor.setSongs(l);
 
+					   Log.d(TAG, "TESTING 123");
 					   // Broadcast the event (so that FloorActivity can update)
 					   broadcast(EVENT_SONG_LIST_UPDATE, l);
 				   }
