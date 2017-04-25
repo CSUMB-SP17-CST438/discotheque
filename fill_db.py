@@ -29,7 +29,7 @@ def fillDB():
 	db.session.commit()
 
 	room2.add_member(member.member_id)
-	s.update_prof(**{'member_id':member.member_id,'bio':"My favoreite music is music that bangs! I like tons of genres from hard rock to indie"})
+	s.update_profile(**{'member_id':member.member_id,'bio':"My favoreite music is music that bangs! I like tons of genres from hard rock to indie"})
 	db.session.add(room2)
 	db.session.add(room3)
 	db.session.commit()
