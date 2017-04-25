@@ -145,7 +145,7 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 		else //not start
 		{
 			Log.d(TAG, "NOT START");
-			if (cur == s[next])
+			if (cur.equals(s[next]))
 			{
 				Log.d(TAG, "SCHEDULE NEXT SONG");
 				// time to schedule the next song

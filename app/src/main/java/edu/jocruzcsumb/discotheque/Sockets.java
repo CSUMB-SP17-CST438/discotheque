@@ -19,7 +19,7 @@ public class Sockets
 {
     private static final String TAG = "DTK Socket";
     // TODO: Set to 0 for live server
-    private static final int SELECTED_SERVER = 0;
+    private static final int SELECTED_SERVER = 3;
     // Append to this list if you want to run a different server :D
     private static final String[] SERVERS = {
             "https://disco-theque.herokuapp.com",
@@ -34,29 +34,61 @@ public class Sockets
         return SERVERS[SELECTED_SERVER];
     }
 
+    public static boolean socketlock = false;
     public static Socket getSocket()
     {
-        if (socket != null)
+		while (socketlock) try
+		{
+			Thread.sleep(1);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		socketlock = true;
+		if (socket != null)
         {
             if (!socket.connected())
             {
-                Log.w(TAG, "the main socket was disconnected, getting a new socket");
-                socket.close();
-                socket = null;
-                return getSocket();
+                Log.wtf(TAG, "the main socket was disconnected");
+				fail();
             }
+			socketlock = false;
             return socket;
         }
         try
         {
             socket = IO.socket(getServer());
-        }
+			socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener()
+			{
+				@Override
+				public void call(Object... args)
+				{
+					while (socketlock) try
+					{
+						Thread.sleep(1);
+					}
+					catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					}
+					if(!socket.connected())
+					{
+						socketlock = true;
+						socket.connect();
+						socketlock = false;
+					}
+				}
+			});
+		}
         catch (URISyntaxException e)
         {
+			socketlock = false;
             e.printStackTrace();
             fail("Invalid server address bro");
         }
         socket.connect();
+		socketlock = false;
         return socket;
     }
 

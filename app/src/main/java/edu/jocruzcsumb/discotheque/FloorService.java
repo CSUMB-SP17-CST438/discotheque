@@ -287,7 +287,8 @@ public class FloorService extends IntentService
 
 	private void registerSocketEvents()
 	{
-		Sockets.getSocket().on(Socket.EVENT_DISCONNECT, new Emitter.Listener()
+		// on reconnect, reregister events
+		Sockets.getSocket().on(Socket.EVENT_CONNECT, new Emitter.Listener()
 		{
 			@Override
 			public void call(Object... args)

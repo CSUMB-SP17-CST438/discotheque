@@ -207,4 +207,29 @@ public class Song implements Comparable<Song>, Parcelable
 	{
 		return startTime;
 	}
+
+	public void print()
+	{
+		//print current song
+		Log.i(TAG, "Title: " + getName());
+		Log.i(TAG, "Artist: " + getArtist());
+		Log.i(TAG, "Start time: " + getStartTime());
+		Log.i(TAG, "URL: " + getUrl());
+	}
+	public boolean equals(Object other)
+	{
+		if (other instanceof Song)
+		{
+			Song s = (Song) other;
+			Log.d(TAG, "Song to Song comparison");
+			print();
+			s.print();
+			return title.equals(s.title) && artist.equals(s.artist) && track_permalink.equals(s.track_permalink);
+		}
+		else
+		{
+			Log.d(TAG, "Song to Obj comparison");
+			return false;
+		}
+	}
 }
