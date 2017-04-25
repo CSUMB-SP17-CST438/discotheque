@@ -12,7 +12,6 @@ import time
 from song_update_service import *
 
 import events, log
-
 from schema import *
 
 public_room = 912837
@@ -128,7 +127,7 @@ def on_new_message(data):
 
 	add_message(floor_id, member_id, text)
 	log.emit(events.MESSAGE_LIST_UPDATE)
-	print("floor messages", getFloorMessages(floor_id))
+	# print("floor messages", getFloorMessages(floor_id))
 	socket.emit(events.MESSAGE_LIST_UPDATE, {
 				'floor_messages': getFloorMessages(floor_id)}, room=floor_id)
 
@@ -167,6 +166,8 @@ def on_create(data):
 		new_floor.set_songlist(thread_holder.find_thread(new_floor.floor_id).songlist)
 		updated_floor = getFloor(new_floor.floor_id)
 		socket.emit('floor created', {'floor':updated_floor.to_list()},room=new_floor.floor_id)
+		log.emit(events.FLOOR_LIST_UPDATE)
+		socket.emit(events.FLOOR_LIST_UPDATE, getPublicFloors())
 	else:
 		socket.emit('error',{'message':new_floor})
 
@@ -209,12 +210,12 @@ def on_join_floor(data):
 		floor_to_join = getFloor(floor_id)
 		print("****floor songlist***")
 		floor_list = floor_to_join.to_list()
-		print(json.dumps(floor_list['songlist'],indent=4))
+		# print(json.dumps(floor_list['songlist'][0:3],indent=4))
 		socket.emit('floor joined', {'floor':floor_to_join.to_list()}, room=request.sid)
-		print("***memlist update***")
-		print(floor_list['floor_members'])
+		# print("***memlist update***")
+		# print(floor_list['floor_members'])
 		socket.emit('member list update', {'floor members': floor_list['floor_members']},room=floor_to_join.floor_id)
-
+		
 @socket.on(events.LEAVE_FLOOR)
 def on_leave_floor(data):
 	log.sock(events.LEAVE_FLOOR)
@@ -225,6 +226,7 @@ def on_leave_floor(data):
 	# socket.emit('member left', {'floor':current_floor.to_list()}, room=data['floor_id'])
 	socket.emit('member list update', {'floor members': current_floor.to_list()['floor_members']},room=data['floor_id'])
 	if not current_floor.isActive():
+		current_floor.set_songlist(thread_holder.find_thread(current_floor.floor_id).songlist)
 		thread_holder.update_thread_status(current_floor.floor_id,current_floor.isActive())
 
 def userEmit(member):
