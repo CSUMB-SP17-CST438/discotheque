@@ -2,10 +2,12 @@ package edu.jocruzcsumb.discotheque;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -79,8 +81,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 							@Override
 							public void run()
 							{
-								Toast.makeText(MainActivity.this, R.string.error_no_connection_dtk, Toast.LENGTH_LONG).show();
-								finish();
+								// Use the Builder class for convenient dialog construction
+								AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+								builder.setTitle(R.string.app_name);
+								builder.setMessage(R.string.error_no_connection_dtk);
+								builder.setPositiveButton(R.string.action_close, new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int id) {
+										finish();
+									}
+								});
+								builder.setNegativeButton(R.string.action_retry, new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int id) {
+										recreate();
+
+									}
+								});
+
+								// Create the AlertDialog
+								builder.create();
 							}
 						});
 					}

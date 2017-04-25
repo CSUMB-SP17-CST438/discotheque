@@ -104,7 +104,7 @@ public class Sockets
 
     public static class SocketWaiter implements Emitter.Listener
     {
-        private static final long TIMEOUT = 20L;
+        private static final long TIMEOUT = 8L;
         private boolean success;
         private CountDownLatch socketLatch;
         private String signal, event;
