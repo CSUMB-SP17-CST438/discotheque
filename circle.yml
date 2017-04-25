@@ -2,7 +2,6 @@
 #   override:
 #     - python -m tests/unit_tests
 #     # - python -m tests/socket_tests
-
 deployment:
   staging:
     branch: server

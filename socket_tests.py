@@ -52,7 +52,7 @@ class SocketioTestCases(unittest.TestCase):
         client.emit('join floor',{'floor_id':1, 'member_id':new_mem.member_id})
         r = client.get_received()
         print("r:",json.dumps(r,indent=4))
-        time.sleep(60)
+        time.sleep(10)
         # song = r[0]['args'][0]['floor']['songlist'][0]['stream_url']
         print("***************leave floor*****************")
         client.emit('leave floor',{'floor_id':1,'member_id':new_mem.member_id})
