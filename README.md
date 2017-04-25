@@ -19,7 +19,7 @@ _Who worked on what_
   * Themes (a set of colors for a room, and possibly one background pic).
 
 ### Known Problems ###
-* Heroku disconnects clients all the time and they get disconnected c9.io is fine though.
+* Heroku disconnects clients all the time and they get disconnected from the floor, c9.io is fine though.
 
 ### Future Improvments ###
 * Add song jukebox system.
