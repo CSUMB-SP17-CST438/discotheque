@@ -85,12 +85,78 @@
 
     <!--Strings related to drop-down list in create floor activity -->
     <string-array name="genre_array_list">
-        <item>reggae</item>
-        <item>punk</item>
-        <item>soft rock</item>
-        <item>hip hop</item>
+        <item>Alternative</item>
+        <item>Ambient</item>
+        <item>Classical</item>
+        <item>Country</item>
+        <item>Dance</item>
+        <item>EDM</item>
+        <item>Dancehall</item>
+        <item>Deep House</item>
+        <item>Disco</item>
+        <item>Drum</item>
+        <item>Dubstep</item>
+        <item>Electronic</item>
+        <item>Folk</item>
+        <item>Hip Hop</item>
+        <item>Rap</item>
+        <item>House</item>
+        <item>Indie</item>
+        <item>Jazz</item>
+        <item>Latin</item>
+        <item>Metal</item>
+        <item>Piano</item>
+        <item>Pop</item>
+        <item>RB</item>
+        <item>Soul</item>
+        <item>Reggae</item>
+        <item>Reggaeton</item>
+        <item>Rock</item>
+        <item>Soundtrack</item>
+        <item>Techno</item>
+        <item>Trance</item>
+        <item>Trap</item>
+        <item>Triphop</item>
+        <item>World</item>
 
     </string-array>
     <string name="confirm_leave_app">You are being redirected to SoundCloud. Do you want to proceed?</string>
+
+    <string-array name="profileGenre">
+        <item>Alternative</item>
+        <item>Ambient</item>
+        <item>Classical</item>
+        <item>Country</item>
+        <item>Dance</item>
+        <item>EDM</item>
+        <item>Dancehall</item>
+        <item>Deep House</item>
+        <item>Disco</item>
+        <item>Drum</item>
+        <item>Dubstep</item>
+        <item>Electronic</item>
+        <item>Folk</item>
+        <item>Hip Hop</item>
+        <item>Rap</item>
+        <item>House</item>
+        <item>Indie</item>
+        <item>Jazz</item>
+        <item>Latin</item>
+        <item>Metal</item>
+        <item>Piano</item>
+        <item>Pop</item>
+        <item>RB</item>
+        <item>Soul</item>
+        <item>Reggae</item>
+        <item>Reggaeton</item>
+        <item>Rock</item>
+        <item>Soundtrack</item>
+        <item>Techno</item>
+        <item>Trance</item>
+        <item>Trap</item>
+        <item>Triphop</item>
+        <item>World</item>
+    </string-array>
+
 
 </resources>
