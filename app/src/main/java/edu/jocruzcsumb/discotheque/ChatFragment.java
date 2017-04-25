@@ -57,9 +57,11 @@ public class ChatFragment extends FloorFragment implements View.OnClickListener
 		LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
 		llm.setStackFromEnd(true); //scrolls to the bottom
 		recyclerView.setLayoutManager(llm);
+
 		if (findFloor())
 		{
 			updateListUI(floor.getMessages());
+
 		}
 		return rootView;
 	}
@@ -92,8 +94,11 @@ public class ChatFragment extends FloorFragment implements View.OnClickListener
 			public void run()
 			{
 				recyclerView.setAdapter(chatAdapter);
+
+
 			}
 		});
+
 	}
 
 	public void onClick(View v)

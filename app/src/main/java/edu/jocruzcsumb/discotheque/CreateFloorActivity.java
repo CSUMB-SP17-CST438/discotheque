@@ -46,7 +46,6 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
     private Button cancelButton;
     private Button createFloorButton;
     private Spinner splitSpinner;
-    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -70,6 +69,18 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
        // return rootView;
     }
 
+    public void showLoader(final boolean show)
+    {
+        CreateFloorActivity.this.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                findViewById(R.id.loadingPanel).setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
+    }
+
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cancel_floor_button:
@@ -78,6 +89,7 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
                 startActivity(intent);
                 break;
             case R.id.create_floor_button:
+                showLoader(true);
                 String floorname = editFloorName.getText().toString();
                 int position = splitSpinner.getSelectedItemPosition();
                 String selectedText = (String) splitSpinner.getSelectedItem();
@@ -119,6 +131,7 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
             JSONObject jsonObject = (JSONObject) args[0];
             if (jsonObject.has("message")) {
                 updateUI(0);
+                showLoader(false);
 
             } else {
                 updateUI(1);
@@ -128,6 +141,7 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
                     Intent k = new Intent(CreateFloorActivity.this, FloorActivity.class);
                     k.putExtra(Floor.TAG, floorId);
                     startActivity(k);
+                    //showLoader(false);
                     //getDialog().dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();

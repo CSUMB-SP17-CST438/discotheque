@@ -3,6 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:indeterminate="true" />
+    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -39,32 +51,32 @@
         android:layout_alignParentEnd="true">
     </Spinner>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="100dp"
-        android:layout_below="@+id/splitSpinner">
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@+id/splitSpinner"
+		android:orientation="vertical"
+		android:paddingTop="100dp">
 
 
-        <Button
-            android:id="@+id/create_floor_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/createFloorButton"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/colorPrimary"/>
+		<Button
+			android:id="@+id/create_floor_button"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_gravity="center_horizontal"
+			android:background="@color/colorPrimary"
+			android:text="@string/createFloorButton" />
 
-        <Button
-            android:id="@+id/cancel_floor_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/cancelbutton"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/colorPrimary"/>
-    </LinearLayout>
+		<Button
+			android:id="@+id/cancel_floor_button"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_gravity="center_horizontal"
+			android:background="@color/colorPrimary"
+			android:text="@string/cancelbutton" />
+	</LinearLayout>
 
 
 </RelativeLayout>

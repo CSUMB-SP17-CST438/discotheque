@@ -93,4 +93,6 @@
     </string-array>
     <string name="confirm_leave_app">You are being redirected to SoundCloud. Do you want to proceed?</string>
 
+    <!--Strings for update profile activity -->
+    <string name="save">Save</string>
 </resources>
