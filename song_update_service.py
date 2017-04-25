@@ -135,7 +135,7 @@ class songUpdateThread(threading.Thread):
 					# print(s)
 					position +=1
 				else:
-					time.sleep(self.sleep_duration-3)
+					time.sleep(self.sleep_duration-1)
 					#gets song at index 0
 					_song = self.songQ.peek()
 					#sets sleep duration to be the length of the song at index 0
@@ -199,7 +199,7 @@ class SongThreadHolder:
 			for t in self.threads:
 				if t.floor_id == floor_id:
 					t.stop()
-			print("killing thread...")
+			print("KILLING THREAD...")
 		else:
 			print(floor_id, " thread still active..")
 

@@ -238,11 +238,11 @@ def userEmit(member):
 def get_floor_profiles(data):
 	floor = data['floor_id']
 	
-@socket.on('update profile')
+@socket.on(events.PROFILE_UPDATE)
 def update_profile(data):
 	print(data)
 	me = update_profile(data)
-	socket.emit(events.PROFILE_UPDATE,me)
+	socket.emit(events.PROFILE_UPDATED,me)
 
 #This event is for the privacy policy page
 @app.route('/privacy')

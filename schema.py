@@ -341,7 +341,7 @@ def floor_name_taken(name):
 	return False
 
 #  username','member_FName','member_LName','member_img_url','member_bio','member_','created_floors'
-def update_prof(**kwargs):
+def update_profile(**kwargs):
 	if kwargs is not None and 'member_id' in kwargs:
 		me = getMemberObject(kwargs['member_id'])
 		for key, value in kwargs.items():

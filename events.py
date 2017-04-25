@@ -54,6 +54,9 @@ LEAVE_FLOOR = "leave floor";
 # This event also contains the entire floor object period.
 FLOOR_JOINED = "floor joined";
 
+#When client requests profile update
+PROFILE_UPDATE = "update profile"
+
 #When profile has been updated it will emit this message 
 #The event contains the member object with updates
-PROFILE_UPDATE = "profile updated"
+PROFILE_UPDATED = "profile updated"
