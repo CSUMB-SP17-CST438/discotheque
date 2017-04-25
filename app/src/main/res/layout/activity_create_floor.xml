@@ -9,7 +9,7 @@
         android:id="@+id/Cover_imageView"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -22,7 +22,7 @@
     <View
         android:id="@+id/bar"
         android:layout_width="fill_parent"
-        android:layout_height="20dp"
+        android:layout_height="30dp"
         android:layout_below="@+id/Cover_imageView"
         android:background="@color/colorPrimary" />
 
@@ -32,7 +32,7 @@
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="37dp"
         android:layout_marginStart="27dp"
         android:layout_marginLeft="27dp"
         android:layout_marginRight="27dp"
@@ -44,17 +44,16 @@
 
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:id="@+id/edit_floor_name"
         android:hint="@string/editFloor"
         android:paddingTop="16dp"
         android:paddingBottom="8dp"
-        android:layout_marginLeft="24dp"
+        android:layout_marginLeft="23dp"
         android:layout_marginStart="24dp"
         android:layout_above="@+id/genreIcon"
-        android:layout_toRightOf="@+id/flooricon"
-        android:layout_toEndOf="@+id/flooricon" />
+        android:layout_toRightOf="@+id/flooricon" />
 
 
     <ImageView
@@ -79,7 +78,7 @@
 
 
         android:textSize="18sp"
-        android:layout_alignTop="@+id/genreIcon"
+        android:layout_alignBottom="@+id/genreIcon"
         android:layout_alignLeft="@+id/edit_floor_name"
         android:layout_alignStart="@+id/edit_floor_name" />
 
@@ -89,7 +88,9 @@
         android:id="@+id/splitSpinner"
         android:hint="@string/genrename"
 
-        android:layout_alignTop="@+id/genre"
+        android:layout_above="@+id/linearLayout"
+        android:layout_marginLeft="2dp"
+        android:layout_alignBaseline="@+id/genre"
         android:layout_toRightOf="@+id/genre"
         android:layout_alignRight="@+id/edit_floor_name"
         android:layout_alignEnd="@+id/edit_floor_name">
@@ -99,22 +100,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="100dp"
-        android:layout_below="@+id/splitSpinner"
+        android:paddingTop="84dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/genreIcon"
+        android:id="@+id/linearLayout">
 
 
         <Button
             android:id="@+id/create_floor_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/createFloorButton"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
-            android:background="@color/colorPrimary"
             android:layout_marginBottom="4dp"
-            />
+            android:background="@color/colorPrimary"
+            android:text="@string/createFloorButton" />
 
         <Button
             android:id="@+id/cancel_floor_button"
