@@ -15,13 +15,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.25"
         android:inputType="textMultiLine"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/save_button"
-        android:text="@string/save"
-        android:clickable="true"
-        android:background="@color/colorPrimary" />
 
     <!--<EditText-->
     <!--android:layout_width="wrap_content"-->
@@ -54,6 +47,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.05"
             android:spinnerMode="dropdown"/>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/save_button"
+        android:text="@string/save"
+        android:clickable="true"
+        android:background="@color/colorPrimary" />
 
 
 </LinearLayout>

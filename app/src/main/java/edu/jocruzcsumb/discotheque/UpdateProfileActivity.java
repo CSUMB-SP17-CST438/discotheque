@@ -31,6 +31,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
 
     private EditText editBio;
     private Button saveButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +39,22 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
         editBio = (EditText) findViewById(R.id.updateBio);
         saveButton = (Button) findViewById(R.id.save_button);
         saveButton.setOnClickListener(this);
+        Spinner spinner1 = (Spinner) findViewById(R.id.profileGenre);
+        Spinner spinner2 = (Spinner) findViewById(R.id.profileGenre2);
+        Spinner spinner3 = (Spinner) findViewById(R.id.profileGenre3);
+
+        spinner1.setOnItemSelectedListener(this);
+        spinner2.setOnItemSelectedListener(this);
+        spinner3.setOnItemSelectedListener(this);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.profileGenre, android.R.layout.simple_spinner_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner1.setAdapter(adapter);
+        spinner2.setAdapter(adapter);
+        spinner3.setAdapter(adapter);
         Sockets.getSocket().on(EVENT_PROFILE_UPDATED, this);
     }
 
@@ -46,11 +63,10 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
         String bio = editBio.getText().toString();
         Log.d(TAG, bio);
         JSONObject jsonObject = new JSONObject();
-        try{
+        try {
             jsonObject.put(EVENT_PROFILE_ID, LocalUser.getCurrentUser().getId());
             //jsonObject.put(BIO_TAG, bio);
-        }
-        catch(JSONException e){
+        } catch (JSONException e) {
             e.getStackTrace();
         }
 
@@ -70,25 +86,6 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
 //            e.getStackTrace();
 //        }
 
-
-        setContentView(R.layout.activity_create_floor);
-        Spinner spinner1 = (Spinner) findViewById(R.id.profileGenre);
-        Spinner spinner2 = (Spinner) findViewById(R.id.profileGenre2);
-        Spinner spinner3 = (Spinner) findViewById(R.id.profileGenre3);
-
-        spinner1.setOnItemSelectedListener(this);
-        spinner2.setOnItemSelectedListener(this);
-        spinner3.setOnItemSelectedListener(this);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.profileGenre, android.R.layout.simple_spinner_item);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner1.setAdapter(adapter);
-        spinner2.setAdapter(adapter);
-        spinner3.setAdapter(adapter);
-
     }
 
     @Override
@@ -101,7 +98,8 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-            //Don't think we need to mess with this?
+        //Don't think we need to mess with this?
     }
+}
 
 

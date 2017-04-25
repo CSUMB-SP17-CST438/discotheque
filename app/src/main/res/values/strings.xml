@@ -122,10 +122,8 @@
     </string-array>
     <string name="confirm_leave_app">You are being redirected to SoundCloud. Do you want to proceed?</string>
 
-<<<<<<< HEAD
     <!--Strings for update profile activity -->
     <string name="save">Save</string>
-=======
     <string-array name="profileGenre">
         <item>Alternative</item>
         <item>Ambient</item>
@@ -235,5 +233,4 @@
     </string-array>
 
 
->>>>>>> e730559cbec369e7eda7eb350b37f17815042ee5
 </resources>
