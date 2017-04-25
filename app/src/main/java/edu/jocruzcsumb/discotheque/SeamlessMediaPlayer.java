@@ -115,11 +115,6 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 			{
 				Log.d(TAG, "seek to song");
 				m[current].seekTo(1000 * (int) ((System.currentTimeMillis() / 1000) - s[current].getStartTime()));
-				if (!startCurrent())
-				{
-					lock = false;
-					return;
-				}
 			}
 			else // NOT need seek
 			{
@@ -138,11 +133,11 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 					return;
 				}
 				//We waited, now start the song
-				if (!startCurrent())
-				{
-					lock = false;
-					return;
-				}
+			}
+			if (!startCurrent())
+			{
+				lock = false;
+				return;
 			}
 			s[next] = songs.get(1);
 			prepareNext();
@@ -155,11 +150,11 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 				Log.d(TAG, "SCHEDULE NEXT SONG");
 				// time to schedule the next song
 				swap();
+				s[current] = cur;
 				if(m[current] == null || m[current].isPlaying())
 				{
 					// We are interrupting the current song
 					Log.d(TAG, "INTERRUPT CURRENT SONG");
-					s[current] = cur;
 					prepareCurrent();
 				}
 				localtime = System.currentTimeMillis() / 1000;
