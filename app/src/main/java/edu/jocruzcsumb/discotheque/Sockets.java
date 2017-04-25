@@ -19,7 +19,7 @@ public class Sockets
 {
     private static final String TAG = "DTK Socket";
     // TODO: Set to 0 for live server
-    private static final int SELECTED_SERVER = 3;
+    private static final int SELECTED_SERVER = 1;
     // Append to this list if you want to run a different server :D
     private static final String[] SERVERS = {
             "https://disco-theque.herokuapp.com",
@@ -28,6 +28,16 @@ public class Sockets
 			"http://testing-jcrzry.c9users.io:8080",
     };
     private static Socket socket = null;
+
+	public static boolean waitForConnect()
+	{
+		Log.i(TAG, "Waiting for server to connect");
+		SocketWaiter w = new SocketWaiter(Socket.EVENT_CONNECT);
+		boolean b = w.waitForEvent();
+		if(b) Log.i(TAG, "Connected");
+		else Log.e(TAG, "Could not connect to server");
+		return b;
+	}
 
     public static String getServer()
     {
@@ -100,7 +110,15 @@ public class Sockets
         private String signal, event;
         private JSONObject json;
         private JSONArray jsonArray;
-        private boolean arrayMode;
+        private Mode mode;
+
+		private enum Mode
+		{
+			ARRAY,
+			OBJECT,
+			NONE
+		}
+
 
         //event = the event we wait for.
         public SocketWaiter(String event)
@@ -116,9 +134,26 @@ public class Sockets
             this.event = event;
         }
 
+		public boolean waitForEvent()
+		{
+			mode = Mode.NONE;
+            success = false;
+			socketLatch = new CountDownLatch(1);
+            getSocket().once(event, this);
+			try
+			{
+				socketLatch.await(TIMEOUT, TimeUnit.SECONDS);
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+			return  success;
+		}
+
         public JSONObject getObj(JSONObject params)
         {
-            arrayMode = false;
+			mode = Mode.OBJECT;
             json = null;
             socketLatch = new CountDownLatch(1);
             success = false;
@@ -162,7 +197,7 @@ public class Sockets
 
         public JSONArray getArray(JSONObject params)
         {
-            arrayMode = true;
+			mode = Mode.ARRAY;
             jsonArray = null;
             socketLatch = new CountDownLatch(1);
             success = false;
@@ -209,16 +244,17 @@ public class Sockets
         public void call(Object... args)
         {
             Log.d(TAG, "Received event: " + event);
+			switch (mode)
+			{
+				case ARRAY:
+					jsonArray = (JSONArray) args[0];
+					break;
+				case OBJECT:
+					json = (JSONObject) args[0];
+					break;
+				case NONE:
 
-            if (arrayMode)
-            {
-                jsonArray = (JSONArray) args[0];
-            }
-            else
-            {
-                json = (JSONObject) args[0];
-            }
-
+			}
             success = true;
             socketLatch.countDown();
         }

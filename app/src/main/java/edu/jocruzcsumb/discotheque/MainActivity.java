@@ -46,16 +46,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		if (!Sockets.getSocket()
-					.connected())
-		{
-			Toast.makeText(this, R.string.error_no_connection_dtk, Toast.LENGTH_LONG)
-				 .show();
-			Log.w(TAG, getString(R.string.error_no_connection_dtk));
-			finish();
-		}
 		setContentView(R.layout.activity_main);
-		findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+		showLoader(true);
 		//facebook login fragment code
 		FragmentManager fm = getFragmentManager();
 		Fragment fragment = fm.findFragmentById(R.id.fragment_container);
@@ -80,6 +72,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				public void run()
 				{
 					showLoader(true);
+					if(!Sockets.waitForConnect())
+					{
+						MainActivity.this.runOnUiThread(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								Toast.makeText(MainActivity.this, R.string.error_no_connection_dtk, Toast.LENGTH_LONG).show();
+								finish();
+							}
+						});
+					}
 					if (LocalUser.silentLogin(MainActivity.this, googleApiClient))
 					{
 						Intent k = new Intent(MainActivity.this, PickFloorActivity.class);
