@@ -9,4 +9,4 @@ flask-testing
 soundcloud
 facebook-sdk
 jsonpickle
-gevent==1.2a1
+eventlet==0.17.4
