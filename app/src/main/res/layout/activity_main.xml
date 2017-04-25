@@ -30,7 +30,7 @@
         android:id="@+id/splash_spacer1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.2"
+        android:layout_weight="0.25"
         android:orientation="vertical"/>
 
     <ImageView
@@ -78,7 +78,7 @@
         android:id="@+id/splash_spacer4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.1"
+        android:layout_weight="0.2"
         android:orientation="vertical"/>
 
     <!-- google signin -->
