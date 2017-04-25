@@ -152,7 +152,7 @@ class songUpdateThread(threading.Thread):
 					print("*****updated list*****")
 					self.songlist = self.songQ.to_list()
 					print(json.dumps(self.songlist[0:4],indent=4))
-					self.socket.emit(self.SLU_TAG,self.songlist,room=self.floor_id)
+					self.socket.emit(self.SLU_TAG,{'songlist':self.songlist},room=self.floor_id)
 					_,s = self.songQ.get()
 					self.songQ.add_to_end(s)
 					
