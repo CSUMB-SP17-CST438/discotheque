@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/floorname"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="53dp"
+        android:id="@+id/floorname"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_floor_name"
+        android:hint="@string/editFloor"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
+        android:layout_below="@+id/floorname"
+        android:layout_alignLeft="@+id/floorname"
+        android:layout_alignStart="@+id/floorname"
+        android:layout_marginTop="15dp" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/splitSpinner"
+        android:hint="@string/genrename"
+        android:layout_marginTop="69dp"
+        android:layout_below="@+id/edit_floor_name"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+    </Spinner>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="100dp"
+        android:layout_below="@+id/splitSpinner">
+
+
+        <Button
+            android:id="@+id/create_floor_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/createFloorButton"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/colorPrimary"/>
+
+        <Button
+            android:id="@+id/cancel_floor_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancelbutton"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/colorPrimary"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

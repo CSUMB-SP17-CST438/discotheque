@@ -73,4 +73,24 @@
 	<string name="action_no">No</string>
 	<string name="action_yes">Yes</string>
 
+
+    <!--Strings related to create floor activity  -->
+    <string name="floorname">Enter Floor</string>
+    <string name="editFloor">Enter floor name</string>
+    <string name="genrename">Enter Genre</string>
+    <string name="editGenre">Enter genre name</string>
+    <string name="cancelbutton">Cancel</string>
+    <string name="createFloorButton">Create Floor</string>
+
+
+    <!--Strings related to drop-down list in create floor activity -->
+    <string-array name="genre_array_list">
+        <item>reggae</item>
+        <item>punk</item>
+        <item>soft rock</item>
+        <item>hip hop</item>
+
+    </string-array>
+    <string name="confirm_leave_app">You are being redirected to SoundCloud. Do you want to proceed?</string>
+
 </resources>

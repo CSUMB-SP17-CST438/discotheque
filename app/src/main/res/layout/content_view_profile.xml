@@ -7,7 +7,10 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="edu.jocruzcsumb.discotheque.ViewProfileActivity"
-    tools:showIn="@layout/activity_view_profile">
+    tools:showIn="@layout/activity_view_profile"
+    android:elevation="2dp"
+
+    >
 
 
     <LinearLayout
@@ -25,7 +28,6 @@
             android:layout_marginBottom="3dp"
             android:layout_marginTop="3dp"
             android:clickable="true"
-            android:elevation="4dp"
             android:padding="20dp"
             android:text="Bio"/>
 
@@ -35,9 +37,18 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:clickable="true"
-            android:elevation="4dp"
             android:padding="20dp"
             android:text="genres"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/fab_margin"
+            app:layout_anchor="@id/genres"
+            app:layout_anchorGravity="bottom|right|end"
+            android:src="@drawable/ic_mode_edit_black_24dp"
+            />
 
 
 
