@@ -67,16 +67,12 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 
 	private void checkSongs()
 	{
+		Log.d(TAG, "CHECK SONGS");
 		if (lock)
 		{
 			Log.w(TAG, "couldnt checkSongs because lock");
 			return;
 		}
-		lock = true;
-		Song cur = songs.get(0);
-		boolean start = s[current] == null;
-		long localtime = System.currentTimeMillis() / 1000;
-		boolean needSeek = localtime > cur.getStartTime();
 
 		// Check to see that there are songs in the list
 		if (songs.size() <= 0)
@@ -86,6 +82,11 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 			return;
 		}
 
+		Song cur = songs.get(0);
+		boolean start = s[current] == null;
+		long localtime = System.currentTimeMillis() / 1000;
+		boolean needSeek = localtime > cur.getStartTime();
+
 		// Check to see that the start time is valid
 		if (cur.getStartTime() == 0)
 		{
@@ -94,17 +95,78 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 			return;
 		}
 
-		if (!start && cur == s[next])
-		{// The service has told us that the next song is about to play.
-			swap();
-			if (cur.getStartTime() > localtime)
+		if (start)
+		{
+			// There is no song currently playing
+			// Here we start playing the very first song
+			s[current] = songs.get(0);
+			prepareCurrent();
+			localtime = System.currentTimeMillis() / 1000;
+
+			Log.d(TAG, "CURRENT TIME: " + String.valueOf(localtime));
+			Log.d(TAG, "SONG START TIME: " + String.valueOf(s[current].getStartTime()));
+
+			needSeek = localtime > cur.getStartTime();
+			if (m[current] != null && m[current].isPlaying())
 			{
-				if (!m[current].isPlaying())
+				m[current].stop();
+			}
+			if (needSeek)
+			{
+				Log.d(TAG, "seek to song");
+				m[current].seekTo(1000 * (int) ((System.currentTimeMillis() / 1000) - s[current].getStartTime()));
+				if (!startCurrent())
 				{
-					//this is a weird case, the next song is scheduled
-					// ...but the current song is not playing
-					prepareNext();
-					swap();
+					lock = false;
+					return;
+				}
+			}
+			else // NOT need seek
+			{
+				Log.d(TAG, "wait for song to start");
+				//FIRST try to wait for the time the song is supposed to start
+				try
+				{
+					localtime = System.currentTimeMillis() / 1000;
+					Thread.sleep(s[current].getStartTime() - localtime);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+					Log.e(TAG, "Thread.sleep InterruptedException");
+					lock = false;
+					return;
+				}
+				//We waited, now start the song
+				if (!startCurrent())
+				{
+					lock = false;
+					return;
+				}
+				s[next] = songs.get(1);
+				prepareNext();
+			}
+		}
+		else //not start
+		{
+			Log.d(TAG, "NOT START");
+			if (cur == s[next])
+			{
+				Log.d(TAG, "SCHEDULE NEXT SONG");
+				// time to schedule the next song
+				swap();
+				if(m[current] == null || m[current].isPlaying())
+				{
+					// We are interrupting the current song
+					Log.d(TAG, "INTERRUPT CURRENT SONG");
+					s[current] = cur;
+					prepareCurrent();
+				}
+				localtime = System.currentTimeMillis() / 1000;
+				if(cur.getStartTime() > localtime)
+				{
+					// The song will start soon, wait
+					Log.d(TAG, "WAIT FOR NEXT SONG");
 					localtime = System.currentTimeMillis() / 1000;
 					try
 					{
@@ -114,84 +176,139 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 					{
 						e.printStackTrace();
 						Log.e(TAG, "Thread.sleep InterruptedException");
-						return;
-					}
-					if (!startCurrent())
-					{
 						lock = false;
 						return;
 					}
 				}
-				// else: we do not interrupt the songs as they are scheduled correctly.
+				else
+				{
+					// The song has already started, we need to seek
+					Log.d(TAG, "SEEK TO NEXT SONG");
+					m[current].seekTo(1000 * (int) ((System.currentTimeMillis() / 1000) - s[current].getStartTime()));
+				}
+				if (!startCurrent())
+				{
+					Log.e(TAG, "startCurrent returned false");
+					lock = false;
+					return;
+				}
+				s[next] = songs.get(1);
+				prepareNext();
 				lock = false;
 				return;
 			}
 			else
 			{
-				Log.e(TAG, "WARNING COULD NOT SYNC");
-				lock = false;
-				return;
-			}
-		}
-		else
-		{
-			if (start)
-			{
-				// There is no song currently playing
-				// Here we start playing the very first song
-				s[current] = songs.get(0);
-				prepareCurrent();
-				localtime = System.currentTimeMillis() / 1000;
-
-				Log.d(TAG, "CURRENT TIME: " + String.valueOf(localtime));
-				Log.d(TAG, "SONG START TIME: " + String.valueOf(s[current].getStartTime()));
-
-				needSeek = localtime > cur.getStartTime();
-				if (m[current] != null && m[current].isPlaying())
-				{
-					m[current].stop();
-				}
-				if (needSeek)
-				{
-					Log.d(TAG, "seek to song");
-					m[current].seekTo(1000 * (int) ((System.currentTimeMillis() / 1000) - s[current].getStartTime()));
-					if (!startCurrent())
-					{
-						lock = false;
-						return;
-					}
-				}
-				else // NOT need seek
-				{
-					Log.d(TAG, "wait for song to start");
-					//FIRST try to wait for the time the song is supposed to start
-					try
-					{
-						localtime = System.currentTimeMillis() / 1000;
-						Thread.sleep(s[current].getStartTime() - localtime);
-					}
-					catch (InterruptedException e)
-					{
-						e.printStackTrace();
-						Log.e(TAG, "Thread.sleep InterruptedException");
-						lock = false;
-						return;
-					}
-					//We waited, now start the song
-					if (!startCurrent())
-					{
-						lock = false;
-						return;
-					}
-				}
-			}
-			if ((m[next] == null || !m[next].isPlaying()) && songs.size() > 1 && songs.get(1) != s[next])
-			{
-				s[next] = songs.get(1);
-				prepareNext();
+				Log.d(TAG, "WUT");
+				printSong(current);
+				printSong(next);
+				Log.d(TAG, "CUR IS " + cur.getName());
 			}
 		}
 		lock = false;
+		return;
+
+
+
+////////////////////////////////////////////////////////
+
+//		if (!start && cur == s[next])
+//		{// The service has told us that the next song is about to play.
+//			swap();
+//			if (cur.getStartTime() > localtime)
+//			{
+//				if (!m[current].isPlaying())
+//				{
+//					//this is a weird case, the next song is scheduled
+//					// ...but the current song is not playing
+//					prepareCurrent();
+//					localtime = System.currentTimeMillis() / 1000;
+//					try
+//					{
+//						Thread.sleep(s[current].getStartTime() - localtime);
+//					}
+//					catch (InterruptedException e)
+//					{
+//						e.printStackTrace();
+//						Log.e(TAG, "Thread.sleep InterruptedException");
+//						return;
+//					}
+//					if (!startCurrent())
+//					{
+//						Log.e(TAG, "startCurrent returned false");
+//						lock = false;
+//						return;
+//					}
+//				}
+//				// else: we do not interrupt the songs as they are scheduled correctly.
+//				lock = false;
+//				return;
+//			}
+//			else
+//			{
+//				Log.e(TAG, "WARNING COULD NOT SYNC");
+//				lock = false;
+//				return;
+//			}
+//		}
+//		else
+//		{
+//			if (start)
+//			{
+//				// There is no song currently playing
+//				// Here we start playing the very first song
+//				s[current] = songs.get(0);
+//				prepareCurrent();
+//				localtime = System.currentTimeMillis() / 1000;
+//
+//				Log.d(TAG, "CURRENT TIME: " + String.valueOf(localtime));
+//				Log.d(TAG, "SONG START TIME: " + String.valueOf(s[current].getStartTime()));
+//
+//				needSeek = localtime > cur.getStartTime();
+//				if (m[current] != null && m[current].isPlaying())
+//				{
+//					m[current].stop();
+//				}
+//				if (needSeek)
+//				{
+//					Log.d(TAG, "seek to song");
+//					m[current].seekTo(1000 * (int) ((System.currentTimeMillis() / 1000) - s[current].getStartTime()));
+//					if (!startCurrent())
+//					{
+//						lock = false;
+//						return;
+//					}
+//				}
+//				else // NOT need seek
+//				{
+//					Log.d(TAG, "wait for song to start");
+//					//FIRST try to wait for the time the song is supposed to start
+//					try
+//					{
+//						localtime = System.currentTimeMillis() / 1000;
+//						Thread.sleep(s[current].getStartTime() - localtime);
+//					}
+//					catch (InterruptedException e)
+//					{
+//						e.printStackTrace();
+//						Log.e(TAG, "Thread.sleep InterruptedException");
+//						lock = false;
+//						return;
+//					}
+//					//We waited, now start the song
+//					if (!startCurrent())
+//					{
+//						lock = false;
+//						return;
+//					}
+//				}
+//			}
+//			if ((m[next] == null || !m[next].isPlaying()) && songs.size() > 1 && songs.get(1) != s[next])
+//			{
+//				s[next] = songs.get(1);
+//				prepareNext();
+//			}
+//		}
 	}
 
 	private void printSong(int i)
@@ -283,11 +400,11 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 
 	public void stop()
 	{
-		if (m[next].isPlaying())
+		if (m[next] != null && m[next].isPlaying())
 		{
 			m[next].stop();
 		}
-		if (m[current].isPlaying())
+		if (m[next] != null && m[current].isPlaying())
 		{
 			m[current].stop();
 		}

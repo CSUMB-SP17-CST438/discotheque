@@ -19,7 +19,7 @@ public class Sockets
 {
     private static final String TAG = "DTK Socket";
     // TODO: Set to 0 for live server
-    private static final int SELECTED_SERVER = 3;
+    private static final int SELECTED_SERVER = 0;
     // Append to this list if you want to run a different server :D
     private static final String[] SERVERS = {
             "https://disco-theque.herokuapp.com",

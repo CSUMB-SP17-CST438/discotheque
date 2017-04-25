@@ -309,8 +309,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 					{
 
 						Log.e(GOOGLE_AUTH_TAG, "User signed in but we could not log them into Discotek");
-						Toast.makeText(MainActivity.this, R.string.error_no_connection_dtk, Toast.LENGTH_LONG)
-							 .show();
+						runOnUiThread(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								Toast.makeText(MainActivity.this, R.string.error_no_connection_dtk, Toast.LENGTH_LONG)
+								  .show();
+							}
+						});
 						googleSignOut();
 						showLoader(false);
 					}
