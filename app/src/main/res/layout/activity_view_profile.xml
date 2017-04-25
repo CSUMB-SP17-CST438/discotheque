@@ -13,18 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
         android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay"
-
-        >
-
-
+        android:theme="@style/AppTheme.AppBarOverlay">
 
 
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -33,10 +29,9 @@
             <LinearLayout
                 android:layout_gravity="bottom"
                 android:layout_width="match_parent"
-                android:layout_height="66dp"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:layout_margin="16dp"
-                >
+                android:layout_margin="16dp">
 
                 <ImageView
                     android:id="@+id/profile_picture"
