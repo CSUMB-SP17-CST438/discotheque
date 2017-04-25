@@ -175,11 +175,11 @@ class sc_test(unittest.TestCase):
 	# 	print(db.memberExists_by_email('thisanemaillll@'))
 	# 	self.assertIsNotNone(member)
 
-	def test_add_floor(self):
-		flag,new_f = add_floor("name1",1,True,"punk")
-		flag2, sec_floor = add_floor("name1",1,True,"punk")
-		print("result: ",flag2,sec_floor)
-		self.assertEqual(flag2,False)
+	# def test_add_floor(self):
+	# 	flag,new_f = add_floor("name1",1,True,"punk")
+	# 	flag2, sec_floor = add_floor("name1",1,True,"punk")
+	# 	print("result: ",flag2,sec_floor)
+	# 	self.assertEqual(flag2,False)
 
 if __name__ == '__main__':
     unittest.main()

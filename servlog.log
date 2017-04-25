@@ -1,0 +1,262 @@
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\log.py', reloading
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\serv.py', reloading
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\serv.py', reloading
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:engineio:Server initialized for eventlet.
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:engineio:Server initialized for eventlet.
+INFO:socketio:received event "join floor" from 0f018c3cf1864aefae058da61838e90e [/]
+INFO:socketio:0f018c3cf1864aefae058da61838e90e is entering room 1 [/]
+DEBUG:root:Starting thread..
+INFO:socketio:emitting event "floor joined" to 0f018c3cf1864aefae058da61838e90e [/]
+INFO:socketio:emitting event "member list update" to 1 [/]
+INFO:socketio:received event "leave floor" from 0f018c3cf1864aefae058da61838e90e [/]
+INFO:socketio:0f018c3cf1864aefae058da61838e90e is leaving room 1 [/]
+INFO:socketio:emitting event "member list update" to 1 [/]
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\log.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\events.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+INFO:socketio:received event "join floor" from 23a83463afb649aa83001b1b4638c143 [/]
+INFO:socketio:23a83463afb649aa83001b1b4638c143 is entering room 1 [/]
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031676?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 200 781
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031676/stream?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 302 571
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031502?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 200 686
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031502/stream?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 302 570
+INFO:socketio:emitting event "floor joined" to 23a83463afb649aa83001b1b4638c143 [/]
+INFO:socketio:emitting event "member list update" to 1 [/]
+INFO:socketio:received event "leave floor" from 23a83463afb649aa83001b1b4638c143 [/]
+INFO:socketio:23a83463afb649aa83001b1b4638c143 is leaving room 1 [/]
+INFO:socketio:emitting event "member list update" to 1 [/]
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031502?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 200 686
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031502/stream?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 302 570
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031123?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 200 728
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031123/stream?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 302 573
+DEBUG:root:*******UPDATED SONGLIST*******
+INFO:engineio:Server initialized for eventlet.
+INFO:socketio:received event "join floor" from 9101627fabef4ade9fff216b40ad1c09 [/]
+INFO:socketio:9101627fabef4ade9fff216b40ad1c09 is entering room 1 [/]
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031676?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 200 781
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031676/stream?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 302 571
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031502?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 200 686
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031502/stream?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 302 571
+INFO:socketio:emitting event "floor joined" to 9101627fabef4ade9fff216b40ad1c09 [/]
+INFO:socketio:emitting event "member list update" to 1 [/]
+INFO:socketio:received event "leave floor" from 9101627fabef4ade9fff216b40ad1c09 [/]
+INFO:socketio:9101627fabef4ade9fff216b40ad1c09 is leaving room 1 [/]
+INFO:socketio:emitting event "member list update" to 1 [/]
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031502?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 200 686
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031502/stream?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 302 571
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031123?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 200 729
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031123/stream?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 302 570
+DEBUG:root:*******UPDATED SONGLIST*******
+INFO:engineio:Server initialized for eventlet.
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031610?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 200 1056
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031610/stream?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 302 572
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031243?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 404 70
+INFO:engineio:Server initialized for eventlet.
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031610?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 200 1056
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031610/stream?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 302 570
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031243?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 404 70
+INFO:engineio:Server initialized for eventlet.
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031610?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 200 1056
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031610/stream?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 302 570
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031243?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 404 70
+INFO:engineio:Server initialized for eventlet.
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031610?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 200 1056
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031610/stream?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 302 570
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031243?client_id=8c1cf28d0d2834808a2eda6645da717b HTTP/1.1" 404 70
+INFO:engineio:Server initialized for eventlet.
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031610?client_id=3v8b5BcHU8keAMcGJE7wbBQs22jhyLDa HTTP/1.1" 200 1056
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031610/stream?client_id=3v8b5BcHU8keAMcGJE7wbBQs22jhyLDa HTTP/1.1" 302 572
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031243?client_id=3v8b5BcHU8keAMcGJE7wbBQs22jhyLDa HTTP/1.1" 404 70
+INFO:engineio:Server initialized for eventlet.
+INFO:engineio:Server initialized for eventlet.
+INFO:engineio:Server initialized for eventlet.
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031610?client_id=3v8b5BcHU8keAMcGJE7wbBQs22jhyLDa HTTP/1.1" 200 1057
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031610/stream?client_id=3v8b5BcHU8keAMcGJE7wbBQs22jhyLDa HTTP/1.1" 302 568
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/319031243?client_id=3v8b5BcHU8keAMcGJE7wbBQs22jhyLDa HTTP/1.1" 404 70
+INFO:engineio:Server initialized for eventlet.
+INFO:engineio:Server initialized for eventlet.
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks?track_type=original&client_id=3v8b5BcHU8keAMcGJE7wbBQs22jhyLDa&tags=rock&sharing=public&limit=50&streamable=True HTTP/1.1" 200 19389
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks?track_type=original&client_id=3v8b5BcHU8keAMcGJE7wbBQs22jhyLDa&tags=Pop&sharing=public&limit=50&streamable=True HTTP/1.1" 200 14589
+INFO:engineio:Server initialized for eventlet.
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks?streamable=True&sharing=public&client_id=VouLZKnkCQYDVMu86Y8dJ1Nt7h8DMeT0&tags=rock&limit=50&track_type=original HTTP/1.1" 200 16064
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks?streamable=True&sharing=public&client_id=VouLZKnkCQYDVMu86Y8dJ1Nt7h8DMeT0&tags=Pop&limit=50&track_type=original HTTP/1.1" 200 15871
+INFO:engineio:Server initialized for eventlet.
+INFO:engineio:Server initialized for eventlet.
+INFO:engineio:Server initialized for eventlet.
+INFO:socketio:received event "join floor" from 013676a361a44cddafbbb9f64f2a13f5 [/]
+INFO:socketio:013676a361a44cddafbbb9f64f2a13f5 is entering room 1 [/]
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/138114067?client_id=VouLZKnkCQYDVMu86Y8dJ1Nt7h8DMeT0 HTTP/1.1" 200 757
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/138114067/stream?client_id=VouLZKnkCQYDVMu86Y8dJ1Nt7h8DMeT0 HTTP/1.1" 302 571
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/238429475?client_id=VouLZKnkCQYDVMu86Y8dJ1Nt7h8DMeT0 HTTP/1.1" 200 820
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/238429475/stream?client_id=VouLZKnkCQYDVMu86Y8dJ1Nt7h8DMeT0 HTTP/1.1" 302 572
+INFO:socketio:emitting event "floor joined" to 013676a361a44cddafbbb9f64f2a13f5 [/]
+INFO:socketio:emitting event "member list update" to 1 [/]
+INFO:socketio:received event "leave floor" from 013676a361a44cddafbbb9f64f2a13f5 [/]
+INFO:socketio:013676a361a44cddafbbb9f64f2a13f5 is leaving room 1 [/]
+INFO:socketio:emitting event "member list update" to 1 [/]
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/238429475?client_id=VouLZKnkCQYDVMu86Y8dJ1Nt7h8DMeT0 HTTP/1.1" 200 821
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/238429475/stream?client_id=VouLZKnkCQYDVMu86Y8dJ1Nt7h8DMeT0 HTTP/1.1" 302 570
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/135811380?client_id=VouLZKnkCQYDVMu86Y8dJ1Nt7h8DMeT0 HTTP/1.1" 200 788
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): api.soundcloud.com
+DEBUG:requests.packages.urllib3.connectionpool:"GET /tracks/135811380/stream?client_id=VouLZKnkCQYDVMu86Y8dJ1Nt7h8DMeT0 HTTP/1.1" 302 573
+DEBUG:root:*******UPDATED SONGLIST*******
+INFO:engineio:Server initialized for eventlet.
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\serv.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:engineio:Server initialized for eventlet.
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\song_update_service.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:engineio:Server initialized for eventlet.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 241-689-358
+INFO:werkzeug: * Detected change in 'E:\\jcrzry\\Documents\\CSIS\\CST 438\\project3\\backend\\events.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
