@@ -86,11 +86,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 								AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 								builder.setTitle(R.string.app_name);
 								builder.setMessage(R.string.error_no_connection_dtk);
+
+								final SpecialDialogDismissListener l = new SpecialDialogDismissListener();
+
+								builder.setOnDismissListener(l);
 								builder.setPositiveButton(R.string.action_close, new DialogInterface.OnClickListener()
 								{
 									public void onClick(DialogInterface dialog, int id)
 									{
-										MainActivity.this.finish();
+										l.finish = true;
 									}
 								});
 								builder.setNegativeButton(R.string.action_retry, new DialogInterface.OnClickListener()
@@ -99,14 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 									{
 										Sockets.clearSocket();
 										MainActivity.this.recreate();
-									}
-								});
-								builder.setOnDismissListener(new DialogInterface.OnDismissListener()
-								{
-									@Override
-									public void onDismiss(DialogInterface dialog)
-									{
-										MainActivity.this.finish();
 									}
 								});
 
@@ -196,6 +192,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			b.setOnClickListener(this);
 		}
 		showLoader(false);
+	}
+
+	public static class SpecialDialogDismissListener implements DialogInterface.OnDismissListener
+	{
+		public boolean finish = false;
+		public MainActivity a;
+		@Override
+		public void onDismiss(DialogInterface dialog)
+		{
+			if(finish) a.finish();
+		}
 	}
 
 	@Override
