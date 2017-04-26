@@ -92,5 +92,7 @@
 
     </string-array>
     <string name="confirm_leave_app">You are being redirected to SoundCloud. Do you want to proceed?</string>
+    <string name="action_close">Close</string>
+    <string name="action_retry">Retry</string>
 
 </resources>
