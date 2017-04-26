@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 								{
 									public void onClick(DialogInterface dialog, int id)
 									{
-										l.finish = true;
 									}
 								});
 								builder.setNegativeButton(R.string.action_retry, new DialogInterface.OnClickListener()
@@ -102,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 									public void onClick(DialogInterface dialog, int id)
 									{
 										Sockets.clearSocket();
-										MainActivity.this.recreate();
+										l.finish = false;
 									}
 								});
 
@@ -196,12 +195,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 	public static class SpecialDialogDismissListener implements DialogInterface.OnDismissListener
 	{
-		public boolean finish = false;
+		public boolean finish = true;
 		public MainActivity a;
 		@Override
 		public void onDismiss(DialogInterface dialog)
 		{
 			if(finish) a.finish();
+			else a.recreate();
 		}
 	}
 
