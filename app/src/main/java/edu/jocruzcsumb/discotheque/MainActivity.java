@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				public void run()
 				{
 					showLoader(true);
-					if(!Sockets.waitForConnect())
+					if (!Sockets.waitForConnect())
 					{
 						MainActivity.this.runOnUiThread(new Runnable()
 						{
@@ -86,15 +86,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 								AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 								builder.setTitle(R.string.app_name);
 								builder.setMessage(R.string.error_no_connection_dtk);
-								builder.setPositiveButton(R.string.action_close, new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog, int id) {
+								builder.setPositiveButton(R.string.action_close, new DialogInterface.OnClickListener()
+								{
+									public void onClick(DialogInterface dialog, int id)
+									{
 										MainActivity.this.finish();
 									}
 								});
-								builder.setNegativeButton(R.string.action_retry, new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog, int id) {
+								builder.setNegativeButton(R.string.action_retry, new DialogInterface.OnClickListener()
+								{
+									public void onClick(DialogInterface dialog, int id)
+									{
 										Sockets.clearSocket();
 										MainActivity.this.recreate();
+									}
+								});
+								builder.setOnDismissListener(new DialogInterface.OnDismissListener()
+								{
+									@Override
+									public void onDismiss(DialogInterface dialog)
+									{
+										MainActivity.this.finish();
 									}
 								});
 
@@ -340,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 							public void run()
 							{
 								Toast.makeText(MainActivity.this, R.string.error_no_connection_dtk, Toast.LENGTH_LONG)
-								  .show();
+									 .show();
 							}
 						});
 						googleSignOut();
