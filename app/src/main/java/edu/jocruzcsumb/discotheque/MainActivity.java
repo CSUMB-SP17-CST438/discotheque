@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 								builder.setMessage(R.string.error_no_connection_dtk);
 
 								final SpecialDialogDismissListener l = new SpecialDialogDismissListener();
+								l.a = MainActivity.this;
 
 								builder.setOnDismissListener(l);
 								builder.setPositiveButton(R.string.action_close, new DialogInterface.OnClickListener()
