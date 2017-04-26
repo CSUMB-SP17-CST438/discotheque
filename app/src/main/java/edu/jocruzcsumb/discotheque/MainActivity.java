@@ -81,26 +81,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 							@Override
 							public void run()
 							{
+								Log.i(TAG, "this");
 								// Use the Builder class for convenient dialog construction
 								AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 								builder.setTitle(R.string.app_name);
 								builder.setMessage(R.string.error_no_connection_dtk);
 								builder.setPositiveButton(R.string.action_close, new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog, int id) {
-										finish();
+										MainActivity.this.finish();
 									}
 								});
 								builder.setNegativeButton(R.string.action_retry, new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog, int id) {
-										recreate();
-
+										Sockets.clearSocket();
+										MainActivity.this.recreate();
 									}
 								});
 
 								// Create the AlertDialog
-								builder.create();
+								AlertDialog a = builder.create();
+								a.show();
 							}
 						});
+						return;
 					}
 					if (LocalUser.silentLogin(MainActivity.this, googleApiClient))
 					{

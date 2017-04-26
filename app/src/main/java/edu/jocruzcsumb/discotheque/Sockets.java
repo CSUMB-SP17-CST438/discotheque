@@ -39,6 +39,16 @@ public class Sockets
 		return b;
 	}
 
+	public static void clearSocket()
+	{
+		if(socket == null)
+		{
+			socket.disconnect();
+			socket.close();
+		}
+		socket = null;
+	}
+
     public static String getServer()
     {
         return SERVERS[SELECTED_SERVER];
