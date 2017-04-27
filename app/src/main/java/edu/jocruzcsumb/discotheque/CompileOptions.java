@@ -21,8 +21,8 @@ public class CompileOptions
 
 	// For logging
 	public static final boolean LOG_VERBOSE = false;
-	public static final boolean LOG_DEBUG = false;
-	public static final boolean LOG_INFO = false;
+	public static final boolean LOG_DEBUG = true;
+	public static final boolean LOG_INFO = true;
 	public static final boolean LOG_WARNINGS = true;
 	public static final boolean LOG_ERRORS = true;
 
