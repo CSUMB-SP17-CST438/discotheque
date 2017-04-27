@@ -6,7 +6,6 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -151,14 +150,14 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 				// time to schedule the next song
 				swap();
 				s[current] = cur;
-				if(m[current] == null || m[current].isPlaying())
+				if (m[current] == null || m[current].isPlaying())
 				{
 					// We are interrupting the current song
 					Log.d(TAG, "INTERRUPT CURRENT SONG");
 					prepareCurrent();
 				}
 				localtime = System.currentTimeMillis() / 1000;
-				if(cur.getStartTime() > localtime)
+				if (cur.getStartTime() > localtime)
 				{
 					// The song will start soon, wait
 					Log.d(TAG, "WAIT FOR NEXT SONG");
@@ -202,7 +201,6 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 		}
 		lock = false;
 		return;
-
 
 
 ////////////////////////////////////////////////////////
@@ -307,17 +305,17 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 	}
 
 	private void printSong(int i)
-    {
-        //print current song
-        Log.i(TAG, "Title: " + s[i].getName());
-        Log.i(TAG, "Artist: " + s[i].getArtist());
-        Log.i(TAG, "Start time: " + s[i].getStartTime());
-        Log.i(TAG, "URL: " + s[i].getUrl());
-    }
+	{
+		//print current song
+		Log.i(TAG, "Title: " + s[i].getName());
+		Log.i(TAG, "Artist: " + s[i].getArtist());
+		Log.i(TAG, "Start time: " + s[i].getStartTime());
+		Log.i(TAG, "URL: " + s[i].getUrl());
+	}
 
 	private boolean startCurrent()
 	{
-        printSong(current);
+		printSong(current);
 		try
 		{
 			m[current].start();
@@ -349,7 +347,7 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 
 	private boolean prep(int i)
 	{
-        printSong(i);
+		printSong(i);
 		try
 		{
 			m[i] = new MediaPlayer();

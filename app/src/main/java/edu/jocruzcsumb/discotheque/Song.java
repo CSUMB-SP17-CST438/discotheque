@@ -2,7 +2,6 @@ package edu.jocruzcsumb.discotheque;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -156,7 +155,10 @@ public class Song implements Comparable<Song>, Parcelable
 		return artist;
 	}
 
-	public String getTrack_permalink(){return track_permalink;}
+	public String getTrack_permalink()
+	{
+		return track_permalink;
+	}
 
 	public String getUrl()
 	{
@@ -216,6 +218,7 @@ public class Song implements Comparable<Song>, Parcelable
 		Log.i(TAG, "Start time: " + getStartTime());
 		Log.i(TAG, "URL: " + getUrl());
 	}
+
 	public boolean equals(Object other)
 	{
 		if (other instanceof Song)

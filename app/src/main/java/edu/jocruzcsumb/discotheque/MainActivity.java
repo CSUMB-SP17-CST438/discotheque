@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -192,18 +191,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			b.setOnClickListener(this);
 		}
 		showLoader(false);
-	}
-
-	public static class SpecialDialogDismissListener implements DialogInterface.OnDismissListener
-	{
-		public boolean finish = true;
-		public MainActivity a;
-		@Override
-		public void onDismiss(DialogInterface dialog)
-		{
-			if(finish) a.finish();
-			else a.recreate();
-		}
 	}
 
 	@Override
@@ -413,7 +400,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		});
 	}
 
-
 	@Override
 	public void onConnected(@Nullable Bundle bundle)
 	{
@@ -424,5 +410,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	public void onConnectionSuspended(int i)
 	{
 
+	}
+
+	public static class SpecialDialogDismissListener implements DialogInterface.OnDismissListener
+	{
+		public boolean finish = true;
+		public MainActivity a;
+
+		@Override
+		public void onDismiss(DialogInterface dialog)
+		{
+			if (finish)
+			{
+				a.finish();
+			}
+			else
+			{
+				a.recreate();
+			}
+		}
 	}
 }

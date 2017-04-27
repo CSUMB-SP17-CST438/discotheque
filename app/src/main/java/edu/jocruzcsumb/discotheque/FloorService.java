@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -278,7 +277,7 @@ public class FloorService extends IntentService
 						EVENT_MESSAGE_ADD,
 						EVENT_USER_ADD,
 						EVENT_USER_REMOVE,
-				})
+						})
 		{
 			Sockets.getSocket()
 				   .off(e);
@@ -288,14 +287,15 @@ public class FloorService extends IntentService
 	private void registerSocketEvents()
 	{
 		// on reconnect, reregister events
-		Sockets.getSocket().on(Socket.EVENT_CONNECT, new Emitter.Listener()
-		{
-			@Override
-			public void call(Object... args)
-			{
-				registerSocketEvents();
-			}
-		});
+		Sockets.getSocket()
+			   .on(Socket.EVENT_CONNECT, new Emitter.Listener()
+			   {
+				   @Override
+				   public void call(Object... args)
+				   {
+					   registerSocketEvents();
+				   }
+			   });
 		// List Events
 		Sockets.getSocket()
 			   .on(EVENT_SONG_LIST_UPDATE, new Emitter.Listener()

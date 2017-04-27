@@ -1,7 +1,5 @@
 package edu.jocruzcsumb.discotheque;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,20 +11,12 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
+import static edu.jocruzcsumb.discotheque.CompileOptions.SOCKET_TIMEOUT;
 import static junit.framework.Assert.fail;
 
 public class Sockets
 {
 	private static final String TAG = "DTK Socket";
-	// TODO: Set to 0 for live server
-	private static final int SELECTED_SERVER = 0;
-	// Append to this list if you want to run a different server :D
-	private static final String[] SERVERS = {
-			"https://disco-theque.herokuapp.com",
-			"http://carsen.ml:8080",
-			"http://devev-jcrzry.c9users.io:8080",
-			"http://testing-jcrzry.c9users.io:8080",
-	};
 	public static boolean socketlock = false;
 	private static Socket socket = null;
 
@@ -56,20 +46,18 @@ public class Sockets
 		socket = null;
 	}
 
-	public static String getServer()
-	{
-		return SERVERS[SELECTED_SERVER];
-	}
-
 	public static Socket getSocket()
 	{
-		while (socketlock) try
+		while (socketlock)
 		{
-			Thread.sleep(1);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
+			try
+			{
+				Thread.sleep(1);
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		socketlock = true;
 		if (socket != null)
@@ -92,7 +80,7 @@ public class Sockets
 	{
 		try
 		{
-			socket = IO.socket(getServer());
+			socket = IO.socket(CompileOptions.SERVER_URL);
 			socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener()
 			{
 				@Override
@@ -101,13 +89,16 @@ public class Sockets
 
 					if (!socket.connected())
 					{
-						while (socketlock) try
+						while (socketlock)
 						{
-							Thread.sleep(1);
-						}
-						catch (InterruptedException e)
-						{
-							e.printStackTrace();
+							try
+							{
+								Thread.sleep(1);
+							}
+							catch (InterruptedException e)
+							{
+								e.printStackTrace();
+							}
 						}
 						socketlock = true;
 						socket.connect();
@@ -128,7 +119,6 @@ public class Sockets
 
 	public static class SocketWaiter implements Emitter.Listener
 	{
-		private static final long TIMEOUT = 8L;
 		private boolean success;
 		private CountDownLatch socketLatch;
 		private String signal, event;
@@ -157,11 +147,11 @@ public class Sockets
 			mode = Mode.NONE;
 			success = false;
 			socketLatch = new CountDownLatch(1);
-			Socket s = create_socket?createSocket():getSocket();
+			Socket s = create_socket ? createSocket() : getSocket();
 			s.once(event, this);
 			try
 			{
-				socketLatch.await(TIMEOUT, TimeUnit.SECONDS);
+				socketLatch.await(SOCKET_TIMEOUT, TimeUnit.SECONDS);
 			}
 			catch (InterruptedException e)
 			{
@@ -194,7 +184,7 @@ public class Sockets
 			getSocket().once(event, this);
 			try
 			{
-				socketLatch.await(TIMEOUT, TimeUnit.SECONDS);
+				socketLatch.await(SOCKET_TIMEOUT, TimeUnit.SECONDS);
 				if (!success)
 				{
 					return null;

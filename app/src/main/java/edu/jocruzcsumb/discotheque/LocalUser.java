@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.facebook.AccessToken;
 import com.facebook.LoginStatusCallback;
@@ -104,7 +103,8 @@ public class LocalUser extends User
 		}
 
 		final CountDownLatch x = new CountDownLatch(1);
-		final SpecialResultCallback cb = new SpecialResultCallback(x);;
+		final SpecialResultCallback cb = new SpecialResultCallback(x);
+		;
 		LoginType type = parseLoginType(t);
 		switch (type)
 		{
@@ -148,10 +148,10 @@ public class LocalUser extends User
 					return false;
 				}
 				GoogleSignInAccount gacc = null;
-				if(cb.result != null)
+				if (cb.result != null)
 				{
 					gacc = cb.result.getSignInAccount();
-					if(gacc != null)
+					if (gacc != null)
 					{
 						Log.i(TAG, "SilentSignIn Google attempting dtk login");
 						return socketLogin(LoginType.GOOGLE, gacc.getIdToken());
@@ -169,14 +169,14 @@ public class LocalUser extends User
 				}
 			case FACEBOOK:
 				a.runOnUiThread(new Runnable()
+				{
+					@Override
+					public void run()
 					{
-						@Override
-						public void run()
-						{
-							LoginManager.getInstance()
-										.retrieveLoginStatus(a, cb);
-						}
-					});
+						LoginManager.getInstance()
+									.retrieveLoginStatus(a, cb);
+					}
+				});
 
 				try
 				{
@@ -187,10 +187,10 @@ public class LocalUser extends User
 					e.printStackTrace();
 					return false;
 				}
-				if(cb.facebookToken != null)
+				if (cb.facebookToken != null)
 				{
-						Log.i(TAG, "SilentSignIn Facebook attempting dtk login");
-						return socketLogin(LoginType.GOOGLE, cb.facebookToken);
+					Log.i(TAG, "SilentSignIn Facebook attempting dtk login");
+					return socketLogin(LoginType.GOOGLE, cb.facebookToken);
 				}
 				else
 				{
@@ -364,15 +364,18 @@ public class LocalUser extends User
 		FACEBOOK,
 		SOUNDCLOUD
 	}
+
 	public static class SpecialResultCallback implements ResultCallback<GoogleSignInResult>, LoginStatusCallback
 	{
 		public GoogleSignInResult result = null;
 		public String facebookToken = null;
 		CountDownLatch latch = null;
+
 		public SpecialResultCallback(CountDownLatch latch)
 		{
 			this.latch = latch;
 		}
+
 		@Override
 		public void onResult(@NonNull GoogleSignInResult result)
 		{
@@ -388,6 +391,7 @@ public class LocalUser extends User
 				latch.countDown();
 			}
 		}
+
 		@Override
 		public void onCompleted(AccessToken accessToken)
 		{
