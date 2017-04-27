@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -17,9 +16,8 @@ import org.json.JSONObject;
 import io.socket.emitter.Emitter;
 
 /**
- * Created by Admin on 4/20/2017.
+ * Created by Tommy on 4/20/2017.
  */
-
 
 public class CreateFloorActivity extends AppCompatActivity implements View.OnClickListener, Emitter.Listener
 {
@@ -37,7 +35,6 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
 	private Button cancelButton;
 	private Button createFloorButton;
 	private Spinner splitSpinner;
-	private ProgressBar progressBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -48,6 +45,7 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
 		cancelButton = (Button) findViewById(R.id.cancel_floor_button);
 		editFloorName = (EditText) findViewById(R.id.edit_floor_name);
 		splitSpinner = (Spinner) findViewById(R.id.splitSpinner);
+		findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CreateFloorActivity.this, R.array.genre_array_list,
 				android.R.layout.simple_dropdown_item_1line);
 		splitSpinner.setAdapter(adapter);
@@ -60,7 +58,20 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
 		Sockets.getSocket()
 			   .on(EVENT_FLOOR_CREATE, this);
 
+
 		// return rootView;
+	}
+
+	public void showLoader(final boolean show)
+	{
+		CreateFloorActivity.this.runOnUiThread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				findViewById(R.id.loadingPanel).setVisibility(show ? View.VISIBLE : View.GONE);
+			}
+		});
 	}
 
 	public void onClick(View v)
@@ -84,31 +95,34 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
 					Toast.makeText(CreateFloorActivity.this, "Please enter a floor name", Toast.LENGTH_SHORT)
 						 .show();
 				}
-				JSONObject jsonObject = new JSONObject();
-				try
+				else
 				{
-					jsonObject.put(FLOOR_NAME, floorname);
-					jsonObject.put(MEMBER_ID, LocalUser.getCurrentUser()
-													   .getId());
-					jsonObject.put(FLOOR_GENRE, selectedText);
-					jsonObject.put(IS_PUBLIC, 1);
+					showLoader(true);
+					JSONObject jsonObject = new JSONObject();
+					try
+					{
+						jsonObject.put(FLOOR_NAME, floorname);
+						jsonObject.put(MEMBER_ID, LocalUser.getCurrentUser()
+														   .getId());
+						jsonObject.put(FLOOR_GENRE, selectedText);
+						jsonObject.put(IS_PUBLIC, 1);
+					}
+					catch (JSONException e)
+					{
+						e.printStackTrace();
+					}
+					Sockets.getSocket()
+						   .emit(EVENT_CREATE_FLOOR, jsonObject);
+					//getDialog().hide();
 				}
-				catch (JSONException e)
-				{
-					e.printStackTrace();
-				}
-				Sockets.getSocket()
-					   .emit(EVENT_CREATE_FLOOR, jsonObject);
-				//getDialog().hide();
+
 				break;
 		}
 	}
 
 	private void updateUI(final int i)
 	{
-		final String[] strings = new String[]{
-				"Error! Floor name already exists.", "Floor was created successfully"
-		};
+		final String[] strings = new String[]{"Error! Floor name already exists.", "Floor was created successfully"};
 		runOnUiThread(new Runnable()
 		{
 			@Override
@@ -130,11 +144,14 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
 			JSONObject jsonObject = (JSONObject) args[0];
 			if (jsonObject.has("message"))
 			{
+				showLoader(false);
 				updateUI(0);
+
 
 			}
 			else
 			{
+				showLoader(false);
 				updateUI(1);
 				try
 				{
@@ -145,7 +162,9 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
 					k.putExtra(Floor.TAG, floorId);
 					k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(k);
+					//showLoader(false);
 					finish();
+
 					//getDialog().dismiss();
 				}
 				catch (JSONException e)

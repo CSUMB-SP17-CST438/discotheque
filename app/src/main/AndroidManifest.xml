@@ -53,7 +53,14 @@
 
         <activity android:name=".CreateFloorActivity"
             android:label="Create Floor"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait">
+            </activity>
+
+
+        <activity android:name=".UpdateProfileActivity"
+            android:label="Update Profile Info"
+            android:screenOrientation="portrait">
+        </activity>
 
     </application>
 

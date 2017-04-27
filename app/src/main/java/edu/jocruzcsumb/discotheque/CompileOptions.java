@@ -4,7 +4,7 @@ package edu.jocruzcsumb.discotheque;
  * Created by carsen on 4/27/17.
  */
 
-public class CompileOptions
+public final class CompileOptions
 {
 	// Server setting
 	private static final boolean DEBUG_MODE = true;
