@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 							@Override
 							public void run()
 							{
-								Log.i(TAG, "this");
 								// Use the Builder class for convenient dialog construction
 								AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 								builder.setTitle(R.string.app_name);
@@ -123,46 +122,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 					showLoader(false);
 				}
 			}).start();
-//			// Attempt silent sign in
-//			OptionalPendingResult<GoogleSignInResult> pendingResult =
-//					Auth.GoogleSignInApi.silentSignIn(googleApiClient);
-//			if (pendingResult.isDone())
-//			{
-//				Log.d(TAG, "pendingResult.isDone() = true");
-//				GoogleSignInResult r = pendingResult.get();
-//				if (r.isSuccess())
-//				{
-//					// There's an immediate result available.
-//					MainActivity.this.handleResult(pendingResult.get());
-//				}
-//				else
-//				{
-//					t.start();
-//				}
-//			}
-//			else
-//			{
-//				// There's no immediate result ready
-//
-//				// We may want to add a progress indicator right here
-//				pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>()
-//				{
-//					@Override
-//					public void onResult(@NonNull GoogleSignInResult result)
-//					{
-//						Log.d(TAG, "Google Silent login onResult");
-//						if (result.isSuccess())
-//						{
-//							Log.d(TAG, "result.isSuccess()");
-//							MainActivity.this.handleResult(result);
-//						}
-//						else
-//						{
-//							t.start();
-//						}
-//					}
-//				});
-//			}
 
 		}
 		else
@@ -212,14 +171,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 	private void googleSignIn()
 	{
-		Log.d(GOOGLE_AUTH_TAG, "googleSignIn");
+		Log.i(GOOGLE_AUTH_TAG, "googleSignIn");
 		Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
 		startActivityForResult(intent, REQ_CODE);
 	}
 
 	private void googleSignOut()
 	{
-		Log.d(GOOGLE_AUTH_TAG, "googleSignOut");
+		Log.i(GOOGLE_AUTH_TAG, "googleSignOut");
 		if (!googleApiClient.isConnected())
 		{
 			googleApiClient.connect();
@@ -245,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 					}
 					else
 					{
-						Log.w(GOOGLE_AUTH_TAG, "signout failed, trying again");
+						Log.e(GOOGLE_AUTH_TAG, "signout failed, trying again");
 						googleSignOut();
 					}
 				}
@@ -303,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 	public void handleResult(GoogleSignInResult r)
 	{
-		Log.d(GOOGLE_AUTH_TAG, "onHandleResult");
+		Log.i(GOOGLE_AUTH_TAG, "handleResult");
 		final GoogleSignInResult result = r;
 		if (result.isSuccess())
 		{
@@ -311,14 +270,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			{
 				public void run()
 				{
-					Log.d(GOOGLE_AUTH_TAG, "result.isSuccess");
-
 					GoogleSignInAccount account = result.getSignInAccount();
-					Log.d(GOOGLE_AUTH_TAG, "Account: " + account.getDisplayName());
-					Log.d(GOOGLE_AUTH_TAG, "IdToken: " + account.getIdToken());
-					Log.d(GOOGLE_AUTH_TAG, "Id: " + account.getId());
-					Log.d(GOOGLE_AUTH_TAG, "GrantedScopes: " + account.getGrantedScopes()
-																	  .toString());
 
 					String name = account.getDisplayName();
 					String email = account.getEmail();
@@ -339,7 +291,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 					}
 					else
 					{
-
 						Log.e(GOOGLE_AUTH_TAG, "User signed in but we could not log them into Discotek");
 						runOnUiThread(new Runnable()
 						{
@@ -363,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
-		Log.d(TAG, "onActivityResult");
+		Log.i(TAG, "onActivityResult");
 		if (requestCode == REQ_CODE)
 		{
 			GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
@@ -371,17 +322,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 											.getStatusCode()));
 			if (result == null)
 			{
-				Log.e(TAG, "result was null you cunt ass bitch");
+				Log.wtf(TAG, "result was null you cunt ass bitch");
 			}
 			else
 			{
 				if (result.getSignInAccount() == null)
 				{
-					fail("result.getSignInAccount was null");
+					Log.wtf(GOOGLE_AUTH_TAG, "result.getSignInAccount was null");
 				}
-				Log.d(TAG, "got result");
-				Log.d(TAG, result.getSignInAccount()
-								 .getDisplayName());
 				handleResult(result);
 			}
 		}
