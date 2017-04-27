@@ -23,8 +23,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
-import org.json.JSONArray;
-
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks
@@ -34,12 +32,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	private static final String TAG = "MainActivity";
 	private static final String GOOGLE_AUTH_TAG = "Google auth";
 	ArrayList<Button> buttons = new ArrayList<>();
-	JSONArray jsonArray;
 
 	//setting listeners
 	//google sign in vars
 	private GoogleApiClient googleApiClient;
-	private Button SignIn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
