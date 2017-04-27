@@ -151,11 +151,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	{
 		switch (v.getId())
 		{
-//			case R.id.guest_login_btn:
-//				//go to activity
-//				Intent guestLogin = new Intent(MainActivity.this, PickFloorActivity.class);
-//				startActivity(guestLogin);
-//				break;
 			case R.id.google_login_btn:
 				showLoader(true);
 				googleSignIn();
