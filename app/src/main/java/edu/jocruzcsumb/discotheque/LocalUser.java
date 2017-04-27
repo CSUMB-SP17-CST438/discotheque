@@ -94,7 +94,7 @@ public class LocalUser extends User
 	//Checks for leftover auth to log in to discotheque server
 	public static boolean silentLogin(final MainActivity a, GoogleApiClient googleApiClient)
 	{
-		Log.d(TAG, "Silent Login");
+		Log.i(TAG, "silentLogin");
 		initPrefs(a);
 		String t = preferences.getString(AUTH_TYPE_KEY, null);
 		if (t == null)
@@ -113,7 +113,7 @@ public class LocalUser extends User
 						Auth.GoogleSignInApi.silentSignIn(googleApiClient);
 				if (pendingResult.isDone())
 				{
-					Log.d(TAG, "pendingResult.isDone() = true");
+//					Log.d(TAG, "pendingResult.isDone() = true");
 					GoogleSignInResult r = pendingResult.get();
 					if (r.isSuccess())
 					{
@@ -121,7 +121,7 @@ public class LocalUser extends User
 						GoogleSignInAccount gacc = r.getSignInAccount();
 						if (gacc == null)
 						{
-							Log.w(TAG, "SilentSignIn: Google sign in result was null.");
+							Log.wtf(TAG, "SilentSignIn: Google sign in result was null.");
 							return false;
 						}
 						Log.i(TAG, "SilentSignIn Google attempting dtk login");
@@ -158,13 +158,13 @@ public class LocalUser extends User
 					}
 					else
 					{
-						Log.w(TAG, "SilentSignIn: Google account was null.");
+						Log.wtf(TAG, "SilentSignIn: Google account was null.");
 						return false;
 					}
 				}
 				else
 				{
-					Log.w(TAG, "SilentSignIn: Google sign in result was null.");
+					Log.wtf(TAG, "SilentSignIn: Google sign in result was null.");
 					return false;
 				}
 			case FACEBOOK:
@@ -194,7 +194,7 @@ public class LocalUser extends User
 				}
 				else
 				{
-					Log.w(TAG, "SilentSignIn: Facebook token was null.");
+					Log.wtf(TAG, "SilentSignIn: Facebook token was null.");
 					return false;
 				}
 			case SOUNDCLOUD:
@@ -230,7 +230,7 @@ public class LocalUser extends User
 	{
 		if (currentUser == null)
 		{
-			fail("You may not call getCuntUser if no user has been logged in");
+			Log.wtf(TAG, "Called getCuntUser when no user was logged in");
 		}
 		return currentUser;
 	}
@@ -240,7 +240,7 @@ public class LocalUser extends User
 	{
 		if (user.loginType == null || user.token == null)
 		{
-			fail("setCurrentUser requires a user with a LoginType and token");
+			Log.wtf(TAG, "setCuntUser requires a user with a LoginType and token");
 		}
 		String x = null;
 		switch (user.getLoginType())
@@ -257,7 +257,7 @@ public class LocalUser extends User
 		}
 		if (x == null)
 		{
-			fail("setCurrentUser requires a user with a LoginType and token");
+			Log.wtf(TAG, "setCuntUser requires a user with a LoginType and token");
 		}
 		SharedPreferences.Editor editor = preferences.edit();
 		editor.putString(AUTH_TYPE_KEY, x);
@@ -294,7 +294,7 @@ public class LocalUser extends User
 
 		if (obj == null)
 		{
-			Log.d(TAG, "login returned null (timeout or other error)");
+			Log.e(TAG, "login returned null (timeout or other error)");
 			return false;
 		}
 		else
@@ -379,10 +379,10 @@ public class LocalUser extends User
 		@Override
 		public void onResult(@NonNull GoogleSignInResult result)
 		{
-			Log.d(TAG, "Google Silent login onResult");
+			Log.i(TAG, "Google Silent login onResult");
 			if (result.isSuccess())
 			{
-				Log.d(TAG, "result.isSuccess()");
+				Log.i(TAG, "result.isSuccess()");
 				this.result = result;
 				latch.countDown();
 			}
@@ -403,13 +403,13 @@ public class LocalUser extends User
 		@Override
 		public void onFailure()
 		{
-			Log.w(TAG, "SilentSignIn Facebook onFailure");
+			Log.wtf(TAG, "SilentSignIn Facebook onFailure");
 		}
 
 		@Override
 		public void onError(Exception exception)
 		{
-			Log.w(TAG, "SilentSignIn Facebook onError");
+			Log.e(TAG, "SilentSignIn Facebook onError");
 		}
 
 	}
