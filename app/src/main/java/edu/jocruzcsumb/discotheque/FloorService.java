@@ -120,7 +120,7 @@ public class FloorService extends IntentService
 				}
 				else
 				{
-					Log.w(TAG, "Could not join room because floorId was 0");
+					Log.wtf(TAG, "Could not join room because floorId was 0");
 				}
 			}
 		}
@@ -204,7 +204,7 @@ public class FloorService extends IntentService
 			obj = waiter.getObj(obj);
 			if (obj == null)
 			{
-				Log.w(TAG, EVENT_FLOOR_JOINED + "Returned null");
+				Log.wtf(TAG, EVENT_FLOOR_JOINED + "Returned null");
 				return;
 			}
 			floor = Floor.parseAdvanced(obj);
@@ -212,13 +212,13 @@ public class FloorService extends IntentService
 		catch (JSONException e)
 		{
 			e.printStackTrace();
-			Log.w(TAG, EVENT_FLOOR_JOINED + ": Unable to parse floor from json");
+			Log.wtf(TAG, EVENT_FLOOR_JOINED + ": Unable to parse floor from json");
 			return;
 		}
 
 		if (floor == null)
 		{
-			Log.w(TAG, "Floor was null");
+			Log.wtf(TAG, "Floor was null");
 			return;
 		}
 
@@ -240,7 +240,7 @@ public class FloorService extends IntentService
 		catch (InterruptedException e)
 		{
 			e.printStackTrace();
-			Log.w(TAG, "The floorLatch was interruped, leaving the floor");
+			Log.wtf(TAG, "The floorLatch was interruped");
 		}
 		Log.i(TAG, "Leaving the floor...");
 		seamlessMediaPlayer.stop();
@@ -261,7 +261,7 @@ public class FloorService extends IntentService
 		catch (JSONException e)
 		{
 			e.printStackTrace();
-			Log.e(TAG, "could not create json to leave floor");
+			Log.wtf(TAG, "could not create json to leave floor");
 		}
 		Log.i(TAG, "Exiting FloorService");
 	}
@@ -269,15 +269,15 @@ public class FloorService extends IntentService
 	private void unregisterSocketEvents()
 	{
 		for (String e : new String[]
-				{
-						EVENT_FLOOR_JOINED,
-						EVENT_SONG_LIST_UPDATE,
-						EVENT_MESSAGE_LIST_UPDATE,
-						EVENT_USER_LIST_UPDATE,
-						EVENT_MESSAGE_ADD,
-						EVENT_USER_ADD,
-						EVENT_USER_REMOVE,
-						})
+			{
+				EVENT_FLOOR_JOINED,
+				EVENT_SONG_LIST_UPDATE,
+				EVENT_MESSAGE_LIST_UPDATE,
+				EVENT_USER_LIST_UPDATE,
+				EVENT_MESSAGE_ADD,
+				EVENT_USER_ADD,
+				EVENT_USER_REMOVE,
+			})
 		{
 			Sockets.getSocket()
 				   .off(e);
@@ -303,14 +303,14 @@ public class FloorService extends IntentService
 				   @Override
 				   public void call(Object... args)
 				   {
-					   Log.d(TAG, EVENT_SONG_LIST_UPDATE);
+					   Log.i(TAG, EVENT_SONG_LIST_UPDATE);
 
 					   JSONObject o = (JSONObject) args[0];
 					   ArrayList<Song> l = null;
 
 					   if (o == null)
 					   {
-						   Log.w(TAG, EVENT_SONG_LIST_UPDATE + ": json was null");
+						   Log.wtf(TAG, EVENT_SONG_LIST_UPDATE + ": json was null");
 						   return;
 					   }
 
@@ -323,20 +323,19 @@ public class FloorService extends IntentService
 					   catch (JSONException e)
 					   {
 						   e.printStackTrace();
-						   Log.w(TAG, EVENT_SONG_LIST_UPDATE + ": failed to parse json");
+						   Log.wtf(TAG, EVENT_SONG_LIST_UPDATE + ": failed to parse json");
 						   return;
 					   }
 
 					   if (l == null)
 					   {
-						   Log.w(TAG, EVENT_SONG_LIST_UPDATE + ": arraylist was null");
+						   Log.wtf(TAG, EVENT_SONG_LIST_UPDATE + ": arraylist was null");
 						   return;
 					   }
 
 					   // Set songs
 					   FloorService.this.floor.setSongs(l);
 
-					   Log.d(TAG, "TESTING 123");
 					   // Broadcast the event (so that FloorActivity can update)
 					   broadcast(EVENT_SONG_LIST_UPDATE, l);
 				   }
@@ -347,34 +346,33 @@ public class FloorService extends IntentService
 				   @Override
 				   public void call(Object... args)
 				   {
-					   Log.d(TAG, EVENT_USER_LIST_UPDATE);
+					   Log.i(TAG, EVENT_USER_LIST_UPDATE);
 
 					   JSONObject o = (JSONObject) args[0];
 					   ArrayList<User> l = null;
 
 					   if (o == null)
 					   {
-						   Log.w(TAG, EVENT_USER_LIST_UPDATE + ": json was null");
+						   Log.wtf(TAG, EVENT_USER_LIST_UPDATE + ": json was null");
 						   return;
 					   }
 
 					   // Parse JSON
 					   try
 					   {
-						   Log.d(TAG, o.toString());
 						   JSONArray a = o.getJSONArray("floor members");
 						   l = User.parse(a);
 					   }
 					   catch (JSONException e)
 					   {
 						   e.printStackTrace();
-						   Log.w(TAG, EVENT_USER_LIST_UPDATE + ": failed to parse json");
+						   Log.wtf(TAG, EVENT_USER_LIST_UPDATE + ": failed to parse json");
 						   return;
 					   }
 
 					   if (l == null)
 					   {
-						   Log.w(TAG, EVENT_USER_LIST_UPDATE + ": arraylist was null");
+						   Log.wtf(TAG, EVENT_USER_LIST_UPDATE + ": arraylist was null");
 						   return;
 					   }
 
@@ -391,14 +389,14 @@ public class FloorService extends IntentService
 				   @Override
 				   public void call(Object... args)
 				   {
-					   Log.d(TAG, EVENT_MESSAGE_LIST_UPDATE);
+					   Log.i(TAG, EVENT_MESSAGE_LIST_UPDATE);
 
 					   JSONObject o = (JSONObject) args[0];
 					   ArrayList<Message> l = null;
 
 					   if (o == null)
 					   {
-						   Log.w(TAG, EVENT_MESSAGE_LIST_UPDATE + ": json was null");
+						   Log.wtf(TAG, EVENT_MESSAGE_LIST_UPDATE + ": json was null");
 						   return;
 					   }
 
@@ -411,13 +409,13 @@ public class FloorService extends IntentService
 					   catch (JSONException e)
 					   {
 						   e.printStackTrace();
-						   Log.w(TAG, EVENT_MESSAGE_LIST_UPDATE + ": failed to parse json");
+						   Log.wtf(TAG, EVENT_MESSAGE_LIST_UPDATE + ": failed to parse json");
 						   return;
 					   }
 
 					   if (l == null)
 					   {
-						   Log.w(TAG, EVENT_MESSAGE_LIST_UPDATE + ": arraylist was null");
+						   Log.wtf(TAG, EVENT_MESSAGE_LIST_UPDATE + ": arraylist was null");
 						   return;
 					   }
 
@@ -436,7 +434,7 @@ public class FloorService extends IntentService
 				   @Override
 				   public void call(Object... args)
 				   {
-					   Log.d(TAG, EVENT_USER_ADD);
+					   Log.i(TAG, EVENT_USER_ADD);
 
 					   User u = null;
 					   // Get the user object
@@ -447,7 +445,7 @@ public class FloorService extends IntentService
 					   catch (JSONException e)
 					   {
 						   e.printStackTrace();
-						   Log.w(TAG, EVENT_USER_ADD + ": failed to parse json");
+						   Log.wtf(TAG, EVENT_USER_ADD + ": failed to parse json");
 						   return;
 					   }
 
@@ -465,7 +463,7 @@ public class FloorService extends IntentService
 				   @Override
 				   public void call(Object... args)
 				   {
-					   Log.d(TAG, EVENT_USER_REMOVE);
+					   Log.i(TAG, EVENT_USER_REMOVE);
 
 					   User u = null;
 					   // Get the user object
@@ -476,7 +474,7 @@ public class FloorService extends IntentService
 					   catch (JSONException e)
 					   {
 						   e.printStackTrace();
-						   Log.w(TAG, EVENT_USER_REMOVE + ": failed to parse json");
+						   Log.wtf(TAG, EVENT_USER_REMOVE + ": failed to parse json");
 						   return;
 					   }
 
@@ -494,7 +492,7 @@ public class FloorService extends IntentService
 				   @Override
 				   public void call(Object... args)
 				   {
-					   Log.d(TAG, EVENT_MESSAGE_ADD);
+					   Log.i(TAG, EVENT_MESSAGE_ADD);
 
 					   Message m = null;
 					   // Get the user object
@@ -505,7 +503,7 @@ public class FloorService extends IntentService
 					   catch (JSONException e)
 					   {
 						   e.printStackTrace();
-						   Log.w(TAG, EVENT_MESSAGE_ADD + ": failed to parse json");
+						   Log.wtf(TAG, EVENT_MESSAGE_ADD + ": failed to parse json");
 						   return;
 					   }
 
