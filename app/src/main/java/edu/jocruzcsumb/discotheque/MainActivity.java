@@ -27,8 +27,6 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
-import static junit.framework.Assert.fail;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks
 {
 
