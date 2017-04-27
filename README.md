@@ -1,27 +1,27 @@
-# project3-jocruz-tha-pking-cyates
-Silent disco android app.
-
-# Discotheque #
+# Discotek #
 ### Current State ###
-The app allows login through facebook and google.  After login, user is sent to the floor and may choose a room or create their own.
-From a room there is a chat, song list, and viewable profiles.
+The app allows login through facebook and google.  After login, user is sent to the floor and may choose a floor or create their own.
+From a floor there is a chat, song list, and viewable profiles.
 
 ### Work Distrubution ###
 _Who worked on what_
 
-* Joshua 'Ryan' Cruz: Backend except for logs and events.
-* Tommy Ha: User experience, floor creation, profiles.
-* Peter King: UI and styling. 
-* Kara Spencer: UI, basic testing, landing page & this handin3 readme.
-* Carsen Yates: Android backend & services. 
+* Joshua 'Ryan' Cruz: Flask and Database server.
+* Tommy Ha: User interface/experience; connecting services to interface.
+* Peter King: Logos, icons, design, styling and user-interface.
+* Kara Spencer: User-interface, landing page.
+* Carsen Yates: Android backend services, seamless media playback and server/client logging.
 
 ### What was completed ###
-*Everything was essentially completed EXCEPT themes, friends list. 
- 
+* __This is the only stuff that _wasn't_ completed__
+  * Song jukebox system.
+  * Additional user info (genres, friends).
+  * Themes (a set of colors for a room, and possibly one background pic).
+
 ### Known Problems ###
-* Socket goes bad on client which causes the app to need to be reset.
+* Heroku disconnects clients all the time and they get disconnected from the floor, c9.io is fine though.
 
 ### Future Improvments ###
-* Add themes
-* Add friends list
-* Add picking songs (number one future improvement wanted!)
+* Add song jukebox system.
+* Add themes.
+* Add genres/friends list.
