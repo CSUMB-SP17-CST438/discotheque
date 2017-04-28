@@ -88,8 +88,8 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
 												.toString();
 				int position = splitSpinner.getSelectedItemPosition();
 				String selectedText = (String) splitSpinner.getSelectedItem();
-				Log.d(TAG, String.valueOf(position));
-				Log.d(TAG, selectedText);
+//				Log.d(TAG, String.valueOf(position));
+//				Log.d(TAG, selectedText);
 				if (floorname.isEmpty())
 				{
 					Toast.makeText(CreateFloorActivity.this, "Please enter a floor name", Toast.LENGTH_SHORT)
@@ -138,7 +138,7 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
 	@Override
 	public void call(Object... args)
 	{
-		Log.d(TAG, "Received object: " + args[0]);
+		Log.i(TAG, "Received object: " + args[0]);
 		if (args[0] instanceof JSONObject)
 		{
 			JSONObject jsonObject = (JSONObject) args[0];
@@ -157,7 +157,7 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
 				{
 					int floorId = Floor.parse(jsonObject)
 									   .getId();
-					Log.d(TAG, String.valueOf(floorId));
+					//Log.d(TAG, String.valueOf(floorId));
 					Intent k = new Intent(CreateFloorActivity.this, FloorActivity.class);
 					k.putExtra(Floor.TAG, floorId);
 					k.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
