@@ -2,7 +2,6 @@ package edu.jocruzcsumb.discotheque;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,7 +81,7 @@ public class Song implements Comparable<Song>, Parcelable
 
 	public static Song parse(JSONObject jsonSong) throws JSONException
 	{
-		Log.d(TAG, jsonSong.toString());
+		Log.v(TAG, jsonSong.toString());
 		long s = 0;
 		try
 		{
@@ -90,7 +89,7 @@ public class Song implements Comparable<Song>, Parcelable
 		}
 		catch (Exception e)
 		{
-			Log.i(TAG, "skipped parsing start time: " + e.getMessage());
+			Log.v(TAG, "skipped parsing start time: " + e.getMessage());
 		}
 		int d = 0;
 		try
@@ -99,7 +98,7 @@ public class Song implements Comparable<Song>, Parcelable
 		}
 		catch (Exception e)
 		{
-			Log.i(TAG, "skipped parsing duration: " + e.getMessage());
+			Log.v(TAG, "skipped parsing duration: " + e.getMessage());
 		}
 		String c = (jsonSong.has(JSON_CHOSEN_BY_TAG) ? jsonSong.getString(JSON_CHOSEN_BY_TAG) : "server");
 		return new Song(
@@ -116,7 +115,7 @@ public class Song implements Comparable<Song>, Parcelable
 
 	public static ArrayList<Song> parse(JSONArray a) throws JSONException
 	{
-		Log.d(TAG, a.toString());
+		Log.v(TAG, a.toString());
 		int arrayLength = a.length();
 		ArrayList<Song> songList = new ArrayList<Song>();
 		for (int i = 0; i < arrayLength; i++)
@@ -156,7 +155,10 @@ public class Song implements Comparable<Song>, Parcelable
 		return artist;
 	}
 
-	public String getTrack_permalink(){return track_permalink;}
+	public String getTrack_permalink()
+	{
+		return track_permalink;
+	}
 
 	public String getUrl()
 	{
@@ -216,19 +218,18 @@ public class Song implements Comparable<Song>, Parcelable
 		Log.i(TAG, "Start time: " + getStartTime());
 		Log.i(TAG, "URL: " + getUrl());
 	}
+
 	public boolean equals(Object other)
 	{
 		if (other instanceof Song)
 		{
 			Song s = (Song) other;
-			Log.d(TAG, "Song to Song comparison");
 			print();
 			s.print();
 			return title.equals(s.title) && artist.equals(s.artist) && track_permalink.equals(s.track_permalink);
 		}
 		else
 		{
-			Log.d(TAG, "Song to Obj comparison");
 			return false;
 		}
 	}

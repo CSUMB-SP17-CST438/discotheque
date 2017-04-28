@@ -15,7 +15,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,7 +44,7 @@ public class FloorActivity extends AppCompatActivity
 	private FloorListener listener;
 	private ImageView albumCoverView;
 	private TextView songInfoView;
-    private ImageView backgroundView = null;
+	private ImageView backgroundView = null;
 	// For the tabs
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
@@ -95,7 +94,6 @@ public class FloorActivity extends AppCompatActivity
 			public void onSongStarted(Song x)
 			{
 				final Song s = x;
-				Log.d(TAG, EVENT_SONG_STARTED + ": " + s.getName() + " - " + s.getArtist());
 				FloorActivity.this.runOnUiThread(new Runnable()
 				{
 					@Override
@@ -117,7 +115,7 @@ public class FloorActivity extends AppCompatActivity
 		int floorId = i.getIntExtra(Floor.TAG, 0);
 		if (floorId == 0)
 		{
-			Log.w(TAG, "No floor was passed to this activity, aborting...");
+			Log.wtf(TAG, "No floor was passed to this activity, aborting...");
 			finish();
 		}
 		else
@@ -149,30 +147,30 @@ public class FloorActivity extends AppCompatActivity
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 		tabLayout.setupWithViewPager(mViewPager);
 
-        albumCoverView = (ImageView) findViewById(R.id.song_artwork);
-        songInfoView = (TextView) findViewById(R.id.song_title_text);
-        backgroundView = (ImageView) findViewById(R.id.floor_background_picture);
+		albumCoverView = (ImageView) findViewById(R.id.song_artwork);
+		songInfoView = (TextView) findViewById(R.id.song_title_text);
+		backgroundView = (ImageView) findViewById(R.id.floor_background_picture);
 
 
-        //setting background by according to genre
-        //backgroundView.setImageResource(genreTypes(floor.getGenre())); //use this to let users background image
+		//setting background by according to genre
+		//backgroundView.setImageResource(genreTypes(floor.getGenre())); //use this to let users background image
 
 
+	}
 
+	private int genreTypes(String genre)
+	{
+		switch (genre)
+		{
+			case "reggae":
+				return R.drawable.red_cardcover_temp;
+			case "soft rock":
+				return R.drawable.teal_cardcover_temp;
+			default:
+				return R.drawable.yellow_cardcover_temp;
 
-    }
-
-    private int genreTypes(String genre){
-        switch(genre){
-            case "reggae":
-                return R.drawable.red_cardcover_temp;
-            case "soft rock":
-                return R.drawable.teal_cardcover_temp;
-            default:
-                return R.drawable.yellow_cardcover_temp;
-
-        }
-    }
+		}
+	}
 
 	private void setCurrentSong(Song s)
 	{

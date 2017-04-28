@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,7 +111,8 @@ public class UserFragment extends FloorFragment
 			}
 
 			@Override
-			public void onLongItemClick(View v, int position){
+			public void onLongItemClick(View v, int position)
+			{
 
 			}
 		});
@@ -161,7 +161,7 @@ public class UserFragment extends FloorFragment
 		public UserFragment.UserAdapter.UserViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
 		{
 			View v = LayoutInflater.from(viewGroup.getContext())
-					.inflate(R.layout.list_user, viewGroup, false);
+								   .inflate(R.layout.list_user, viewGroup, false);
 			final UserFragment.UserAdapter.UserViewHolder svh = new UserFragment.UserAdapter.UserViewHolder(v);
 			v.setOnClickListener(new View.OnClickListener()
 			{
@@ -183,15 +183,16 @@ public class UserFragment extends FloorFragment
 		{
 			//TODO set profile picture
 			Picasso.with(mContext)
-					.load(users.get(i).getPhoto())
-					.resize(200, 200)
-					.centerInside()
-					.transform(new CircleTransform())
-					.into(userViewHolder.userPhoto);
+				   .load(users.get(i)
+							  .getPhoto())
+				   .resize(200, 200)
+				   .centerInside()
+				   .transform(new CircleTransform())
+				   .into(userViewHolder.userPhoto);
 
 			userViewHolder.username.setText(users.get(i)
-					.getFirstName() + " " + users.get(i)
-					.getLastName());
+												 .getFirstName() + " " + users.get(i)
+																			  .getLastName());
 		}
 
 		@Override

@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,25 +84,30 @@ public class SongFragment extends FloorFragment
 			}
 
 			@Override
-			public void onLongItemClick(View v, int position){
+			public void onLongItemClick(View v, int position)
+			{
 				Log.d(TAG, "song was long clicked");
 				final Song song = songs.get(position);
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 				builder.setMessage(R.string.confirm_leave_app)
-						.setCancelable(false)
-						.setPositiveButton(R.string.action_yes, new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								Uri uri = Uri.parse(song.getTrack_permalink()); // missing 'http://' will cause crashed
-								Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-								startActivity(intent);
+					   .setCancelable(false)
+					   .setPositiveButton(R.string.action_yes, new DialogInterface.OnClickListener()
+					   {
+						   public void onClick(DialogInterface dialog, int id)
+						   {
+							   Uri uri = Uri.parse(song.getTrack_permalink()); // missing 'http://' will cause crashed
+							   Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+							   startActivity(intent);
 
-							}
-						})
-						.setNegativeButton(R.string.action_no, new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								dialog.cancel();
-							}
-						});
+						   }
+					   })
+					   .setNegativeButton(R.string.action_no, new DialogInterface.OnClickListener()
+					   {
+						   public void onClick(DialogInterface dialog, int id)
+						   {
+							   dialog.cancel();
+						   }
+					   });
 				AlertDialog alert = builder.create();
 				alert.show();
 			}
@@ -173,9 +177,11 @@ public class SongFragment extends FloorFragment
 				}
 			});
 
-			v.setOnLongClickListener(new View.OnLongClickListener() {
+			v.setOnLongClickListener(new View.OnLongClickListener()
+			{
 				@Override
-				public boolean onLongClick(View v) {
+				public boolean onLongClick(View v)
+				{
 					listener.onLongItemClick(v, svh.getAdapterPosition());
 					return true;
 				}

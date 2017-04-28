@@ -11,41 +11,41 @@ import org.json.JSONObject;
 
 public class Theme implements Parcelable
 {
-    public static final Creator<Theme> CREATOR = new Creator<Theme>()
-    {
-        @Override
-        public Theme createFromParcel(Parcel in)
-        {
-            return new Theme(in);
-        }
+	public static final Creator<Theme> CREATOR = new Creator<Theme>()
+	{
+		@Override
+		public Theme createFromParcel(Parcel in)
+		{
+			return new Theme(in);
+		}
 
-        @Override
-        public Theme[] newArray(int size)
-        {
-            return new Theme[size];
-        }
-    };
+		@Override
+		public Theme[] newArray(int size)
+		{
+			return new Theme[size];
+		}
+	};
 
-    protected Theme(Parcel in)
-    {
-        //TODO
-    }
+	protected Theme(Parcel in)
+	{
+		//TODO
+	}
 
-    public static Theme parse(JSONObject jsonTheme)
-    {
-        //TODO
-        return null;
-    }
+	public static Theme parse(JSONObject jsonTheme)
+	{
+		//TODO
+		return null;
+	}
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags)
-    {
-        //TODO
-    }
+	@Override
+	public void writeToParcel(Parcel dest, int flags)
+	{
+		//TODO
+	}
 
-    @Override
-    public int describeContents()
-    {
-        return 0;
-    }
+	@Override
+	public int describeContents()
+	{
+		return 0;
+	}
 }
