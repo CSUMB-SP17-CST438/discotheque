@@ -80,14 +80,13 @@ public class ChatFragment extends FloorFragment implements View.OnClickListener
 
 	private void updateListUI(final ArrayList<Message> messages)
 	{
+		Log.i(TAG, "updateListUI");
 		Activity a = getActivity();
 		if (a == null)
 		{
 			return;
 		}
-		Log.d(TAG, "updateListUI");
 		chatAdapter = new ChatAdapter(a, messages);
-		Log.d(TAG, messages.toString());
 		a.runOnUiThread(new Runnable()
 		{
 			@Override
@@ -106,12 +105,11 @@ public class ChatFragment extends FloorFragment implements View.OnClickListener
 
 	public void onClick(View v)
 	{
-		Log.d(TAG, "onClick");
 		String text = chatField.getText()
 							   .toString();
 		if (!findFloor())
 		{
-			Log.w(TAG, "NO FLOOR ON CLICK");
+			Log.wtf(TAG, "NO FLOOR ON CLICK");
 			return;
 		}
 		Message m = new Message(0, LocalUser.getCurrentUser(), text, floor.getId(), 0);

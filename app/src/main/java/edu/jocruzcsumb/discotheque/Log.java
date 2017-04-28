@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 import static edu.jocruzcsumb.discotheque.CompileOptions.BIG_LOGS;
 import static edu.jocruzcsumb.discotheque.CompileOptions.DEBUG_MODE;
-import static edu.jocruzcsumb.discotheque.CompileOptions.SHOW_LOG_DEBUG;
 import static edu.jocruzcsumb.discotheque.CompileOptions.SHOW_LOG_ERRORS;
 import static edu.jocruzcsumb.discotheque.CompileOptions.SHOW_LOG_INFO;
 import static edu.jocruzcsumb.discotheque.CompileOptions.SHOW_LOG_VERBOSE;
@@ -28,21 +27,16 @@ public class Log
 		{
 			wtf(TAG, "Call to Log.d, but DEBUG_MODE is false");
 		}
-		if (!SHOW_LOG_DEBUG)
-		{
-			return;
-		}
 		if(BIG_LOGS)
 		{
 			String[][] box = new String[][]{
-					new String[]{"DEBUG"},
-					new String[]{tag},
-					new String[]{text},
+					new String[]{"DEBUG",tag},
+					new String[]{"MSG",text},
 			};
 			text = getBox(box);
 			tag = TAG;
 		}
-		android.util.Log.i(tag, text);
+		android.util.Log.d(tag, text);
 	}
 
 	// Generic information about what the app is doing
@@ -56,9 +50,8 @@ public class Log
 		if(BIG_LOGS)
 		{
 			String[][] box = new String[][]{
-					new String[]{"INFO"},
-					new String[]{tag},
-					new String[]{text},
+					new String[]{"INFO",tag},
+					new String[]{"MSG",text},
 			};
 			text = getBox(box);
 			tag = TAG;
@@ -76,14 +69,13 @@ public class Log
 		if(BIG_LOGS)
 		{
 			String[][] box = new String[][]{
-					new String[]{"VERBOSE INFO"},
-					new String[]{tag},
-					new String[]{text},
+					new String[]{"VERBOSE",tag},
+					new String[]{"MSG",text},
 			};
 			text = getBox(box);
 			tag = TAG;
 		}
-		android.util.Log.i(tag, text);
+		android.util.Log.v(tag, text);
 	}
 
 	// Warnings can be unexpected behavior that DON'T break functionality
@@ -96,14 +88,13 @@ public class Log
 		if(BIG_LOGS)
 		{
 			String[][] box = new String[][]{
-					new String[]{"WARNING"},
-					new String[]{tag},
-					new String[]{text},
+					new String[]{"WARNING",tag},
+					new String[]{"MSG",text},
 			};
 			text = getBox(box);
 			tag = TAG;
 		}
-		android.util.Log.i(tag, text);
+		android.util.Log.w(tag, text);
 	}
 
 	// Errors can be unexpected behavior that COULD break functionality
@@ -116,14 +107,13 @@ public class Log
 		if(BIG_LOGS)
 		{
 			String[][] box = new String[][]{
-					new String[]{"ERROR"},
-					new String[]{tag},
-					new String[]{text},
+					new String[]{"ERROR",tag},
+					new String[]{"MSG",text},
 			};
 			text = getBox(box);
 			tag = TAG;
 		}
-		android.util.Log.i(tag, text);
+		android.util.Log.e(tag, text);
 	}
 
 	// What A Terrible Failure messages ( I prefer "What the fuck")
@@ -134,9 +124,8 @@ public class Log
 		if(BIG_LOGS)
 		{
 			String[][] box = new String[][]{
-					new String[]{"WTF"},
-					new String[]{tag},
-					new String[]{text},
+					new String[]{"WTF",tag},
+					new String[]{"MSG",text},
 			};
 			text = getBox(box);
 			tag = TAG;

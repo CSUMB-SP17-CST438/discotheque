@@ -94,7 +94,6 @@ public class FloorActivity extends AppCompatActivity
 			public void onSongStarted(Song x)
 			{
 				final Song s = x;
-				Log.d(TAG, EVENT_SONG_STARTED + ": " + s.getName() + " - " + s.getArtist());
 				FloorActivity.this.runOnUiThread(new Runnable()
 				{
 					@Override
@@ -116,7 +115,7 @@ public class FloorActivity extends AppCompatActivity
 		int floorId = i.getIntExtra(Floor.TAG, 0);
 		if (floorId == 0)
 		{
-			Log.w(TAG, "No floor was passed to this activity, aborting...");
+			Log.wtf(TAG, "No floor was passed to this activity, aborting...");
 			finish();
 		}
 		else

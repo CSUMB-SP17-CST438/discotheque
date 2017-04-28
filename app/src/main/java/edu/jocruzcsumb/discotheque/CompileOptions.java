@@ -1,7 +1,7 @@
 package edu.jocruzcsumb.discotheque;
 
 /**
- * Created by carsen on 4/27/17.
+ * Created by Carsen on 4/27/17.
  */
 
 public final class CompileOptions
@@ -22,8 +22,7 @@ public final class CompileOptions
 	// For logging
 	public static final boolean BIG_LOGS = true;
 	public static final boolean SHOW_LOG_VERBOSE = false;
-	public static final boolean SHOW_LOG_DEBUG = true;
-	public static final boolean SHOW_LOG_INFO = true;
+	public static final boolean SHOW_LOG_INFO = false;
 	public static final boolean SHOW_LOG_WARNINGS = true;
 	public static final boolean SHOW_LOG_ERRORS = true;
 

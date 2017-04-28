@@ -69,7 +69,7 @@ public class Message implements Parcelable
 
 	public static Message parse(JSONObject jsonMessage) throws JSONException
 	{
-		Log.d(TAG, jsonMessage.toString());
+		Log.v(TAG, jsonMessage.toString());
 		User author = User.parse(jsonMessage.getJSONObject(JSON_FROM_TAG));
 		String text = jsonMessage.getString(JSON_TEXT_TAG);
 		long pubTime = 0;//long pubTime = jsonMessage.getLong(JSON_PUB_TIME_TAG);
@@ -81,7 +81,7 @@ public class Message implements Parcelable
 	public static ArrayList<Message> parse(JSONArray a) throws JSONException
 	{
 		int arrayLength = a.length();
-		Log.d(TAG, a.toString());
+		Log.v(TAG, a.toString());
 		ArrayList<Message> messageList = new ArrayList<Message>();
 		for (int i = 0; i < arrayLength; i++)
 		{
