@@ -307,8 +307,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		if (requestCode == REQ_CODE)
 		{
 			GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-			Log.d(TAG, String.valueOf(result.getStatus()
-											.getStatusCode()));
+//			Log.d(TAG, String.valueOf(result.getStatus()
+//											.getStatusCode()));
 			if (result == null)
 			{
 				Log.wtf(TAG, "result was null you cunt ass bitch");
@@ -332,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			@Override
 			public void run()
 			{
-				findViewById(R.id.loadingPanel).setVisibility(show ? View.VISIBLE : View.GONE);
+				findViewById(R.id.loading_panel).setVisibility(show ? View.VISIBLE : View.GONE);
 			}
 		});
 	}

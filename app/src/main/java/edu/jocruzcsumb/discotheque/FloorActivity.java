@@ -81,7 +81,7 @@ public class FloorActivity extends AppCompatActivity
 					@Override
 					public void run()
 					{
-						findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+						findViewById(R.id.loading_panel).setVisibility(View.GONE);
 						setTitle(FloorActivity.this.floor.getName());
 
 						//setting background by according to genre
@@ -213,7 +213,7 @@ public class FloorActivity extends AppCompatActivity
 		floor = (Floor) savedInstanceState.getParcelable(Floor.TAG);
 		if (floor != null)
 		{
-			findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+			findViewById(R.id.loading_panel).setVisibility(View.GONE);
 		}
 		setCurrentSong((Song) savedInstanceState.getParcelable(Song.TAG));
 	}

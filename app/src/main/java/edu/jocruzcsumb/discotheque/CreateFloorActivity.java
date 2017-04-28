@@ -45,7 +45,7 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
 		cancelButton = (Button) findViewById(R.id.cancel_floor_button);
 		editFloorName = (EditText) findViewById(R.id.edit_floor_name);
 		splitSpinner = (Spinner) findViewById(R.id.splitSpinner);
-		findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+		findViewById(R.id.loading_panel).setVisibility(View.GONE);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CreateFloorActivity.this, R.array.genre_array_list,
 				android.R.layout.simple_dropdown_item_1line);
 		splitSpinner.setAdapter(adapter);
@@ -69,7 +69,8 @@ public class CreateFloorActivity extends AppCompatActivity implements View.OnCli
 			@Override
 			public void run()
 			{
-				findViewById(R.id.loadingPanel).setVisibility(show ? View.VISIBLE : View.GONE);
+				findViewById(R.id.loading_panel).setVisibility(show ? View.VISIBLE : View.GONE);
+				findViewById(R.id.create_floor_main).setVisibility(show ? View.GONE : View.VISIBLE);
 			}
 		});
 	}
