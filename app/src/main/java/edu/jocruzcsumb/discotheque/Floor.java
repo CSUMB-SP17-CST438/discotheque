@@ -77,7 +77,7 @@ public class Floor implements Parcelable
 
 	public static Floor parse(JSONObject jsonFloor) throws JSONException
 	{
-		Log.d(TAG, "Parse Floor: " + jsonFloor.toString());
+		Log.v(TAG, "Parse Floor: " + jsonFloor.toString());
 		boolean sub = (jsonFloor.has("floor"));
 		//Log.d(TAG, "Parse Floor: has tag floor: " + (sub ? "true" : "false"));
 		if (sub)
@@ -96,6 +96,7 @@ public class Floor implements Parcelable
 
 	public static ArrayList<Floor> parse(JSONArray a) throws JSONException
 	{
+		Log.v(TAG, "Parse Floor: " + a.toString());
 		int arrayLength = a.length();
 		ArrayList<Floor> floorList = new ArrayList<Floor>();
 		for (int i = 0; i < arrayLength; i++)

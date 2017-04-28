@@ -91,7 +91,7 @@ public class User implements Parcelable
 
 	protected static User parse(JSONObject jsonUser) throws JSONException
 	{
-		Log.d(TAG, jsonUser.toString());
+		Log.v(TAG, jsonUser.toString());
 		return new User(
 				jsonUser.getString(JSON_USERNAME_TAG),
 				jsonUser.getString(JSON_FNAME_TAG),
@@ -102,7 +102,7 @@ public class User implements Parcelable
 
 	public static ArrayList<User> parse(JSONArray a) throws JSONException
 	{
-		Log.d(TAG, a.toString());
+		Log.v(TAG, a.toString());
 		int arrayLength = a.length();
 		ArrayList<User> userList = new ArrayList<User>();
 		for (int i = 0; i < arrayLength; i++)

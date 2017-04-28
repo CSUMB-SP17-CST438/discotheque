@@ -7,7 +7,7 @@ package edu.jocruzcsumb.discotheque;
 public final class CompileOptions
 {
 	// Server setting
-	private static final boolean DEBUG_MODE = true;
+	public static final boolean DEBUG_MODE = false;
 	private static final int SELECTED_TEST_SERVER = 2;
 	// Append to this list if you want to run a different server :D
 	private static final String[] SERVERS =
@@ -20,11 +20,12 @@ public final class CompileOptions
 	public static final String SERVER_URL = DEBUG_MODE ? SERVERS[SELECTED_TEST_SERVER] : LIVE_SERVER;
 
 	// For logging
-	public static final boolean LOG_VERBOSE = false;
-	public static final boolean LOG_DEBUG = true;
-	public static final boolean LOG_INFO = true;
-	public static final boolean LOG_WARNINGS = true;
-	public static final boolean LOG_ERRORS = true;
+	public static final boolean BIG_LOGS = true;
+	public static final boolean SHOW_LOG_VERBOSE = false;
+	public static final boolean SHOW_LOG_DEBUG = true;
+	public static final boolean SHOW_LOG_INFO = true;
+	public static final boolean SHOW_LOG_WARNINGS = true;
+	public static final boolean SHOW_LOG_ERRORS = true;
 
 	// For socket timeout
 	public static final long SOCKET_TIMEOUT = 8L;

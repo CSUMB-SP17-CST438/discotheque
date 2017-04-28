@@ -167,7 +167,7 @@ public class Sockets
 			socketLatch = new CountDownLatch(1);
 			success = false;
 
-			Log.d(TAG, "Sending socket event: " + signal);
+			Log.i(TAG, "Sending socket event: " + signal);
 
 			if (signal != null)
 			{
@@ -211,7 +211,7 @@ public class Sockets
 			socketLatch = new CountDownLatch(1);
 			success = false;
 
-			Log.d(TAG, "Sending event: " + signal);
+			Log.i(TAG, "Sending event: " + signal);
 
 			if (signal != null)
 			{
@@ -252,7 +252,7 @@ public class Sockets
 		@Override
 		public void call(Object... args)
 		{
-			Log.d(TAG, "Received event: " + event);
+			Log.i(TAG, "Received event: " + event);
 			switch (mode)
 			{
 				case ARRAY:

@@ -92,7 +92,7 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 				}
 
 				JSONArray a = waiter.getArray(jsonObject2);
-				Log.d(TAG, a.toString());
+				Log.v(TAG, a.toString());
 				if (a != null)
 				{
 					try
@@ -108,7 +108,7 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 				}
 				else
 				{
-					Log.d(TAG, "Floor list is empty");
+					Log.w(TAG, "Floor list is empty");
 				}
 
 			}
@@ -135,14 +135,14 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 
 	private void updateListUI()
 	{
-		Log.v(TAG, "updateListUI");
+		Log.i(TAG, "updateListUI");
 		floorAdapter = new FloorAdapter(PickFloorActivity.this, floorList, new RecyclerViewListener()
 		{
 			@Override
 			public void onItemClick(View v, int position)
 			{
 				Floor floor = floorList.get(position);
-				Log.d(TAG, String.valueOf(floor.getId()));
+				Log.v(TAG, String.valueOf(floor.getId()));
 				Intent k = new Intent(PickFloorActivity.this, FloorActivity.class);
 				k.putExtra(Floor.TAG, floor.getId());
 				startActivity(k);
@@ -198,7 +198,7 @@ public class PickFloorActivity extends AppCompatActivity implements View.OnClick
 				break;
 
 			case R.id.fab2:
-				Log.d(TAG, "fab button was pressed");
+				Log.i(TAG, "fab button was pressed");
 //                CreateFloorDialogFragment dialogFragment = new CreateFloorDialogFragment();
 //                FragmentManager fragmentManager = getFragmentManager();
 //                dialogFragment.show(fragmentManager, "sample fragment");
