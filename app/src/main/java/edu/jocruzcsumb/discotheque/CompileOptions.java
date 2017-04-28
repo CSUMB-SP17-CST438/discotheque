@@ -21,8 +21,8 @@ public final class CompileOptions
 
 	// For logging
 	public static final boolean BIG_LOGS = true;
-	public static final boolean SHOW_LOG_VERBOSE = false;
-	public static final boolean SHOW_LOG_INFO = false;
+	public static final boolean SHOW_LOG_VERBOSE = true;
+	public static final boolean SHOW_LOG_INFO = true;
 	public static final boolean SHOW_LOG_WARNINGS = true;
 	public static final boolean SHOW_LOG_ERRORS = true;
 
