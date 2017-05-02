@@ -7,16 +7,15 @@
     <string name="google">Log in with Google</string>
     <string name="guest">Enter as a Guest</string>
 
-    <string name="room">Listening Rooms</string>
+    <string name="available_floors">Available floors:</string>
 
+    <string name="room_title">Room Title</string>
+    <string name="current_song">Song title</string>
+    <string name="current_art">Art</string>
 
-    <string name="RoomTitle">Room Title</string>
-    <string name="curSong">Song title</string>
-    <string name="curArt">Art</string>
-
-    <string name="CurRoomTitle">Current Room Title</string>
-    <string name="currentTrack">Current Song</string>
-    <string name="currentArtist">Artist</string>
+    <string name="current_room_title">Current Room Title</string>
+    <string name="current_track">Current Song</string>
+    <string name="current_artist">Artist</string>
     <string name="title_activity_view_profile">ViewProfileActivity</string>
 
     <string name="action_settings">Settings</string>
@@ -75,11 +74,11 @@
 
 
     <!--Strings related to create floor activity  -->
-    <string name="floorname">Floor Name:</string>
-    <string name="editFloor">Enter floor name</string>
-    <string name="genrename">Enter Genre</string>
-    <string name="editGenre">Enter genre name</string>
-    <string name="cancelbutton">Cancel</string>
+    <string name="floor_name">Floor Name:</string>
+    <string name="edit_floor">Enter floor name</string>
+    <string name="genre_name">Enter Genre</string>
+    <string name="edit_genre">Enter genre name</string>
+    <string name="cancel_button">Cancel</string>
     <string name="createFloorButton">Create Floor</string>
 
 

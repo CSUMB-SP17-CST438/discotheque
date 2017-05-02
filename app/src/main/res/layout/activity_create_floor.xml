@@ -71,7 +71,7 @@
 			android:layout_marginLeft="23dp"
 			android:layout_marginStart="24dp"
 			android:layout_toRightOf="@+id/flooricon"
-			android:hint="@string/editFloor"
+			android:hint="@string/edit_floor"
 			android:paddingBottom="8dp"
 			android:paddingTop="16dp"/>
 
@@ -113,7 +113,7 @@
 			android:layout_alignRight="@+id/edit_floor_name"
 			android:layout_marginLeft="2dp"
 			android:layout_toRightOf="@+id/genre"
-			android:hint="@string/genrename">
+			android:hint="@string/genre_name">
 		</Spinner>
 
 		<LinearLayout
@@ -145,7 +145,7 @@
 				android:layout_gravity="center_horizontal"
 				android:layout_marginBottom="10dp"
 				android:background="@color/colorPrimary"
-				android:text="@string/cancelbutton"
+				android:text="@string/cancel_button"
 				/>
 
 		</LinearLayout>

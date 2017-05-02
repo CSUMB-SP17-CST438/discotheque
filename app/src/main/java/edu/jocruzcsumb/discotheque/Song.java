@@ -213,10 +213,12 @@ public class Song implements Comparable<Song>, Parcelable
 	public void print()
 	{
 		//print current song
-		Log.i(TAG, "Title: " + getName());
-		Log.i(TAG, "Artist: " + getArtist());
-		Log.i(TAG, "Start time: " + getStartTime());
-		Log.i(TAG, "URL: " + getUrl());
+		Log.i(TAG,
+				"Title: " + getName() +
+				"\nArtist: " + getArtist() +
+				"\nStart time: " + getStartTime() +
+				"\nURL: " + getUrl()
+		);
 	}
 
 	public boolean equals(Object other)
