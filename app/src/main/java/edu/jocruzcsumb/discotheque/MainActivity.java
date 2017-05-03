@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 								@Override
 								public void onResult(@NonNull Status status)
 								{
-									Log.d(GOOGLE_AUTH_TAG, "googleSignOut onResult: " + status.getStatusMessage());
+									Log.i(GOOGLE_AUTH_TAG, "googleSignOut onResult: " + status.getStatusMessage());
 								}
 							});
 	}

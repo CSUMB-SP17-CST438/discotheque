@@ -20,6 +20,43 @@ public class Sockets
 	public static boolean socketlock = false;
 	private static Socket socket = null;
 
+	public static final String EVENT_PING = "ping";
+	public static final String EVENT_PONG = "pong";
+
+	static Thread pingThread = null;
+	static Runnable r = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			SocketWaiter w = new SocketWaiter(EVENT_PING, EVENT_PONG);
+			while(getSocket().connected())
+			{
+				try
+				{
+					Thread.sleep(CompileOptions.PING_INTERVAL);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+					Log.wtf(TAG, e.getMessage());
+				}
+				w.waitForEvent();
+			}
+			Log.e(TAG, "Socket was disconnected");
+		}
+	};
+
+	public static void persist()
+	{
+		Log.i(TAG, "persist (Ping Pong)");
+		if(pingThread == null)
+		{
+			(pingThread = new Thread(r)).start();
+		}
+	}
+
+
 	public static boolean waitForConnect()
 	{
 		Log.i(TAG, "Waiting for server to connect");
@@ -133,7 +170,6 @@ public class Sockets
 			this(null, event);
 		}
 
-
 		//Signal = what to send the server, event = event we wait for.
 		public SocketWaiter(String signal, String event)
 		{
@@ -149,6 +185,11 @@ public class Sockets
 			socketLatch = new CountDownLatch(1);
 			Socket s = create_socket ? createSocket() : getSocket();
 			s.once(event, this);
+			if (signal != null)
+			{
+				Log.i(TAG, "Sending event: " + signal);
+				getSocket().emit(signal);
+			}
 			try
 			{
 				socketLatch.await(SOCKET_TIMEOUT, TimeUnit.SECONDS);
@@ -166,11 +207,10 @@ public class Sockets
 			json = null;
 			socketLatch = new CountDownLatch(1);
 			success = false;
-
-			Log.i(TAG, "Sending socket event: " + signal);
-
+			getSocket().once(event, this);
 			if (signal != null)
 			{
+				Log.i(TAG, "Sending socket event: " + signal);
 				if (params == null)
 				{
 					getSocket().emit(signal);
@@ -181,7 +221,6 @@ public class Sockets
 				}
 			}
 
-			getSocket().once(event, this);
 			try
 			{
 				socketLatch.await(SOCKET_TIMEOUT, TimeUnit.SECONDS);
@@ -210,11 +249,10 @@ public class Sockets
 			jsonArray = null;
 			socketLatch = new CountDownLatch(1);
 			success = false;
-
-			Log.i(TAG, "Sending event: " + signal);
-
+			getSocket().once(event, this);
 			if (signal != null)
 			{
+				Log.i(TAG, "Sending event: " + signal);
 				if (params == null)
 				{
 					getSocket().emit(signal);
@@ -225,7 +263,6 @@ public class Sockets
 				}
 			}
 
-			getSocket().once(event, this);
 			try
 			{
 				//socketLatch.await(TIMEOUT, TimeUnit.SECONDS);

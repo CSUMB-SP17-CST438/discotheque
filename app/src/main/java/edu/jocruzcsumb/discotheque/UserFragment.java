@@ -103,7 +103,6 @@ public class UserFragment extends FloorFragment
 			public void onItemClick(View v, int position)
 			{
 				User user = users.get(position);
-				Log.d(TAG, user.toString());
 				//TODO: pass user to profile activity
 				Intent intent = new Intent(a, ViewProfileActivity.class);
 				intent.putExtra("user", user);

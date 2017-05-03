@@ -89,7 +89,6 @@ public class Song implements Comparable<Song>, Parcelable
 		}
 		catch (Exception e)
 		{
-			Log.v(TAG, "skipped parsing start time: " + e.getMessage());
 		}
 		int d = 0;
 		try
@@ -98,7 +97,6 @@ public class Song implements Comparable<Song>, Parcelable
 		}
 		catch (Exception e)
 		{
-			Log.v(TAG, "skipped parsing duration: " + e.getMessage());
 		}
 		String c = (jsonSong.has(JSON_CHOSEN_BY_TAG) ? jsonSong.getString(JSON_CHOSEN_BY_TAG) : "server");
 		return new Song(

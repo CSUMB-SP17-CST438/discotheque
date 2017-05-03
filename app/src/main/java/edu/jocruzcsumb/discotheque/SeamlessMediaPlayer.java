@@ -185,11 +185,11 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 			}
 			else
 			{
-				Log.v(TAG, "Current:");
+				Log.i(TAG, "Current:");
 				printSong(current);
-				Log.v(TAG, "Next:");
+				Log.i(TAG, "Next:");
 				printSong(next);
-				Log.v(TAG, "Server's current:");
+				Log.i(TAG, "Server's current:");
 				printSong(cur);
 				lock = false;
 				return;
