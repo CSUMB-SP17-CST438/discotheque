@@ -109,16 +109,20 @@ public class Song implements Comparable<Song>, Parcelable
 				d,
 				jsonSong.getString(JSON_PERMALINK_TAG)
 		);
+
 	}
 
 	public static ArrayList<Song> parse(JSONArray a) throws JSONException
 	{
-		Log.v(TAG, a.toString());
 		int arrayLength = a.length();
 		ArrayList<Song> songList = new ArrayList<Song>();
 		for (int i = 0; i < arrayLength; i++)
 		{
-			songList.add(Song.parse(a.getJSONObject(i)));
+			Log.i(TAG, "Song.parse [" + i + "]");
+			Song s = Song.parse(a.getJSONObject(i));
+			s.print(Log.Level.Verbose);
+			songList.add(s);
+
 		}
 		return songList;
 	}
@@ -215,7 +219,8 @@ public class Song implements Comparable<Song>, Parcelable
 				"Title: " + getName() +
 				"\nArtist: " + getArtist() +
 				"\nStart time: " + getStartTime() +
-				"\nURL: " + getUrl()
+				"\nDuration: " + getDuration() +
+				"\nURL: " + (CompileOptions.LOG_SONG_URLS ?  getUrl() : ((getUrl() == null || getUrl().equals(""))? "NO" : "YES"))
 		);
 	}
 

@@ -170,6 +170,13 @@ public class FloorActivity extends AppCompatActivity
 
 	}
 
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		songTimer.cancel();
+	}
+
 	private int genreTypes(String genre)
 	{
 		switch (genre)
@@ -186,34 +193,40 @@ public class FloorActivity extends AppCompatActivity
 
 	private void setCurrentSong(Song s)
 	{
+		Log.i(TAG, "setCurrentSong");
+		if (songTimer != null)
+		{
+			songTimer.cancel();
+		}
 		currentSong = s;
 		songInfoView.setText((s.getName() + " - " + s.getArtist()));
 		Picasso.with(FloorActivity.this)
 			   .load(s.getArtworkUrl())
 			   .into(albumCoverView);
-		//TODO progressbar
 		songBar.setMax(0);
 		songBar.setMax(s.getDuration());
-		songBar.setProgress((int) (System.currentTimeMillis() - (currentSong.getStartTime() * 1000)));
-		if (songTimer != null)
-		{
-			songTimer.cancel();
-		}
+//		Log.d(TAG, "Duration      (MS): "  +s.getDuration());
+//		Log.d(TAG, "Start time    (MS): "  +(s.getStartTime() * 1000L));
+//		Log.d(TAG, "currentTime   (MS): "  + System.currentTimeMillis());
+//		Log.d(TAG, "Song progress (MS): " + (System.currentTimeMillis() - ((s.getStartTime()) * 1000L)));
+//		Log.d(TAG, "=====================================");
+		songBar.setProgress((int) (System.currentTimeMillis() - ((s.getStartTime()) * 1000L)));
 		songTimer = new Timer();
-
 
 		songTimer.scheduleAtFixedRate(new TimerTask()
 		{
 			@Override
 			public void run()
 			{
+				int k = (int)(System.currentTimeMillis() - ((currentSong.getStartTime()) * 1000L));
+				//Log.d(TAG, "Song progress (MS): " + k);
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
 				{
-					songBar.setProgress(songBar.getProgress() + SONG_UPDATE_INTERVAL, true);
+					songBar.setProgress(k, true);
 				}
 				else
 				{
-					songBar.setProgress(songBar.getProgress() + SONG_UPDATE_INTERVAL);
+					songBar.setProgress(k);
 				}
 			}
 		}, 0, SONG_UPDATE_INTERVAL);
