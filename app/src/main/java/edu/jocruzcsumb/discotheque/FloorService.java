@@ -19,6 +19,7 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STARTED;
+import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STOPPED;
 
 /**
  * IntentService that handles all events inside chat floor
@@ -143,6 +144,8 @@ public class FloorService extends IntentService
 		f.addAction(EVENT_MESSAGE_SEND);
 		f.addAction(EVENT_FLOOR_JOINED);
 		f.addAction(EVENT_GET_CURRENT_SONG);
+		f.addAction(EVENT_SONG_STARTED);
+		f.addAction(EVENT_SONG_STOPPED);
 		return f;
 	}
 
