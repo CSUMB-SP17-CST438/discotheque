@@ -156,9 +156,10 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 					localtime = System.currentTimeMillis() / 1000;
 					try
 					{
-						Thread.sleep(s[current].getStartTime() - localtime);
+//						Log.d(TAG, "Song starts in (MS): " + ((((long)s[current].getStartTime()) * 1000L) - (long)System.currentTimeMillis()));
+						Thread.sleep((((long)s[current].getStartTime()) * 1000L) - (long)System.currentTimeMillis());
 					}
-					catch (InterruptedException e)
+					catch (Exception e)
 					{
 						e.printStackTrace();
 						Log.wtf(TAG, "Thread.sleep InterruptedException");
@@ -185,12 +186,12 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 			}
 			else
 			{
-				Log.i(TAG, "Current:");
-				printSong(current);
-				Log.i(TAG, "Next:");
-				printSong(next);
-				Log.i(TAG, "Server's current:");
-				printSong(cur);
+//				Log.d(TAG, "Current:");
+//				s[current].print(Log.Level.Debug);
+//				Log.d(TAG, "Next:");
+//				s[next].print(Log.Level.Debug);
+//				Log.d(TAG, "Server's current:");
+//				cur.print(Log.Level.Debug);
 				lock = false;
 				return;
 			}
@@ -198,24 +199,10 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 		lock = false;
 		return;
 	}
-
-	private void printSong(int i)
-	{
-		printSong(s[i]);
-	}
-
-	private void printSong(Song s)
-	{
-		Log.i(TAG, "Title: " + s.getName());
-		Log.i(TAG, "Artist: " + s.getArtist());
-		Log.i(TAG, "Start time: " + s.getStartTime());
-		Log.i(TAG, "URL: " + s.getUrl());
-	}
-
 	private boolean startCurrent()
 	{
 		Log.i(TAG, "startCurrent");
-		printSong(current);
+		s[current].print(Log.Level.Info);
 		try
 		{
 			m[current].start();
@@ -248,7 +235,7 @@ public class SeamlessMediaPlayer implements MediaPlayer.OnCompletionListener, Me
 	private boolean prep(int i)
 	{
 		Log.i(TAG, "prep");
-		printSong(i);
+		s[i].print(Log.Level.Info);
 		try
 		{
 			m[i] = new MediaPlayer();

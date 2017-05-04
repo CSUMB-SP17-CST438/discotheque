@@ -120,7 +120,7 @@ public class Song implements Comparable<Song>, Parcelable
 		{
 			Log.i(TAG, "Song.parse [" + i + "]");
 			Song s = Song.parse(a.getJSONObject(i));
-			s.print(Log.Level.Info);
+			s.print(Log.Level.Verbose);
 			songList.add(s);
 
 		}
@@ -219,7 +219,8 @@ public class Song implements Comparable<Song>, Parcelable
 				"Title: " + getName() +
 				"\nArtist: " + getArtist() +
 				"\nStart time: " + getStartTime() +
-				"\nURL: " + (CompileOptions.LOG_SONG_URLS ?  getUrl() : (getUrl() == null? "NO" : "YES"))
+				"\nDuration: " + getDuration() +
+				"\nURL: " + (CompileOptions.LOG_SONG_URLS ?  getUrl() : ((getUrl() == null || getUrl().equals(""))? "NO" : "YES"))
 		);
 	}
 
