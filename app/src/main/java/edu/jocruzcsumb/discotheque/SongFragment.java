@@ -78,16 +78,18 @@ public class SongFragment extends FloorFragment
 			@Override
 			public void onItemClick(View v, int position)
 			{
+				Log.i(TAG, "onItemClick");
 				Song song = songs.get(position);
-				Log.d(TAG, "song was regular clicked");
+				song.print(Log.Level.Verbose);
 				//TODO: Broadcast song picked.
 			}
 
 			@Override
 			public void onLongItemClick(View v, int position)
 			{
-				Log.d(TAG, "song was long clicked");
+				Log.i(TAG, "onLongItemClick");
 				final Song song = songs.get(position);
+				song.print(Log.Level.Verbose);
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 				builder.setMessage(R.string.confirm_leave_app)
 					   .setCancelable(false)

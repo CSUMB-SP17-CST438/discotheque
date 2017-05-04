@@ -52,13 +52,9 @@ public class FloorActivity extends AppCompatActivity
 	private SeekBar songBar;
 	private Timer songTimer;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	// This tells the activity what LocalBroadcast Events to listen for
+	IntentFilter getFilter()
 	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_floor);
-		setTitle(" ");
-		// This tells the activity what LocalBroadcast Events to listen for
 		IntentFilter f = new IntentFilter();
 		f.addAction(EVENT_FLOOR_JOINED);
 //        f.addAction(EVENT_SONG_LIST_UPDATE);
@@ -69,46 +65,60 @@ public class FloorActivity extends AppCompatActivity
 //        f.addAction(EVENT_MESSAGE_ADD);
 		f.addAction(EVENT_SONG_STARTED);
 		f.addAction(EVENT_SONG_STOPPED);
+		return f;
+	}
 
-		listener = new FloorListener(f, this, TAG)
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		listener = new FloorListener(getFilter(), this, TAG)
+	{
+		@Override
+		public void onFloorJoined(Floor floor)
 		{
-			@Override
-			public void onFloorJoined(Floor floor)
+			FloorActivity.this.floor = floor;
+			FloorActivity.this.runOnUiThread(new Runnable()
 			{
-				FloorActivity.this.floor = floor;
-				FloorActivity.this.runOnUiThread(new Runnable()
+				@Override
+				public void run()
 				{
-					@Override
-					public void run()
-					{
-						findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-						setTitle(FloorActivity.this.floor.getName());
+					findViewById(R.id.loading_panel).setVisibility(View.GONE);
+					setTitle(FloorActivity.this.floor.getName());
 
-						//setting background by according to genre
-						backgroundView.setImageResource(genreTypes(FloorActivity.this.floor.getGenre())); //use this to let users background image later
-					}
-				});
+					//setting background by according to genre
+					backgroundView.setImageResource(genreTypes(FloorActivity.this.floor.getGenre())); //use this to let users background image later
+				}
+			});
 
-			}
+		}
 
-			public void onSongStarted(Song x)
+		public void onSongStarted(Song x)
+		{
+			final Song s = x;
+			FloorActivity.this.runOnUiThread(new Runnable()
 			{
-				final Song s = x;
-				FloorActivity.this.runOnUiThread(new Runnable()
+				@Override
+				public void run()
 				{
-					@Override
-					public void run()
-					{
-						setCurrentSong(s);
-					}
-				});
+					setCurrentSong(s);
+				}
+			});
 
-			}
+		}
 
-			public void onSongStopped(Song s)
-			{
-			}
-		};
+		public void onSongStopped(Song s)
+		{
+		}
+	};
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_floor);
+		setTitle(" ");
 
 		// Start the floor service
 		Intent i = getIntent();
@@ -213,7 +223,7 @@ public class FloorActivity extends AppCompatActivity
 		floor = (Floor) savedInstanceState.getParcelable(Floor.TAG);
 		if (floor != null)
 		{
-			findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+			findViewById(R.id.loading_panel).setVisibility(View.GONE);
 		}
 		setCurrentSong((Song) savedInstanceState.getParcelable(Song.TAG));
 	}

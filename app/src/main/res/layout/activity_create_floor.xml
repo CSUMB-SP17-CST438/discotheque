@@ -4,140 +4,152 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <RelativeLayout
-        android:id="@+id/loadingPanel"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:indeterminate="true" />
-    </RelativeLayout>
+	<RelativeLayout
+		android:id="@+id/loading_panel"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:elevation="24dp"
+		android:gravity="center">
 
-    <ImageView
-        android:id="@+id/Cover_imageView"
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/yellow_cardcover_temp"
+		<ProgressBar
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"
+			android:indeterminate="true"/>
+	</RelativeLayout>
 
-        />
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:id="@+id/create_floor_main"
+		>
 
-    <View
-        android:id="@+id/bar"
-        android:layout_width="fill_parent"
-        android:layout_height="30dp"
-        android:layout_below="@+id/Cover_imageView"
-        android:background="@color/colorPrimary" />
+		<ImageView
+			android:id="@+id/Cover_imageView"
+			android:layout_width="wrap_content"
+			android:layout_height="150dp"
+			android:layout_alignParentEnd="true"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentStart="true"
+			android:layout_alignParentTop="true"
+			android:scaleType="centerCrop"
+			app:srcCompat="@drawable/yellow_cardcover_temp"
 
-    <ImageView
-        android:id="@+id/flooricon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="37dp"
-        android:layout_marginStart="27dp"
-        android:layout_marginLeft="27dp"
-        android:layout_marginRight="27dp"
-        android:layout_marginEnd="15dp"
+			/>
 
+		<View
+			android:id="@+id/bar"
+			android:layout_width="fill_parent"
+			android:layout_height="30dp"
+			android:layout_below="@+id/Cover_imageView"
+			android:background="@color/colorPrimary"/>
 
-        android:layout_below="@+id/bar"
-        app:srcCompat="@drawable/ic_dancefloor" />
-
-
-    <EditText
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/edit_floor_name"
-        android:hint="@string/editFloor"
-        android:paddingTop="16dp"
-        android:paddingBottom="8dp"
-        android:layout_marginLeft="23dp"
-        android:layout_marginStart="24dp"
-        android:layout_above="@+id/genreIcon"
-        android:layout_toRightOf="@+id/flooricon" />
+		<ImageView
+			android:id="@+id/flooricon"
+			android:layout_width="40dp"
+			android:layout_height="40dp"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentStart="true"
+			android:layout_below="@+id/bar"
+			android:layout_marginEnd="15dp"
+			android:layout_marginLeft="27dp"
+			android:layout_marginRight="27dp"
+			android:layout_marginStart="27dp"
 
 
-    <ImageView
-        android:id="@+id/genreIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_below="@+id/flooricon"
-
-        android:layout_marginTop="27dp"
-        android:layout_marginStart="27dp"
-        android:layout_marginLeft="27dp"
-        android:layout_marginRight="27dp"
-        android:layout_marginEnd="15dp"
-
-        app:srcCompat="@drawable/ic_genre" />
-
-    <TextView
-        android:id="@+id/genre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select Genere"
+			android:layout_marginTop="37dp"
+			app:srcCompat="@drawable/ic_dancefloor"/>
 
 
-        android:textSize="18sp"
-        android:layout_alignBottom="@+id/genreIcon"
-        android:layout_alignLeft="@+id/edit_floor_name"
-        android:layout_alignStart="@+id/edit_floor_name" />
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/splitSpinner"
-        android:hint="@string/genrename"
-
-        android:layout_above="@+id/linearLayout"
-        android:layout_marginLeft="2dp"
-        android:layout_alignBaseline="@+id/genre"
-        android:layout_toRightOf="@+id/genre"
-        android:layout_alignRight="@+id/edit_floor_name"
-        android:layout_alignEnd="@+id/edit_floor_name">
-    </Spinner>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="50dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/genreIcon"
-        android:id="@+id/linearLayout">
+		<EditText
+			android:id="@+id/edit_floor_name"
+			android:layout_width="240dp"
+			android:layout_height="wrap_content"
+			android:layout_above="@+id/genreIcon"
+			android:layout_marginLeft="23dp"
+			android:layout_marginStart="24dp"
+			android:layout_toRightOf="@+id/flooricon"
+			android:hint="@string/edit_floor"
+			android:paddingBottom="8dp"
+			android:paddingTop="16dp"/>
 
 
-        <Button
-            android:id="@+id/create_floor_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="4dp"
-            android:background="@color/colorPrimary"
-            android:text="@string/createFloorButton" />
+		<ImageView
+			android:id="@+id/genreIcon"
+			android:layout_width="40dp"
+			android:layout_height="40dp"
+			android:layout_below="@+id/flooricon"
 
-        <Button
-            android:id="@+id/cancel_floor_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/cancelbutton"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/colorPrimary"
-            android:layout_marginBottom="10dp"
-            />
+			android:layout_marginEnd="15dp"
+			android:layout_marginLeft="27dp"
+			android:layout_marginRight="27dp"
+			android:layout_marginStart="27dp"
+			android:layout_marginTop="27dp"
 
-    </LinearLayout>
+			app:srcCompat="@drawable/ic_genre"/>
+
+		<TextView
+			android:id="@+id/genre"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignBottom="@+id/genreIcon"
+
+
+			android:layout_alignLeft="@+id/edit_floor_name"
+			android:layout_alignStart="@+id/edit_floor_name"
+			android:text="Select Genere"
+			android:textSize="18sp"/>
+
+		<Spinner
+			android:id="@+id/splitSpinner"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_above="@+id/linearLayout"
+
+			android:layout_alignBaseline="@+id/genre"
+			android:layout_alignEnd="@+id/edit_floor_name"
+			android:layout_alignRight="@+id/edit_floor_name"
+			android:layout_marginLeft="2dp"
+			android:layout_toRightOf="@+id/genre"
+			android:hint="@string/genre_name">
+		</Spinner>
+
+		<LinearLayout
+			android:id="@+id/linearLayout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentStart="true"
+			android:layout_below="@+id/genreIcon"
+			android:orientation="vertical"
+			android:paddingTop="50dp">
+
+
+			<Button
+				android:id="@+id/create_floor_button"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_centerHorizontal="true"
+				android:layout_gravity="center_horizontal"
+				android:layout_marginBottom="4dp"
+				android:background="@color/colorPrimary"
+				android:text="@string/createFloorButton"/>
+
+			<Button
+				android:id="@+id/cancel_floor_button"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_centerHorizontal="true"
+				android:layout_gravity="center_horizontal"
+				android:layout_marginBottom="10dp"
+				android:background="@color/colorPrimary"
+				android:text="@string/cancel_button"
+				/>
+
+		</LinearLayout>
+	</RelativeLayout>
+
+
 </RelativeLayout>

@@ -50,7 +50,7 @@
                 android:layout_weight="0.10"
                 android:ems="10"
                 android:gravity="center"
-                android:text="@string/room"
+                android:text="@string/available_floors"
                 android:textSize="10pt"/>
 
             <android.support.v7.widget.RecyclerView

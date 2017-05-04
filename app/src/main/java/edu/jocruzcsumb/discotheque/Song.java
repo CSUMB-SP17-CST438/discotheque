@@ -89,7 +89,6 @@ public class Song implements Comparable<Song>, Parcelable
 		}
 		catch (Exception e)
 		{
-			Log.v(TAG, "skipped parsing start time: " + e.getMessage());
 		}
 		int d = 0;
 		try
@@ -98,7 +97,6 @@ public class Song implements Comparable<Song>, Parcelable
 		}
 		catch (Exception e)
 		{
-			Log.v(TAG, "skipped parsing duration: " + e.getMessage());
 		}
 		String c = (jsonSong.has(JSON_CHOSEN_BY_TAG) ? jsonSong.getString(JSON_CHOSEN_BY_TAG) : "server");
 		return new Song(
@@ -210,13 +208,15 @@ public class Song implements Comparable<Song>, Parcelable
 		return startTime;
 	}
 
-	public void print()
+	public void print(Log.Level level)
 	{
 		//print current song
-		Log.i(TAG, "Title: " + getName());
-		Log.i(TAG, "Artist: " + getArtist());
-		Log.i(TAG, "Start time: " + getStartTime());
-		Log.i(TAG, "URL: " + getUrl());
+		Log.l(level, TAG,
+				"Title: " + getName() +
+				"\nArtist: " + getArtist() +
+				"\nStart time: " + getStartTime() +
+				"\nURL: " + getUrl()
+		);
 	}
 
 	public boolean equals(Object other)
@@ -224,8 +224,8 @@ public class Song implements Comparable<Song>, Parcelable
 		if (other instanceof Song)
 		{
 			Song s = (Song) other;
-			print();
-			s.print();
+//			print(Log.Level.Debug);
+//			s.print(Log.Level.Debug);
 			return title.equals(s.title) && artist.equals(s.artist) && track_permalink.equals(s.track_permalink);
 		}
 		else

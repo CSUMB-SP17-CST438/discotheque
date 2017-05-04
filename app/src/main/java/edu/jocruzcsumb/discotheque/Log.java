@@ -17,6 +17,15 @@ import static junit.framework.Assert.fail;
 
 public class Log
 {
+	public enum Level
+	{
+		Verbose,
+		Debug,
+		Info,
+		Warning,
+		Error,
+		WTF
+	}
 	private static final String TAG = "Logger";
 
 	// Debug messages should only be used when you are trying to test something
@@ -132,6 +141,33 @@ public class Log
 		}
 		android.util.Log.wtf(tag, text);
 		fail();
+	}
+
+	public static void l(Level logLevel, String tag, String text)
+	{
+		switch (logLevel)
+		{
+			case Verbose:
+				v(tag, text);
+				return;
+			case Debug:
+				d(tag, text);
+				return;
+			case Info:
+				i(tag, text);
+				return;
+			case Warning:
+				w(tag, text);
+				return;
+			case Error:
+				e(tag, text);
+				return;
+			case WTF:
+				wtf(tag, text);
+				return;
+			default:
+				Log.wtf(TAG, "Unknown log level");
+		}
 	}
 
 	// Takes a 2D array of strings and makes it into a fancy unicode box

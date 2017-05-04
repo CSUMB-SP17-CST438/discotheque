@@ -313,6 +313,7 @@ public class LocalUser extends User
 							User.parse(obj.getJSONObject("user"))
 					);
 					LocalUser.setCurrentUser(u);
+					//Sockets.persist();
 					return true;
 				}
 				else
