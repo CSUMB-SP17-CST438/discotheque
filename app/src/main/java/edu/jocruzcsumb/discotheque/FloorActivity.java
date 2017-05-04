@@ -28,6 +28,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_FLOOR_JOINED;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_CURRENT_SONG;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_LEAVE_FLOOR;
 import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STARTED;
 import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STOPPED;
@@ -73,44 +74,45 @@ public class FloorActivity extends AppCompatActivity
 	{
 		super.onResume();
 		listener = new FloorListener(getFilter(), this, TAG)
-	{
-		@Override
-		public void onFloorJoined(Floor floor)
 		{
-			FloorActivity.this.floor = floor;
-			FloorActivity.this.runOnUiThread(new Runnable()
+			@Override
+			public void onFloorJoined(Floor floor)
 			{
-				@Override
-				public void run()
+				FloorActivity.this.floor = floor;
+				FloorActivity.this.runOnUiThread(new Runnable()
 				{
-					findViewById(R.id.loading_panel).setVisibility(View.GONE);
-					setTitle(FloorActivity.this.floor.getName());
+					@Override
+					public void run()
+					{
+						findViewById(R.id.loading_panel).setVisibility(View.GONE);
+						setTitle(FloorActivity.this.floor.getName());
 
-					//setting background by according to genre
-					backgroundView.setImageResource(genreTypes(FloorActivity.this.floor.getGenre())); //use this to let users background image later
-				}
-			});
+						//setting background by according to genre
+						backgroundView.setImageResource(genreTypes(FloorActivity.this.floor.getGenre())); //use this to let users background image later
+					}
+				});
 
-		}
+			}
 
-		public void onSongStarted(Song x)
-		{
-			final Song s = x;
-			FloorActivity.this.runOnUiThread(new Runnable()
+			public void onSongStarted(Song x)
 			{
-				@Override
-				public void run()
+				final Song s = x;
+				FloorActivity.this.runOnUiThread(new Runnable()
 				{
-					setCurrentSong(s);
-				}
-			});
+					@Override
+					public void run()
+					{
+						setCurrentSong(s);
+					}
+				});
 
-		}
+			}
 
-		public void onSongStopped(Song s)
-		{
-		}
-	};
+			public void onSongStopped(Song s)
+			{
+			}
+		};
+		broadcast(EVENT_GET_CURRENT_SONG);
 	}
 
 	@Override

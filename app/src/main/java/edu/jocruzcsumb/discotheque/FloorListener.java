@@ -10,6 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import java.util.ArrayList;
 
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_FLOOR_JOINED;
+import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_CURRENT_SONG;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_MESSAGE_LIST;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_SONG_LIST;
 import static edu.jocruzcsumb.discotheque.FloorService.EVENT_GET_USER_LIST;
@@ -125,6 +126,9 @@ public abstract class FloorListener extends BroadcastReceiver
 				case EVENT_MESSAGE_SEND:
 					sendMessage((Message) intent.getParcelableExtra(EVENT_MESSAGE_SEND));
 					break;
+				case EVENT_GET_CURRENT_SONG:
+					getCurrentSong();
+					break;
 				case EVENT_LEAVE_FLOOR:
 					leaveFloor();
 					break;
@@ -133,6 +137,10 @@ public abstract class FloorListener extends BroadcastReceiver
 	}
 
 	// The floor service uses these
+	public void getCurrentSong()
+	{
+	}
+
 	public void getUsers()
 	{
 	}

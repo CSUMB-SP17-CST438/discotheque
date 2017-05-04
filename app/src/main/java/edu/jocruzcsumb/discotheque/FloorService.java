@@ -18,6 +18,8 @@ import java.util.concurrent.CountDownLatch;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
+import static edu.jocruzcsumb.discotheque.SeamlessMediaPlayer.EVENT_SONG_STARTED;
+
 /**
  * IntentService that handles all events inside chat floor
  */
@@ -61,6 +63,9 @@ public class FloorService extends IntentService
 	// When the user requests to leave the floor
 	public static final String EVENT_LEAVE_FLOOR = "leave floor";
 
+	// When the floor needs to ask what song is playing
+	public static final String EVENT_GET_CURRENT_SONG = "get current song";
+
 	// When the server acknowledges that the client has joined the floor
 	// This event also contains the entire floor object according to Ryan
 	public static final String EVENT_FLOOR_JOINED = "floor joined";
@@ -72,6 +77,7 @@ public class FloorService extends IntentService
 	private static final String EXTRA_FLOOR = "edu.jocruzcsumb.discotheque.extra.FLOOR";
 
 	private Floor floor = null;
+	private Song currentSong = null;
 	private CountDownLatch floorLatch = null;
 
 
@@ -126,6 +132,20 @@ public class FloorService extends IntentService
 		}
 	}
 
+	private IntentFilter getFilter()
+	{
+		// This tells the service what LocalBroadcast Events to listen for
+		IntentFilter f = new IntentFilter();
+		f.addAction(EVENT_GET_SONG_LIST);
+		f.addAction(EVENT_GET_USER_LIST);
+		f.addAction(EVENT_GET_MESSAGE_LIST);
+		f.addAction(EVENT_LEAVE_FLOOR);
+		f.addAction(EVENT_MESSAGE_SEND);
+		f.addAction(EVENT_FLOOR_JOINED);
+		f.addAction(EVENT_GET_CURRENT_SONG);
+		return f;
+	}
+
 	/**
 	 * Handle action Join floor in the provided background thread with the provided
 	 * parameters.
@@ -135,17 +155,9 @@ public class FloorService extends IntentService
 		//This holds the service open until the room is left
 		floorLatch = new CountDownLatch(1);
 
-		// This tells the service what LocalBroadcast Events to listen for
-		IntentFilter f = new IntentFilter();
-		f.addAction(EVENT_GET_SONG_LIST);
-		f.addAction(EVENT_GET_USER_LIST);
-		f.addAction(EVENT_GET_MESSAGE_LIST);
-		f.addAction(EVENT_LEAVE_FLOOR);
-		f.addAction(EVENT_MESSAGE_SEND);
-		f.addAction(EVENT_FLOOR_JOINED);
 
 
-		FloorListener l = new FloorListener(f, this, TAG)
+		FloorListener l = new FloorListener(getFilter(), this, TAG)
 		{
 			@Override
 			public void getUsers()
@@ -182,6 +194,27 @@ public class FloorService extends IntentService
 				}
 				Sockets.getSocket()
 					   .emit(EVENT_MESSAGE_SEND, jsonObject);
+			}
+
+			@Override
+			public void onSongStarted(Song s)
+			{
+				currentSong = s;
+			}
+
+			@Override
+			public void onSongStopped(Song s)
+			{
+				currentSong = null;
+			}
+
+			@Override
+			public void getCurrentSong()
+			{
+				if(currentSong != null)
+				{
+					broadcast(EVENT_SONG_STARTED, currentSong);
+				}
 			}
 
 			@Override
