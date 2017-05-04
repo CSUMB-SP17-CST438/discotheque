@@ -208,10 +208,10 @@ public class Song implements Comparable<Song>, Parcelable
 		return startTime;
 	}
 
-	public void print()
+	public void print(Log.Level level)
 	{
 		//print current song
-		Log.i(TAG,
+		Log.l(level, TAG,
 				"Title: " + getName() +
 				"\nArtist: " + getArtist() +
 				"\nStart time: " + getStartTime() +
@@ -224,8 +224,8 @@ public class Song implements Comparable<Song>, Parcelable
 		if (other instanceof Song)
 		{
 			Song s = (Song) other;
-			print();
-			s.print();
+//			print(Log.Level.Debug);
+//			s.print(Log.Level.Debug);
 			return title.equals(s.title) && artist.equals(s.artist) && track_permalink.equals(s.track_permalink);
 		}
 		else

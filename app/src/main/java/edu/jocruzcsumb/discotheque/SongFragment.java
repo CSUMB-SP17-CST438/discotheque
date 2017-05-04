@@ -80,7 +80,7 @@ public class SongFragment extends FloorFragment
 			{
 				Log.i(TAG, "onItemClick");
 				Song song = songs.get(position);
-				song.print();
+				song.print(Log.Level.Verbose);
 				//TODO: Broadcast song picked.
 			}
 
@@ -89,7 +89,7 @@ public class SongFragment extends FloorFragment
 			{
 				Log.i(TAG, "onLongItemClick");
 				final Song song = songs.get(position);
-				song.print();
+				song.print(Log.Level.Verbose);
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 				builder.setMessage(R.string.confirm_leave_app)
 					   .setCancelable(false)
